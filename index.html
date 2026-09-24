@@ -306,7 +306,7 @@ body.racing #toast { bottom: calc(env(safe-area-inset-bottom, 0px) + 112px); }
 .perf b { font-family: var(--fm); font-weight: 700; }
 .perf i { font-style: normal; }
 .perf i.up { color: var(--go); }
-.perf i.down { color: var(--signal); }
+.perf i.dn { color: var(--signal); }
 .perf .tip { margin: 4px 0 0; }
 .offer h4 { margin: 2px 0 0; font-family: var(--fd); font-weight: 400; font-size: 22px; letter-spacing: 0.02em; text-transform: uppercase; }
 .offer p { margin: 0; font-size: 13px; color: var(--muted); }
@@ -341,6 +341,11 @@ body.racing #toast { bottom: calc(env(safe-area-inset-bottom, 0px) + 112px); }
   .car-panel.sticky .perf > div { flex-direction: column; gap: 0; justify-content: flex-start; }
   .car-panel.sticky .perf b { font-size: 12px; white-space: nowrap; }
   .car-panel.sticky .perf .tip { display: none; }
+}
+/* on a phone four columns do not fit "168 → 169 mph", so the stats go two by two */
+@media (max-width: 600px) {
+  .car-panel.sticky .perf { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 14px; }
+  .car-panel.sticky .perf b small { font-size: 0.85em; color: var(--muted); font-weight: 400; }
 }
 @media (max-height: 640px) and (min-width: 821px) {
   .car-panel.sticky .tip.center { display: none; }
@@ -4444,7 +4449,7 @@ function perfPanel(car, own, d) {
   const a = curStats(S), b = statsFor(car.id, own.up, d);
   const row = (label, x, y, unit, dp) => {
     const fx = v => dp ? v.toFixed(dp) : String(v), diff = +(y - x).toFixed(dp || 0);
-    return `<div><span>${label}</span><b>${diff ? `${fx(x)} → <i class="${diff > 0 ? 'up' : 'down'}">${fx(y)}</i>` : fx(y)}${unit}</b></div>`;
+    return `<div><span>${label}</span><b>${diff ? `${fx(x)} → <i class="${diff > 0 ? 'up' : 'dn'}">${fx(y)}</i>` : fx(y)}<small>${unit}</small></b></div>`;
   };
   const pctA = Math.round(styleBonus(a.style) * 100), pctB = Math.round(styleBonus(b.style) * 100);
   return `<div class="perf">
