@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="color-scheme" content="dark only">
+<meta name="darkreader-lock">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Street Kings</title>
 <meta name="theme-color" content="#0b0f12">
@@ -15,8 +17,12 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
 <style>
+/* the game is already dark: "only" stops phone browsers (Samsung Internet, Chrome auto dark) from recolouring it */
+html, body { color-scheme: dark; color-scheme: dark only; }
+@media (prefers-color-scheme: dark) { html, body { color-scheme: dark only; } }
 :root {
   color-scheme: dark;
+  color-scheme: dark only;
   --ground: #080c0f;
   --panel: rgba(12, 18, 21, 0.93);
   --panel-2: #141f24;
@@ -67,6 +73,7 @@ button { font: inherit; color: inherit; }
   -webkit-background-clip: text; background-clip: text; color: transparent;
   filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.55)); }
 .logo span + span { background: linear-gradient(180deg, #ffffff 0%, #d7dcde 55%, #8d989c 100%); -webkit-background-clip: text; background-clip: text; margin-left: 0.18em; }
+.byline { margin: 0 0 4px 0.35em; }
 .tag { margin: 0; font-size: clamp(14px, 2.6vh, 18px); color: var(--ink); max-width: 40ch; }
 .menu { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
 .confirm { background: var(--panel); border: 1px solid var(--signal); padding: 16px; display: flex; flex-direction: column; gap: 12px; max-width: 520px; }
@@ -413,8 +420,8 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 <div id="ui">
   <section class="screen clear" id="scr-title">
     <div class="title-wrap">
-      <p class="kicker">East and North London street racing</p>
       <h1 class="logo"><span>Street</span><span>Kings</span></h1>
+      <p class="kicker byline">A game by Neel Ely</p>
       <p class="tag">Twelve rivals, two sides of London and one crown. Weave through the traffic, build your car and take the city.</p>
       <div class="menu">
         <button class="btn primary big" id="btn-continue" data-act="continue" hidden><span>Continue career</span></button>
