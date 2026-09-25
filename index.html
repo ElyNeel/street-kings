@@ -446,7 +446,9 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 .board th:last-child { text-align: right; }
 .board tr.me td { background: rgba(242, 163, 58, 0.12); }
 .board tr.me small { font-family: var(--fm); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sodium); margin-left: 6px; }
-@media (max-width: 560px) { .board th:nth-child(3), .board td:nth-child(3) { display: none; } .board th, .board td { padding: 8px; } }
+.board .lb-name { display: block; }
+.board .lb-car { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+@media (max-width: 560px) { .board th, .board td { padding: 8px; } }
 </style>
 </head>
 <body>
@@ -3960,7 +3962,7 @@ const Online = {
     if (!this.on || Date.now() - this.recordsAt < 60000) return false;
     this.recordsAt = Date.now();
     try {
-      const rows = await this.fetch('/rest/v1/leaderboard?select=route,racer_name,time_ms&place=eq.1&order=route.asc', { anon: !this.signedIn });
+      const rows = await this.fetch('/rest/v1/leaderboard?select=route,racer_name,time_ms,car&place=eq.1&order=route.asc', { anon: !this.signedIn });
       const rec = {}; for (const r of rows || []) if (!rec[r.route]) rec[r.route] = r;
       this.records = rec;
       if (this.signedIn) {
@@ -5106,7 +5108,7 @@ function recordLine(route, cls) {
 function recordText(route) {
   const rec = Online.records[route], mine = Online.mine[route];
   if (!rec && !mine) return 'Leaderboard: no times yet. Be the first.';
-  return `Record ${rec ? `<b>${fmtMs(rec.time_ms)}</b> by ${esc(rec.racer_name)}` : '--'}${mine ? ` · your best ${fmtMs(mine)}` : ''}`;
+  return `Record ${rec ? `<b>${fmtMs(rec.time_ms)}</b> by ${esc(rec.racer_name)}${rec.car ? ` in the ${esc(rec.car)}` : ''}` : '--'}${mine ? ` · your best ${fmtMs(mine)}` : ''}`;
 }
 function refreshRecords() { for (const el of document.querySelectorAll('[data-rec]')) el.innerHTML = recordText(el.dataset.rec); }
 /* posts the time from a finished race and shows where it landed */
@@ -5175,8 +5177,8 @@ async function goBoard(route) {
   try { rows = await Online.board(boardRoute); } catch (e) { if (seq === boardSeq) $('board-table').innerHTML = `<p class="tip bad">Could not load the leaderboard. Check your connection.</p>`; return; }
   if (seq !== boardSeq || $('scr-board').hidden) return;
   if (!rows.length) { $('board-table').innerHTML = `<p class="tip">No times yet on this route. Be the first.</p>`; return; }
-  $('board-table').innerHTML = `<table><thead><tr><th>#</th><th>Racer</th><th>Car</th><th>Time</th></tr></thead><tbody>
-    ${rows.map(r => `<tr class="${r.user_id === Online.uid ? 'me' : ''}"><td>${r.place}</td><td>${esc(r.racer_name)}${r.user_id === Online.uid ? ' <small>you</small>' : ''}</td><td>${esc(r.car)}</td><td>${fmtMs(r.time_ms)}</td></tr>`).join('')}
+  $('board-table').innerHTML = `<table><thead><tr><th>#</th><th>Racer and car</th><th>Time</th></tr></thead><tbody>
+    ${rows.map(r => `<tr class="${r.user_id === Online.uid ? 'me' : ''}"><td>${r.place}</td><td><span class="lb-name">${esc(r.racer_name)}${r.user_id === Online.uid ? ' <small>you</small>' : ''}</span><span class="lb-car">${esc(r.car || 'Unknown car')}</span></td><td>${fmtMs(r.time_ms)}</td></tr>`).join('')}
     </tbody></table>`;
 }
 document.getElementById('ui').addEventListener('change', e => { if (e.target.id === 'board-route') goBoard(e.target.value); });
