@@ -449,6 +449,45 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 .board .lb-name { display: block; }
 .board .lb-car { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
 @media (max-width: 560px) { .board th, .board td { padding: 8px; } }
+
+.gsi-slot { min-height: 44px; display: flex; align-items: center; }
+.gsi-slot[data-done] > .btn { display: none; }
+
+/* ---------- Essex ---------- */
+.hub-main { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.hub-tabs { margin: -6px 0 2px; }
+.hub-tabs .tab { padding: 8px 16px; font-size: 18px; }
+.flyer.essex::after { background: radial-gradient(circle, rgba(255, 95, 162, 0.16), transparent 70%); }
+.stars { display: inline-flex; gap: 1px; font-size: 14px; letter-spacing: 0; line-height: 1; }
+.stars i { font-style: normal; color: #3a4a50; }
+.stars i.on { color: var(--plate); text-shadow: 0 0 6px rgba(245, 197, 24, 0.45); }
+.stars.big { font-size: 26px; gap: 3px; }
+.star-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 8px 12px; background: var(--panel-2); border: 1px solid var(--line); }
+.star-row span { font-family: var(--fm); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.star-row b { font-weight: 400; }
+.star-row b.on { color: var(--plate); }
+.star-row em { font-style: normal; color: var(--go); }
+.star-n { color: var(--plate); }
+@media (max-width: 560px) { .stat-stars { display: none; } }
+.slips { background: var(--panel); border: 1px solid var(--line); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.slips .h3 { margin: 0; }
+.offer.slip { border-top-color: #ff5fa2; }
+.offer.slip .chip.diff { color: #ff8cc0; border-color: #ff5fa2; }
+.offer.slip canvas.slipcar { width: 100%; height: 96px; display: block; background: linear-gradient(180deg, #0d1519, #121c21); }
+.offer.slip .row { display: flex; gap: 8px; flex-wrap: wrap; }
+.offer-foot .tip.warn { margin: 0 0 6px; }
+.chip.cls { color: var(--ink); border-color: var(--line-2); }
+.chip.cls-S { color: #ff8cc0; border-color: #ff5fa2; }
+.chip.cls-A { color: var(--plate); border-color: var(--plate); }
+.chip.cls-B { color: var(--sodium); border-color: var(--sodium); }
+.chip.slipchip { color: #ff8cc0; border-color: #ff5fa2; }
+.cls-line { margin: 0; display: flex; gap: 6px; flex-wrap: wrap; }
+.unlock-note.bad { border-left-color: var(--signal); background: rgba(255, 59, 59, 0.08); }
+.unlock-note.bad small { color: #ff8a80; }
+.invite.teaser { border-color: rgba(255, 95, 162, 0.45); border-left-color: #ff5fa2; background: linear-gradient(135deg, rgba(255, 95, 162, 0.1), rgba(0, 0, 0, 0)); }
+.rung .pz .stars { margin-top: 2px; }
+.unlocks canvas.map + canvas.map { margin-top: 10px; }
+.offer.slip .offer-foot { flex-direction: column; align-items: stretch; }
 </style>
 </head>
 <body>
@@ -523,6 +562,14 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         <section>
           <h3>Checkpoints</h3>
           <p>Gold gates light up one lane now and then. Drive through them for cash and a splash of nitro, and hit them in a row to multiply the cash up to four times. A Checkpoint Run has no rival: go through every gate to win, miss one and you are out.</p>
+        </section>
+        <section>
+          <h3>Stars</h3>
+          <p>Every career route has three stars: one for the win, one for no crashes and one for hitting every gate. Go back and collect the ones you missed.</p>
+        </section>
+        <section>
+          <h3>Essex and pink slips</h3>
+          <p>Take the crown and beat Ishaaq, and the border opens. Essex has eight rivals, faster cars and pink slips: once you have beaten someone, they will race you for their car if you put yours up. Win and it is yours. Lose and they keep the car you raced.</p>
         </section>
       </div>
       <button class="btn" data-act="title"><span>Back</span></button>
@@ -617,6 +664,30 @@ const CARS = [
   { id: 'gtr', name: 'Nissan GT-R', price: 12000, bhp: 520, handling: 8.5, rep: 11, pot: 1.0, model: 'gtr',
     blurb: 'Brutal pace, huge grip. The car everyone wants to beat.',
     look: { paint: '#3d434b', finish: 'metallic', rims: 'fan', rimColor: '#2a2d31', tint: 2, spoiler: 'gt', kit: 1, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: '#b14bff', smoked: false, plate: 'R35 GTR' } },
+  // Essex dealership
+  { id: 'rs6', name: 'Audi RS6 Avant', price: 22000, bhp: 590, handling: 7.6, rep: 44, pot: 1.2, model: 'rs6', chapter: 'essex',
+    blurb: 'A twin turbo V8 estate with room for the shopping. Wide arches, huge grip and it never runs out of pull.',
+    look: { paint: '#5d6a73', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ff3355', smoked: false, plate: 'RS66 AVT' } },
+  { id: 'mcl720', name: 'McLaren 720S', price: 45000, bhp: 710, handling: 9.3, rep: 55, pot: 1.35, model: 'mcl720', chapter: 'essex',
+    blurb: 'Carbon tub, twin turbo V8 and the fastest thing in the showroom. This is the car for the bridge.',
+    look: { paint: '#f07a14', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'none', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ff8c1a', smoked: false, plate: 'M720 SSS' } },
+  // cars you can only win in a pink slip race. They come the way their owner raced them.
+  { id: 'golfr', name: 'VW Golf R', price: 9000, bhp: 320, handling: 8.2, rep: 999, pot: 0.6, model: 'golf', slip: 'tommy', slipUp: 2,
+    look: { paint: '#1e4fa8', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#4aa8ff', smoked: false, plate: 'TH19 GTR' } },
+  { id: 'a45', name: 'Mercedes-AMG A45 S', price: 11000, bhp: 415, handling: 8.0, rep: 999, pot: 0.7, model: 'hatch', slip: 'priya', slipUp: 2,
+    look: { paint: '#e9e9e6', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'big', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ffd23f', smoked: false, plate: 'PM21 AMG' } },
+  { id: 'rs3n', name: 'Audi RS3 (Nardo)', price: 12000, bhp: 400, handling: 7.8, rep: 999, pot: 0.8, model: 'rs3', slip: 'callum', slipUp: 2,
+    look: { paint: '#7d8084', finish: 'matte', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 1, stance: 2, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ff3355', smoked: false, plate: 'CR22 RSS' } },
+  { id: 'svr', name: 'Range Rover Sport SVR', price: 16000, bhp: 575, handling: 5.5, rep: 999, pot: 0.6, model: 'suv', slip: 'mick', slipUp: 2,
+    look: { paint: '#141517', finish: 'gloss', rims: 'split', rimColor: '#2a2d31', tint: 3, spoiler: 'none', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#b14bff', smoked: false, plate: 'MF69 SVR' } },
+  { id: 'gt3', name: 'Porsche 911 GT3', price: 22000, bhp: 500, handling: 9.3, rep: 999, pot: 0.7, model: 'p911', slip: 'sophie', slipUp: 2,
+    look: { paint: '#1f6fd1', finish: 'gloss', rims: 'five', rimColor: '#c9a23a', tint: 1, spoiler: 'big', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#4aa8ff', smoked: false, plate: 'GT33 SLN' } },
+  { id: 'gtrn', name: 'Nissan GT-R Nismo', price: 20000, bhp: 600, handling: 8.8, rep: 999, pot: 1.0, model: 'gtr', slip: 'jay', slipUp: 2,
+    look: { paint: '#ececec', finish: 'gloss', rims: 'fan', rimColor: '#2a2d31', tint: 2, spoiler: 'gt', kit: 1, stance: 1, stripes: 'racing', stripeColor: '#c8161d', glow: '#ff3355', smoked: false, plate: 'JO23 NSM' } },
+  { id: 'm4', name: 'BMW M4 (F82)', price: 24000, bhp: 560, handling: 8.4, rep: 999, pot: 1.3, model: 'm4f82', slip: 'saleenah', slipUp: 3,
+    look: { paint: '#f0619f', finish: 'pearl', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ff5fa2', smoked: false, plate: 'SAL 33N' } },
+  { id: 'huracan', name: 'Lamborghini Huracán', price: 50000, bhp: 640, handling: 9.0, rep: 999, pot: 1.4, model: 'huracan', slip: 'duke', slipUp: 3,
+    look: { paint: '#6ccf2b', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, stripes: 'none', stripeColor: '#f2f2ee', glow: '#6ccf2b', smoked: false, plate: 'DUK 3' } },
 ];
 const carById = id => CARS.find(c => c.id === id);
 
@@ -887,6 +958,57 @@ const CHARACTERS = {
     youLose: 'Told you. Woodford is mine.',
     face: { skin: '#bf8a6c', hair: 'longhl', hairCol: '#16100d', highlight: '#c8a98a', highlight2: '#d98a9e', browCol: '#1c1310', lashes: true, blush: true, lips: '#b8626c', nose: '#d9b45a', mole: true,
       shadesUp: '#221814', top: '#d8a337', floral: ['#e39ab0', '#f2e7d2', '#7a5a3a', '#c7788e'], chain: '#d7b45c', chainLong: true, bg: '#8f6a87' } },
+  // Essex
+  tommy: { name: 'Tommy Hale', from: 'Romford', car: 'VW Golf R',
+    bio: 'Runs the A12 out of Romford in a Golf R he swears is stock. It is not stock.',
+    pre: 'Welcome to Essex. The roads are wider out here, so keep up.',
+    youWin: 'Alright, London. You can drive. The Lakeside lot will want a go.',
+    youLose: 'Head back over the border, mate.',
+    face: { skin: '#eac2a2', hair: 'fade', hairCol: '#5a3a22', facial: 'stubble', facialCol: '#5a3a22', mouth: 'smirk', top: '#1d3c7a', chain: '#c9ccd0', bg: '#1e4fa8' } },
+  priya: { name: 'Priya Mistry', from: 'West Thurrock', car: 'Mercedes-AMG A45 S',
+    bio: 'Works nights at Lakeside and races the ring road when the shutters come down. The A45 is the quickest hot hatch in Thurrock.',
+    pre: 'The car park lights go off at midnight. Then it is ours.',
+    youWin: 'Clean. Callum on the Arterial will not go easy on you.',
+    youLose: 'Shop is closed. Come back tomorrow night.',
+    face: { skin: '#b98261', hair: 'longhl', hairCol: '#1a120e', highlight: '#a8703f', highlight2: '#b98049', browCol: '#1a1210', browW: 1.5, lashes: true, blush: true, lips: '#a8454f',
+      hoops: '#e2b650', top: '#151518', chain: '#d7b45c', chainLong: true, bg: '#7a3b5e' } },
+  callum: { name: 'Callum Reid', from: 'Basildon', car: 'Audi RS3 (Nardo)',
+    bio: 'Nardo grey RS3 on the A127. The five cylinder warble is the first thing Basildon hears every Friday night.',
+    pre: 'Five cylinders. You will hear me coming.',
+    youWin: 'Proper. Watch yourself on Canvey, Mick does not lose.',
+    youLose: 'The Arterial is mine. Go home.',
+    face: { skin: '#f0c7a8', hair: 'slick', hairCol: '#b88a4c', facial: 'stubble', facialCol: '#9a7040', top: '#2a2d31', bg: '#7d8084' } },
+  mick: { name: 'Big Mick Farrow', from: 'Canvey Island', car: 'Range Rover Sport SVR',
+    bio: 'Owns half the scrapyards on Canvey. His SVR weighs as much as a small house and it is still quick.',
+    pre: 'Two and a half tonnes. Try not to be in the way.',
+    youWin: 'Well I never. Sophie up in Chelmsford will want to meet you.',
+    youLose: 'Nobody beats Mick on his own island.',
+    face: { skin: '#e4b08e', hair: 'bald', facial: 'beard', facialCol: '#8c8c8c', build: 'big', top: '#141517', chain: '#e2b650', pendant: false, bg: '#2c3b2a' } },
+  sophie: { name: 'Sophie Lane', from: 'Chelmsford', car: 'Porsche 911 GT3',
+    bio: 'Track day regular who treats the Chelmsford bypass like Brands Hatch. Never misses an apex, never lifts.',
+    pre: 'I brake later than you. That is all it takes.',
+    youWin: 'Good lines. Jay in Brentwood is next, and he is quick.',
+    youLose: 'Book a track day. You need it.',
+    face: { skin: '#f2cdb0', hair: 'bun', hairCol: '#d8b56a', earrings: '#e2b650', mouth: 'smirk', top: '#1f6fd1', bg: '#1a4f9a' } },
+  jay: { name: 'Jay Okafor', from: 'Brentwood', car: 'Nissan GT-R Nismo',
+    bio: 'White GT-R Nismo, red stripes, and a following on every Brentwood high street. He has not lost in two years.',
+    pre: 'Brentwood is watching. Do not embarrass yourself.',
+    youWin: 'Respect. You know who is next. She is waiting on the seafront.',
+    youLose: 'Two years unbeaten. Make it three.',
+    face: { skin: '#6b4630', hair: 'fade', hairCol: '#0e0b09', facial: 'shortbeard', facialCol: '#0e0b09', top: '#ececec', chain: '#c9ccd0', bg: '#b3272d' } },
+  saleenah: { name: 'Saleenah', from: 'Southend-on-Sea', car: 'BMW M4 (F82)',
+    bio: 'Pink F82 M4 with every tuning part and every bit of aero money can buy. She runs the Southend seafront, and she is the last thing between you and the Duke.',
+    pre: 'Pink does not mean slow. Keep up.',
+    youWin: 'Fair. The Duke is waiting at the bridge. Good luck, you will need it.',
+    youLose: 'Told you. Pink does not mean slow.',
+    face: { skin: '#c8926d', hair: 'hijab', hairCol: '#4d5d72', pattern: ['#c8672e', '#ede2c8', '#5b3b2a', '#26426b', '#8a4a2c'], underscarf: '#3a2a22',
+      browCol: '#1a1210', browW: 1.8, lashes: true, lips: '#c9847f', earrings: '#d8b04a', bigEarrings: true, top: '#1c1d20', bg: '#a8875a' } },
+  duke: { name: 'The Duke', from: 'Brentwood', car: 'Lamborghini Huracán', real: 'Vince Harlow',
+    bio: 'Ran Essex before anyone else had a car worth racing. Lime green Huracán, sunglasses at midnight, and nobody has beaten him over the bridge.',
+    pre: 'London sent their King? Cute.',
+    youWin: 'Thirty years I have owned this bridge. It is yours now. Look after it.',
+    youLose: 'Back over the river, son.',
+    face: { skin: '#e8bf9f', hair: 'slick', hairCol: '#2e2e30', facial: 'stubble', facialCol: '#555', shades: 'wrap', mouth: 'smirk', top: '#101012', chain: '#e2b650', bg: '#4f8f1f' } },
   // Adam, owner of Ride3
   ride3: { name: 'Adam', from: 'Ride3', car: 'Kawasaki Ninja H2R',
     bio: 'Owner of Ride3 and first out on every ride. His H2R is supercharged, over 300 horsepower and barely 200 kilos. Nobody on four wheels has beaten him yet.',
@@ -1030,6 +1152,73 @@ const EVENTS = [
 const NORTH_FROM = 7;   // index of the first North London event
 const REP_TOTAL = EVENTS.reduce((a, e) => a + e.rep, 0);
 
+/* ---------- Essex: opens once you have the crown and have beaten Ishaaq ----------
+   Wider, faster roads: the traffic is lighter and top speed matters more than weaving. */
+const ESSEX = [
+  { title: 'THE BORDER', chapter: 'Essex', rival: 'tommy', oppBhp: 760, reward: 9000, rep: 3, dist: 7000,
+    area: 'Romford', road: 'A12 Eastern Avenue', time: 'night', env: 'fields', sky: ['cranes', 'canary'], map: [0.18, 51.58],
+    signs: [['green', 'A12', 'Brentwood', 'Chelmsford'], ['borough', 'County of Essex'], ['green', 'A127', 'Southend', 'Basildon'], ['green', 'M25', 'Dartford', 'Stansted']],
+    intro: 'Over the border and the roads open right up. Tommy Hale runs the A12 out of Romford in a Golf R he swears is stock. Top speed matters out here, so keep your foot in.',
+    win: 'Essex has noticed you. The Lakeside lot want a go next.', oppLook: { engine: 'golfr', model: 'golf', paint: '#1e4fa8', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', stance: 1, plate: 'TH19 GTR' },
+    diff: { skill: 1.084, inc: [18, 24] } },
+  { title: 'LAKESIDE', chapter: 'Essex', rival: 'priya', oppBhp: 780, reward: 10000, rep: 3, dist: 7200,
+    area: 'West Thurrock', road: 'A1306 around Lakeside', time: 'late', env: 'retail', sky: ['lakeside', 'qe2'], map: [0.28, 51.49],
+    signs: [['green', 'A1306', 'Lakeside', 'Grays'], ['borough', 'Borough of Thurrock'], ['green', 'A13', 'Southend', 'London'], ['green', 'A282', 'Dartford Crossing', 'M25']],
+    intro: 'When the shutters come down at Lakeside, the ring road belongs to Priya Mistry and her A45. Empty car parks, orange lights and one clean run.',
+    win: 'Lakeside is quiet again. Callum on the Arterial has heard about you.', oppLook: { engine: 'a45', model: 'hatch', paint: '#e9e9e6', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'big', stance: 1, plate: 'PM21 AMG' },
+    diff: { skill: 1.091, inc: [18, 24] } },
+  { title: 'THE ARTERIAL', chapter: 'Essex', rival: 'callum', oppBhp: 800, reward: 11500, rep: 4, dist: 7600,
+    area: 'Basildon', road: 'A127 Southend Arterial Road', time: 'dusk', env: 'fields', sky: ['cranes'], map: [0.46, 51.58],
+    signs: [['green', 'A127', 'Southend', 'Rayleigh'], ['borough', 'Borough of Basildon'], ['green', 'A130', 'Chelmsford', 'Canvey Island'], ['green', 'A127', 'London', 'Romford']],
+    intro: 'The A127 runs straight as a ruler to the sea. Callum Reid and his Nardo grey RS3 own it every Friday. Nitro on the straights, and do not lift.',
+    win: 'The Arterial is yours. Big Mick on Canvey wants a word.', oppLook: { model: 'rs3', paint: '#7d8084', finish: 'matte', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 1, stance: 2, plate: 'CR22 RSS' },
+    diff: { skill: 1.093, inc: [19, 25] } },
+  { title: 'CANVEY', chapter: 'Essex', rival: 'mick', oppBhp: 880, reward: 13000, rep: 4, dist: 7400,
+    area: 'Canvey Island', road: 'A130 Canvey Way', time: 'night', env: 'fields', sky: ['tanks', 'cranes'], map: [0.57, 51.53],
+    signs: [['green', 'A130', 'Canvey Island', 'Benfleet'], ['borough', 'Borough of Castle Point'], ['green', 'A13', 'Southend', 'Basildon'], ['green', 'A127', 'London', 'Chelmsford']],
+    intro: 'One road on, one road off. Big Mick Farrow owns the scrapyards on Canvey and his SVR weighs as much as a small house. The oil terminals are lit up like a city.',
+    win: 'Mick is still shaking his head. Sophie up in Chelmsford wants to meet you.', oppLook: { engine: 'svr', model: 'suv', paint: '#141517', finish: 'gloss', rims: 'split', rimColor: '#2a2d31', tint: 3, stance: 1, plate: 'MF69 SVR' },
+    diff: { skill: 1.092, inc: [19, 25] } },
+  { title: 'CITY LIGHTS', chapter: 'Essex', rival: 'sophie', oppBhp: 900, reward: 15000, rep: 5, dist: 7800,
+    area: 'Chelmsford', road: 'A12 Chelmsford bypass', time: 'late', env: 'aroad', sky: ['spire', 'cranes'], map: [0.47, 51.73],
+    signs: [['green', 'A12', 'Chelmsford', 'Colchester'], ['borough', 'City of Chelmsford'], ['green', 'A130', 'Southend', 'Basildon'], ['green', 'A414', 'Harlow', 'Maldon']],
+    intro: 'Sophie Lane treats the Chelmsford bypass like a race track, because to her it is one. The GT3 turns in like nothing else. Beat her on the straights.',
+    win: 'Chelmsford is yours. Jay in Brentwood has been waiting.', oppLook: { engine: 'gt3', model: 'p911', paint: '#1f6fd1', finish: 'gloss', rims: 'five', rimColor: '#c9a23a', tint: 1, spoiler: 'big', stance: 1, plate: 'GT33 SLN' },
+    diff: { skill: 1.096, inc: [20, 26] } },
+  { title: 'HIGH STREET', chapter: 'Essex', rival: 'jay', oppBhp: 1000, reward: 17000, rep: 5, dist: 7200,
+    area: 'Brentwood', road: 'A1023 Brentwood High Street', time: 'night', env: 'terrace', sky: ['canary'], map: [0.3, 51.62],
+    signs: [['green', 'A1023', 'Brentwood', 'Shenfield'], ['borough', 'Borough of Brentwood'], ['green', 'A12', 'Chelmsford', 'London'], ['green', 'A128', 'Ongar', 'Tilbury']],
+    intro: 'Brentwood High Street, every table outside the bars full. Jay Okafor has not lost in two years and his white GT-R Nismo knows every gap.',
+    win: 'Brentwood is talking about you. There is one more before the Duke. Pink M4, Southend seafront.', oppLook: { engine: 'gtrn', model: 'gtr', paint: '#ececec', finish: 'gloss', rims: 'fan', rimColor: '#2a2d31', tint: 2, spoiler: 'gt', kit: 1, stance: 1, stripes: 'racing', stripeColor: '#c8161d', plate: 'JO23 NSM' },
+    diff: { skill: 1.103, inc: [20, 26] } },
+  { title: 'THE GOLDEN MILE', chapter: 'Essex', rival: 'saleenah', oppBhp: 1020, reward: 20000, rep: 6, dist: 7600,
+    area: 'Southend-on-Sea', road: 'Marine Parade, Southend seafront', time: 'late', env: 'seafront', sky: ['pier', 'wheel'], map: [0.71, 51.535],
+    signs: [['green', 'A13', 'Southend', 'Leigh-on-Sea'], ['borough', 'City of Southend-on-Sea'], ['green', 'A1159', 'Shoeburyness', 'Airport'], ['green', 'A127', 'London', 'Basildon']],
+    intro: 'The seafront meet, arcades lit up and the pier stretching out into the dark. Saleenah\'s pink M4 has every tuning part and every bit of aero money can buy. Beat her and the Duke has to answer.',
+    win: 'The seafront went quiet when you crossed the line. The Duke has sent word: the bridge, tonight.', oppLook: { model: 'm4f82', paint: '#f0619f', finish: 'pearl', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, plate: 'SAL 33N' },
+    diff: { skill: 1.095, inc: [21, 27] } },
+  { title: 'THE CROSSING', chapter: 'Essex', rival: 'duke', oppBhp: 1100, reward: 30000, rep: 8, dist: 8200,
+    area: 'Dartford Crossing', road: 'A282 over the QE2 Bridge', time: 'late', env: 'bridge', sky: ['tanks', 'canary', 'cranes'], map: [0.26, 51.465],
+    signs: [['green', 'A282', 'Dartford', 'Kent'], ['borough', 'Borough of Dartford'], ['green', 'M25', 'Gatwick', 'Heathrow'], ['green', 'A13', 'London', 'Southend']],
+    intro: 'The QE2 Bridge, sixty metres above the Thames. The Duke has run Essex for thirty years and nobody has beaten his lime green Huracán over the bridge. Win this and Essex is yours.',
+    win: 'Essex bows to a new name. The Duke handed over his keys to the bridge.', oppLook: { model: 'huracan', paint: '#6ccf2b', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, plate: 'DUK 3' },
+    diff: { skill: 1.081, inc: [22, 28] } },
+];
+const essexOpen = S => !!(S && S.careerDone && S.specials && S.specials.ishaaq);
+const nextEssexIndex = S => { const c = (S.essex && S.essex.completed) || []; const i = ESSEX.findIndex((e, k) => !c[k]); return i < 0 ? ESSEX.length : i; };
+/* stars: win, win without a crash, win hitting every gate */
+const STAR_WIN = 1, STAR_CLEAN = 2, STAR_GATES = 4;
+const starCount = bits => ((bits & 1) ? 1 : 0) + ((bits & 2) ? 1 : 0) + ((bits & 4) ? 1 : 0);
+const totalStars = S => Object.values((S && S.stars) || {}).reduce((a, b) => a + starCount(b), 0);
+/* car classes, from the power the car makes right now */
+const carClass = bhp => bhp >= 800 ? 'S' : bhp >= 600 ? 'A' : bhp >= 450 ? 'B' : bhp >= 300 ? 'C' : 'D';
+/* pink slips: a beaten Essex rival will race you for their car, if you put up one of yours */
+const slipCarFor = rival => CARS.find(c => c.slip === rival);
+function slipReady(S, rival) {
+  const i = ESSEX.findIndex(e => e.rival === rival);
+  return i >= 0 && !!(S.essex && S.essex.completed[i]) && !!slipCarFor(rival) && !S.owned[slipCarFor(rival).id];
+}
+
 /* ---------- street races: repeatable, pay every win, get harder with rep ---------- */
 const LOCAL_NAMES = ['Jay', 'Rico', 'Sam', 'Leah', 'Dev', 'Sade', 'Ollie', 'Priya', 'Kofi', 'Aaron', 'Zain', 'Mia', 'Kyle', 'Nadia', 'Reece', 'Bilal',
   'Chloe', 'Tunde', 'Luca', 'Imran', 'Ayo', 'Rhys', 'Shanice', 'Yusuf', 'Callum', 'Hana', 'Deniz', 'Jordan', 'Ellie', 'Kwame', 'Tomasz', 'Aisha', 'Connor', 'Femi', 'Lena', 'Hassan'];
@@ -1043,13 +1232,19 @@ const LOCAL_CARS = [
   { name: 'Mercedes A45', lo: 370, hi: 430, model: 'rs3' }, { name: 'Porsche Cayman', lo: 390, hi: 470, model: 'p911' },
   { name: 'BMW M4', lo: 420, hi: 500, model: 'm3' }, { name: 'Audi RS5', lo: 430, hi: 480, model: 'c63' },
   { name: 'Mercedes E63', lo: 500, hi: 600, model: 'c63' }, { name: 'Nissan GT-R', lo: 520, hi: 640, model: 'gtr' },
-  { name: 'Audi RS6', lo: 550, hi: 650, model: 'c63' },
+  { name: 'Audi RS6', lo: 550, hi: 650, model: 'rs6' },
+  { name: 'Mercedes-AMG GT R', lo: 580, hi: 700, model: 'p911' }, { name: 'Audi R8 V10', lo: 560, hi: 680, model: 'r8' },
+  { name: 'McLaren 570S', lo: 560, hi: 680, model: 'mcl720' }, { name: 'Porsche 911 Turbo S', lo: 640, hi: 760, model: 'p911' },
+  { name: 'BMW M5 Competition', lo: 620, hi: 760, model: 'c63' }, { name: 'Lamborghini Huracán EVO', lo: 630, hi: 800, model: 'huracan' },
+  { name: 'Tuned Supra', lo: 650, hi: 900, model: 'supra' }, { name: 'Tuned GT-R', lo: 700, hi: 1000, model: 'gtr' },
+  { name: 'McLaren 765LT', lo: 750, hi: 900, model: 'mcl720' }, { name: 'Twin turbo Huracán', lo: 850, hi: 1100, model: 'huracan' },
 ];
 const LOCAL_PAINTS = ['#eeeeea', '#15171b', '#3d434b', '#b9c2cb', '#c9252c', '#e8761e', '#f2c418', '#1f4fb5', '#12a3a8', '#5b2a8c', '#8a5a2b', '#7fc241', '#e0508f'];
 const TIMES = ['day', 'dusk', 'night', 'night', 'late'];
 function streetOffers(S) {
   const rep = S.rep * 33 / REP_TOTAL, pb = curStats(S).bhp, rb = 175 + rep * 11;   // scaled so the board keeps the same curve with more events
-  const areas = EVENTS.map((e, i) => i).filter(i => i < NORTH_FROM || nextEventIndex(S) >= NORTH_FROM || S.careerDone);
+  const essex = essexOpen(S), list = essex ? ESSEX : EVENTS;
+  const areas = list.map((e, i) => i).filter(i => essex || i < NORTH_FROM || nextEventIndex(S) >= NORTH_FROM || S.careerDone);
   const base = 220 + rep * 22;
   const tiers = [
     { label: 'Easy', bhp: Math.min(rb, pb) * 0.88, prize: base, skill: 0.95, inc: [9, 13], dd: -0.12 },
@@ -1062,12 +1257,12 @@ function streetOffers(S) {
     const fits = LOCAL_CARS.filter(c => bhp >= c.lo && bhp <= c.hi);
     const car = fits.length ? pick(fits) : LOCAL_CARS.reduce((a, c) => Math.abs((c.lo + c.hi) / 2 - bhp) < Math.abs((a.lo + a.hi) / 2 - bhp) ? c : a);
     let name; do { name = pick(LOCAL_NAMES); } while (used.has(name)); used.add(name);
-    return { id: Math.random().toString(36).slice(2, 9), label: t.label, area: pick(areas), time: pick(TIMES), name: name + ' ' + String.fromCharCode(65 + randInt(26)) + '.',
+    return { id: Math.random().toString(36).slice(2, 9), label: t.label, ch: essex ? 'essex' : 'london', area: pick(areas), time: pick(TIMES), name: name + ' ' + String.fromCharCode(65 + randInt(26)) + '.',
       car: car.name, bhp, prize: Math.round(t.prize / 10) * 10, dist: Math.round((3600 + rep * 60) / 100) * 100, skill: t.skill, inc: t.inc,
       d: clamp(rep / 33 + t.dd, 0, 1), look: { model: car.model, paint: pick(LOCAL_PAINTS), rims: pick(['five', 'mesh', 'split', 'dish']), rimColor: pick(['#c3c8cc', '#1c1e21', '#4a4f55']) } };
   });
   // Checkpoint Run: no rival, a shorter route, and every wave has a gate. Miss one and you are out.
-  offers.push({ id: Math.random().toString(36).slice(2, 9), label: 'Checkpoint Run', mode: 'cp', area: pick(areas), time: pick(TIMES), name: 'Checkpoint Run', car: '',
+  offers.push({ id: Math.random().toString(36).slice(2, 9), label: 'Checkpoint Run', mode: 'cp', ch: essex ? 'essex' : 'london', area: pick(areas), time: pick(TIMES), name: 'Checkpoint Run', car: '',
     bhp: 0, prize: Math.round(base * 1.8 / 10) * 10, dist: Math.round((2400 + rep * 40) / 100) * 100, skill: 1, inc: [99, 99], d: clamp(rep / 33, 0, 1), look: null });
   return offers;
 }
@@ -1077,7 +1272,8 @@ function streetOffers(S) {
    ===================================================================== */
 function blankState() {
   return { v: 2, money: 5000, rep: 0, current: 'civic', owned: {}, eventIndex: 0, completed: EVENTS.map(() => false),
-    careerDone: false, kingRevealed: false, news: '', stats: { races: 0, wins: 0, streetWins: 0, street: 0 }, street: [], specials: {}, found: {} };
+    careerDone: false, kingRevealed: false, news: '', stats: { races: 0, wins: 0, streetWins: 0, street: 0 }, street: [], specials: {}, found: {},
+    essex: null, stars: {}, announced: {} };
 }
 function newCareer(starterId) {
   const car = carById(starterId);
@@ -1119,7 +1315,10 @@ function migrateSave(old) {
     S.stats = Object.assign(S.stats, old.stats || {});
     if (!old.stats || old.stats.street === undefined) S.stats.street = S.stats.streetWins || 0;
     S.found = Object.assign({}, old.found || {}, S.specials);
-    S.street = Array.isArray(old.street) && old.street.length === 4 && old.street.every(o => EVENTS[o.area]) ? old.street : [];
+    S.announced = Object.assign({}, old.announced || {});
+    S.stars = Object.assign({}, old.stars || {});
+    if (old.essex && Array.isArray(old.essex.completed)) S.essex = { completed: ESSEX.map((e, i) => !!old.essex.completed[i]), done: !!old.essex.done };
+    S.street = Array.isArray(old.street) && old.street.length === 4 && old.street.every(o => (o.ch === 'essex' ? ESSEX : EVENTS)[o.area]) ? old.street : [];
 
   } else {
     const map = [0, 2, 4, 5, 8, 11];
@@ -1216,7 +1415,7 @@ function createRace(S, spec) {
   const st = curStats(S), own = S.owned[S.current];
   let ev;
   if (spec.kind === 'street') {
-    const o = spec.offer, a = EVENTS[o.area];
+    const o = spec.offer, a = (o.ch === 'essex' ? ESSEX : EVENTS)[o.area] || EVENTS[0];
     ev = { kind: 'street', title: 'STREET RACE', label: o.label, chapter: a.chapter, area: a.area, road: a.road, env: a.env, sky: a.sky, signs: a.signs,
       time: o.time, dawn: false, dist: o.dist, oppBhp: o.bhp, oppName: o.name, oppCar: o.car, oppLook: o.look, rival: null,
       reward: o.prize, rep: 0, skill: o.skill, inc: o.inc, d: o.d, offerId: o.id, cp: o.mode === 'cp' };
@@ -1225,17 +1424,25 @@ function createRace(S, spec) {
     const beaten = !!(S.specials && S.specials[spec.id]);
     ev = Object.assign({}, e, { kind: 'special', id: spec.id, exhibition: beaten && !e.friend, rematch: beaten, oppName: e.friend ? ch.name + ' (AI)' : ch.name, oppCar: ch.car,
       reward: beaten && e.friend ? rematchPrize(S) : e.reward, skill: e.diff.skill, inc: e.diff.inc, d: 1 });
+  } else if (spec.kind === 'essex' || spec.kind === 'slip') {
+    // Essex career races, and pink slip rematches on the same roads
+    const idx = spec.kind === 'slip' ? ESSEX.findIndex(e => e.rival === spec.id) : spec.index;
+    const e = ESSEX[idx], ch = CHARACTERS[e.rival];
+    ev = Object.assign({}, e, { kind: spec.kind, index: idx, exhibition: spec.kind === 'essex' && !!spec.exhibition, oppName: ch.name, oppCar: ch.car,
+      skill: e.diff.skill, inc: e.diff.inc, d: 1, open: true, slipCar: spec.kind === 'slip' ? slipCarFor(e.rival).id : null, betCar: spec.kind === 'slip' ? S.current : null,
+      reward: spec.kind === 'slip' ? 0 : e.reward });
   } else {
     const e = EVENTS[spec.index], ch = CHARACTERS[e.rival];
     ev = Object.assign({}, e, { kind: 'career', index: spec.index, exhibition: !!spec.exhibition, oppName: ch.name, oppCar: ch.car,
       skill: e.diff.skill, inc: e.diff.inc, d: spec.index / (EVENTS.length - 1) });
   }
   // the route a time counts for on the leaderboard (career events and friend races), and its traffic seed
-  ev.route = spec.kind === 'street' ? null : spec.kind === 'special' ? 'special:' + spec.id : 'career:' + ev.rival;
+  ev.route = spec.kind === 'street' ? null : spec.kind === 'special' ? 'special:' + spec.id : spec.kind === 'essex' || spec.kind === 'slip' ? 'essex:' + ev.rival : 'career:' + ev.rival;
   const seed = hashStr((ev.route || 'street:' + ev.offerId) + '|v1');
   const rw = seededRng(seed), rr = seededRng(seed ^ 0x9E3779B9);
   const oppV = vmaxFor(ev.oppBhp) * ev.skill;
   const traffic = trafficFor(ev.d);
+  if (ev.open || (spec.kind === 'street' && spec.offer.ch === 'essex')) { traffic.two *= 0.8; traffic.extra *= 1.5; }   // Essex: wider, emptier roads
   return {
     ev, carId: S.current, st, traffic, look: lookOf(S, S.current), up: Object.assign({}, own.up), styleBonus: styleBonus(st.style),
     state: 'countdown', countdown: 3.2, t: 0, doneT: 0, wrecked: false,
@@ -1492,6 +1699,7 @@ function payout(R, base, out) {
 function settleRace(S, R) {
   if (R.settled || !R.result) return R.summary || null;
   R.settled = true;
+  const essexBefore = essexOpen(S);
   const own = S.owned[R.carId];
   if (own) own.damage = Math.round(Math.min(100, R.p.damage));
   const ev = R.ev;
@@ -1501,6 +1709,14 @@ function settleRace(S, R) {
   out.cpCash = 0; out.gates = { hit: R.cp.hit, missed: R.cp.missed, best: R.cp.best };
   if (R.result.how === 'finish' && R.cp.cash > 0) { S.money += R.cp.cash; out.cpCash = R.cp.cash; }
   if (ev.rival) out.line = R.result.won ? CHARACTERS[ev.rival].youWin : CHARACTERS[ev.rival].youLose;
+  // stars on every fixed route: the win, a clean win, and a win that hit every gate
+  if (ev.route && R.result.won) {
+    const bits = STAR_WIN | (R.p.collisions === 0 ? STAR_CLEAN : 0) | (R.cp.hit > 0 && R.cp.missed === 0 ? STAR_GATES : 0);
+    S.stars = S.stars || {};
+    const before = S.stars[ev.route] || 0;
+    S.stars[ev.route] = before | bits;
+    out.stars = bits; out.newStars = starCount(S.stars[ev.route]) - starCount(before);
+  }
   if (ev.kind === 'street') {
     S.stats.street = (S.stats.street || 0) + 1;
     if (R.result.won && S.street.some(o => o.id === ev.offerId)) {
@@ -1518,6 +1734,37 @@ function settleRace(S, R) {
         out.rep = ev.rep; out.story = ev.win; S.news = ev.win;
       } else if (ev.friend && ev.rematch) S.money += payout(R, ev.reward, out);   // quick cash every time after the first win
     }
+  } else if (ev.kind === 'slip') {
+    // pink slip: win their car, or lose the one you put up
+    const car = carById(ev.slipCar), bet = carById(ev.betCar);
+    if (R.result.won) {
+      S.stats.wins++;
+      const up = {}; for (const u of UPGRADES) up[u.id] = car.slipUp || 2;
+      S.owned[car.id] = { up, damage: 0, spent: 0, look: stockLook(car.id) };
+      out.slipWon = car.name; out.story = `${CHARACTERS[ev.rival].name} signed over the ${car.name}. It is in your garage.`; S.news = out.story;
+    } else if (S.owned[ev.betCar] && Object.keys(S.owned).length > 1) {
+      delete S.owned[ev.betCar];
+      if (S.current === ev.betCar) S.current = Object.keys(S.owned)[0];
+      out.slipLost = bet.name; out.story = `${CHARACTERS[ev.rival].name} drove off in your ${bet.name}.`; S.news = out.story;
+    }
+    S.street = streetOffers(S);
+  } else if (ev.kind === 'essex') {
+    if (R.result.won) {
+      S.stats.wins++;
+      S.essex = S.essex || { completed: ESSEX.map(() => false), done: false };
+      if (!ev.exhibition && !S.essex.completed[ev.index] && ev.index === nextEssexIndex(S)) {
+        const repBefore = S.rep;
+        S.essex.completed[ev.index] = true;
+        S.money += payout(R, ev.reward, out); S.rep += ev.rep;
+        out.rep = ev.rep; out.story = ev.win; S.news = ev.win;
+        out.newCars = CARS.filter(c => !c.slip && c.rep > repBefore && c.rep <= S.rep).map(c => c.name);
+        out.slipOpen = slipCarFor(ev.rival) ? slipCarFor(ev.rival).name : null;
+        const nx = nextEssexIndex(S);
+        if (nx >= ESSEX.length) { out.essexDone = !S.essex.done; S.essex.done = true; }
+        else out.nextEvent = ESSEX[nx].title;
+        S.street = streetOffers(S);
+      }
+    }
   } else if (R.result.won) {
     S.stats.wins++;
     if (!ev.exhibition && !S.completed[ev.index] && ev.index === nextEventIndex(S)) {
@@ -1525,7 +1772,7 @@ function settleRace(S, R) {
       S.completed[ev.index] = true;
       S.money += payout(R, ev.reward, out); S.rep += ev.rep;
       out.rep = ev.rep; out.story = ev.win;
-      out.newCars = CARS.filter(c => c.rep > repBefore && c.rep <= S.rep).map(c => c.name);
+      out.newCars = CARS.filter(c => !c.slip && c.rep > repBefore && c.rep <= S.rep).map(c => c.name);
       S.news = ev.win;
       const nx = nextEventIndex(S);
       if (nx >= EVENTS.length) { S.careerDone = true; S.kingRevealed = true; out.careerDone = !wasDone; }
@@ -1536,6 +1783,7 @@ function settleRace(S, R) {
       S.street = streetOffers(S);
     }
   }
+  if (!essexBefore && essexOpen(S)) out.essexOpened = true;
   R.summary = out;
   return out;
 }
@@ -1713,7 +1961,7 @@ function carEnv(pal) {
 /* daylight colours of the world; time of day darkens and tints them */
 const MAT = { road: [86, 88, 92], pave: [150, 148, 142], kerb: [176, 173, 166], line: [240, 240, 230], verge: [72, 98, 58], bus: [150, 48, 44],
   brick: [150, 114, 84], brick2: [132, 70, 54], render: [196, 190, 178], concrete: [146, 146, 142], glass: [78, 98, 118], steel: [118, 124, 130],
-  viaduct: [118, 80, 60], barrier: [150, 156, 160], median: [96, 110, 80] };
+  viaduct: [118, 80, 60], barrier: [150, 156, 160], median: [96, 110, 80], sea: [44, 72, 92], sand: [168, 150, 112], river: [40, 58, 70], hedge: [52, 78, 44] };
 function wc(pal, base, k, fg) {
   const l = pal.light * (k || 1), c = [base[0] * l * pal.keyCol[0], base[1] * l * pal.keyCol[1], base[2] * l * pal.keyCol[2]];
   return fg > 0 ? mix(c, pal.fog, fg) : c;
@@ -1727,7 +1975,14 @@ const ENV = {
   arches:     { block: 44, density: 0.72, set: [12, 16], h: [6, 10], mats: ['steel', 'brick2'], win: 'sparse', shops: 0, stripe: true, viaduct: true, lampSp: 38 },
   aroad:      { block: 70, density: 0.4, set: [28, 42], h: [24, 58], mats: ['concrete'], win: 'estate', shops: 0, trees: 1, barrier: true, opposite: true, lampSp: 40 },
   park:       { block: 60, density: 0.1, set: [20, 30], h: [6, 9], mats: ['render'], win: 'sash', shops: 0, trees: 2, wall: true, lampSp: 36 },
+  // Essex: open dual carriageway through fields, a retail park ring road, the seafront and the bridge
+  fields:     { block: 110, density: 0.16, set: [34, 60], h: [5, 8.5], mats: ['render', 'brick'], win: 'sparse', shops: 0, trees: 1, barrier: true, opposite: true, lampSp: 64, hedge: true },
+  retail:     { block: 74, density: 0.72, set: [26, 40], h: [9, 14], mats: ['steel', 'concrete', 'render'], win: 'none', shops: 0, retail: true, barrier: true, opposite: true, lampSp: 34, trees: 0.5 },
+  seafront:   { block: 14, density: 0.95, set: [9, 9.6], h: [7, 11], mats: ['render', 'render', 'brick'], win: 'sash', shops: 0.92, names: 'seaside', sea: true, lampSp: 26, festoon: true },
+  bridge:     { block: 100, density: 0, set: [30, 40], h: [0, 0], mats: ['concrete'], win: 'none', shops: 0, barrier: true, opposite: true, lampSp: 44, bridge: true },
 };
+const SEASIDE_NAMES = ['AMUSEMENTS', 'ARCADE', 'FISH & CHIPS', 'ROCK SHOP', 'ICE CREAM', 'DOUGHNUTS', 'BINGO', 'CASINO', 'GIFTS', 'SEAFRONT CAFE', 'CANDY FLOSS', 'PENNY FALLS', 'SEAFOOD', 'KEBAB'];
+const RETAIL_NAMES = ['HOMEWARE', 'SPORTS', 'ELECTRICALS', 'CINEMA', 'DRIVE THRU', 'TYRES & EXHAUSTS', 'FURNITURE', 'GYM', 'TOYS', 'PETS', 'DIY', 'CARPETS', 'BOWLING', 'FASHION OUTLET'];
 const SHOP_NAMES = ['GRILL', 'CAFE', 'BARBERS', 'MINI MARKET', 'PHONE REPAIR', 'BAKERY', 'SWEET CENTRE', 'OFF LICENCE', 'LAUNDERETTE', 'CHICKEN', 'PHARMACY',
   'CASH & CARRY', 'NAILS', 'TAILOR', 'PIZZA', 'MONEY TRANSFER', 'FISH BAR', 'OPTICIANS', 'HARDWARE', 'FLORIST', 'DRY CLEANERS', 'JEWELLERS'];
 const SHOP_SPECIAL = { tariq: 'RAHMAN PHARMACY', kasia: 'NOWAK TUNING', emre: 'YILDIZ GRILL', marcus: 'CAMPBELL DETAILING', asha: 'WARSAME DRIVING SCHOOL' };
@@ -1884,6 +2139,65 @@ function drawLandmark(g, id, x, base, u, pal, seed) {
       for (let i = 0; i <= 8; i++) { const xx = cx - w / 2 + i * w / 8; g.beginPath(); g.moveTo(xx, base); g.lineTo(xx, base - h); g.stroke(); }
       for (let j = 1; j <= 3; j++) { g.beginPath(); g.moveTo(cx - w / 2, base - h * j / 3); g.lineTo(cx + w / 2, base - h * j / 3); g.stroke(); }
     }
+  } else if (id === 'lakeside') {
+    // the shopping centre: a long low block with glass domes and a lit sign
+    const w = 150 * u, h = 20 * u;
+    fillC(night ? [26, 30, 36] : mix([150, 150, 146], pal.fog, 0.35)); g.fillRect(x - w / 2, base - h, w, h);
+    for (const dx of [-45, 0, 45]) { g.beginPath(); g.arc(x + dx * u, base - h, 11 * u, Math.PI, 0); g.fill(); }
+    if (night) {
+      for (const dx of [-45, 0, 45]) drawGlow(g, [200, 220, 255], x + dx * u, base - h - 4 * u, 16 * u, 0.3);
+      g.fillStyle = 'rgba(255,220,160,0.7)'; for (let i = 0; i < 18; i++) g.fillRect(x - w / 2 + 6 * u + i * 8 * u, base - h * 0.55, 4 * u, 3 * u);
+    }
+    g.fillStyle = night ? '#f2a33a' : 'rgba(40,50,60,0.6)'; g.fillRect(x - 18 * u, base - h - 1 * u, 36 * u, 4 * u);
+  } else if (id === 'qe2') {
+    // the QE2 bridge far off: a long deck, two towers and fans of cables
+    const w = 230 * u, dy = base - 30 * u, th = 62 * u;
+    g.strokeStyle = css(night ? [60, 70, 80] : mix([120, 130, 140], pal.fog, 0.35)); g.lineWidth = Math.max(1, 1.8 * u);
+    g.beginPath(); g.moveTo(x - w / 2, base - 6 * u); g.quadraticCurveTo(x, dy - 8 * u, x + w / 2, base - 6 * u); g.stroke();
+    g.lineWidth = Math.max(0.5, 0.6 * u);
+    for (const tx of [-38, 38]) {
+      const cx = x + tx * u;
+      g.beginPath(); g.moveTo(cx, dy - 6 * u); g.lineTo(cx, dy - th); g.stroke();
+      for (let i = 1; i <= 7; i++) { g.beginPath(); g.moveTo(cx, dy - th + i * 5 * u); g.lineTo(cx - i * 10 * u, dy - 6 * u + i * 0.6 * u); g.moveTo(cx, dy - th + i * 5 * u); g.lineTo(cx + i * 10 * u, dy - 6 * u + i * 0.6 * u); g.stroke(); }
+      redLight(cx, dy - th);
+    }
+    if (night) for (let i = 0; i < 24; i++) { const t = i / 23, px = x - w / 2 + t * w, py = base - 6 * u - Math.sin(t * Math.PI) * (30 * u); g.fillStyle = 'rgba(255,200,120,0.8)'; g.fillRect(px, py - 1.5 * u, 1.6, 1.6); }
+  } else if (id === 'tanks') {
+    // oil storage tanks and a flare stack on the estuary
+    for (let i = 0; i < 6; i++) {
+      const cx = x + (i - 2.5) * 26 * u, w = 20 * u, h = (12 + hash(i, seed) * 6) * u;
+      fillC(night ? [30, 34, 38] : mix([170, 172, 170], pal.fog, 0.35)); g.fillRect(cx - w / 2, base - h, w, h);
+      g.beginPath(); g.ellipse(cx, base - h, w / 2, 2.2 * u, 0, 0, 7); g.fill();
+      if (night) { g.fillStyle = 'rgba(255,230,170,0.8)'; g.fillRect(cx - 1, base - h - 1, 2, 2); }
+    }
+    const fx = x + 95 * u; fillC(night ? [34, 38, 42] : [110, 114, 118]); g.fillRect(fx - 1.5 * u, base - 64 * u, 3 * u, 64 * u);
+    drawGlow(g, [255, 150, 40], fx, base - 68 * u, 12 * u, night ? 0.9 : 0.5);
+    g.fillStyle = '#ffb040'; g.beginPath(); g.ellipse(fx, base - 67 * u, 2.2 * u, 4.5 * u, 0, 0, 7); g.fill();
+  } else if (id === 'spire') {
+    // a cathedral tower with a small spire above the town
+    fillC(night ? [26, 28, 32] : mix([150, 140, 124], pal.fog, 0.3));
+    g.fillRect(x - 6 * u, base - 44 * u, 12 * u, 44 * u); g.fillRect(x - 30 * u, base - 18 * u, 60 * u, 18 * u);
+    g.beginPath(); g.moveTo(x - 4 * u, base - 44 * u); g.lineTo(x, base - 66 * u); g.lineTo(x + 4 * u, base - 44 * u); g.closePath(); g.fill();
+    if (night) { drawGlow(g, [255, 210, 150], x, base - 40 * u, 26 * u, 0.35); g.fillStyle = 'rgba(255,214,150,0.8)'; g.fillRect(x - 1.5 * u, base - 36 * u, 3 * u, 6 * u); }
+  } else if (id === 'pier') {
+    // the pier runs miles out into the estuary: a thin lit line with the pier head at the end
+    const w = 260 * u, y = base - 5 * u;
+    g.strokeStyle = css(night ? [50, 56, 62] : mix([110, 110, 104], pal.fog, 0.3)); g.lineWidth = Math.max(1, 1.4 * u);
+    g.beginPath(); g.moveTo(x - w / 2, y); g.lineTo(x + w / 2, y - 3 * u); g.stroke();
+    fillC(night ? [40, 44, 48] : [120, 120, 114]); g.fillRect(x + w / 2 - 14 * u, y - 10 * u, 18 * u, 8 * u);
+    if (night) for (let i = 0; i < 40; i++) { const t = i / 39; g.fillStyle = 'rgba(255,220,160,0.85)'; g.fillRect(x - w / 2 + t * w, y - t * 3 * u - 1.5, 1.4, 1.4); }
+  } else if (id === 'wheel') {
+    // the big wheel on the seafront, lit up in colours at night
+    const r = 30 * u, cy = base - r - 8 * u;
+    g.strokeStyle = css(night ? [60, 64, 70] : mix([140, 144, 150], pal.fog, 0.3)); g.lineWidth = Math.max(1, 1.2 * u);
+    g.beginPath(); g.moveTo(x - 12 * u, base); g.lineTo(x, cy); g.lineTo(x + 12 * u, base); g.stroke();
+    g.beginPath(); g.arc(x, cy, r, 0, 7); g.stroke();
+    for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; g.beginPath(); g.moveTo(x, cy); g.lineTo(x + Math.cos(a) * r, cy + Math.sin(a) * r); g.stroke(); }
+    if (night) for (let i = 0; i < 24; i++) {
+      const a = i / 24 * Math.PI * 2, c = NEON[i % NEON.length];
+      g.fillStyle = css(c); g.fillRect(x + Math.cos(a) * r - 1, cy + Math.sin(a) * r - 1, 2.2, 2.2);
+      drawGlow(g, c, x + Math.cos(a) * r, cy + Math.sin(a) * r, 5 * u, 0.4);
+    }
   } else if (id === 'cranes') {
     for (const dx of [-120, 90, 170]) {
       const cx = x + dx * u, h = (60 + hash(dx, seed) * 40) * u;
@@ -1916,8 +2230,18 @@ function drawRoad(pal, dist, evDist) {
     if (z1 > Z_FAR) z1 = Z_FAR;
     if (z1 <= z0) continue;
     const a = G(z0), b = G(z1), fg = fogK((z0 + z1) * 0.5), odd = k & 1;
-    ctx.fillStyle = css(wc(pal, MAT.verge, odd ? 1.08 : 1, fg));
+    ctx.fillStyle = css(wc(pal, env.bridge ? MAT.river : MAT.verge, odd ? 1.08 : 1, fg));
     ctx.fillRect(0, b.y - 0.5, W, a.y - b.y + 1.5);
+    if (env.sea) {
+      // beach below the promenade, then the estuary out to the horizon
+      ctx.fillStyle = css(wc(pal, MAT.sea, odd ? 1.06 : 0.96, fg)); quadX(ctx, a, b, -4000, -ROAD_HALF - 14);
+      ctx.fillStyle = css(wc(pal, MAT.sand, odd ? 1.04 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF - 14, -ROAD_HALF - 3.6);
+    }
+    if (env.bridge && pal.lit > 0.5 && hash(k, 61) < 0.25) {
+      // lights from the shore glinting on the river far below
+      const y = (a.y + b.y) / 2, xg = hash(k, 62) < 0.5 ? X(a, -ROAD_HALF - 8 - hash(k, 63) * 60) : X(a, ROAD_HALF + 20 + hash(k, 63) * 60);
+      ctx.fillStyle = css(mix([255, 200, 120], pal.fog, fg), 0.5); ctx.fillRect(xg, y, Math.max(2, 0.8 * a.s), 1);
+    }
     const paveR = env.opposite ? oppX1 : ROAD_HALF + 0.25;
     ctx.fillStyle = css(wc(pal, MAT.pave, odd ? 1.05 : 0.97, fg));
     quadX(ctx, a, b, -ROAD_HALF - 3.6, -ROAD_HALF - 0.25); quadX(ctx, a, b, paveR, paveR + 3.4);
@@ -1959,6 +2283,14 @@ function drawRoad(pal, dist, evDist) {
       }
     }
     if (env.wall && z0 < 220) for (const sd of [-1, 1]) { ctx.fillStyle = css(wc(pal, MAT.brick, 0.9, fg)); vquad(ctx, sd * (ROAD_HALF + 3.7), 0, 1.1, z0, z1); }
+    if (env.sea && z0 < 220) {
+      // the promenade railing: a top rail and posts
+      const xr = -ROAD_HALF - 3.6;
+      ctx.fillStyle = css(wc(pal, [210, 214, 218], 1, fg)); vquad(ctx, xr, 1.0, 1.1, z0, z1); vquad(ctx, xr, 0.55, 0.6, z0, z1);
+      if (!odd) { const q0 = P(xr, 0, z0), q1 = P(xr, 1.1, z0); ctx.fillRect(q0.x - 0.04 * q0.s, q1.y, Math.max(1, 0.08 * q0.s), q0.y - q1.y); }
+    }
+    if (env.bridge && z0 < 260) for (const xb of [-ROAD_HALF - 3.6, oppX1 + 3.4]) { ctx.fillStyle = css(wc(pal, MAT.concrete, 0.8, fg)); vquad(ctx, xb, 0, 1.25, z0, z1); }
+    if (env.hedge && z0 < 240) for (const xb of [-ROAD_HALF - 6.5, oppX1 + 6]) { ctx.fillStyle = css(wc(pal, MAT.hedge, odd ? 1.05 : 0.95, fg)); vquad(ctx, xb, 0, 1.6 + hash(k, xb > 0 ? 71 : 72) * 0.5, z0, z1); }
   }
   // zebra crossings
   if (env.zebra) {
@@ -2013,6 +2345,7 @@ function drawBuildings(pal, dist, rival) {
   const env = ENV[pal.env] || ENV.aroad, camW = dist - Z_PLAYER, BL = env.block, night = pal.lit > 0.5;
   for (const sd of [-1, 1]) {
     if (sd < 0 && env.viaduct) { drawViaduct(pal, dist, rival); continue; }
+    if ((sd < 0 && env.sea) || !env.density) continue;
     const bFirst = Math.floor((camW + 1) / BL), bLast = Math.floor((camW + Z_FAR) / BL);
     for (let bi = bLast; bi >= bFirst; bi--) {
       if (hash(bi, sd + 5) > env.density) continue;
@@ -2042,7 +2375,8 @@ function drawBuildings(pal, dist, rival) {
       const winCol = (hv) => night || pal.time === 'dusk' ? css(mix(WIN_COL[Math.floor(hv * 40) % 4], pal.fog, fg * 0.8), 0.9)
         : css(wc(pal, [60, 72, 84], 1, fg));
       // windows
-      if (env.win === 'tower') {
+      if (env.win === 'none') { /* big sheds with no windows */ }
+      else if (env.win === 'tower') {
         for (let fl = 1, y = 4.5; y < hgt - 2 && fl < 45; fl++, y += 3.6) {
           for (let sgi = 0; sgi < 3; sgi++) {
             const hv = hash(bi * 97 + fl * 13 + sgi, sd);
@@ -2076,7 +2410,8 @@ function drawBuildings(pal, dist, rival) {
       }
       // shop fronts with signs
       if (env.shops && hash(bi, sd + 21) < env.shops) {
-        const nm = SHOP_SPECIAL[rival] && hash(bi, sd + 25) < 0.22 ? SHOP_SPECIAL[rival] : SHOP_NAMES[Math.floor(hash(bi, sd + 23) * SHOP_NAMES.length)];
+        const names = env.names === 'seaside' ? SEASIDE_NAMES : SHOP_NAMES;
+        const nm = SHOP_SPECIAL[rival] && hash(bi, sd + 25) < 0.22 ? SHOP_SPECIAL[rival] : names[Math.floor(hash(bi, sd + 23) * names.length)];
         const za = Math.max(z0, bi * BL - camW + 1.2), zb2 = Math.min(z1, bi * BL - camW + BL - 1.2);
         if (zb2 > za) {
           ctx.fillStyle = css(night || pal.time === 'dusk' ? mix([255, 220, 160], pal.fog, fg * 0.7) : wc(pal, [70, 84, 96], 1, fg), night ? 0.5 : 1);
@@ -2090,6 +2425,24 @@ function drawBuildings(pal, dist, rival) {
             if (sd < 0) mapImage(ctx, img, q[1], q[2], q[0], 1 - fg); else mapImage(ctx, img, q[2], q[1], q[3], 1 - fg);
           }
           if (night) { const nc = NEON[Math.floor(hash(bi, sd + 22) * NEON.length)]; ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, nc, (q[1].x + q[2].x) / 2, q[1].y, Math.min(1.6 * q[0].s, Math.max(W, H) * 0.12), 0.35 * (1 - fg)); ctx.globalCompositeOperation = 'source-over'; }
+        }
+      }
+      if (env.retail) {
+        // a big lit sign across the top of each unit
+        const za = Math.max(z0, bi * BL - camW + 8), zb2 = Math.min(z1, bi * BL - camW + BL - 8);
+        if (zb2 > za) {
+          const sb = SIGN_BG[Math.floor(hash(bi, sd + 24) * SIGN_BG.length)];
+          ctx.fillStyle = css(wc(pal, sb, night ? 2.4 : 1.1, fg * 0.8));
+          const q = vquad(ctx, xs + sd * 0.012, hgt - 3.4, hgt - 1, za, zb2);
+          const wpx = Math.hypot(q[3].x - q[0].x, q[3].y - q[0].y);
+          if (wpx > 42 && fg < 0.7) {
+            const img = textTile(RETAIL_NAMES[Math.floor(hash(bi, sd + 23) * RETAIL_NAMES.length)], css(wc(pal, sb, night ? 2.4 : 1.1, 0)), night ? '#fff6d8' : '#f4f1e6');
+            if (sd < 0) mapImage(ctx, img, q[1], q[2], q[0], 1 - fg); else mapImage(ctx, img, q[2], q[1], q[3], 1 - fg);
+          }
+          // the glass entrance
+          ctx.fillStyle = css(night ? mix([255, 230, 180], pal.fog, fg * 0.7) : wc(pal, [70, 84, 96], 1, fg), night ? 0.55 : 1);
+          const zm = (za + zb2) / 2; vquad(ctx, xs + sd * 0.01, 0, 3.2, zm - 4, zm + 4);
+          if (night) { ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, sb.map(v => Math.min(255, v * 2.4)), (q[1].x + q[2].x) / 2, (q[1].y + q[0].y) / 2, Math.min(3 * q[0].s, Math.max(W, H) * 0.14), 0.3 * (1 - fg)); ctx.globalCompositeOperation = 'source-over'; }
         }
       }
       if (env.stripe) {
@@ -2152,6 +2505,16 @@ function lampSprites(list, pal, dist) {
         ctx.beginPath(); ctx.moveTo(b.x, b.y); ctx.lineTo(t.x, t.y); ctx.lineTo(arm.x, arm.y); ctx.stroke();
         ctx.fillStyle = css(wc(pal, [140, 145, 150], 1, fg));
         ctx.fillRect(arm.x - 0.35 * b.s, arm.y - 0.08 * b.s, 0.7 * b.s, 0.18 * b.s);
+        if (env.festoon && sd < 0 && z < 160) {
+          // seafront festoon lights strung from this lamp to the next one
+          const n = 12;
+          for (let i = 1; i < n; i++) {
+            const t = i / n, zz = z + SP * t; if (zz < 2 || zz > Z_FAR) continue;
+            const q = P(xb, 7.7 - Math.sin(Math.PI * t) * 1.5, zz), c = NEON[(k * 3 + i) % NEON.length], r = Math.max(1, 0.09 * q.s);
+            ctx.fillStyle = css(pal.lit > 0.3 ? c : mix(c, [120, 120, 120], 0.5)); ctx.fillRect(q.x - r, q.y - r, r * 2, r * 2);
+            if (pal.lit > 0.3) { ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, c, q.x, q.y, clamp(0.5 * q.s, 2, 30), 0.5 * pal.lit * (1 - fogK(zz))); ctx.globalCompositeOperation = 'source-over'; }
+          }
+        }
         if (pal.lit > 0.3) {
           ctx.globalCompositeOperation = 'lighter';
           // the halo is capped and fades as the lamp passes overhead, so it never floods the screen
@@ -2186,6 +2549,43 @@ function treeSprites(list, pal, dist) {
         ctx.beginPath(); ctx.arc(b.x, t.y + r * 1.1, r, 0, 7); ctx.arc(b.x - r * 0.6, t.y + r * 1.8, r * 0.85, 0, 7); ctx.arc(b.x + r * 0.6, t.y + r * 1.8, r * 0.85, 0, 7); ctx.fill();
       } });
     }
+  }
+}
+/* the QE2 bridge: a tower each side of the deck with cables fanning down to the edges */
+const PYLON_SP = 1300;
+function bridgeSprites(list, pal, dist) {
+  const env = ENV[pal.env]; if (!env || !env.bridge) return;
+  const camW = dist - Z_PLAYER, H_T = 72;
+  const k0 = Math.floor((camW - 160) / PYLON_SP), k1 = Math.floor((camW + Z_FAR + 160) / PYLON_SP);
+  for (let k = k0; k <= k1; k++) {
+    const zp = 700 + k * PYLON_SP - camW;
+    if (zp < -150 || zp > Z_FAR + 150) continue;
+    list.push({ z: clamp(zp, 2, Z_FAR), draw: () => {
+      const col = css(wc(pal, [170, 176, 182], 1, fogK(clamp(zp, 0, Z_FAR))));
+      // cables first so the towers sit over them
+      ctx.strokeStyle = css(wc(pal, [200, 205, 210], 1, fogK(clamp(zp, 0, Z_FAR))), 0.85);
+      for (const xt of [-ROAD_HALF - 4.2, ROAD_HALF + 13.2 + 4]) {
+        for (let i = 0; i < 9; i++) for (const dir of [-1, 1]) {
+          let y1 = H_T - 6 - i * 3, z1 = zp, y2 = 1.3, z2 = zp + dir * (16 + i * 13);
+          const zmin = 2;
+          if (z1 < zmin && z2 < zmin) continue;
+          if (z1 < zmin) { const t = (zmin - z1) / (z2 - z1); y1 = y1 + (y2 - y1) * t; z1 = zmin; }
+          if (z2 < zmin) { const t = (zmin - z2) / (z1 - z2); y2 = y2 + (y1 - y2) * t; z2 = zmin; }
+          if (z1 > Z_FAR && z2 > Z_FAR) continue;
+          const a = P(xt, y1, Math.min(z1, Z_FAR)), b = P(xt, y2, Math.min(z2, Z_FAR));
+          ctx.lineWidth = Math.max(0.6, 0.05 * Math.min(a.s, b.s)); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+      }
+      if (zp < 2 || zp > Z_FAR) return;
+      for (const xt of [-ROAD_HALF - 4.2, ROAD_HALF + 13.2 + 4]) {
+        const b0 = P(xt - 1.3, 0, zp), b1 = P(xt + 1.3, 0, zp), t0 = P(xt - 0.9, H_T, zp), t1 = P(xt + 0.9, H_T, zp);
+        ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(b0.x, b0.y); ctx.lineTo(b1.x, b1.y); ctx.lineTo(t1.x, t1.y); ctx.lineTo(t0.x, t0.y); ctx.closePath(); ctx.fill();
+        if (pal.lit > 0.3) { ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, [255, 40, 40], (t0.x + t1.x) / 2, t0.y, clamp(1.2 * t0.s, 3, 40), 0.9); ctx.globalCompositeOperation = 'source-over'; }
+      }
+      // the cross beam between the towers, high over the road
+      const l = P(-ROAD_HALF - 4.2, H_T - 4, zp), r = P(ROAD_HALF + 17.2, H_T - 1.5, zp);
+      ctx.fillStyle = col; ctx.fillRect(l.x, r.y, r.x - l.x, l.y - r.y);
+    } });
   }
 }
 /* Belisha beacons at zebra crossings */
@@ -2242,8 +2642,10 @@ function signSprites(list, pal, dist, ev) {
         if (bw > 40) {
           ctx.fillStyle = css(mix([20, 60, 110], pal.fog, fg)); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           const words = s[1].split(' of ');
-          ctx.font = `${Math.round(bh * 0.2)}px ${FONT_PLATE}`; ctx.fillText(words[0] + ' of', a.x + bw / 2, a.y + bh * 0.32);
-          ctx.font = `700 ${Math.round(bh * 0.3)}px ${FONT_PLATE}`; ctx.fillText(words[1] || '', a.x + bw / 2, a.y + bh * 0.66);
+          if (words.length > 1) {
+            ctx.font = `${Math.round(bh * 0.2)}px ${FONT_PLATE}`; ctx.fillText(words[0] + ' of', a.x + bw / 2, a.y + bh * 0.32);
+            ctx.font = `700 ${Math.round(bh * 0.3)}px ${FONT_PLATE}`; ctx.fillText(words[1], a.x + bw / 2, a.y + bh * 0.66);
+          } else { ctx.font = `700 ${Math.round(bh * 0.3)}px ${FONT_PLATE}`; ctx.fillText(s[1], a.x + bw / 2, a.y + bh * 0.52); }
         }
       }
     } });
@@ -2378,6 +2780,7 @@ function renderScene(R, dt) {
   const list = [];
   lampSprites(list, pal, p.dist);
   treeSprites(list, pal, p.dist);
+  bridgeSprites(list, pal, p.dist);
   beaconSprites(list, pal, p.dist, R.demo ? 1e9 : ev.dist, sceneT);
   if (!R.demo) {
     signSprites(list, pal, p.dist, ev);
@@ -2565,7 +2968,7 @@ function renderIntro(R, t, len) {
   let ty = land ? H * 0.2 : H * 0.6;
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
   ctx.font = `700 ${Math.round(12 * u + 3)}px ${FONT_M}`; ctx.fillStyle = '#f2a33a';
-  const kick = ev.kind === 'street' ? 'STREET RACE · ' + (ev.label || '').toUpperCase() : ev.kind === 'special' && ev.brand ? 'INVITATION' : ev.kind === 'special' ? 'STREET RACE · CHALLENGE' : 'EVENT ' + ((ev.index || 0) + 1) + ' · ' + ev.title;
+  const kick = ev.kind === 'street' ? 'STREET RACE · ' + (ev.label || '').toUpperCase() : ev.kind === 'special' && ev.brand ? 'INVITATION' : ev.kind === 'special' ? 'STREET RACE · CHALLENGE' : ev.kind === 'slip' ? 'PINK SLIP · ' + ev.title : (ev.kind === 'essex' ? 'ESSEX ' : 'EVENT ') + ((ev.index || 0) + 1) + ' · ' + ev.title;
   ctx.fillText(kick, tx, ty);
   // portrait
   const ps = Math.round(clamp(84 * u, 58, 110));
@@ -2816,6 +3219,23 @@ const SPECS = {
   is200t: { L: 4.665, W: 1.81, ro: 0.99, wb: 2.8, r: 0.32, sill: 0.2, beltR: 0.96, beltF: 0.87, rear: 'lexus', front: 'lexus', mount: 'deck', exTwin: true,
     keys: [[0, 0.96, 0.1, 'paint', 0.02], [0.6, 0.99, 0.12, 'glass', 0.03], [1.32, 1.37, 0.3, 'paint', 0.05], [2.42, 1.4, 0.31, 'glass', 0.02], [3.28, 0.95, 0.14, 'paint', 0.03], [4.54, 0.79, 0.2], [4.665, 0.69, 0.28]],
     glass: [[1.1, 1.36], [1.42, 2.16], [2.24, 3.28]], black: [[1.36, 1.42], [2.16, 2.24]], doors: [[1.38, 2.2], [2.2, 3.38]] },
+  // Essex
+  // BMW M4 F82: long bonnet with the power dome, two door coupe, L shaped rear lights, quad pipes
+  m4f82: { L: 4.671, W: 1.87, ro: 0.95, wb: 2.812, r: 0.35, sill: 0.19, beltR: 0.92, beltF: 0.87, rear: 'L', front: 'kidney', mount: 'deck', dome: true, exhaust4: true, flares: true,
+    keys: [[0, 0.92, 0.1, 'paint', 0.01], [0.74, 0.96, 0.13, 'glass', 0.03], [1.46, 1.34, 0.31, 'paint', 0.04], [2.42, 1.36, 0.32, 'glass', 0.02], [3.26, 0.94, 0.14, 'paint', 0.02], [4.55, 0.79, 0.2], [4.671, 0.69, 0.28]],
+    glass: [[1.16, 1.72], [1.78, 3.26]], doors: [[1.8, 3.48]] },
+  // Lamborghini Huracan: mid engine wedge, louvred engine cover, Y shaped lights, side intakes behind the doors
+  huracan: { L: 4.459, W: 1.933, ro: 0.86, wb: 2.62, r: 0.35, sill: 0.16, beltR: 0.86, beltF: 0.74, rear: 'lambo', front: 'lambo', mount: 'deck', blade: [1.2, 1.62], exCentre: true, exhaust4: true,
+    keys: [[0, 0.88, 0.12, 'paint', 0.01], [0.3, 0.9, 0.18, 'dark', 0.01], [1.1, 0.97, 0.24, 'glass', 0.04], [1.6, 1.14, 0.39, 'paint', 0.03], [2.2, 1.16, 0.4, 'glass', 0.02], [3.2, 0.78, 0.12, 'paint', 0.03], [4.33, 0.62, 0.2], [4.459, 0.53, 0.3]],
+    glass: [[1.66, 3.2]], doors: [[1.72, 3.06]] },
+  // Audi RS6 Avant (C8): long estate roof, wide blistered arches, black single frame grille, full width rear light bar, big oval pipes
+  rs6: { L: 4.995, W: 1.951, ro: 1.02, wb: 2.926, r: 0.36, sill: 0.22, beltR: 1.0, beltF: 0.9, rear: 'bar', front: 'audi', mount: 'roof', exTwin: true, flares: true,
+    keys: [[0, 1.0, 0.12], [0.1, 1.04, 0.17, 'glass', 0.02], [0.52, 1.43, 0.27, 'paint', 0.03], [2.74, 1.45, 0.29, 'glass', 0.02], [3.58, 0.98, 0.14, 'paint', 0.02], [4.87, 0.84, 0.2], [4.995, 0.74, 0.28]],
+    glass: [[0.6, 1.22], [1.29, 2.28], [2.36, 3.58]], black: [[1.22, 1.29], [2.28, 2.36]], doors: [[1.42, 2.32], [2.32, 3.52]] },
+  // McLaren 720S: teardrop glass canopy, eye socket headlights, deep door intakes, glass engine cover
+  mcl720: { L: 4.543, W: 1.93, ro: 0.92, wb: 2.67, r: 0.35, sill: 0.16, beltR: 0.84, beltF: 0.72, rear: 'mcl', front: 'mcl', mount: 'deck', blade: [1.15, 1.7], exHigh: true,
+    keys: [[0, 0.94, 0.14, 'paint', 0.02], [0.32, 0.97, 0.2, 'glass', 0.02], [1.05, 1.03, 0.3, 'glass', 0.05], [1.55, 1.18, 0.41, 'glass', 0.03], [2.3, 1.2, 0.42, 'glass', 0.02], [3.22, 0.8, 0.14, 'paint', 0.03], [4.42, 0.63, 0.2], [4.543, 0.54, 0.3]],
+    glass: [[1.5, 3.22]], doors: [[1.6, 3.1]] },
   van: { L: 5.4, W: 1.98, ro: 1.0, wb: 3.3, r: 0.34, sill: 0.34, beltR: 1.12, beltF: 1.12, rear: 'van', front: 'plain', mount: 'roof',
     keys: [[0, 2.36, 0.08, 'paint', 0.03], [4.2, 2.4, 0.14, 'glass', 0.02], [4.72, 1.24, 0.15, 'paint', 0.03], [5.28, 1.04, 0.2], [5.4, 0.94, 0.28]],
     glass: [[4.05, 4.72]], doors: [[3.9, 4.6]] },
@@ -3021,6 +3441,16 @@ function buildCar(model, look, lo) {
   else if (style === 'quad') { C2(lx - 0.1, bl - 0.12, 0.08); C2(lx - 0.32, bl - 0.12, 0.08); }
   else if (style === 'tt') { L2(lx - 0.42, bl - 0.1, lx, bl - 0.02); L2(0.06, bl - 0.075, lx - 0.44, bl - 0.055, 'dark'); }
   else if (style === 'lexus') { L2(lx - 0.5, bl - 0.085, lx, bl - 0.01); L2(lx - 0.1, bl - 0.24, lx, bl - 0.085); L2(0.04, bl - 0.05, lx - 0.52, bl - 0.035, 'chrome'); }
+  else if (style === 'lambo') {
+    // thin Y shaped lights and a black mesh panel across the whole back
+    L2(lx - 0.5, bl - 0.07, lx, bl - 0.03); L2(lx - 0.12, bl - 0.16, lx - 0.04, bl - 0.07);
+    lights.push({ pts: rectPts(-lx + 0.05, sill + 0.1, lx - 0.05, bl - 0.12, zk * 1.5), mat: 'dark' });
+  }
+  else if (style === 'mcl') {
+    // C shaped light blades round a big open mesh
+    for (const sd of [-1, 1]) lights.push({ pts: [[sd * lx, bl - 0.02, zk * 2], [sd * (lx - 0.36), bl - 0.05, zk * 2], [sd * (lx - 0.36), bl - 0.08, zk * 2], [sd * (lx - 0.05), bl - 0.06, zk * 2], [sd * (lx - 0.05), bl - 0.28, zk * 2], [sd * lx, bl - 0.3, zk * 2]], mat: 'light' });
+    lights.push({ pts: rectPts(-lx + 0.1, sill + 0.08, lx - 0.1, bl - 0.12, zk * 1.5), mat: 'hole' });
+  }
   else if (style === 'van') L2(s0.w - 0.14, sill + 0.14, s0.w - 0.03, sill + 0.62);
   else if (style === 'bar') L2(0, bl - 0.13, lx, bl - 0.03);
   else L2(lx - 0.48, bl - 0.14, lx, bl - 0.02);
@@ -3030,9 +3460,10 @@ function buildCar(model, look, lo) {
   const py = style === 'van' ? sill + 0.14 : sill + 0.16;
   rear.kids.push({ pts: rectPts(-0.26, py, 0.26, py + 0.111, zk * 2), mat: 'plate', plate: true });
   const tips = [], nEx = sp.exhaust4 ? 4 : [1, 1, 2, 4][look.exhaust || 0] || (model === 'gtr' ? 4 : 1);
-  const exX = sp.exCentre ? [-0.07, 0.07] : sp.exTwin && nEx < 4 ? [-(s0.w - 0.36), s0.w - 0.36] : nEx === 1 ? [s0.w - 0.36] : nEx === 2 ? [s0.w - 0.4, s0.w - 0.28] : [-(s0.w - 0.28), -(s0.w - 0.4), s0.w - 0.4, s0.w - 0.28];
+  const exX = sp.exHigh ? [-0.1, 0.1] : sp.exCentre && nEx >= 4 ? [-0.2, -0.08, 0.08, 0.2] : sp.exCentre ? [-0.07, 0.07] : sp.exTwin && nEx < 4 ? [-(s0.w - 0.36), s0.w - 0.36] : nEx === 1 ? [s0.w - 0.36] : nEx === 2 ? [s0.w - 0.4, s0.w - 0.28] : [-(s0.w - 0.28), -(s0.w - 0.4), s0.w - 0.4, s0.w - 0.28];
   const exR = [0.035, 0.05, 0.045, 0.042][look.exhaust || 0] || 0.04;
-  for (const xc of exX) { rear.kids.push({ pts: circlePts(xc, sill + 0.02, exR, zk * 3, 10), mat: 'chrome' }); rear.kids.push({ pts: circlePts(xc, sill + 0.02, exR * 0.62, zk * 4, 10), mat: 'hole' }); tips.push([xc, sill + 0.02, -0.02]); }
+  const exY = sp.exHigh ? bl - 0.2 : sill + 0.02, exRr = sp.exHigh ? 0.06 : exR;
+  for (const xc of exX) { rear.kids.push({ pts: circlePts(xc, exY, exRr, zk * 3, 10), mat: 'chrome' }); rear.kids.push({ pts: circlePts(xc, exY, exRr * 0.62, zk * 4, 10), mat: 'hole' }); tips.push([xc, exY, -0.02]); }
   faces.push(rear);
 
   // front panel: grille, headlights and plate
@@ -3073,6 +3504,20 @@ function buildCar(model, look, lo) {
     const gw = fs === 'audi' ? 0.36 : fs === 'evo' ? 0.42 : 0.3, gy0 = fs === 'audi' ? sill + 0.16 : fy - 0.2;
     front.kids.push({ pts: [[-gw, gy0, zfk], [gw, gy0, zfk], [gw + 0.03, fy - 0.03, zfk], [-gw - 0.03, fy - 0.03, zfk]], mat: fs === 'merc' || fs === 'vw' ? 'dark' : 'hole' });
     if (fs === 'merc') front.kids.push({ pts: circlePts(0, fy - 0.11, 0.05, zfk + 0.003, 12), mat: 'chrome' });
+  } else if (fs === 'lambo') {
+    // sharp Y headlights, no grille, big hexagon intakes low at each corner
+    for (const sd of [-1, 1]) {
+      front.kids.push({ pts: [[sd * (hx - 0.02), fy - 0.02, zfk + 0.002], [sd * (hx - 0.5), fy - 0.03, zfk + 0.002], [sd * (hx - 0.42), fy - 0.08, zfk + 0.002], [sd * (hx - 0.05), fy - 0.09, zfk + 0.002]], mat: 'head' });
+      front.kids.push({ pts: [[sd * 0.18, sill + 0.05, zfk], [sd * (hx - 0.02), sill + 0.05, zfk], [sd * (hx - 0.02), fy - 0.14, zfk], [sd * (hx - 0.24), fy - 0.12, zfk], [sd * 0.24, sill + 0.2, zfk]], mat: 'hole' });
+    }
+    front.kids.push({ pts: rectPts(-0.18, sill + 0.05, 0.18, sill + 0.1, zfk), mat: 'hole' });
+  } else if (fs === 'mcl') {
+    // eye socket headlights: a dark socket that drops down into the bumper intake, with the lamps up in the top
+    for (const sd of [-1, 1]) {
+      front.kids.push({ pts: [[sd * (hx - 0.02), fy - 0.02, zfk + 0.001], [sd * (hx - 0.4), fy - 0.04, zfk + 0.001], [sd * (hx - 0.36), sill + 0.06, zfk + 0.001], [sd * (hx - 0.12), sill + 0.06, zfk + 0.001], [sd * (hx - 0.04), sill + 0.18, zfk + 0.001]], mat: 'hole' });
+      front.kids.push({ pts: [[sd * (hx - 0.05), fy - 0.035, zfk + 0.003], [sd * (hx - 0.34), fy - 0.05, zfk + 0.003], [sd * (hx - 0.3), fy - 0.1, zfk + 0.003], [sd * (hx - 0.08), fy - 0.09, zfk + 0.003]], mat: 'head' });
+    }
+    front.kids.push({ pts: rectPts(-0.32, sill + 0.05, 0.32, sill + 0.12, zfk), mat: 'hole' });
   } else if (fs === 'mini') {
     // big round headlights and a hexagon grille
     for (const sd of [-1, 1]) front.kids.push({ pts: circlePts(sd * (hx - 0.16), fy - 0.09, 0.11, zfk + 0.002, 16), mat: 'chrome' }, { pts: circlePts(sd * (hx - 0.16), fy - 0.09, 0.085, zfk + 0.004, 16), mat: 'head' });
@@ -3542,6 +3987,23 @@ function drawPortrait(canvas, face, hidden) {
     return;
   }
   const skin = hex2rgb(face.skin), hair = face.hairCol, top = face.top;
+  // a printed scarf: small paisley drops and dots in the print colours, clipped to whatever part of the scarf is being drawn
+  const scarfPrint = (path, x0, y0, x1, y1, seed) => {
+    if (!face.pattern) return;
+    const pc = face.pattern;
+    g.save(); path(); g.clip();
+    const n = Math.round((x1 - x0) * (y1 - y0) / 24);
+    for (let i = 0; i < n; i++) {
+      const x = x0 + hash(i, seed) * (x1 - x0), y = y0 + hash(i, seed + 1) * (y1 - y0), rr = 1.2 + hash(i, seed + 2) * 1.7, a = hash(i, seed + 3) * 6.3;
+      g.fillStyle = pc[i % pc.length]; g.globalAlpha = 0.85;
+      g.beginPath(); g.ellipse(x, y, rr, rr * 0.55, a, 0, 7); g.fill();
+      // the curled tip of the paisley drop
+      g.beginPath(); g.arc(x + Math.cos(a) * rr * 1.05, y + Math.sin(a) * rr * 1.05, rr * 0.32, 0, 7); g.fill();
+      g.fillStyle = pc[(i + 2) % pc.length]; g.globalAlpha = 0.9;
+      g.beginPath(); g.arc(x - Math.cos(a) * rr * 0.2, y - Math.sin(a) * rr * 0.2, rr * 0.22, 0, 7); g.fill();
+    }
+    g.globalAlpha = 1; g.restore();
+  };
   const S = css(skin), Sd = css(shade(skin, 0.86)), Sl = css(shade(skin, 1.06));
   // a hood sits behind the head and around the face
   if (face.hat === 'hood') {
@@ -3551,8 +4013,9 @@ function drawPortrait(canvas, face, hidden) {
   }
   // hijab sits behind the face and over the shoulders
   if (face.hair === 'hijab') {
-    g.fillStyle = hair; g.beginPath(); g.ellipse(50, 46, 24, 28, 0, 0, 7); g.fill();
-    g.beginPath(); g.moveTo(22, 100); g.bezierCurveTo(24, 72, 36, 62, 50, 62); g.bezierCurveTo(64, 62, 76, 72, 78, 100); g.fill();
+    const back = () => { g.beginPath(); g.ellipse(50, 46, 24, 28, 0, 0, 7); g.moveTo(22, 100); g.bezierCurveTo(24, 72, 36, 62, 50, 62); g.bezierCurveTo(64, 62, 76, 72, 78, 100); g.closePath(); };
+    g.fillStyle = hair; back(); g.fill();
+    scarfPrint(back, 20, 16, 80, 100, 81);
   }
   const lhl = face.hair === 'longhl';
   if (lhl) { g.fillStyle = hair; g.beginPath(); g.ellipse(50, 46, 24.5, 29, 0, 0, 7); g.fill(); }
@@ -3574,7 +4037,12 @@ function drawPortrait(canvas, face, hidden) {
     }
     g.globalAlpha = 1; g.restore();
   }
-  if (face.hair === 'hijab') { g.fillStyle = hair; g.beginPath(); g.moveTo(30, 100); g.bezierCurveTo(32, 78, 40, 70, 50, 70); g.bezierCurveTo(60, 70, 68, 78, 70, 100); g.fill(); }
+  if (face.hair === 'hijab') {
+    const drape = () => { g.beginPath(); g.moveTo(30, 100); g.bezierCurveTo(32, 78, 40, 70, 50, 70); g.bezierCurveTo(60, 70, 68, 78, 70, 100); g.closePath(); };
+    g.fillStyle = hair; drape(); g.fill(); scarfPrint(drape, 28, 68, 72, 100, 91);
+    // a soft fold where the scarf crosses under the chin
+    if (face.pattern) { g.strokeStyle = 'rgba(0,0,0,0.22)'; g.lineWidth = 0.8; g.beginPath(); g.moveTo(36, 80); g.quadraticCurveTo(50, 90, 66, 78); g.stroke(); }
+  }
   else { g.fillStyle = Sd; if (big) g.fillRect(40, 60, 20, 14); else g.fillRect(43, 60, 14, 18); g.fillStyle = css(shade(hex2rgb(top), 0.75)); g.beginPath(); g.moveTo(40, 77); g.lineTo(50, 86); g.lineTo(60, 77); g.closePath(); g.fill(); }
   if (face.puffer) { g.strokeStyle = 'rgba(255,255,255,0.08)'; g.lineWidth = 1.2; for (const y of [86, 93]) { g.beginPath(); g.moveTo(12, y); g.quadraticCurveTo(50, y - 6, 88, y); g.stroke(); } g.fillStyle = css(shade(hex2rgb(top), 1.35)); g.fillRect(49.3, 84, 1.4, 16); }
   if (face.stripes) { g.strokeStyle = face.stripes; g.lineWidth = 1.6; for (const k of [0, 3.2, 6.4]) { g.beginPath(); g.moveTo(22 + k, 78 - k * 0.2); g.lineTo(8 + k, 100); g.moveTo(78 - k, 78 - k * 0.2); g.lineTo(92 - k, 100); g.stroke(); } }
@@ -3604,7 +4072,7 @@ function drawPortrait(canvas, face, hidden) {
   if (face.hair !== 'hijab' && !lhl) { g.fillStyle = Sd; g.beginPath(); g.ellipse(33, 47, 3.2, 5, 0, 0, 7); g.ellipse(67, 47, 3.2, 5, 0, 0, 7); g.fill(); }
   g.fillStyle = S; g.beginPath(); g.ellipse(50, 45, face.hair === 'hijab' ? 14.5 : 17, face.hair === 'hijab' ? 18 : 21, 0, 0, 7); g.fill();
   g.fillStyle = Sl; g.beginPath(); g.ellipse(45, 38, 6, 8, -0.3, 0, 7); g.globalAlpha = 0.35; g.fill(); g.globalAlpha = 1;
-  if (face.earrings && face.hair !== 'braids') { g.fillStyle = face.earrings; g.beginPath(); g.arc(33, 53, 1.6, 0, 7); g.arc(67, 53, 1.6, 0, 7); g.fill(); }
+  if (face.earrings && face.hair !== 'braids' && !face.bigEarrings) { g.fillStyle = face.earrings; g.beginPath(); g.arc(33, 53, 1.6, 0, 7); g.arc(67, 53, 1.6, 0, 7); g.fill(); }
   // hair on top
   g.fillStyle = hair;
   const cap = (y) => { g.beginPath(); g.moveTo(33, 42); g.bezierCurveTo(32, y + 4, 40, y - 2, 50, y - 2); g.bezierCurveTo(60, y - 2, 68, y + 4, 67, 42); g.bezierCurveTo(64, 34, 58, 31, 50, 31); g.bezierCurveTo(42, 31, 36, 34, 33, 42); g.fill(); };
@@ -3630,7 +4098,34 @@ function drawPortrait(canvas, face, hidden) {
   else if (face.hair === 'crop') { cap(24.5); g.globalAlpha = 0.55; g.beginPath(); g.ellipse(34, 42, 2.6, 7, 0, 0, 7); g.ellipse(66, 42, 2.6, 7, 0, 0, 7); g.fill(); g.globalAlpha = 1; }
   else if (face.hair === 'topknot') { cap(24); g.beginPath(); g.ellipse(50, 20, 8, 5.5, 0, 0, 7); g.fill(); for (const [x, y] of [[37, 31], [42, 28], [62, 30], [35, 36]]) { g.beginPath(); g.arc(x, y, 3.2, 0, 7); g.fill(); } }
   else if (face.hair === 'bald') { g.fillStyle = 'rgba(255,255,255,0.22)'; g.beginPath(); g.ellipse(45, 29, 7, 3.2, -0.3, 0, 7); g.fill(); g.fillStyle = css(shade(skin, 0.8)); g.globalAlpha = 0.35; g.beginPath(); g.ellipse(34, 42, 2, 5, 0, 0, 7); g.ellipse(66, 42, 2, 5, 0, 0, 7); g.fill(); g.globalAlpha = 1; }
-  else if (face.hair === 'hijab') { g.beginPath(); g.moveTo(35.5, 40); g.bezierCurveTo(36, 28, 44, 25, 50, 25); g.bezierCurveTo(56, 25, 64, 28, 64.5, 40); g.bezierCurveTo(60, 32, 55, 30, 50, 30); g.bezierCurveTo(45, 30, 40, 32, 35.5, 40); g.fill(); }
+  else if (face.hair === 'hijab') {
+    const crown = () => { g.beginPath(); g.moveTo(35.5, 40); g.bezierCurveTo(36, 28, 44, 25, 50, 25); g.bezierCurveTo(56, 25, 64, 28, 64.5, 40); g.bezierCurveTo(60, 32, 55, 30, 50, 30); g.bezierCurveTo(45, 30, 40, 32, 35.5, 40); g.closePath(); };
+    g.fillStyle = hair; crown(); g.fill(); scarfPrint(crown, 34, 24, 66, 41, 101);
+    if (face.underscarf) {
+      // the plain under scarf shows as a band along the forehead and down the sides of the face
+      g.strokeStyle = face.underscarf; g.lineWidth = 1.8; g.lineCap = 'round';
+      g.beginPath(); g.moveTo(36.2, 41); g.bezierCurveTo(40, 32.6, 45, 30.9, 50, 30.9); g.bezierCurveTo(55, 30.9, 60, 32.6, 63.8, 41); g.stroke();
+      g.lineWidth = 1.2; g.beginPath(); g.moveTo(36.2, 41); g.quadraticCurveTo(35.6, 50, 38, 58); g.moveTo(63.8, 41); g.quadraticCurveTo(64.4, 50, 62, 58); g.stroke();
+    }
+  }
+  if (face.hoops) {
+    // gold hoops showing through the hair
+    g.strokeStyle = face.hoops; g.lineWidth = 1.1;
+    for (const sd of [-1, 1]) { g.beginPath(); g.arc(50 + sd * 16.4, 56.5, 3.3, 0, 7); g.stroke(); }
+    g.strokeStyle = 'rgba(255,245,200,0.55)'; g.lineWidth = 0.5;
+    for (const sd of [-1, 1]) { g.beginPath(); g.arc(50 + sd * 16.4, 56.5, 3.3, 3.6, 4.6); g.stroke(); }
+  }
+  if (face.bigEarrings) {
+    // gold statement earrings sitting on the scarf: a stud and a long hanging drop
+    for (const sd of [-1, 1]) {
+      const x = 50 + sd * 16.2, y = 53;
+      g.fillStyle = face.earrings || '#d8b04a';
+      g.beginPath(); g.arc(x, y, 1.5, 0, 7); g.fill();
+      g.beginPath(); g.moveTo(x, y + 1.2); g.lineTo(x - 2.6, y + 6.5); g.quadraticCurveTo(x, y + 10.5, x + 2.6, y + 6.5); g.closePath(); g.fill();
+      g.fillStyle = 'rgba(255,245,200,0.6)'; g.beginPath(); g.ellipse(x - 0.7, y + 5.8, 0.7, 1.4, 0.2, 0, 7); g.fill();
+      g.fillStyle = css(shade(hex2rgb(face.earrings || '#d8b04a'), 0.7)); g.beginPath(); g.arc(x, y + 8.6, 0.9, 0, 7); g.fill();
+    }
+  }
   // facial hair
   const fh = face.facialCol || hair;
   if (face.facial === 'stubble') { g.fillStyle = fh; g.globalAlpha = 0.22; g.beginPath(); g.ellipse(50, 56, 14, 9, 0, 0, Math.PI); g.fill(); g.globalAlpha = 1; }
@@ -3648,7 +4143,7 @@ function drawPortrait(canvas, face, hidden) {
   g.fillStyle = '#1a1210';
   g.beginPath(); g.ellipse(43.5, 45.5, 1.9, 1.5, 0, 0, 7); g.ellipse(56.5, 45.5, 1.9, 1.5, 0, 0, 7); g.fill();
   g.fillStyle = 'rgba(255,255,255,0.7)'; g.beginPath(); g.arc(44.1, 45, 0.5, 0, 7); g.arc(57.1, 45, 0.5, 0, 7); g.fill();
-  g.strokeStyle = face.hair === 'hijab' || face.hair === 'bun' ? css(shade(skin, 0.45)) : face.browCol || hair; g.lineWidth = 1.3; g.lineCap = 'round';
+  g.strokeStyle = face.browCol || (face.hair === 'hijab' || face.hair === 'bun' ? css(shade(skin, 0.45)) : hair); g.lineWidth = face.browW || 1.3; g.lineCap = 'round';
   g.beginPath();
   if (face.lashes) { g.moveTo(39.5, 42.2); g.quadraticCurveTo(43, 39.2, 47, 40.9); g.moveTo(60.5, 42.2); g.quadraticCurveTo(57, 39.2, 53, 40.9); }
   else { g.moveTo(40, 41.5); g.lineTo(46.5, 40.8); g.moveTo(53.5, 40.8); g.lineTo(60, 41.5); }
@@ -3761,6 +4256,57 @@ function drawLondonMap(canvas, S) {
   });
 }
 
+/* ---------- schematic map of the Essex races ---------- */
+const ESSEX_BOX = { lon0: 0.08, lon1: 0.82, lat0: 51.43, lat1: 51.76 };
+const ESTUARY = [[0.08, 51.49], [0.16, 51.483], [0.22, 51.466], [0.27, 51.462], [0.32, 51.468], [0.37, 51.455], [0.42, 51.466], [0.48, 51.492], [0.54, 51.505], [0.6, 51.51], [0.66, 51.52], [0.72, 51.527], [0.82, 51.52]];
+const ESSEX_ROADS = [
+  ['A12', [[0.1, 51.57], [0.18, 51.58], [0.26, 51.605], [0.31, 51.625], [0.4, 51.68], [0.47, 51.72], [0.55, 51.76]]],
+  ['A127', [[0.1, 51.565], [0.2, 51.57], [0.32, 51.575], [0.46, 51.58], [0.58, 51.575], [0.7, 51.55]]],
+  ['A13', [[0.08, 51.52], [0.2, 51.505], [0.3, 51.495], [0.4, 51.525], [0.5, 51.54], [0.62, 51.545], [0.72, 51.54]]],
+  ['M25', [[0.26, 51.44], [0.265, 51.47], [0.27, 51.52], [0.25, 51.58], [0.22, 51.64], [0.18, 51.7]]],
+];
+const ESSEX_LABELS = [['ROMFORD', 0.18, 51.595], ['BASILDON', 0.46, 51.6], ['SOUTHEND', 0.71, 51.565], ['CHELMSFORD', 0.47, 51.745], ['BRENTWOOD', 0.3, 51.64], ['LAKESIDE', 0.3, 51.475], ['CANVEY', 0.58, 51.525]];
+function drawEssexMap(canvas, S) {
+  const cw = canvas.clientWidth || 400, ch = canvas.clientHeight || 400, dpr = Math.min(2, window.devicePixelRatio || 1);
+  canvas.width = Math.round(cw * dpr); canvas.height = Math.round(ch * dpr);
+  const g = canvas.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const pad = 14, B = ESSEX_BOX;
+  const kx = (cw - pad * 2) / (B.lon1 - B.lon0), ky = (ch - pad * 2) / (B.lat1 - B.lat0);
+  const k = Math.min(kx, ky / 1.61);
+  const ox = (cw - k * (B.lon1 - B.lon0)) / 2, oy = (ch - k * 1.61 * (B.lat1 - B.lat0)) / 2;
+  const M = (lon, lat) => [ox + (lon - B.lon0) * k, oy + (B.lat1 - lat) * k * 1.61];
+  g.fillStyle = '#0c1417'; g.fillRect(0, 0, cw, ch);
+  // the estuary gets wider towards the sea: fill everything south of the north bank
+  g.fillStyle = '#163845'; g.beginPath();
+  ESTUARY.forEach((p, i) => { const q = M(p[0], p[1]); if (i) g.lineTo(q[0], q[1]); else g.moveTo(q[0], q[1]); });
+  const e1 = M(B.lon1 + 0.1, B.lat0 - 0.1), e0 = M(B.lon0 - 0.1, B.lat0 - 0.1); g.lineTo(e1[0], e1[1]); g.lineTo(e0[0], e0[1]); g.closePath(); g.fill();
+  g.fillStyle = '#0c1417'; g.beginPath();   // Kent side of the river, west of the estuary
+  const kent = [[0.08, 51.47], [0.2, 51.46], [0.27, 51.445], [0.36, 51.44], [0.45, 51.44], [0.55, 51.45], [0.62, 51.44]];
+  kent.forEach((p, i) => { const q = M(p[0], p[1]); if (i) g.lineTo(q[0], q[1]); else g.moveTo(q[0], q[1]); });
+  g.lineTo(M(0.62, B.lat0 - 0.1)[0], M(0.62, B.lat0 - 0.1)[1]); g.lineTo(e0[0], e0[1]); g.closePath(); g.fill();
+  for (const [name, pts] of ESSEX_ROADS) {
+    g.strokeStyle = name === 'M25' ? 'rgba(90,160,220,0.45)' : 'rgba(242,163,58,0.4)'; g.lineWidth = 2; g.setLineDash(name === 'M25' ? [6, 5] : []);
+    g.beginPath(); pts.forEach((p, i) => { const q = M(p[0], p[1]); if (i) g.lineTo(q[0], q[1]); else g.moveTo(q[0], q[1]); }); g.stroke(); g.setLineDash([]);
+    const lq = M(pts[pts.length - 1][0], pts[pts.length - 1][1]);
+    g.font = `600 ${clamp(Math.round(cw * 0.022), 8, 11)}px ${FONT_M}`; g.fillStyle = name === 'M25' ? 'rgba(90,160,220,0.8)' : 'rgba(242,163,58,0.75)'; g.textAlign = 'center';
+    g.fillText(name, lq[0], lq[1] - 6);
+  }
+  g.font = `600 ${clamp(Math.round(cw * 0.024), 9, 12)}px ${FONT_M}`; g.fillStyle = 'rgba(147,162,164,0.75)'; g.textAlign = 'center';
+  for (const [t, lon, lat] of ESSEX_LABELS) { const q = M(lon, lat); g.fillText(t, q[0], q[1] + 16); }
+  const tl = M(0.5, 51.47); g.fillStyle = 'rgba(80,140,170,0.9)'; g.fillText('THAMES ESTUARY', tl[0], tl[1]);
+  g.font = `${Math.max(12, Math.round(cw * 0.05))}px ${FONT_D}`; g.fillStyle = 'rgba(235,230,218,0.12)';
+  const el = M(0.6, 51.68); g.fillText('ESSEX', el[0], el[1]);
+  const next = S ? nextEssexIndex(S) : 0, done = (S && S.essex && S.essex.completed) || [];
+  ESSEX.forEach((e, i) => {
+    const q = M(e.map[0], e.map[1]), rr = clamp(cw * 0.026, 8, 12), cur = i === next;
+    g.fillStyle = done[i] ? '#5fd38a' : cur ? '#f2a33a' : '#33464d';
+    g.beginPath(); g.arc(q[0], q[1], rr, 0, 7); g.fill();
+    if (cur) { g.strokeStyle = 'rgba(242,163,58,0.5)'; g.lineWidth = 3; g.beginPath(); g.arc(q[0], q[1], rr + 5, 0, 7); g.stroke(); }
+    g.fillStyle = done[i] || cur ? '#10120e' : '#93a2a4'; g.font = `700 ${Math.round(rr * 1.1)}px ${FONT_M}`; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(String(i + 1), q[0], q[1] + 0.5); g.textBaseline = 'alphabetic';
+  });
+}
+
 /* =====================================================================
    STREET KINGS : ONLINE (Google sign-in, racer names, cloud saves, leaderboards)
    Talks to Supabase over plain fetch, no library. Only switched on for the
@@ -3768,6 +4314,7 @@ function drawLondonMap(canvas, S) {
    ===================================================================== */
 const SB_URL = 'https://wdtrktzxszfaftotrdyw.supabase.co';
 const SB_KEY = 'sb_publishable_Llb7ESB5jkatL60gq7vNpw_WXucSND0';   // publishable key: meant to be public, the database rules do the protecting
+const GOOGLE_CLIENT_ID = '976658848882-hsh1cgvct6gpfjkh0lu0bt1nttk2nqgq.apps.googleusercontent.com';
 const SESSION_KEY = 'streetkings.session', PENDING_KEY = 'streetkings.pending', BACKUP_KEY = 'streetkings.save.backup';
 const ONLINE_OK = /(^|\.)elyneel\.github\.io$/.test(location.hostname) || window.__online === true;
 
@@ -3807,6 +4354,51 @@ const Online = {
     try { uid = JSON.parse(atob(s.access_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).sub; } catch (e) {}
     this.session = Object.assign({}, s, { uid });
     this.storeSession();
+  },
+  /* Google's own button. Google's box then names this website instead of the database address. */
+  loadGis() {
+    if (window.google && google.accounts && google.accounts.id) return Promise.resolve();
+    if (!this.gisLoading) this.gisLoading = new Promise((res, rej) => {
+      const sc = document.createElement('script'); sc.src = 'https://accounts.google.com/gsi/client'; sc.async = true;
+      sc.onload = () => res(); sc.onerror = () => { this.gisLoading = null; rej(new Error('Google did not load')); };
+      document.head.appendChild(sc);
+    });
+    return this.gisLoading;
+  },
+  async prepareGis() {
+    if (this.gisReady) return true;
+    try { await this.loadGis(); } catch (e) { return false; }
+    // Google gets a hashed one-off code and the database checks the plain one, so a stolen sign in cannot be replayed
+    const raw = Array.from(crypto.getRandomValues(new Uint8Array(24)), b => b.toString(16).padStart(2, '0')).join('');
+    const dig = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(raw));
+    const hashed = Array.from(new Uint8Array(dig), b => b.toString(16).padStart(2, '0')).join('');
+    this.nonce = raw;
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: r => this.onGoogle(r), nonce: hashed, ux_mode: 'popup', auto_select: false, itp_support: true, use_fedcm_for_button: true });
+    this.gisReady = true;
+    return true;
+  },
+  // puts Google's button into every sign in spot on the screen
+  async mountButtons() {
+    const slots = [...document.querySelectorAll('.gsi-slot:not([data-done])')];
+    if (!slots.length || !this.on || this.signedIn) return;
+    if (!(await this.prepareGis())) { for (const el of slots) el.classList.add('gsi-failed'); return; }
+    for (const el of slots) {
+      if (!el.isConnected) continue;
+      el.dataset.done = '1';
+      google.accounts.id.renderButton(el, { type: 'standard', theme: 'filled_black', size: 'large', text: 'signin_with', shape: 'rectangular', logo_alignment: 'left', width: Math.max(200, Math.min(320, el.clientWidth || 280)) });
+    }
+  },
+  async onGoogle(resp) {
+    try {
+      const r = await fetch(SB_URL + '/auth/v1/token?grant_type=id_token', { method: 'POST', headers: { apikey: SB_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider: 'google', id_token: resp.credential, nonce: this.nonce }) });
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.msg || j.error_description || j.message || 'please try again');
+      this.setSession({ access_token: j.access_token, refresh_token: j.refresh_token, expires_at: j.expires_at || Math.floor(Date.now() / 1000) + (j.expires_in || 3600) });
+      this.gisReady = false;                 // the one-off code is used up; a fresh one is made next time
+      this.justSignedIn = true;
+      await this.afterSignIn();
+    } catch (e) { this.gisReady = false; toast('Sign in did not work: ' + e.message, true); refreshOnlineUi(); }
   },
   signIn() {
     if (!this.on) { toast('Sign in works on the website version of the game.', true); return; }
@@ -3853,6 +4445,9 @@ const Online = {
     this.fromRedirect();
     if (this.flash) toast(this.flash, true);
     if (!this.signedIn) { this.ready = true; refreshOnlineUi(); return; }
+    await this.afterSignIn();
+  },
+  async afterSignIn() {
     try {
       await this.token();
       if (!this.signedIn) { this.ready = true; refreshOnlineUi(); return; }
@@ -3916,11 +4511,12 @@ const Online = {
     if (!route) return '';
     const [kind, id] = route.split(':');
     if (kind === 'career') { const i = EVENTS.findIndex(e => e.rival === id); return i >= 0 ? `${i + 1}. ${EVENTS[i].title}` : route; }
+    if (kind === 'essex') { const i = ESSEX.findIndex(e => e.rival === id); return i >= 0 ? `Essex ${i + 1}. ${ESSEX[i].title}` : route; }
     const sp = SPECIALS[id]; if (!sp) return route;
     return sp.friend ? `${CHARACTERS[sp.rival].name} · ${sp.title}` : sp.title;
   },
   routes() {
-    return EVENTS.map(e => 'career:' + e.rival).concat(SPECIAL_ORDER.map(id => 'special:' + id));
+    return EVENTS.map(e => 'career:' + e.rival).concat(SPECIAL_ORDER.map(id => 'special:' + id), ESSEX.map(e => 'essex:' + e.rival));
   },
   // posts a finished time. Returns { best_ms, place, total, improved } or a reason it was not posted
   async submit(route, ms, car) {
@@ -4045,6 +4641,16 @@ const ENGINE_OF = {
   is200t: { t: 'i4', red: 6300, turbo: 0.6, dct: true, drive: 1.5, rasp: 0.2 },
   e46c: { t: 'i6', red: 6600, drive: 1.6, rasp: 0.25 },
   e46s: { t: 'i6', red: 6600, drive: 1.6, rasp: 0.25 },
+  // Essex
+  golfr: { t: 'i4', red: 6800, turbo: 0.9, dct: true, drive: 2.0, rasp: 0.4, pops: 0.4 },
+  a45: { t: 'i4', red: 7200, turbo: 1.1, dct: true, drive: 2.3, rasp: 0.5, pops: 0.6 },
+  svr: { t: 'v8', red: 6500, sc: 1, drive: 2.6, rasp: 0.6, deep: true, pops: 0.8 },
+  gt3: { t: 'flat6', red: 9000, dct: true, drive: 2.4, rasp: 0.5 },
+  gtrn: { t: 'v6', red: 7100, turbo: 1.1, dct: true, drive: 2.3, rasp: 0.4, pops: 0.3 },
+  m4f82: { t: 'i6', red: 7600, turbo: 1.1, dct: true, drive: 2.2, rasp: 0.45, pops: 0.6 },
+  huracan: { t: 'v10', red: 8500, dct: true, drive: 2.5, rasp: 0.55, pops: 0.5 },
+  rs6: { t: 'v8', red: 6800, turbo: 0.8, dct: true, drive: 2.6, rasp: 0.5, deep: true, pops: 0.5 },
+  mcl720: { t: 'v8', red: 8200, turbo: 1.2, flutter: true, dct: true, drive: 2.3, rasp: 0.4, pops: 0.3 },
   r1: { t: 'bike4', red: 14000, idle: 1400, dct: true, drive: 2.4, rasp: 0.55, pops: 0.35 },
   h2r: { t: 'bike4', red: 14000, idle: 1400, dct: true, sc: 1, drive: 2.4, rasp: 0.5, pops: 0.3 },
 };
@@ -4225,8 +4831,8 @@ const Sound = {
   },
   build(race) {
     this.kill(this.voices && this.voices.me); this.kill(this.voices && this.voices.opp);
-    const car = carById(race.carId), me = this.voice(engineProfile(car ? car.model : 'hatch', race.up), 3);
-    const om = race.ev.oppLook && race.ev.oppLook.model;
+    const car = carById(race.carId), me = this.voice(engineProfile(car ? (ENGINE_OF[car.id] ? car.id : car.model) : 'hatch', race.up), 3);
+    const om = race.ev.oppLook && (race.ev.oppLook.engine || race.ev.oppLook.model);
     const opp = race.ev.cp ? null : this.voice(engineProfile(om, race.ev.oppUp || { exhaust: race.ev.pops ? 3 : 1 }), 11);
     this.voices = { me, opp, pops: 0, passed: new WeakMap(), boosting: false };
     this.race = race;
@@ -4404,7 +5010,7 @@ function paintCanvases() {
   requestAnimationFrame(() => {
     for (const c of document.querySelectorAll('.screen:not([hidden]) canvas[data-car], .screen:not([hidden]) canvas[data-model]')) paintCar(c);
     for (const c of document.querySelectorAll('.screen:not([hidden]) canvas[data-portrait]')) drawPortrait(c, CHARACTERS[c.dataset.portrait].face, c.dataset.hidden === '1');
-    for (const c of document.querySelectorAll('.screen:not([hidden]) canvas[data-map]')) drawLondonMap(c, S);
+    for (const c of document.querySelectorAll('.screen:not([hidden]) canvas[data-map]')) (c.dataset.map === 'essex' ? drawEssexMap : drawLondonMap)(c, S);
   });
 }
 const spin = { yaw: -2.45, hold: 0, plate: 0, zoom: 0 };
@@ -4423,16 +5029,18 @@ function topBar() {
     <div class="brand">STREET <em>KINGS</em></div>
     <div class="stat"><small>Money</small><b class="money">${money(S.money)}</b></div>
     <div class="stat"><small>Reputation</small><b>${S.rep}</b></div>
+    ${totalStars(S) ? `<div class="stat stat-stars"><small>Stars</small><b class="star-n">★ ${totalStars(S)}</b></div>` : ''}
     <div class="stat stat-car"><small>Race car</small><b style="font-size:15px">${carById(S.current).name}</b></div>
     ${Online.on ? `<button class="bar-btn" type="button" data-act="board">Leaderboards</button>` : ''}
     <button class="bar-btn" type="button" data-act="sound">${Sound.on ? 'Sound on' : 'Sound off'}</button>
   </div>`;
 }
 function specRows(st, dmg) {
+  const big = S && S.careerDone, mb = big ? 1000 : 700, mt = big ? 250 : 215;
   return `<div class="specs">
-    <span>Power</span><div class="meter"><i style="width:${pct(st.bhp, 700)}"></i></div><b>${st.bhp} bhp</b>
+    <span>Power</span><div class="meter"><i style="width:${pct(st.bhp, mb)}"></i></div><b>${st.bhp} bhp</b>
     <span>Handling</span><div class="meter"><i style="width:${pct(st.handling, 10)}"></i></div><b>${st.handling.toFixed(1)}/10</b>
-    <span>Top speed</span><div class="meter"><i style="width:${pct(st.topMph, 215)}"></i></div><b>${st.topMph} mph</b>
+    <span>Top speed</span><div class="meter"><i style="width:${pct(st.topMph, mt)}"></i></div><b>${st.topMph} mph</b>
     <span>Nitro tank</span><div class="meter"><i style="width:${pct(st.nitroCap, 200)};background:var(--nitro)"></i></div><b>${(st.nitroCap / NITRO_DRAIN).toFixed(1)} s</b>
     ${dmg === undefined || st.style === undefined ? '' : `<span>Style</span><div class="meter"><i style="width:${st.style}%;background:var(--plate)"></i></div><b>${st.style}/100</b>`}
     ${dmg === undefined ? '' : `<span>Damage</span><div class="meter dmg ${dmgClass(dmg)}"><i style="width:${dmg}%"></i></div><b>${Math.round(dmg)}%</b>`}
@@ -4459,6 +5067,7 @@ function goTitle() {
   $('confirm-new').hidden = true;
   $('account-box').innerHTML = accountBox();
   showScreen('scr-title');
+  Online.mountButtons();
 }
 
 /* ---------- starter car choice ---------- */
@@ -4469,7 +5078,7 @@ function goSelect() {
     <p class="kicker">New career · East London</p>
     <h2 class="h2">Choose your first car</h2>
     <p class="lede">You start with <b>£5,000</b>. The Civic is free and the BMW costs <b>£2,500</b>. Whatever you do not spend is yours for upgrades. Faster cars unlock as your reputation grows.</p>
-    <div class="car-grid">${CARS.map(c => {
+    <div class="car-grid">${CARS.filter(c => !c.slip && !c.chapter).map(c => {
       const st = statsFor(c.id, {}), locked = c.rep > 0;
       return `<div class="car-card ${locked ? 'locked' : ''}">
         <canvas data-car="${c.id}" data-locked="${locked ? 1 : 0}" width="300" height="150"></canvas>
@@ -4494,7 +5103,7 @@ function streetBoard() {
       <button class="link" data-act="reroll">New races</button></div>
     <p class="tip">Win as many as you like. They pay cash every time, but no reputation. Harder races pay more. In a Checkpoint Run there is no rival: go through every gate or you are out. Keep racing out here and a few familiar faces might turn up.</p>
     <div class="offers">${friendCards()}${S.street.map(o => {
-      const a = EVENTS[o.area], cpRun = o.mode === 'cp';
+      const a = (o.ch === 'essex' ? ESSEX : EVENTS)[o.area] || EVENTS[0], cpRun = o.mode === 'cp';
       return `<div class="offer ${cpRun ? 'cp' : o.label.toLowerCase()}">
         <div class="offer-top"><span class="chip diff">${o.label}</span><span class="chip">${TIME_NAMES[o.time]}</span></div>
         <h4>${esc(a.area)}</h4>
@@ -4569,13 +5178,128 @@ function ride3Card() {
     <div class="actions"><button class="btn primary" data-act="special" data-arg="ride3" ${own.damage >= 100 ? 'disabled' : ''}><span>${done ? 'Rematch' : 'Accept the invitation'}</span></button></div>
   </div>`;
 }
+/* ---------- Essex ---------- */
+let hubTab = null, pendingSlip = null;
+const STAR_NAMES = ['Win', 'No crashes', 'Every gate'];
+function starsHtml(bits, big) {
+  bits = bits || 0;
+  const label = STAR_NAMES.map((n, i) => (bits & (1 << i) ? '★ ' : '☆ ') + n).join(', ');
+  return `<span class="stars${big ? ' big' : ''}" title="${label}" aria-label="${starCount(bits)} of 3 stars. ${label}">${[0, 1, 2].map(i => `<i class="${bits & (1 << i) ? 'on' : ''}">★</i>`).join('')}</span>`;
+}
+function hubTabs(tab) {
+  return `<div class="tabs hub-tabs" role="tablist">${[['essex', 'Essex'], ['london', 'London']].map(([t, n]) =>
+    `<button class="tab" role="tab" aria-selected="${tab === t}" data-act="hubtab" data-arg="${t}">${n}</button>`).join('')}</div>`;
+}
+function powerTip(st, oppBhp) {
+  const ratio = st.bhp / oppBhp;
+  return ratio >= 1.08 ? 'You have the power advantage here. Keep it clean and there is no stopping you.'
+    : ratio >= 0.97 ? 'Evenly matched on power. Clean driving and good nitro timing will decide it.'
+    : ratio >= 0.88 ? 'More power on the other side. You need a clean run and every drop of nitro, or an upgrade.'
+    : 'A lot faster on paper. Upgrade, buy a better car or win some street races for cash first.';
+}
+function damageWarn(own) {
+  if (own.damage >= 100) return `<p class="tip bad">Your car is wrecked. Repair it in the garage before you can race.</p>`;
+  if (own.damage >= 50) return `<p class="tip warn">Your car is ${own.damage}% damaged. A few more hits and it is wrecked. Repair costs ${money(repairCost(S))}.</p>`;
+  return '';
+}
+const slipUps = car => { const up = {}; for (const u of UPGRADES) up[u.id] = car.slipUp || 2; return up; };
+/* beaten Essex rivals will race you for their car, if you put yours up */
+function slipCards(own) {
+  const ready = ESSEX.filter(e => slipReady(S, e.rival));
+  if (!ready.length) return '';
+  const cur = carById(S.current), n = Object.keys(S.owned).length;
+  return `<section class="slips">
+    <p class="kicker">Pink slips</p><h3 class="h3">Race for their car</h3>
+    <p class="tip">Beaten rivals will put their car on the line, but only if you put up the car you race. Win and their car is yours, built the way they raced it. Lose and they drive off in yours.</p>
+    <div class="offers">${ready.map(e => {
+      const car = slipCarFor(e.rival), ch = CHARACTERS[e.rival], bhp = statsFor(car.id, slipUps(car)).bhp;
+      let act;
+      if (n < 2) act = `<span class="lock">You need a second car before you can put one up</span>`;
+      else if (own.damage >= 100) act = `<span class="lock">Repair your car first</span>`;
+      else if (pendingSlip === e.rival) act = `<p class="tip warn">If you lose, your ${esc(cur.name)} is gone for good.</p>
+        <div class="row"><button class="btn danger small" data-act="slipyes" data-arg="${e.rival}"><span>Put up my ${esc(cur.name.split(' ')[0])}</span></button><button class="btn ghost small" data-act="slipno"><span>Cancel</span></button></div>`;
+      else act = `<button class="btn small primary" data-act="slip" data-arg="${e.rival}"><span>Race for pink slips</span></button>`;
+      return `<div class="offer slip">
+        <div class="offer-top"><span class="chip diff">Pink slip</span><span class="chip cls">Class ${carClass(bhp)}</span></div>
+        <div class="co-head"><canvas class="portrait sm" data-portrait="${e.rival}" data-hidden="0" width="44" height="44"></canvas>
+          <div><h4>${esc(ch.name)}</h4><p class="offer-opp">${esc(car.name)} · <b>${bhp} bhp</b></p></div></div>
+        <canvas class="slipcar" data-car="${car.id}" width="300" height="120" aria-label="${esc(car.name)}"></canvas>
+        <p class="offer-road">${esc(e.area)} · ${esc(e.road)}</p>
+        <p class="offer-opp">You put up: <b>${esc(cur.name)}</b></p>
+        <div class="offer-foot">${act}</div>
+      </div>`;
+    }).join('')}</div>
+  </section>`;
+}
+function essexMain(own, st) {
+  const i = nextEssexIndex(S), done = (S.essex && S.essex.completed) || [];
+  const stars = ESSEX.reduce((a, e) => a + starCount((S.stars || {})['essex:' + e.rival]), 0);
+  const exh = ESSEX.map((e, k) => done[k] ? `<button class="btn small" data-act="essexex" data-arg="${k}"><span>${e.title}</span></button>` : '').join('');
+  let body;
+  if (i >= ESSEX.length) {
+    body = `<p class="kicker">Essex complete</p>
+      <h2 class="flyer-title">King of Essex</h2>
+      ${rivalCard('duke', CHARACTERS.duke.youWin, false, 'The Duke')}
+      <dl class="facts">
+        <div><dt>Essex stars</dt><dd>${stars} <small>of ${ESSEX.length * 3}</small></dd></div><div><dt>Wins</dt><dd>${S.stats.wins}</dd></div>
+        <div><dt>Money</dt><dd>${money(S.money)}</dd></div><div><dt>Reputation</dt><dd>${S.rep}</dd></div>
+      </dl>
+      <p class="tip">Exhibition races: run any Essex event again for fun and stars. No prize money, but pink slips and street races still pay.</p>`;
+  } else {
+    const ev = ESSEX[i];
+    body = `<p class="kicker">Essex · Event ${i + 1} of ${ESSEX.length} · ${esc(ev.area)}</p>
+      <h2 class="flyer-title">${ev.title}</h2>
+      ${rivalCard(ev.rival, CHARACTERS[ev.rival].pre)}
+      ${rivalCarStrip(ev.oppLook, CHARACTERS[ev.rival].car)}
+      <p class="story">${esc(ev.intro)}</p>
+      <dl class="facts">
+        <div><dt>Their car</dt><dd>${ev.oppBhp} <small>bhp</small></dd></div>
+        <div><dt>Prize</dt><dd>${money(ev.reward)}${st.style ? ` <small>+${Math.round(styleBonus(st.style) * 100)}% style</small>` : ''}</dd></div>
+        <div><dt>Reputation</dt><dd>+${ev.rep}</dd></div>
+        <div><dt>Route</dt><dd>${(ev.dist / 1000).toFixed(1)} km <small>${TIME_NAMES[ev.time]}</small></dd></div>
+      </dl>
+      ${recordLine('essex:' + ev.rival, 'tip rec')}
+      ${damageWarn(own)}
+      <div class="actions">
+        <button class="btn primary big" data-act="essex" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button>
+        <button class="btn" data-act="garage"><span>Garage</span></button>
+        <button class="btn" data-act="ladder"><span>Career ladder</span></button>
+      </div>
+      <p class="tip">Your ${st.bhp} bhp against ${ev.oppBhp} bhp. ${powerTip(st, ev.oppBhp)}</p>`;
+  }
+  return `<div class="hub-main"><article class="flyer essex">
+      ${hubTabs('essex')}
+      ${S.news ? `<p class="news">“${esc(S.news)}”</p>` : ''}
+      ${body}
+      ${exh ? `<p class="kicker">Exhibition races · stars ${stars} of ${ESSEX.length * 3}</p><div class="actions">${exh}</div>` : ''}
+    </article>${slipCards(own)}</div>`;
+}
+/* shown on the London side until Essex opens */
+function essexTeaser() {
+  const beat = S.specials && S.specials.ishaaq, near = specialUnlocked(S, 'ishaaq');
+  return `<div class="invite teaser">
+    <p class="kicker">Next · Essex</p>
+    <h3 class="invite-title">Over the border</h3>
+    <p class="story">Essex has heard there is a new Street King. Wider roads, faster cars and a Duke who has never lost on the QE2 Bridge.</p>
+    <p class="tip">${beat ? 'The border is open.' : near ? 'First, beat Ishaaq in the Tunnel. He is waiting on the street race board.' : 'First, Ishaaq wants a word. Win a few more street races and he will call you out.'}</p>
+  </div>`;
+}
 function goHub() {
   mode = 'menu'; R = null; paused = false; intro = null; setDemo();
   $('controls').hidden = true; $('b-pause').hidden = true; document.body.classList.remove('racing');
   const own = S.owned[S.current], car = carById(S.current), st = curStats(S);
+  const exOpen = essexOpen(S);
   let main;
-  if (S.careerDone) {
+  // the first time Essex opens, say so and show it
+  if (exOpen && !(S.announced || {}).essex) {
+    S.announced = Object.assign(S.announced || {}, { essex: true }); hubTab = 'essex';
+    S.news = 'Essex has heard about the new Street King. The border is open.'; S.street = streetOffers(S); save();
+    setTimeout(() => toast('Essex is open. Eight new races, new cars and pink slips.'), 500);
+  }
+  if (exOpen && hubTab !== 'london') main = essexMain(own, st);
+  else if (S.careerDone) {
     main = `<article class="flyer">
+      ${exOpen ? hubTabs('london') : ''}
       <p class="kicker">Career complete</p>
       <h2 class="flyer-title">Street King</h2>
       ${rivalCard('king', CHARACTERS.king.youWin, false, 'Ray Walsh, the first Street King')}
@@ -4584,20 +5308,15 @@ function goHub() {
         <div><dt>Money</dt><dd>${money(S.money)}</dd></div><div><dt>Reputation</dt><dd>${S.rep}</dd></div>
       </dl>
       ${newRivalCard()}
+      ${exOpen ? '' : essexTeaser()}
       ${ride3Card()}
       <p class="tip">Exhibition races: run any career event again just for fun. There is no prize money for these, but street races still pay.</p>
       <div class="actions">${EVENTS.map((e, i) => S.completed[i] ? `<button class="btn small" data-act="exhibition" data-arg="${i}"><span>${e.title}</span></button>` : '').join('')}</div>
       <div class="actions"><button class="btn" data-act="garage"><span>Garage</span></button><button class="btn" data-act="ladder"><span>Career ladder</span></button></div>
     </article>`;
   } else {
-    const i = nextEventIndex(S), ev = EVENTS[i], ratio = st.bhp / ev.oppBhp, isKing = ev.rival === 'king';
-    const tip = ratio >= 1.08 ? 'You have the power advantage here. Keep it clean and there is no stopping you.'
-      : ratio >= 0.97 ? 'Evenly matched on power. Clean driving and good nitro timing will decide it.'
-      : ratio >= 0.88 ? 'More power on the other side. You need a clean run and every drop of nitro, or an upgrade.'
-      : 'A lot faster on paper. Upgrade, buy a better car or win some street races for cash first.';
-    let warn = '';
-    if (own.damage >= 100) warn = `<p class="tip bad">Your car is wrecked. Repair it in the garage before you can race.</p>`;
-    else if (own.damage >= 50) warn = `<p class="tip warn">Your car is ${own.damage}% damaged. A few more hits and it is wrecked. Repair costs ${money(repairCost(S))}.</p>`;
+    const i = nextEventIndex(S), ev = EVENTS[i], isKing = ev.rival === 'king';
+    const tip = powerTip(st, ev.oppBhp), warn = damageWarn(own);
     main = `<article class="flyer">
       ${S.news ? `<p class="news">“${esc(S.news)}”</p>` : ''}
       <p class="kicker">Event ${i + 1} of ${EVENTS.length} · ${ev.chapter} · ${ev.area}</p>
@@ -4628,6 +5347,7 @@ function goHub() {
         <p class="kicker">Your race car</p>
         <canvas data-car="${car.id}" data-spin="1" width="300" height="170" class="spin" aria-label="Your car. Drag to turn it."></canvas>
         <div class="car-name"><h3>${car.name}</h3><span class="plate">${esc(lookOf(S, car.id).plate)}</span></div>
+        ${S.careerDone ? `<p class="cls-line"><span class="chip cls">Class ${carClass(st.bhp)}</span></p>` : ''}
         ${specRows(st, own.damage)}
         <div class="chips">${UPGRADES.map(u => { const n = Number(own.up[u.id]) || 0; return `<span class="chip ${n ? 'on' : ''}">${u.name}${n ? ' S' + n : ''}</span>`; }).join('')}</div>
       </aside>
@@ -4655,12 +5375,14 @@ function goGarage(tab, keepScroll) {
   let body;
   if (garageTab === 'upgrades') body = upgradesTab(own, car, st);
   else if (garageTab === 'body') body = bodyTab(own, car);
+  else if (garageTab === 'mine') body = collectionTab();
   else body = dealerTab();
   $('garage-body').innerHTML = `${topBar()}
     <p class="kicker">Garage · ${car.name}</p>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" aria-selected="${garageTab === 'upgrades'}" data-act="tab" data-arg="upgrades">Upgrades</button>
       <button class="tab" role="tab" aria-selected="${garageTab === 'body'}" data-act="tab" data-arg="body">Body Shop</button>
+      <button class="tab" role="tab" aria-selected="${garageTab === 'mine'}" data-act="tab" data-arg="mine">My cars</button>
       <button class="tab" role="tab" aria-selected="${garageTab === 'cars'}" data-act="tab" data-arg="cars">Dealership</button>
     </div>
     ${body}
@@ -4775,17 +5497,23 @@ function bodyTab(own, car) {
     </div>
   </div>`;
 }
+/* the buttons on a car you own: race it, or sell it (with a confirm step) */
+function ownedActs(c) {
+  if (S.current === c.id) return `<span class="fitted">✓ Your race car</span>`;
+  return pendingSell === c.id
+    ? `<button class="btn danger small" data-act="sellyes" data-arg="${c.id}"><span>Confirm sell ${money(sellValue(S, c.id))}</span></button><button class="btn ghost small" data-act="sellno"><span>Cancel</span></button>`
+    : `<button class="btn primary small" data-act="select" data-arg="${c.id}"><span>Race this car</span></button><button class="btn ghost small" data-act="sell" data-arg="${c.id}"><span>Sell ${money(sellValue(S, c.id))}</span></button>`;
+}
+const clsChip = bhp => `<span class="chip cls cls-${carClass(bhp)}">Class ${carClass(bhp)}</span>`;
 function dealerTab() {
-  return `<div class="car-grid">${CARS.map(c => {
+  // pink slip cars are never for sale, and the Essex showroom only shows up once you have the crown
+  const list = CARS.filter(c => !c.slip && (!c.chapter || S.careerDone));
+  return `<div class="car-grid">${list.map(c => {
     const owned = S.owned[c.id], cur = S.current === c.id, unlocked = carUnlocked(S, c);
     const st2 = statsFor(c.id, owned ? owned.up : {}), mx = maxStats(c.id);
     let act;
-    if (cur) act = `<span class="fitted">✓ Your race car</span>`;
-    else if (owned) {
-      act = pendingSell === c.id
-        ? `<button class="btn danger small" data-act="sellyes" data-arg="${c.id}"><span>Confirm sell ${money(sellValue(S, c.id))}</span></button><button class="btn ghost small" data-act="sellno"><span>Cancel</span></button>`
-        : `<button class="btn primary small" data-act="select" data-arg="${c.id}"><span>Race this car</span></button><button class="btn ghost small" data-act="sell" data-arg="${c.id}"><span>Sell ${money(sellValue(S, c.id))}</span></button>`;
-    } else if (!unlocked) act = `<span class="lock">🔒 Needs Rep ${c.rep} (you have ${S.rep})</span>`;
+    if (owned) act = ownedActs(c);
+    else if (!unlocked) act = `<span class="lock">🔒 Needs Rep ${c.rep} (you have ${S.rep})</span>`;
     else {
       const tv = sellValue(S, S.current), canTrade = S.money < c.price && S.money + tv >= c.price;
       act = `<button class="btn small ${S.money >= c.price ? 'primary' : ''}" data-act="buycar" data-arg="${c.id}" ${S.money >= c.price ? '' : 'disabled'}><span>${c.price ? 'Buy ' + money(c.price) : 'Take it (free)'}</span></button>`
@@ -4795,12 +5523,29 @@ function dealerTab() {
     return `<div class="car-card ${cur ? 'current' : ''} ${!unlocked && !owned ? 'locked' : ''}">
       <canvas data-car="${c.id}" data-locked="${!unlocked && !owned ? 1 : 0}" width="300" height="150"></canvas>
       <div class="car-name"><h3>${c.name}</h3><span class="plate">${esc(owned ? lookOf(S, c.id).plate : c.look.plate)}</span></div>
-      <p>${c.blurb} Fully upgraded: <b>${mx.bhp} bhp</b>.</p>
+      ${S.careerDone ? `<p class="cls-line">${clsChip(st2.bhp)}${c.chapter === 'essex' ? '<span class="chip">Essex</span>' : ''}</p>` : ''}
+      <p>${c.blurb} Fully upgraded: <b>${mx.bhp} bhp</b>${S.careerDone ? ` (class ${carClass(mx.bhp)})` : ''}.</p>
       ${specRows(st2, owned ? owned.damage : undefined)}
       <div class="actions">${act}</div>
     </div>`;
   }).join('')}</div>
   <p class="tip">Selling or trading in returns half of what the car and its performance upgrades cost. Body Shop work does not add value. Upgrades and looks stay with the car.</p>`;
+}
+/* every car you own, with its class. Cars won in pink slips show who you took them from. */
+function collectionTab() {
+  const ids = CARS.filter(c => S.owned[c.id]).map(c => c.id);
+  return `<p class="tip">Your garage. Classes go by how much power a car makes right now: D, C, B, A, then S at 800 bhp and up.</p>
+  <div class="car-grid">${ids.map(id => {
+    const c = carById(id), own = S.owned[id], st2 = statsFor(id, own.up, lookOf(S, id));
+    return `<div class="car-card ${S.current === id ? 'current' : ''}">
+      <canvas data-car="${id}" width="300" height="150"></canvas>
+      <div class="car-name"><h3>${c.name}</h3><span class="plate">${esc(lookOf(S, id).plate)}</span></div>
+      <p class="cls-line">${clsChip(st2.bhp)}${c.slip ? `<span class="chip slipchip">Pink slip</span>` : ''}</p>
+      <p>${c.slip ? `Won from ${esc(CHARACTERS[c.slip].name)} in a pink slip race.` : c.blurb}</p>
+      ${specRows(st2, own.damage)}
+      <div class="actions">${ownedActs(c)}</div>
+    </div>`;
+  }).join('')}</div>`;
 }
 
 /* ---------- career ladder ---------- */
@@ -4817,8 +5562,22 @@ function goLadder() {
     return `${head}<div class="rung ${st}"><div class="ic">${ic}</div>
       <canvas class="portrait sm" data-portrait="${ev.rival}" data-hidden="${hidden ? 1 : 0}" width="44" height="44"></canvas>
       <div><h4><span class="num">${i + 1}</span> ${ev.title}</h4><p>${hidden ? 'The King' : esc(CHARACTERS[ev.rival].name)} · ${esc(CHARACTERS[ev.rival].car)}${ev.bike ? '' : ' · ' + ev.oppBhp + ' bhp'}</p><p class="where">${esc(ev.area)} · ${esc(ev.road)}</p></div>
-      <div class="pz">${money(ev.reward)}<br>+${ev.rep} rep</div></div>`;
+      <div class="pz">${money(ev.reward)}<br>+${ev.rep} rep${S.completed[i] ? '<br>' + starsHtml((S.stars || {})['career:' + ev.rival]) : ''}</div></div>`;
   }).join('<div class="down" aria-hidden="true">↓</div>');
+  // Essex: shows once the crown is won, locked until Ishaaq is beaten
+  let essexRungs = '';
+  if (S.careerDone) {
+    const open = essexOpen(S), nx = nextEssexIndex(S), done = (S.essex && S.essex.completed) || [];
+    essexRungs = `<p class="chapter">Essex${open ? '' : ' · beat Ishaaq to open it'}</p>` + ESSEX.map((ev, i) => {
+      const st = done[i] ? 'done' : open && i === nx ? 'current' : 'locked', ic = st === 'done' ? '✓' : st === 'current' ? '→' : '🔒';
+      const slip = slipCarFor(ev.rival), won = slip && S.owned[slip.id];
+      return `<div class="rung ${st}"><div class="ic">${ic}</div>
+        <canvas class="portrait sm" data-portrait="${ev.rival}" data-hidden="${open ? 0 : 1}" width="44" height="44"></canvas>
+        <div><h4><span class="num">${i + 1}</span> ${ev.title}</h4><p>${open ? esc(CHARACTERS[ev.rival].name) + ' · ' + esc(CHARACTERS[ev.rival].car) + ' · ' + ev.oppBhp + ' bhp' : 'Unknown'}</p>
+          <p class="where">${esc(ev.area)} · ${esc(ev.road)}${done[i] && slip ? ` · pink slip: ${won ? 'won ✓' : 'open'}` : ''}</p></div>
+        <div class="pz">${money(ev.reward)}<br>+${ev.rep} rep${done[i] ? '<br>' + starsHtml((S.stars || {})['essex:' + ev.rival]) : ''}</div></div>`;
+    }).join('<div class="down" aria-hidden="true">↓</div>');
+  }
   const bonus = S.careerDone ? `<p class="chapter">Invitation</p>` + ['ride3'].map(id => {
     const sp = SPECIALS[id], done = S.specials && S.specials[id], ch = CHARACTERS[sp.rival];
     return `<div class="rung ${done ? 'done' : 'open'} special"><div class="ic">${done ? '✓' : '→'}</div>
@@ -4826,14 +5585,16 @@ function goLadder() {
       <div><h4><img class="r3logo" src="${RIDE3_LOGO}" alt="Ride3"> Invitational</h4><p>${esc(ch.name)} · ${esc(ch.car)}</p><p class="where">${esc(sp.area)} · ${esc(sp.road)}</p></div>
       <div class="pz">${money(sp.reward)}<br>+${sp.rep} rep</div></div>`;
   }).join('') : '';
-  const unl = CARS.map(c => `<div class="${carUnlocked(S, c) ? 'ok' : ''}"><span>${c.name}</span><b>${c.rep ? 'REP ' + c.rep : 'START'} ${carUnlocked(S, c) ? '✓' : '🔒'}</b></div>`).join('');
+  const unl = CARS.filter(c => !c.slip && (!c.chapter || S.careerDone)).map(c => `<div class="${carUnlocked(S, c) ? 'ok' : ''}"><span>${c.name}</span><b>${c.rep ? 'REP ' + c.rep : 'START'} ${carUnlocked(S, c) ? '✓' : '🔒'}</b></div>`).join('');
   $('ladder-body').innerHTML = `${topBar()}
-    <p class="kicker">Career ladder</p>
-    <h2 class="h2">From Canning Town to the crown</h2>
+    <p class="kicker">Career ladder${totalStars(S) ? ` · ★ ${totalStars(S)} stars` : ''}</p>
+    <h2 class="h2">${essexOpen(S) ? 'From Canning Town to the QE2 Bridge' : 'From Canning Town to the crown'}</h2>
+    <p class="tip">Stars: one for the win, one for a race with no crashes, one for hitting every gate. They stay with the route, so you can go back for them.</p>
     <div class="ladder-grid">
-      <div class="ladder">${rungs}${bonus}</div>
+      <div class="ladder">${rungs}${bonus}${essexRungs}</div>
       <div class="unlocks">
         <canvas class="map" data-map="1" width="400" height="400" aria-label="Map of the career across East and North London"></canvas>
+        ${essexOpen(S) ? `<canvas class="map" data-map="essex" width="400" height="400" aria-label="Map of the Essex races"></canvas>` : ''}
         <p class="kicker">Dealership unlocks · you have Rep ${S.rep}</p>
         ${unl}
         <p class="tip">Reputation only comes from career wins, and each career event pays out once. Street races can be replayed for cash.</p>
@@ -4848,8 +5609,9 @@ function goLadder() {
 function showResults() {
   mode = 'results';
   $('controls').hidden = true; $('b-pause').hidden = true; document.body.classList.remove('racing');
-  const res = R.result, sum = R.summary || settleRace(S, R), own = S.owned[R.carId], ev = R.ev;
-  const head = res.how === 'wrecked' ? 'Wrecked' : res.how === 'missed' ? 'Out' : res.won ? 'You win' : 'You lost';
+  // a car lost in a pink slip is no longer in the garage, so fall back to what the race knows about it
+  const res = R.result, sum = R.summary || settleRace(S, R), own = S.owned[R.carId] || { damage: Math.round(R.p.damage), up: {} }, ev = R.ev;
+  const head = res.how === 'wrecked' ? 'Wrecked' : res.how === 'missed' ? 'Out' : res.won ? (ev.kind === 'slip' ? 'Pink slip won' : 'You win') : 'You lost';
   const gapTxt = res.how === 'finish' ? (res.won ? `${res.gap.toFixed(2)} s ahead` : `${res.gap.toFixed(2)} s behind`) : res.how === 'wrecked' ? 'Did not finish' : res.how === 'missed' ? 'Missed a checkpoint' : 'Quit';
   const gates = sum.gates || { hit: 0, missed: 0, best: 0 };
   let pay = '';
@@ -4863,33 +5625,48 @@ function showResults() {
       ${parts2.length > 1 ? `<p class="paysplit">${parts2.join(' · ')}</p>` : ''}`;
   }
   else if (res.won && ev.exhibition) pay = `<p class="tip">${ev.kind === 'special' ? 'Rematch. Pride only, no prize money.' : 'Exhibition race. No prize money.'}</p>`;
+  // stars for this route: what you got this time and what you have
+  let starRow = '';
+  if (ev.route && ev.kind !== 'special' && ev.kind !== 'street') {
+    const have = (S.stars || {})[ev.route] || 0;
+    starRow = `<div class="star-row">${starsHtml(have, true)}<span>${STAR_NAMES.map((n, i) => `<b class="${have & (1 << i) ? 'on' : ''}">${n}</b>`).join(' · ')}${sum.newStars ? ` <em>+${sum.newStars} new</em>` : ''}</span></div>`;
+  }
   let notes = '';
   if (sum.chapter) notes += `<div class="unlock-note"><small>New area unlocked</small>${sum.chapter}</div>`;
   if (sum.nextEvent) notes += `<div class="unlock-note"><small>Next event unlocked</small>${sum.nextEvent}</div>`;
   for (const n of sum.newCars) notes += `<div class="unlock-note"><small>New car in the dealership</small>${n}</div>`;
+  if (sum.slipOpen) notes += `<div class="unlock-note"><small>Pink slip unlocked</small>${esc(CHARACTERS[ev.rival].name)} will race you for the ${esc(sum.slipOpen)}</div>`;
+  if (sum.slipWon) notes += `<div class="unlock-note special"><small>New car in your garage</small>${esc(sum.slipWon)}</div>`;
+  if (sum.slipLost) notes += `<div class="unlock-note bad"><small>Car lost</small>${esc(sum.slipLost)}</div>`;
+  if (sum.essexOpened) notes += `<div class="unlock-note special"><small>New area unlocked</small>Essex</div>`;
   let who = '';
   if (sum.careerDone) notes += `<div class="unlock-note special"><small>Invitation unlocked</small>${SPECIALS.ride3.title}</div>`;
   if (sum.careerDone) {
     who = `<div class="reveal"><p class="kicker">The King is revealed</p>${rivalCard('king', CHARACTERS.king.youWin, false, 'Ray Walsh')}
       <p class="story">The GT-R door opens as the sun comes up over Canary Wharf. It is Ray Walsh, Danny's uncle from the MOT garage in Canning Town.</p></div>`;
+  } else if (sum.essexDone) {
+    who = `<div class="reveal"><p class="kicker">King of Essex</p>${rivalCard('duke', CHARACTERS.duke.youWin, false, 'The Duke')}
+      <p class="story">The Duke pulls over at the Kent end of the bridge, takes off his sunglasses and shakes your hand. Thirty years, and this is the first time anyone has seen his eyes.</p></div>`;
   } else if (ev.rival) who = rivalCard(ev.rival, sum.line, ev.rival === 'king' && !S.kingRevealed);
   let story = sum.story ? `<p class="news">“${esc(sum.story)}”</p>` : '';
   if (ev.kind === 'street' && ev.cp) story = res.won ? `<p class="story">Every gate, clean. There are fresh street races on the board.</p>` : `<p class="story">${res.how === 'wrecked' ? 'The car is in bits.' : 'One gate too many.'} There are fresh street races on the board.</p>`;
   else if (ev.kind === 'street') story = res.won ? `<p class="story">Easy money. There are fresh street races on the board.</p>` : `<p class="story">${esc(ev.oppName)} got there first. There are fresh street races on the board.</p>`;
   else if (!res.won && !story) story = `<p class="story">${res.how === 'wrecked' ? 'The car is in bits. Get it repaired, then go again.' : 'Study the gaps, save nitro for the straights and try again. Street races can earn you cash for upgrades.'}</p>`;
   let btns;
-  if (ev.kind === 'special' && !res.won) btns = `<button class="btn primary big" data-act="retry" ${own.damage >= 100 ? 'disabled' : ''}><span>Go again</span></button>
+  if (ev.kind === 'slip') btns = `<button class="btn primary big" data-act="hub"><span>Continue to career hub</span></button>${res.won ? `<button class="btn" data-act="tab" data-arg="mine"><span>See it in your garage</span></button>` : ''}`;
+  else if (ev.kind === 'special' && !res.won) btns = `<button class="btn primary big" data-act="retry" ${own.damage >= 100 ? 'disabled' : ''}><span>Go again</span></button>
     <button class="btn" data-act="garage"><span>Garage</span></button><button class="btn" data-act="hub"><span>Career hub</span></button>`;
   else if (res.won || ev.kind === 'street') btns = `<button class="btn primary big" data-act="hub"><span>${sum.careerDone ? 'Claim your crown' : 'Continue to career hub'}</span></button>`;
   else btns = `<button class="btn primary big" data-act="retry" ${own.damage >= 100 ? 'disabled' : ''}><span>Retry event</span></button>
     ${own.damage >= 50 ? `<button class="btn" data-act="garage"><span>Garage</span></button>` : ''}
     <button class="btn" data-act="hub"><span>Career hub</span></button>`;
   $('results-body').innerHTML = `
-    <p class="kicker">${ev.kind === 'street' ? 'Street race · ' + ev.label + ' · ' + esc(ev.area) : (ev.kind === 'special' && !ev.brand ? 'Street race · ' : '') + ev.title + (ev.exhibition || ev.rematch ? (ev.kind === 'special' ? ' · Rematch' : ' · Exhibition') : '')}</p>
+    <p class="kicker">${ev.kind === 'street' ? 'Street race · ' + ev.label + ' · ' + esc(ev.area) : ev.kind === 'slip' ? 'Pink slip · ' + ev.title : (ev.kind === 'special' && !ev.brand ? 'Street race · ' : ev.kind === 'essex' ? 'Essex · ' : '') + ev.title + (ev.exhibition || ev.rematch ? (ev.kind === 'special' ? ' · Rematch' : ' · Exhibition') : '')}</p>
     ${ev.kind === 'special' && ev.brand ? `<img class="r3head" src="${RIDE3_LOGO}" alt="Ride3">` : ''}
     <h2 class="result-head ${res.won ? 'win' : 'lose'}">${head}</h2>
     ${story}
     ${pay}
+    ${starRow}
     ${notes}
     ${who}
     <div class="actions">${btns}</div>
@@ -4915,6 +5692,12 @@ function startRace(spec) {
   if (spec.kind === 'career' && !spec.exhibition && (S.completed[spec.index] || spec.index !== nextEventIndex(S))) return;
   if (spec.kind === 'career' && spec.exhibition && !S.careerDone) return;
   if (spec.kind === 'special' && (!SPECIALS[spec.id] || !specialUnlocked(S, spec.id))) return;
+  if (spec.kind === 'essex') {
+    if (!essexOpen(S) || !ESSEX[spec.index]) return;
+    const done = S.essex && S.essex.completed[spec.index];
+    if (spec.exhibition ? !done : done || spec.index !== nextEssexIndex(S)) return;
+  }
+  if (spec.kind === 'slip' && (!slipReady(S, spec.id) || Object.keys(S.owned).length < 2 || S.current === slipCarFor(spec.id).id)) return;
   R = createRace(S, spec);
   mode = 'race'; paused = false; input.nitro = false;
   parts.length = 0; popups.length = 0; banner = null; flashT = 0; V.shake = 0; V.boost = 0; V.camX = 0;
@@ -4993,12 +5776,13 @@ function processEvents() {
 /* ---------- menu background ---------- */
 let demo = null;
 function setDemo() {
-  const evi = S ? Math.min(nextEventIndex(S), EVENTS.length - 1) : 0;
+  const ex = S && essexOpen(S), list = ex ? ESSEX : EVENTS;
+  const evi = S ? Math.min(ex ? nextEssexIndex(S) : nextEventIndex(S), list.length - 1) : 0;
   const carId = S ? S.current : 'civic';
   const look = S ? lookOf(S, carId) : stockLook(carId), up = S ? S.owned[carId].up : {};
-  const key = evi + carId + JSON.stringify(look) + JSON.stringify(up);
+  const key = (ex ? 'x' : '') + evi + carId + JSON.stringify(look) + JSON.stringify(up);
   if (demo && demo.key === key) return;
-  demo = { key, demo: true, ev: Object.assign({}, EVENTS[evi], { index: evi }), carId, look, up, waves: [], o: null, state: 'demo',
+  demo = { key, demo: true, ev: Object.assign({}, list[evi], { index: evi }), carId, look, up, waves: [], o: null, state: 'demo',
     p: { dist: demo ? demo.p.dist : 120, v: 30, x: 1, vx: 0, latV: 0, boosting: false, damage: 0 } };
 }
 
@@ -5076,9 +5860,9 @@ function accountBox() {
   const privacy = `<a class="acc-link" href="privacy.html" target="_blank" rel="noopener">Privacy</a>`;
   if (!Online.ready) return `<div class="account"><p class="acc-note">Connecting…</p></div>`;
   if (!Online.signedIn) return `<div class="account">
-      <div class="row"><button class="btn gbtn" data-act="signin"><span>Sign in with Google</span></button>
+      <div class="row">${gsiSlot()}
       <button class="btn ghost small" data-act="board"><span>Leaderboards</span></button></div>
-      <p class="acc-note">Sign in to post your times and keep your career on any phone or laptop. You can still play without it. ${privacy}</p>
+      <p class="acc-note">Sign in to post your times and keep your career on any phone or laptop. You can still play without it. ${privacy} · <a class="acc-link" href="#" data-act="signin">Other way to sign in</a></p>
     </div>`;
   return `<div class="account signed">
       <p class="acc-note">Signed in as <b>${esc(Online.name || 'no racer name yet')}</b> · ${privacy}</p>
@@ -5094,8 +5878,10 @@ function accountBox() {
       </div>
     </div>`;
 }
+/* a spot for Google's sign in button, with a plain button underneath in case Google's does not load */
+const gsiSlot = () => `<div class="gsi-slot"><button class="btn gbtn small" data-act="signin"><span>Sign in with Google</span></button></div>`;
 function refreshOnlineUi() {
-  if (!$('scr-title').hidden) { $('account-box').innerHTML = accountBox(); $('btn-continue').hidden = !S; }
+  if (!$('scr-title').hidden) { $('account-box').innerHTML = accountBox(); $('btn-continue').hidden = !S; Online.mountButtons(); }
   if (!$('scr-hub').hidden && mode === 'menu' && S) goHub();
   if (!$('scr-board').hidden) goBoard();
   if (Online.loadedCloud) { Online.loadedCloud = false; toast('Loaded your career from your account.'); }
@@ -5117,7 +5903,8 @@ function postTime(race) {
   race.posted = true;
   const el = () => $('lb-line'), ms = Math.round(race.result.time * 1000), car = carById(race.carId).name;
   if (!Online.signedIn) {
-    const l = el(); if (l) l.innerHTML = `<button class="btn small gbtn" data-act="signin" data-arg="post"><span>Sign in to post</span></button>`;
+    Online.addPending({ route: race.ev.route, ms, car });   // posted for you if you sign in later
+    const l = el(); if (l) { l.innerHTML = `Sign in to post`; const a = $('results-body').querySelector('.actions'); if (a && !a.querySelector('.gsi-slot')) a.insertAdjacentHTML('beforeend', gsiSlot()); Online.mountButtons(); }
     return;
   }
   Online.submit(race.ev.route, ms, car).then(r => {
@@ -5153,12 +5940,13 @@ let boardRoute = null, boardSeq = 0;
 function boardRoutes() {
   const list = EVENTS.map(e => 'career:' + e.rival);
   if (S) for (const id of SPECIAL_ORDER) if (specialUnlocked(S, id) || (S.specials && S.specials[id])) list.push('special:' + id);
+  if (S && essexOpen(S)) list.push(...ESSEX.map(e => 'essex:' + e.rival));
   return list;
 }
 async function goBoard(route) {
   mode = 'menu';
   const routes = boardRoutes();
-  boardRoute = route && routes.includes(route) ? route : boardRoute && routes.includes(boardRoute) ? boardRoute : S ? 'career:' + EVENTS[Math.min(nextEventIndex(S), EVENTS.length - 1)].rival : routes[0];
+  boardRoute = route && routes.includes(route) ? route : boardRoute && routes.includes(boardRoute) ? boardRoute : routes[0];
   const seq = ++boardSeq;
   const opt = r => `<option value="${r}" ${r === boardRoute ? 'selected' : ''}>${esc(Online.routeName(r))}</option>`;
   $('board-body').innerHTML = `${S ? topBar() : ''}
@@ -5167,12 +5955,14 @@ async function goBoard(route) {
     <label class="board-pick"><span>Route</span><select id="board-route">
       <optgroup label="Career">${routes.filter(r => r.startsWith('career:')).map(opt).join('')}</optgroup>
       ${routes.some(r => r.startsWith('special:')) ? `<optgroup label="Friends and invitations">${routes.filter(r => r.startsWith('special:')).map(opt).join('')}</optgroup>` : ''}
+      ${routes.some(r => r.startsWith('essex:')) ? `<optgroup label="Essex">${routes.filter(r => r.startsWith('essex:')).map(opt).join('')}</optgroup>` : ''}
     </select></label>
     <p class="tip">Everyone gets the same traffic on a route, so the times are fair. Only finished races count, in any car.</p>
     <div id="board-table" class="board"><p class="tip">Loading…</p></div>
-    <div class="actions">${Online.signedIn ? '' : `<button class="btn gbtn" data-act="signin"><span>Sign in with Google to post times</span></button>`}
+    <div class="actions">${Online.signedIn ? '' : gsiSlot()}
       <button class="btn" data-act="${S ? 'hub' : 'title'}"><span>Back</span></button></div>`;
   showScreen('scr-board');
+  Online.mountButtons();
   let rows;
   try { rows = await Online.board(boardRoute); } catch (e) { if (seq === boardSeq) $('board-table').innerHTML = `<p class="tip bad">Could not load the leaderboard. Check your connection.</p>`; return; }
   if (seq !== boardSeq || $('scr-board').hidden) return;
@@ -5205,9 +5995,16 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'street': { const o = S.street.find(x => x.id === arg); if (o) startRace({ kind: 'street', offer: o }); break; }
     case 'reroll': S.street = streetOffers(S); save(); goHub(); break;
     case 'special': if (SPECIALS[arg] && specialUnlocked(S, arg)) { S.found = S.found || {}; S.found[arg] = true; startRace({ kind: 'special', id: arg }); } break;
-    case 'retry': if (R && R.ev.kind === 'special') startRace({ kind: 'special', id: R.ev.id }); else if (R && R.ev.kind === 'career') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.careerDone) goHub(); else startRace({ kind: 'career', index: i, exhibition: ex }); } else goHub(); break;
+    case 'essex': startRace({ kind: 'essex', index: nextEssexIndex(S) }); break;
+    case 'essexex': startRace({ kind: 'essex', index: +arg, exhibition: true }); break;
+    case 'hubtab': hubTab = arg; pendingSlip = null; goHub(); break;
+    case 'slip': pendingSlip = arg; goHub(); break;
+    case 'slipno': pendingSlip = null; goHub(); break;
+    case 'slipyes': pendingSlip = null; startRace({ kind: 'slip', id: arg }); break;
+    case 'retry': if (R && R.ev.kind === 'essex') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.essex && S.essex.completed[i]) goHub(); else startRace({ kind: 'essex', index: i, exhibition: ex }); }
+      else if (R && R.ev.kind === 'special') startRace({ kind: 'special', id: R.ev.id }); else if (R && R.ev.kind === 'career') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.careerDone) goHub(); else startRace({ kind: 'career', index: i, exhibition: ex }); } else goHub(); break;
     case 'hub': goHub(); break;
-    case 'signin': if (b.dataset.arg === 'post' && R && R.ev.route && R.result && R.result.how === 'finish') Online.addPending({ route: R.ev.route, ms: Math.round(R.result.time * 1000), car: carById(R.carId).name }); Online.signIn(); break;
+    case 'signin': e.preventDefault(); Online.signIn(); break;
     case 'signout': Online.signOut(); break;
     case 'rename': showNameScreen(); break;
     case 'namesave': saveName(); break;
@@ -5309,7 +6106,7 @@ window.StreetKings = {
   get intro() { return intro; }, skipIntro: endIntro,
   step(sec, bot) { const h = 1 / 120; let n = Math.round(sec / h); while (n-- > 0 && R && mode !== 'menu') { if (bot) bot(R, input); updateRace(R, h, input); processEvents(); } },
   Online, core: { rematchPrize, specialUnlocked, makeWave, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
-    migrateSave, buyLook, lookCost, lookOf, checkPlate, EVENTS, CARS, UPGRADES, CHARACTERS, BODY, Z_PLAYER, P_LEN, SPAWN_D, NITRO_MULT },
+    migrateSave, buyLook, lookCost, lookOf, checkPlate, EVENTS, ESSEX, essexOpen, nextEssexIndex, slipReady, slipCarFor, carClass, totalStars, starCount, CARS, UPGRADES, CHARACTERS, BODY, Z_PLAYER, P_LEN, SPAWN_D, NITRO_MULT },
 };
 
 })();
