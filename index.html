@@ -240,6 +240,10 @@ kbd { font-family: var(--fm); font-size: 12px; border: 1px solid var(--line-2); 
 body.racing #toast { bottom: calc(env(safe-area-inset-bottom, 0px) + 112px); }
 .bar-btn { font-family: var(--fm); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; background: rgba(10, 15, 18, 0.75); border: 1px solid var(--line-2); color: var(--muted); padding: 8px 10px; cursor: pointer; }
 .bar-btn:hover { color: var(--ink); border-color: var(--sodium); }
+.bar-btn.back-btn { color: var(--ink); border-color: var(--sodium); font-size: 12px; padding: 9px 12px; order: -1; }
+.topback { display: flex; }
+.tip.hint { border-left: 3px solid var(--sodium); padding-left: 10px; color: var(--ink); }
+.topback .back-btn { order: 0; }
 #topbtns.in-bar #b-sound { display: none; }
 @media (max-width: 700px) { #scr-title, #scr-results { padding-top: calc(env(safe-area-inset-top, 0px) + 54px); } }
 @media (max-width: 560px) { .stat-car { display: none; } }
@@ -498,6 +502,10 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 .board td:nth-child(3) { font-family: var(--fm); font-weight: 700; text-align: right; }
 
 #topbtns.in-bar #b-music, body.racing #b-music { display: none; }
+
+/* ---------- cut scenes ---------- */
+#cine { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; z-index: 30; background: #000; touch-action: none; }
+#cine-skip { position: fixed; right: 14px; bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); z-index: 31; font-family: var(--fm); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(246, 241, 227, 0.7); background: rgba(0, 0, 0, 0.35); padding: 6px 10px; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -528,7 +536,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 
   <section class="screen" id="scr-help" hidden>
     <div class="wrap">
-      <div class="bar"><div class="brand">STREET <em>KINGS</em></div><button class="bar-btn" type="button" data-act="music">Music on</button><button class="bar-btn" type="button" data-act="sound">Sound on</button></div>
+      <div class="bar"><button class="bar-btn back-btn" type="button" data-act="back">&larr; Back</button><div class="brand">STREET <em>KINGS</em></div><button class="bar-btn" type="button" data-act="music">Music on</button><button class="bar-btn" type="button" data-act="sound">Sound on</button></div>
       <p class="kicker">How to play</p>
       <h2 class="h2">The rules of the road</h2>
       <div class="help">
@@ -705,7 +713,7 @@ const CARS = [
     look: { paint: '#1d6b4a', finish: 'metallic', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: '3 M3 25' } },
   // your GT-R, shipped over and rebuilt for one race: comes with every upgrade fitted and aero nobody else can buy
   { id: 'gtrx', name: 'Nissan GT-R (Island build)', price: 40000, bhp: 1050, handling: 9.9, rep: 0, pot: 1.4, model: 'gtr', chapter: 'mu', muUnlock: 7, built: 3,
-    blurb: 'Your GT-R, shipped to Port Louis and rebuilt in Plaine Lauzun to beat Le Boss. Over a thousand horsepower, a wing like a table, canards, a splitter you could stand on and arches out to here.',
+    blurb: 'Your GT-R, shipped to Port Louis and rebuilt in Plaine Lauzun to beat Boss. Over a thousand horsepower, a wing like a table, canards, a splitter you could stand on and arches out to here.',
     look: { paint: '#f2f2ee', finish: 'gloss', rims: 'fan', rimColor: '#8c5f32', tint: 3, spoiler: 'ta', kit: 2, stance: 2, stripes: 'mu', stripeColor: '#c8161d', glow: '#ff3355', smoked: false, plate: 'GTR 230' } },
   // cars you can only win in a pink slip race. They come the way their owner raced them.
   { id: 'golfr', name: 'VW Golf R', price: 9000, bhp: 320, handling: 8.2, rep: 999, pot: 0.6, model: 'golf', slip: 'tommy', slipUp: 2,
@@ -1047,8 +1055,8 @@ const CHARACTERS = {
     youLose: 'Back over the river, son.',
     face: { skin: '#e8bf9f', hair: 'slick', hairCol: '#2e2e30', facial: 'stubble', facialCol: '#555', shades: 'wrap', mouth: 'smirk', top: '#101012', chain: '#e2b650', bg: '#4f8f1f' } },
   // Mauritius
-  kevin: { name: 'Kevin Lam', from: 'Grand Baie', car: 'Kia Picanto GT-Line (tuned)',
-    bio: 'Runs the family snack bar on the coast road and races it after closing. His Picanto has more boost than sense.',
+  kevin: { name: 'Kevin Lam', from: 'Grand Baie', car: 'Toyota Starlet Glanza V (tuned)',
+    bio: 'Runs the family snack bar on the coast road and races it after closing. His Glanza has more boost than sense.',
     pre: 'Ki manyer, London? The coast road is mine. Try to keep up.',
     youWin: 'Not bad for a tourist. Nawaz will want you on the motorway in Port Louis.',
     youLose: 'The island does not care about London. Go again.',
@@ -1086,10 +1094,10 @@ const CHARACTERS = {
   rouz: { name: 'Yannick "Rouz" Casimir', from: 'Chamarel', car: 'Mitsubishi Lancer Evo IX',
     bio: 'Everyone on the island knows the red Evo. Rouz built it himself in a shed above the waterfall, and nobody has beaten him on the Chamarel road.',
     pre: 'Red Evo, mountain road. You know how this ends.',
-    youWin: 'Nobody has done that. Le Boss will have heard by tonight.',
+    youWin: 'Nobody has done that. Boss will have heard by tonight.',
     youLose: 'The mountain is mine.',
     face: { skin: '#5c3a26', hair: 'curly', hairCol: '#120d0a', facial: 'shortbeard', facialCol: '#120d0a', top: '#c9252c', chain: '#e2b650', bg: '#8f1c1c' } },
-  boss: { name: 'Le Boss', from: 'Le Morne', car: 'BMW M3 Competition (G80)', real: 'Raj Ramdin',
+  boss: { name: 'Boss', from: 'Le Morne', car: 'BMW M3 Competition (G80)', real: 'Raj Ramdin',
     bio: 'Nobody on the island has beaten him in ten years. A green G80 M3 built to a thousand horsepower, and he only races at sunset under Le Morne.',
     pre: 'You came a long way to lose.',
     youWin: 'Ten years and nobody. The island is yours now. Look after it.',
@@ -1308,54 +1316,54 @@ function slipReady(S, rival) {
 /* ---------- Mauritius: opens once Essex is done. Island cars only, and island roads are narrow:
    one lane each way on the coast and in the mountains, two lanes each way on the motorways. ---------- */
 const MU = [
-  { title: 'LA CÔTE', chapter: 'Mauritius', rival: 'kevin', need: 'picanto', oppBhp: 190, reward: 5000, rep: 2, dist: 5200, d: 0.2,
+  { title: 'COAST ROAD', chapter: 'Mauritius', rival: 'kevin', need: 'picanto', oppBhp: 150, reward: 5000, rep: 2, dist: 5200, d: 0.2,
     area: 'Grand Baie', road: 'Royal Road along the bay', time: 'day', env: 'lagoon', twoWay: true, sky: ['coindemire', 'islets'], map: [57.583, -20.012],
     signs: [['borough', 'Grand Baie'], ['green', 'B13', 'Pereybère', 'Cap Malheureux'], ['green', 'M2', 'Port Louis', 'Pamplemousses'], ['borough', 'District of Rivière du Rempart']],
-    intro: 'Your cousin has lent you his Picanto, and half of Grand Baie has come out to see what London looks like. One lane each way along the bay, pirogues out on the lagoon, and Kevin Lam in a Picanto with far too much boost.',
-    win: 'Grand Baie is talking about you. Nawaz wants you on the motorway through Port Louis.', oppLook: { engine: 'picanto', model: 'picanto', paint: '#f2f2ee', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', stance: 2, plate: '77 KL 21' },
-    diff: { skill: 1.308, inc: [10, 14] } },
-  { title: 'THE CAPITAL', chapter: 'Mauritius', rival: 'nawaz', need: 'hilux', oppBhp: 280, reward: 6000, rep: 2, dist: 5600, d: 0.3,
+    intro: 'Your cousin has lent you his Picanto, and half of Grand Baie has come out to see what London looks like. One lane each way along the bay, pirogues out on the lagoon, and Kevin Lam in a Starlet Glanza V with far too much boost.',
+    win: 'Grand Baie is talking about you. Nawaz wants you on the motorway through Port Louis.', oppLook: { engine: 'glanza', model: 'glanza', paint: '#f2f2ee', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', stance: 2, plate: '77 KL 21' },
+    diff: { skill: 1.231, inc: [10, 14] } },
+  { title: 'THE CAPITAL', chapter: 'Mauritius', rival: 'nawaz', need: 'hilux', oppBhp: 315, reward: 6000, rep: 2, dist: 5600, d: 0.3,
     area: 'Port Louis', road: 'M1 Motorway past the harbour', time: 'night', env: 'harbour', sky: ['pouce', 'signal', 'citadel', 'cranes'], map: [57.502, -20.16],
     signs: [['green', 'M1', 'Plaisance', 'Curepipe'], ['borough', 'City of Port Louis'], ['green', 'M2', 'Grand Baie', 'Pamplemousses'], ['green', 'A1', 'Caudan', 'Place d\'Armes']],
     intro: 'After midnight the motorway through Port Louis empties out: the harbour cranes on one side, the old town and Le Pouce on the other. Nawaz Joomun runs it in a white Hilux, and it is quicker than it has any right to be.',
     win: 'Port Louis knows your name. Cindy is waiting on the Ring Road.', oppLook: { engine: 'hilux', model: 'hilux', paint: '#eeeeea', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 3, plate: '4521 JN 18' },
-    diff: { skill: 1.322, inc: [11, 15] } },
-  { title: 'LA RING ROAD', chapter: 'Mauritius', rival: 'cindy', need: 'a110', oppBhp: 420, reward: 7000, rep: 3, dist: 6000, d: 0.4,
+    diff: { skill: 1.226, inc: [11, 15] } },
+  { title: 'RING ROAD', chapter: 'Mauritius', rival: 'cindy', need: 'a110', oppBhp: 425, reward: 7000, rep: 3, dist: 6000, d: 0.4,
     area: 'Pailles', road: 'Ring Road, Pailles to Terre Rouge', time: 'dusk', env: 'ringroad', lanes: 2, hill: [1500, 2300, 3000, 3900, 24], sky: ['pouce', 'pieterboth', 'moka'], map: [57.49, -20.19],
     signs: [['green', 'M1', 'Port Louis', 'Pailles'], ['borough', 'District of Moka'], ['green', 'M3', 'Terre Rouge', 'Grand Baie'], ['green', 'A1', 'Pailles', 'Soreze']],
     intro: 'Two lanes each way cut into the hills above Port Louis, bridges over the valleys and the city lighting up below. Cindy Laval sits a foot above everyone in her orange Raptor. Two lanes means nowhere to hide.',
     win: 'The Ring Road is yours. Vikash is waiting past Ebène.', oppLook: { engine: 'raptor', model: 'raptor', paint: '#e8761e', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, plate: '808 CL 21' },
-    diff: { skill: 1.21, inc: [12, 16] } },
-  { title: 'CYBERCITY', chapter: 'Mauritius', rival: 'vikash', need: 'raptor', oppBhp: 480, reward: 8500, rep: 3, dist: 6400, d: 0.5,
+    diff: { skill: 1.203, inc: [12, 16] } },
+  { title: 'CYBERCITY', chapter: 'Mauritius', rival: 'vikash', need: 'raptor', oppBhp: 505, reward: 8500, rep: 3, dist: 6400, d: 0.5,
     area: 'Ebène', road: 'M1 Motorway past Ebène Cybercity', time: 'late', env: 'cyber', lanes: 2, sky: ['cybercity', 'trois'], map: [57.49, -20.245],
     signs: [['green', 'M1', 'Curepipe', 'Plaisance'], ['borough', 'Ebène Cybercity'], ['green', 'M1', 'Port Louis', 'Réduit'], ['green', 'A7', 'Rose Hill', 'Quatre Bornes']],
     intro: 'Glass towers lit up all night and two lanes of motorway running between them. Vikash Seegoolam writes code in one of those towers, then takes his V8 M3 out when the traffic dies.',
     win: 'Ebène went quiet. Chloé is waiting on the hill at Verdun.', oppLook: { engine: 'm3', model: 'm3', paint: '#101113', finish: 'metallic', rims: 'split', rimColor: '#2a2d31', tint: 3, stance: 1, plate: '8 VS 12' },
-    diff: { skill: 1.211, inc: [13, 17] } },
-  { title: 'MONSTER HILL', chapter: 'Mauritius', rival: 'chloe', need: 'evo9', oppBhp: 380, reward: 10000, rep: 4, dist: 6600, d: 0.55,
+    diff: { skill: 1.177, inc: [13, 17] } },
+  { title: 'MONSTER HILL', chapter: 'Mauritius', rival: 'chloe', need: 'evo9', oppBhp: 490, reward: 10000, rep: 4, dist: 6600, d: 0.55,
     area: 'Verdun', road: 'M3 link road, Terre Rouge to Verdun', time: 'day', env: 'cane', lanes: 2, hill: [1100, 2700, 3300, 5000, 64], sky: ['pieterboth', 'moka', 'pouce'], map: [57.56, -20.13],
     signs: [['green', 'M3', 'Verdun', 'Trianon'], ['borough', 'District of Moka'], ['green', 'M3', 'Terre Rouge', 'Port Louis'], ['green', 'B49', 'Verdun', 'Montagne Blanche']],
     intro: 'The link road climbs through the cane fields to Verdun and drops back down with the whole north of the island below you, all the way to the sea. Chloé Maurel says power does not matter on the hill. Two lanes, a big climb and a long way down.',
     win: 'The hill is yours. Kavish is waiting on the airport road.', oppLook: { engine: 'a110', model: 'a110', paint: '#1f5fb8', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, stance: 2, plate: '110 CM 22' },
-    diff: { skill: 1.439, inc: [13, 17] } },
-  { title: 'LAST FLIGHT', chapter: 'Mauritius', rival: 'kavish', need: 'evo9', oppBhp: 430, reward: 12000, rep: 4, dist: 6800, d: 0.62,
+    diff: { skill: 1.217, inc: [13, 17] } },
+  { title: 'LAST FLIGHT', chapter: 'Mauritius', rival: 'kavish', need: 'evo9', oppBhp: 600, reward: 12000, rep: 4, dist: 6800, d: 0.62,
     area: 'Plaisance', road: 'M1 Motorway to the airport', time: 'night', env: 'airport', lanes: 2, sky: ['lionmtn', 'tower'], map: [57.67, -20.43],
     signs: [['green', 'M1', 'SSR International Airport', 'Plaisance'], ['borough', 'District of Grand Port'], ['green', 'A10', 'Mahébourg', 'Blue Bay'], ['green', 'M1', 'Curepipe', 'Port Louis']],
     intro: 'The last flight of the night comes in low over the road with its lights on. Kavish Moonsamy races the M1 once it has landed, in a Subaru that has been rebuilt three times and still sounds like a rally car.',
     win: 'The airport road is yours. Rouz is waiting up in Chamarel.', oppLook: { engine: 'wrx', model: 'wrx', paint: '#1f4fb5', finish: 'metallic', rims: 'split', rimColor: '#c9a23a', tint: 2, spoiler: 'big', plate: '22 KM 15' },
-    diff: { skill: 1.415, inc: [14, 18] } },
-  { title: 'LA MONTAGNE', chapter: 'Mauritius', rival: 'rouz', need: 'm3g80', oppBhp: 620, reward: 14000, rep: 5, dist: 6400, d: 0.72, curvy: 1.8,
+    diff: { skill: 1.184, inc: [14, 18] } },
+  { title: 'CHAMAREL', chapter: 'Mauritius', rival: 'rouz', need: 'm3g80', oppBhp: 635, reward: 14000, rep: 5, dist: 6400, d: 0.72, curvy: 1.8,
     area: 'Chamarel', road: 'Chamarel road, down to Case Noyale', time: 'day', env: 'gorge', twoWay: true, hill: [700, 1900, 2500, 4600, 42], sky: ['lemorne', 'falls'], map: [57.39, -20.43],
     signs: [['borough', 'Chamarel'], ['green', 'B103', 'Case Noyale', 'Le Morne'], ['borough', 'District of Rivière Noire'], ['green', 'B103', 'Chamarel', 'Seven Coloured Earth']],
     intro: 'The road down from Chamarel is one lane each way through the forest, with red earth in the banks and Le Morne out on the coast below. Rouz and his red Evo have never lost on it. Mind the tourists coming up.',
-    win: 'The mountain is yours. Le Boss has sent word: Le Morne, at sunset.', oppLook: { engine: 'evo9', model: 'evo', paint: '#c9252c', finish: 'gloss', rims: 'split', rimColor: '#c3c8cc', tint: 2, spoiler: 'big', stance: 1, plate: 'ROUZ 9' },
-    diff: { skill: 1.199, inc: [15, 19] } },
+    win: 'The mountain is yours. Boss has sent word: Le Morne, at sunset.', oppLook: { engine: 'evo9', model: 'evo', paint: '#c9252c', finish: 'gloss', rims: 'split', rimColor: '#c3c8cc', tint: 2, spoiler: 'big', stance: 1, plate: 'ROUZ 9' },
+    diff: { skill: 1.184, inc: [15, 19] } },
   { title: 'LE MORNE', chapter: 'Mauritius', rival: 'boss', need: 'gtrx', oppBhp: 1000, reward: 25000, rep: 8, dist: 7400, d: 0.8,
     area: 'Le Morne', road: 'Coast road under Le Morne Brabant', time: 'dusk', env: 'morne', twoWay: true, sky: ['lemorne'], map: [57.33, -20.46],
     signs: [['borough', 'Le Morne'], ['green', 'B9', 'La Gaulette', 'Baie du Cap'], ['borough', 'District of Rivière Noire'], ['green', 'B9', 'Le Morne', 'Black River']],
-    intro: 'Sunset under Le Morne Brabant. One lane each way along the lagoon, kite surfers packing up on the beach, and Le Boss waiting in a green M3 built to a thousand horsepower. Nothing on the island can beat it. That is why your GT-R is here.',
-    win: 'The whole island saw it. Le Boss handed you the keys to Le Morne.', oppLook: { engine: 'm3g80', model: 'm3g80', paint: '#1d6b4a', finish: 'metallic', rims: 'split', rimColor: '#1c1e21', tint: 3, spoiler: 'gt', kit: 1, stance: 2, plate: 'BOSS 1' },
-    diff: { skill: 1.253, inc: [18, 24] } },
+    intro: 'Sunset under Le Morne Brabant. One lane each way along the lagoon, kite surfers packing up on the beach, and Boss waiting in a green M3 built to a thousand horsepower. Nothing on the island can beat it. That is why your GT-R is here.',
+    win: 'The whole island saw it. Boss handed you the keys to Le Morne.', oppLook: { engine: 'm3g80', model: 'm3g80', paint: '#1d6b4a', finish: 'metallic', rims: 'split', rimColor: '#1c1e21', tint: 3, spoiler: 'gt', kit: 1, stance: 2, plate: 'BOSS 1' },
+    diff: { skill: 1.254, inc: [18, 24] } },
 ];
 const muOpen = S => !!(S && S.essex && S.essex.done);
 const muWins = S => ((S && S.mu && S.mu.completed) || []).filter(Boolean).length;
@@ -1445,7 +1453,7 @@ const LOCAL_CARS = [
 const MU_NAMES = ['Ravi', 'Yannick', 'Priscilla', 'Ashvin', 'Jessie', 'Zaheer', 'Kevin', 'Anjali', 'Stéphane', 'Nadia', 'Rishi', 'Mélanie', 'Fabrice', 'Pooja', 'Imran', 'Cédric',
   'Vishal', 'Laetitia', 'Jean-Marc', 'Yasmine', 'Dimitri', 'Kavya', 'Christophe', 'Sanjay', 'Aurélie', 'Nitin', 'Joanna', 'Ludovic', 'Shabnam', 'Loïc', 'Deepa', 'Kelvin'];
 const MU_CARS = [
-  { name: 'Suzuki Swift Sport', lo: 90, hi: 170, model: 'hatch' }, { name: 'Toyota Vitz', lo: 90, hi: 150, model: 'hatch' }, { name: 'Kia Picanto GT-Line', lo: 90, hi: 190, model: 'picanto' },
+  { name: 'Suzuki Swift Sport', lo: 90, hi: 170, model: 'hatch' }, { name: 'Toyota Vitz', lo: 90, hi: 150, model: 'hatch' }, { name: 'Kia Picanto GT-Line', lo: 90, hi: 190, model: 'picanto' }, { name: 'Toyota Starlet Glanza V', lo: 120, hi: 220, model: 'glanza' },
   { name: 'Honda Fit', lo: 100, hi: 160, model: 'jazz' }, { name: 'Toyota Hilux', lo: 150, hi: 280, model: 'hilux' }, { name: 'VW Polo GTI', lo: 180, hi: 260, model: 'hatch' },
   { name: 'Nissan Navara', lo: 160, hi: 260, model: 'pickup' }, { name: 'Honda Civic Type R', lo: 280, hi: 380, model: 'civic' }, { name: 'VW Golf GTI', lo: 220, hi: 320, model: 'golf' },
   { name: 'Subaru Impreza WRX', lo: 260, hi: 420, model: 'wrx' }, { name: 'Ford Ranger Raptor', lo: 290, hi: 450, model: 'raptor' }, { name: 'Mitsubishi Evo IX', lo: 300, hi: 520, model: 'evo' },
@@ -4237,6 +4245,10 @@ const SPECS = {
   picanto: { L: 3.595, W: 1.595, ro: 0.52, wb: 2.4, r: 0.3, sill: 0.2, beltR: 0.99, beltF: 0.88, rear: 'civic', front: 'kia', mount: 'roof',
     keys: [[0, 0.98, 0.12], [0.08, 1.01, 0.16, 'glass', 0.02], [0.34, 1.45, 0.26, 'paint', 0.03], [1.96, 1.47, 0.28, 'glass', 0.02], [2.74, 0.95, 0.14, 'paint', 0.02], [3.48, 0.8, 0.2], [3.595, 0.72, 0.28]],
     glass: [[0.4, 0.8], [0.87, 1.7], [1.78, 2.74]], black: [[1.7, 1.78]], doors: [[0.92, 1.74], [1.74, 2.58]] },
+  // Toyota Starlet Glanza V (EP91): a small round three door hatch with a 1.3 turbo, oval lamps swept into the wings, a big bumper intake
+  glanza: { L: 3.79, W: 1.625, ro: 0.66, wb: 2.3, r: 0.29, sill: 0.19, beltR: 0.96, beltF: 0.86, rear: 'starlet', front: 'starlet', mount: 'roof',
+    keys: [[0, 0.95, 0.12], [0.1, 0.99, 0.17, 'glass', 0.02], [0.58, 1.36, 0.27, 'paint', 0.04], [1.9, 1.38, 0.29, 'glass', 0.02], [2.74, 0.92, 0.15, 'paint', 0.03], [3.64, 0.76, 0.21], [3.79, 0.66, 0.29]],
+    glass: [[0.64, 1.2], [1.28, 2.74]], black: [[1.2, 1.28]], doors: [[1.24, 2.62]] },
   // Toyota Hilux double cab: a black roller cover over the bed, a sports bar, the cab standing up behind it
   hilux: { L: 5.325, W: 1.855, ro: 1.3, wb: 3.085, r: 0.39, sill: 0.46, beltR: 1.24, beltF: 1.2, rear: 'truck', front: 'hilux', mount: 'roof', sportsbar: true,
     keys: [[0, 1.3, 0.06, 'dark'], [1.52, 1.3, 0.06, 'glass'], [1.58, 1.78, 0.2, 'paint', 0.02], [3.05, 1.8, 0.22, 'glass', 0.02], [3.62, 1.26, 0.13, 'paint', 0.02], [5.2, 1.14, 0.2], [5.325, 1.02, 0.28]],
@@ -4488,6 +4500,7 @@ function buildCar(model, look, lo) {
     lights.push({ pts: [[sd * lx, bl - 0.15, zk * 2], [sd * (lx - 0.4), bl - 0.02, zk * 2], [sd * (lx - 0.4), bl + 0.01, zk * 2], [sd * lx, bl - 0.12, zk * 2]], mat: 'light' });
   }
   else if (style === 'bar') L2(0, bl - 0.13, lx, bl - 0.03);
+  else if (style === 'starlet') { L2(lx - 0.24, bl - 0.22, lx, bl - 0.02); L2(lx - 0.24, bl - 0.29, lx, bl - 0.22, 'amber'); }
   else L2(lx - 0.48, bl - 0.14, lx, bl - 0.02);
   if (style === 'quad') for (const xc of [lx - 0.1, lx - 0.32]) C2(xc, bl - 0.12, 0.035, 'lightcore', zk * 3);
   if (style === 'van') for (const sd of [-1, 1]) lights.push({ pts: rectPts(sd < 0 ? -0.8 : 0.08, 1.45, sd < 0 ? -0.08 : 0.8, 2.05, zk), mat: 'glass' });
@@ -4562,6 +4575,13 @@ function buildCar(model, look, lo) {
     head(hx - 0.34, fy - 0.1, hx, fy - 0.02);
     front.kids.push({ pts: [[-0.24, fy - 0.12, zfk], [0.24, fy - 0.12, zfk], [0.28, fy - 0.03, zfk], [0.1, fy - 0.05, zfk], [-0.1, fy - 0.05, zfk], [-0.28, fy - 0.03, zfk]], mat: 'hole' });
     front.kids.push({ pts: [[-0.46, sill + 0.08, zfk], [0.46, sill + 0.08, zfk], [0.5, sill + 0.26, zfk], [-0.5, sill + 0.26, zfk]], mat: 'hole' });
+  } else if (fs === 'starlet') {
+    // oval lamps swept back into the wings, a slim slot grille with the badge, a wide intake and round fogs low in the bumper
+    for (const sd of [-1, 1]) front.kids.push({ pts: [[sd * (hx - 0.01), fy - 0.035, zfk + 0.002], [sd * (hx - 0.18), fy - 0.02, zfk + 0.002], [sd * (hx - 0.36), fy - 0.05, zfk + 0.002], [sd * (hx - 0.35), fy - 0.11, zfk + 0.002], [sd * (hx - 0.16), fy - 0.14, zfk + 0.002], [sd * (hx - 0.03), fy - 0.11, zfk + 0.002]], mat: 'head' });
+    front.kids.push({ pts: rectPts(-0.2, fy - 0.1, 0.2, fy - 0.055, zfk), mat: 'hole' });
+    front.kids.push({ pts: circlePts(0, fy - 0.078, 0.032, zfk + 0.003, 12), mat: 'chrome' });
+    front.kids.push({ pts: [[-0.44, sill + 0.02, zfk], [0.44, sill + 0.02, zfk], [0.47, sill + 0.13, zfk], [-0.47, sill + 0.13, zfk]], mat: 'hole' });
+    for (const sd of [-1, 1]) front.kids.push({ pts: circlePts(sd * (hx - 0.1), sill + 0.19, 0.045, zfk + 0.002, 12), mat: 'head' });
   } else if (fs === 'hilux') {
     head(hx - 0.36, fy - 0.12, hx, fy - 0.02);
     // a big black grille that runs from the lights down into the bumper
@@ -5842,19 +5862,19 @@ function load() {
    half/rough = how uneven the firing is (the burble), bright = how far up the harmonics reach,
    lope = the lumpy pulse you hear at low revs: cross-plane V8s and boxers with unequal headers have it, flat-plane V8s and straight sixes do not */
 const ENGINE_TYPES = {
-  i4: { cyl: 4, half: 0.22, rough: 0.1, bright: 2.8 },
-  i5: { cyl: 5, half: 0, rough: 0.26, bright: 2.8, lope: 0.08, lopeX: 1 },               // five cylinders: the odd warble
-  i6: { cyl: 6, half: 0.1, rough: 0.05, bright: 3.3 },                                    // perfectly balanced, silky
-  v6: { cyl: 6, half: 0.32, rough: 0.12, bright: 2.8 },
-  v8: { cyl: 8, half: 0.6, rough: 0.3, bright: 2.3, lope: 0.16, lopeX: 1, idle: 720 },     // cross-plane: the burble
-  v8flat: { cyl: 8, half: 0.3, rough: 0.08, bright: 3.4, idle: 900 },                     // flat-plane: fires like two fours, smooth and screaming
-  v10: { cyl: 10, half: 0.35, rough: 0.14, bright: 3.0, idle: 950 },
-  boxer: { cyl: 4, half: 0.65, rough: 0.38, bright: 2.3, lope: 0.2, lopeX: 2 },            // unequal length headers: the Subaru rumble
-  flat6: { cyl: 6, half: 0.38, rough: 0.14, bright: 3.2, idle: 950 },
-  bike4: { cyl: 4, half: 0.5, rough: 0.28, bright: 3.4 },
-  bike4cp: { cyl: 4, half: 0.7, rough: 0.45, bright: 3.0, lope: 0.18, lopeX: 1 },          // cross-plane R1: fires like a V4, lumpy
-  i3: { cyl: 3, half: 0.45, rough: 0.22, bright: 2.5, lope: 0.1, lopeX: 1 },               // three cylinders: the off beat thrum
-  d4: { cyl: 4, half: 0.3, rough: 0.55, bright: 1.7, idle: 760 },                          // turbo diesel: clatter and grunt
+  i4: { cyl: 4, half: 0.22, rough: 0.1, bright: 2.8, pipe: [4.2], cv: 0.1, jit: 0.3 },
+  i5: { cyl: 5, half: 0, rough: 0.26, bright: 2.8, lope: 0.08, lopeX: 1, pipe: [4.6], cv: 0.14, jit: 0.4 },       // five cylinders: the odd warble
+  i6: { cyl: 6, half: 0.1, rough: 0.05, bright: 3.3, pipe: [4.4], cv: 0.03, jit: 0.2 },                            // perfectly balanced, silky
+  v6: { cyl: 6, half: 0.32, rough: 0.12, bright: 2.8, pipe: [4.3, 4.8], banks: 'alt', cv: 0.08, jit: 0.3 },
+  v8: { cyl: 8, half: 0.6, rough: 0.3, bright: 2.3, lope: 0.16, lopeX: 1, idle: 720, pipe: [4.8, 5.6], banks: [0, 1, 0, 0, 1, 0, 1, 1], cv: 0.12, jit: 0.5 },   // cross-plane: the burble
+  v8flat: { cyl: 8, half: 0.3, rough: 0.08, bright: 3.4, idle: 900, pipe: [3.6, 3.9], banks: 'alt', cv: 0.05, jit: 0.25 },   // flat-plane: fires like two fours, smooth and screaming
+  v10: { cyl: 10, half: 0.35, rough: 0.14, bright: 3.0, idle: 950, pipe: [3.8, 4.2], banks: 'alt', cv: 0.07, jit: 0.3 },
+  boxer: { cyl: 4, half: 0.65, rough: 0.38, bright: 2.3, lope: 0.2, lopeX: 2, pipe: [4.6, 5.2], banks: 'alt', late: 0.045, cv: 0.14, jit: 0.5 },   // unequal length headers: the Subaru rumble
+  flat6: { cyl: 6, half: 0.38, rough: 0.14, bright: 3.2, idle: 950, pipe: [3.9, 4.3], banks: 'alt', cv: 0.08, jit: 0.3 },
+  bike4: { cyl: 4, half: 0.5, rough: 0.28, bright: 3.4, pipe: [2.6], cv: 0.06, jit: 0.3 },
+  bike4cp: { cyl: 4, half: 0.7, rough: 0.45, bright: 3.0, lope: 0.18, lopeX: 1, pipe: [2.8], fire: [0, 0.375, 0.625, 0.75], cv: 0.1, jit: 0.4 },   // cross-plane R1: fires like a V4, lumpy
+  i3: { cyl: 3, half: 0.45, rough: 0.22, bright: 2.5, lope: 0.1, lopeX: 1, pipe: [4.9], cv: 0.16, jit: 0.45, lvl: 0.72 },       // three cylinders: the off beat thrum
+  d4: { cyl: 4, half: 0.3, rough: 0.55, bright: 1.7, idle: 760, pipe: [5.8], cv: 0.1, jit: 0.6, knock: 0.5, lvl: 0.72 },        // turbo diesel: clatter and grunt
 };
 /* red = red line, turbo = how much whistle, dct = quick paddle shifts, pops = chance of a bang on each upshift */
 const ENGINE_OF = {
@@ -5893,6 +5913,7 @@ const ENGINE_OF = {
   h2r: { t: 'bike4', red: 14000, idle: 1400, dct: true, sc: 1, drive: 2.4, rasp: 0.5, pops: 0.3 },
   // Mauritius
   picanto: { t: 'i3', red: 6300, turbo: 0.7, drive: 1.6, rasp: 0.3 },
+  glanza: { t: 'i4', red: 7200, turbo: 1.1, flutter: true, drive: 2.1, rasp: 0.45, pops: 0.3 },
   hilux: { t: 'd4', red: 4400, turbo: 1.1, drive: 1.9, rasp: 0.15, deep: true },
   raptor: { t: 'v6', red: 6200, turbo: 1.0, drive: 2.3, rasp: 0.4, deep: true, pops: 0.3 },
   evo9: { t: 'i4', red: 7200, turbo: 1.3, flutter: true, drive: 2.4, rasp: 0.55, pops: 0.8 },     // anti-lag: bangs on every lift
@@ -5900,6 +5921,114 @@ const ENGINE_OF = {
   m3g80: { t: 'i6', red: 7200, turbo: 1.0, drive: 2.4, rasp: 0.5, pops: 0.6 },
   gtrx: { t: 'v6', red: 7800, turbo: 1.5, flutter: true, dct: true, drive: 2.6, rasp: 0.55, pops: 1 },
 };
+/* The engine itself, worked out sample by sample off the main thread. Each cylinder fires a pressure pulse into the
+   exhaust (a sharp rise and a decay that shortens with the revs), a little different every time, with a hiss of
+   combustion noise on top. The pulses ring the exhaust pipes, which resonate at fixed pitches whatever the revs,
+   then go through the silencer. Big throttle opens up an induction roar. This gives the note its weight and grain;
+   the oscillator voice further down is only the fallback for browsers without audio worklets. */
+function engineWorklet() {
+  class Engine extends AudioWorkletProcessor {
+    static get parameterDescriptors() {
+      return [{ name: 'rpm', defaultValue: 900, minValue: 50, maxValue: 20000, automationRate: 'k-rate' },
+        { name: 'thr', defaultValue: 0.3, minValue: 0, maxValue: 1, automationRate: 'k-rate' }];
+    }
+    constructor(opt) {
+      super();
+      const P = this.P = opt.processorOptions, sr = this.sr = sampleRate;
+      this.F = P.fire; this.k = 0; this.cyc = 0; this.cp = 0; this.nextAt = P.fire[0][0];
+      this.rpm = P.idle; this.thr = 0.3; this.kS = 1 - Math.exp(-1 / (0.012 * sr));
+      this.seed = ((P.seed || 1) * 7919) % 2147483647 || 1;
+      this.yd = [0, 0]; this.ya = [0, 0]; this.en = [0, 0]; this.kn = 0;
+      this.pipes = P.pipe.map(ms => ({ buf: new Float32Array(8192), w: 0, D: Math.max(16, Math.min(8000, Math.round(ms * sr / 1000))), lp: 0 }));
+      this.m = { b0: 0, b1: 0, b2: 0, a1: 0, a2: 0, x1: 0, x2: 0, y1: 0, y2: 0 };
+      this.lo = 0; this.bp = 0; this.dx = 0; this.dy = 0; this.nl = 0; this.s1 = 0; this.s2 = 0;
+      this.kN = 1 - Math.exp(-2 * Math.PI * 2400 / sr); this.kL = 1 - Math.exp(-2 * Math.PI * P.lowF / sr);
+      this.f1 = 2 * Math.sin(Math.PI * P.inF / sr);
+      this.port.onmessage = e => { if (e.data === 'stop') this.dead = true; };
+    }
+    rnd() { this.seed = (this.seed * 16807) % 2147483647; return this.seed / 2147483647; }
+    process(inputs, outputs, params) {
+      if (this.dead) return false;
+      const out = outputs[0] && outputs[0][0]; if (!out) return true;
+      const P = this.P, F = this.F, nF = F.length, sr = this.sr, n = out.length, m = this.m, pipes = this.pipes, nb = pipes.length;
+      const rpmT = params.rpm[0], thrT = params.thr[0];
+      // the silencer: a low pass that opens a little with revs and throttle
+      const rf = Math.min(1, this.rpm / P.red), fc = Math.min(sr * 0.45, P.muff * (0.7 + 0.35 * rf + 0.45 * this.thr * rf));
+      const w = 2 * Math.PI * fc / sr, cs = Math.cos(w), al = Math.sin(w) / 1.6, a0 = 1 + al;
+      m.b0 = (1 - cs) / 2 / a0; m.b1 = (1 - cs) / a0; m.b2 = m.b0; m.a1 = -2 * cs / a0; m.a2 = (1 - al) / a0;
+      for (let i = 0; i < n; i++) {
+        this.rpm += (rpmT - this.rpm) * this.kS; this.thr += (thrT - this.thr) * this.kS;
+        const rpm = this.rpm, thr = this.thr;
+        const td = P.tauK / rpm, pd = Math.exp(-1 / (td * sr)), pa = Math.exp(-1 / ((P.tauA / (0.6 + 0.8 * thr)) * sr)), pn = Math.exp(-1 / (td * 1.6 * sr));
+        this.cp += rpm / 120 / sr;
+        let e0 = 0, e1 = 0;
+        while (this.cp >= this.nextAt) {
+          const f = F[this.k];
+          const g = (this.rnd() + this.rnd() + this.rnd() - 1.5) * 1.15;
+          const a = f[2] * (0.2 + 0.8 * Math.pow(thr, 0.7)) * Math.max(0.15, 1 + P.rough * (1.25 - 0.5 * thr) * g);
+          if (f[1]) { e1 += a; this.en[1] = Math.max(this.en[1], a); } else { e0 += a; this.en[0] = Math.max(this.en[0], a); }
+          if (P.knock) this.kn = Math.max(this.kn, a);
+          this.k++; if (this.k >= nF) { this.k = 0; this.cyc++; }
+          this.nextAt = this.cyc + F[this.k][0] + P.jit * 0.01 * (this.rnd() - 0.5);
+        }
+        const nz = this.rnd() * 2 - 1;
+        this.nl += (nz - this.nl) * this.kN;      // combustion noise, with the fizz taken off
+        // each bank: pulse (fast rise, slower fall) plus combustion noise, into its pipe
+        let y = 0, lowIn = 0;
+        for (let b = 0; b < nb; b++) {
+          const e = b ? e1 : e0;
+          this.yd[b] = this.yd[b] * pd + e; this.ya[b] = this.ya[b] * pa + e; this.en[b] *= pn;
+          const pulse = this.yd[b] - this.ya[b]; lowIn += pulse;
+          const s = pulse + this.nl * this.en[b] * P.noise;
+          const pp = pipes[b]; let r = pp.w - pp.D; if (r < 0) r += 8192;
+          pp.lp += (pp.buf[r] - pp.lp) * P.damp;
+          const v = s + P.refl * pp.lp;
+          pp.buf[pp.w] = v; pp.w = (pp.w + 1) & 8191;
+          y += v;
+        }
+        // induction roar under load
+        this.lo += this.f1 * this.bp; const hi = nz - this.lo - 0.7 * this.bp; this.bp += this.f1 * hi;
+        y += this.bp * P.roar * thr * thr * (0.3 + rf);
+        const z = m.b0 * y + m.b1 * m.x1 + m.b2 * m.x2 - m.a1 * m.y1 - m.a2 * m.y2;
+        m.x2 = m.x1; m.x1 = y; m.y2 = m.y1; m.y1 = z;
+        // the weight: the pressure pulses themselves, low passed, straight out of the tailpipe
+        this.s1 += (lowIn - this.s1) * this.kL; this.s2 += (this.s1 - this.s2) * this.kL;
+        // and a sine locked to half the firing rate: the deep hum you feel through the seat
+        let o = z + this.s2 * P.low + Math.sin(2 * Math.PI * this.cp * P.half) * P.sub * (0.35 + 0.65 * thr);
+        if (P.knock) { this.kn *= 0.93; o += this.kn * this.nl * P.knock * 1.8; }     // diesel clatter: tiny bright clicks
+        const d = o - this.dx + 0.996 * this.dy; this.dx = o; this.dy = d;  // no DC
+        out[i] = Math.tanh(d * P.drive) * P.outG;
+      }
+      return true;
+    }
+  }
+  registerProcessor('sk-engine', Engine);
+}
+/* where in the four stroke cycle each cylinder's pulse reaches the exhaust, which bank it goes down, and how strong it is */
+function firePattern(T, seed) {
+  const n = T.cyl, out = [];
+  for (let i = 0; i < n; i++) {
+    const ph = T.fire ? T.fire[i] : i / n + (T.late && i % 2 ? T.late : 0);
+    const bank = T.banks === 'alt' ? i % 2 : Array.isArray(T.banks) ? T.banks[i] : 0;
+    out.push([ph, bank, 1 + (T.cv || 0) * (hash(i + 1, seed + 3) * 2 - 1)]);
+  }
+  return out.sort((a, b) => a[0] - b[0]);
+}
+/* the settings the worklet needs for one car */
+function workletOpts(prof, seed) {
+  const T = prof.T, deep = prof.deep ? 1.22 : 1;
+  return {
+    fire: firePattern(T, seed), idle: prof.idle, red: prof.red, seed,
+    pipe: T.pipe.map(ms => ms * deep * (1 + 0.06 * (hash(seed, 5) - 0.5))),
+    refl: -0.5 - 0.1 * Math.min(1, prof.rasp), damp: 0.42,
+    tauK: (prof.deep ? 7 : 5.6) * (T.cyl > 6 ? 0.8 : 1), tauA: 0.00016,
+    rough: (T.rough * 0.35 + 0.04) * (prof.turbo ? 0.85 : 1), jit: T.jit || 0.3, noise: 0.07 + prof.rasp * 0.14,
+    low: prof.deep ? 0.75 : 0.55, lowF: prof.deep ? 150 : 180, half: T.cyl / 2, sub: prof.deep ? 0.17 : 0.12,
+    muff: (prof.deep ? 900 : 1150) + prof.rasp * 1900 * (prof.turbo ? 0.8 : 1), inF: prof.turbo ? 1100 : 700, roar: 0.05 + prof.rasp * 0.06,
+    knock: T.knock || 0, drive: 0.9 + prof.drive * 0.25, outG: 0.9 * (T.lvl || 1),
+  };
+}
+
 /* share of the gearing's top speed each gear reaches at the red line */
 const GEARS = [0.27, 0.43, 0.58, 0.72, 0.86, 1.0];
 
@@ -5926,7 +6055,14 @@ const Sound = {
       // iPhones mute web audio when the ring switch is on silent unless the page asks for playback audio
       try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
       const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
-      const c = this.ctx = new AC();
+      this.setup(new AC());
+      this.unlockIOS();
+    } catch (e) { this.ctx = null; }
+  },
+  /* the shared parts: compressor, master volume, a noise buffer, nitro hiss and wind. Also used for offline tests */
+  setup(c) {
+    {
+      this.ctx = c;
       const comp = c.createDynamicsCompressor();
       comp.threshold.value = -14; comp.knee.value = 10; comp.ratio.value = 4; comp.attack.value = 0.003; comp.release.value = 0.2;
       comp.connect(c.destination); this.comp = comp;
@@ -5945,8 +6081,18 @@ const Sound = {
       ns.connect(wl); wl.connect(wh); wh.connect(this.wind); this.wind.connect(this.master);
       ns.start();
       this.curves = {};
-      this.unlockIOS();
-    } catch (e) { this.ctx = null; }
+    }
+    return this.loadWorklet();
+  },
+  loadWorklet() {
+    const c = this.ctx;
+    if (!c.audioWorklet || typeof AudioWorkletNode === 'undefined' || this.noWk) return Promise.resolve(false);
+    // a blob URL where the page has a proper origin, a data URL where it does not (opened as a file)
+    const code = '(' + engineWorklet.toString() + ')()';
+    const load = url => c.audioWorklet.addModule(url).then(() => { this.wk = true; return true; });
+    let first;
+    try { first = load(URL.createObjectURL(new Blob([code], { type: 'application/javascript' }))); } catch (e) { first = Promise.reject(e); }
+    return first.catch(() => load('data:application/javascript;charset=utf-8,' + encodeURIComponent(code))).catch(() => false);
   },
   /* older iPhones: playing a short silent clip switches the page to playback audio, so the ring switch does not mute it */
   unlockIOS() {
@@ -5979,6 +6125,7 @@ const Sound = {
   /* one engine: two slightly detuned oscillators carrying the firing pulses, exhaust rasp pulsed at the firing rate,
      distortion, a filter that opens with revs and throttle, plus turbo whistle or supercharger whine */
   voice(prof, seed) {
+    if (this.wk) { const W = this.wvoice(prof, seed); if (W) return W; }
     const c = this.ctx, T = prof.T, N = 72, re = new Float32Array(N + 1), im = new Float32Array(N + 1), half = T.cyl / 2;
     for (let k = 1; k <= N; k++) {
       let a = k % T.cyl === 0 ? 1 : Number.isInteger(half) && k % half === 0 ? T.half : T.rough * (0.4 + hash(k, seed));
@@ -5987,7 +6134,7 @@ const Sound = {
       re[k] = a * Math.cos(ph); im[k] = a * Math.sin(ph);
     }
     const wave = c.createPeriodicWave(re, im);
-    const V = { prof, nodes: [], g: 0, rpm: prof.idle, cut: 0, boost: 0, thr: 0, lastV: 0, limT: 0, fresh: true };
+    const V = { prof, nodes: [], g: 0, rpm: prof.idle, cut: 0, boost: 0, thr: 0, lastV: 0, limT: 0, fresh: true, accS: 0, acc: false, thrS: 0.3 };
     const src = n => { V.nodes.push(n); return n; };
     const o1 = src(c.createOscillator()), o2 = src(c.createOscillator());
     o1.setPeriodicWave(wave); o2.setPeriodicWave(wave); o2.detune.value = 9;
@@ -6025,9 +6172,29 @@ const Sound = {
     for (const n of V.nodes) { if (n === ns) n.start(t0, Math.random() * 1.5); else n.start(t0); }
     return V;
   },
+  /* the worklet engine, with the turbo whistle on top */
+  wvoice(prof, seed) {
+    const c = this.ctx;
+    let node;
+    try { node = new AudioWorkletNode(c, 'sk-engine', { numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [1], processorOptions: workletOpts(prof, seed) }); }
+    catch (e) { this.wk = false; return null; }
+    const V = { prof, nodes: [], g: 0, rpm: prof.idle, cut: 0, boost: 0, thr: 0, lastV: 0, limT: 0, fresh: true, accS: 0, acc: false, thrS: 0.3, wk: node };
+    const body = c.createBiquadFilter(); body.type = 'lowshelf'; body.frequency.value = 160; body.gain.value = 4;
+    const vol = c.createGain(); vol.gain.value = 0;
+    const pan = c.createStereoPanner ? c.createStereoPanner() : c.createGain();
+    node.connect(body); body.connect(vol); vol.connect(pan); pan.connect(this.master);
+    let tw = null, tg = null;
+    if (prof.turbo || prof.sc) {
+      tw = c.createOscillator(); tw.type = 'sine'; tg = c.createGain(); tg.gain.value = 0;
+      tw.connect(tg); tg.connect(pan); tw.start(); V.nodes.push(tw);
+    }
+    Object.assign(V, { vol, pan, tw, tg, rpmP: node.parameters.get('rpm'), thrP: node.parameters.get('thr') });
+    return V;
+  },
   kill(V) {
     if (!V) return;
     const t = this.ctx.currentTime;
+    if (V.wk) setTimeout(() => { try { V.wk.port.postMessage('stop'); V.wk.disconnect(); } catch (e) {} }, 500);
     V.vol.gain.setTargetAtTime(0, t, 0.05); if (V.tg) V.tg.gain.setTargetAtTime(0, t, 0.05);
     for (const n of V.nodes) try { n.stop(t + 0.4); } catch (e) {}
     setTimeout(() => { try { V.pan.disconnect(); } catch (e) {} }, 600);
@@ -6060,6 +6227,13 @@ const Sound = {
     const c = this.ctx, t = c.currentTime, p = V.prof, T = p.T;
     const f = rpm / 120, fire = f * T.cyl, rf = rpm / p.red;
     const vtec = p.vtec && rpm > p.vtec ? 1.35 : 1;
+    if (V.wk) {
+      V.rpmP.setTargetAtTime(rpm * (vtec > 1 ? 1.0 : 1), t, 0.012); V.thrP.setTargetAtTime(clamp(thr * (vtec > 1 ? 1.1 : 1), 0, 1), t, 0.012);
+      V.vol.gain.setTargetAtTime(gain * p.loud * 2.0 * (0.55 + 0.45 * thr) * (0.62 + 0.38 * rf), t, 0.025);
+      if (V.pan.pan) V.pan.pan.setTargetAtTime(clamp(pan, -1, 1), t, 0.05);
+      this.whistle(V, p, rpm, rf, thr, gain, t, dt);
+      return;
+    }
     V.o1.frequency.setTargetAtTime(f, t, 0.02); V.o2.frequency.setTargetAtTime(f, t, 0.02);
     V.lfo.frequency.setTargetAtTime(fire, t, 0.02);
     V.sub.frequency.setTargetAtTime(fire / 2, t, 0.02);
@@ -6070,13 +6244,15 @@ const Sound = {
     V.nam.gain.setTargetAtTime(r, t, 0.03); V.lfoG.gain.setTargetAtTime(r, t, 0.03);
     V.vol.gain.setTargetAtTime(gain * p.loud * (0.3 + 0.7 * thr) * (0.55 + 0.45 * rf), t, 0.025);
     if (V.pan.pan) V.pan.pan.setTargetAtTime(clamp(pan, -1, 1), t, 0.05);
-    if (V.tw) {
-      if (p.sc) { V.tw.frequency.setTargetAtTime(rpm / 60 * 8.5, t, 0.03); V.tg.gain.setTargetAtTime(gain * 0.05 * rf * p.sc, t, 0.03); }
-      else {
-        V.boost = clamp(V.boost + (thr > 0.6 && rf > 0.35 ? 1.2 : -2.5) * dt, 0, 1);
-        V.tw.frequency.setTargetAtTime(1900 + V.boost * 4200 + rf * 700, t, 0.05);
-        V.tg.gain.setTargetAtTime(gain * 0.03 * p.turbo * V.boost * V.boost, t, 0.05);
-      }
+    this.whistle(V, p, rpm, rf, thr, gain, t, dt);
+  },
+  whistle(V, p, rpm, rf, thr, gain, t, dt) {
+    if (!V.tw) return;
+    if (p.sc) { V.tw.frequency.setTargetAtTime(rpm / 60 * 8.5, t, 0.03); V.tg.gain.setTargetAtTime(gain * 0.05 * rf * p.sc, t, 0.03); }
+    else {
+      V.boost = clamp(V.boost + (thr > 0.6 && rf > 0.35 ? 1.2 : -2.5) * dt, 0, 1);
+      V.tw.frequency.setTargetAtTime(1900 + V.boost * 4200 + rf * 700, t, 0.05);
+      V.tg.gain.setTargetAtTime(gain * (V.wk ? 0.022 : 0.03) * p.turbo * V.boost * V.boost, t, 0.05);
     }
   },
   build(race) {
@@ -6087,7 +6263,7 @@ const Sound = {
     this.voices = { me, opp, pops: 0, passed: new WeakMap(), boosting: false };
     this.race = race;
   },
-  update(race, intro) {
+  update(race, intro, realDt) {
     if (!this.ctx) return;
     const c = this.ctx, t = c.currentTime;
     if (!race || race.wrecked) {
@@ -6101,7 +6277,7 @@ const Sound = {
     }
     this.idleT = 0;
     if (race !== this.race || !this.voices) this.build(race);
-    const Vs = this.voices, p = race.p, o = race.o, dt = 1 / 60;
+    const Vs = this.voices, p = race.p, o = race.o, dt = clamp(realDt || 1 / 60, 1 / 240, 0.05);
     const vtop = race.st.vmax * race.st.nitroMult;
     // the player
     const me = Vs.me, meP = me.prof;
@@ -6112,10 +6288,15 @@ const Sound = {
       const rpm = meP.idle + (meP.red * (intro ? 0.18 : 0.38) + meP.red * 0.4 * (intro ? 0 : blip) - meP.idle);
       this.drive(me, rpm, intro ? 0.2 : 0.35 + blip * 0.6, intro ? 0.12 : 0.3, 0, dt);
     } else {
+      // is the car still pulling? Smoothed over a few frames, with a gap between on and off, so a slow car
+      // that is only just gaining speed does not flick between full and part throttle every frame
       const acc = (p.v - me.lastV) / dt; me.lastV = p.v;
-      const accel = acc > 0.25 || (race.state === 'racing' && p.v < 3);
+      me.accS += (acc - me.accS) * Math.min(1, dt / 0.15);
+      if (me.acc ? me.accS < 0.08 : me.accS > 0.35) me.acc = !me.acc;
+      const accel = me.acc || (race.state === 'racing' && p.v < 3);
       let rpm = this.gearbox(me, p.v, vtop, accel, dt, 0, 0.35);
       let thr = me.cut > 0 ? 0.08 : accel ? 1 : race.state === 'finishing' ? 0.05 : 0.5;
+      me.thrS = me.cut > 0 ? thr : me.thrS + (thr - me.thrS) * Math.min(1, dt / 0.08); thr = me.thrS;
       // at a steady speed the revs and throttle drift a little, like a real right foot
       if (!accel && me.cut <= 0) { const w = Math.sin(race.t * 0.9) * 0.6 + Math.sin(race.t * 2.3 + 1) * 0.4; rpm *= 1 + 0.014 * w; thr = clamp(thr + 0.12 * w, 0, 1); }
       if (me.limit && accel) { me.limT += dt; if (Math.sin(me.limT * 90) > 0) { rpm *= 0.965; thr = 0.2; } }
@@ -6151,12 +6332,15 @@ const Sound = {
       } else {
         rel = o.dist - p.dist; pan = (o.x - p.x) * 0.45;
         const acc = (o.v - opp.lastV) / dt; opp.lastV = o.v;
+        opp.accS += (acc - opp.accS) * Math.min(1, dt / 0.15);
+        if (opp.acc ? opp.accS < 0.08 : opp.accS > 0.35) opp.acc = !opp.acc;
         if (race.state === 'countdown') {
           const blip = Math.pow(Math.max(0, Math.sin(race.t * 1.7 + 2.2)), 6);
           rpm = oP.idle + oP.red * (0.3 + 0.45 * blip) - oP.idle; thr = 0.3 + blip * 0.6;
         } else {
-          rpm = this.gearbox(opp, o.v, (o.vmax || 40) * NITRO_MULT, acc > 0.25, dt, pan, 0.8 / (1 + Math.pow(rel / 12, 2)));
-          thr = opp.cut > 0 ? 0.08 : acc > 0.25 ? 1 : 0.5;
+          rpm = this.gearbox(opp, o.v, (o.vmax || 40) * NITRO_MULT, opp.acc, dt, pan, 0.8 / (1 + Math.pow(rel / 12, 2)));
+          thr = opp.cut > 0 ? 0.08 : opp.acc ? 1 : 0.5;
+          opp.thrS = opp.cut > 0 ? thr : opp.thrS + (thr - opp.thrS) * Math.min(1, dt / 0.08); thr = opp.thrS;
         }
         // Azhar's pops and bangs, in time with the flames
         if (race.ev.pops && (o.pop || 0) > Vs.pops + 0.05) { const gg = 1 / (1 + Math.pow(rel / 14, 2)); this.bang(0.55 * gg, pan, 0); if (Math.random() < 0.7) this.bang(0.35 * gg, pan, 0.07 + Math.random() * 0.06); }
@@ -6235,6 +6419,25 @@ const Sound = {
     s.connect(f); f.connect(g); g.connect(out); s.start(t, Math.random()); s.stop(t + d + 0.02);
   },
   click() { this.tone(1300, 0.04, 0.04, 'square'); },
+  /* a long swell of filtered noise: jet engines, wind over the wings */
+  swell(dur, vol, f0, f1) {
+    if (!this.ctx) return;
+    const c = this.ctx, t = c.currentTime, s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+    s.buffer = this.noise; s.loop = true; f.type = 'bandpass'; f.Q.value = 0.7;
+    f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + dur * 0.35); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    s.connect(f); f.connect(g); g.connect(this.master); s.start(t, Math.random()); s.stop(t + dur + 0.05);
+  },
+  /* container doors: a low groaning creak */
+  creak() {
+    if (!this.ctx) return;
+    const c = this.ctx, t = c.currentTime, o = c.createOscillator(), f = c.createBiquadFilter(), g = c.createGain();
+    o.type = 'sawtooth'; o.frequency.setValueAtTime(70, t); o.frequency.linearRampToValueAtTime(95, t + 0.5); o.frequency.linearRampToValueAtTime(60, t + 1.2);
+    f.type = 'bandpass'; f.frequency.value = 520; f.Q.value = 3;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.09, t + 0.15); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.3);
+    o.connect(f); f.connect(g); g.connect(this.master); o.start(t); o.stop(t + 1.35);
+    this.burst(0.25, 0.25, 180, 1.2, 0, 1.2);
+  },
 };
 /* browsers only allow sound after a tap or key press: unlock on the first one, and again after the app comes back */
 for (const ev of ['pointerdown', 'touchend', 'keydown']) addEventListener(ev, () => Sound.init(), { capture: true, passive: true });
@@ -6246,7 +6449,7 @@ let toastTimer = 0;
 const MUSIC_KEY = 'streetkings.music';
 /* each part of the game can have its own track. loop: [start, end] in seconds is the part that repeats.
    Filled in when the tracks arrive, e.g. london: { src: 'music/london.mp3', loop: [12.5, 98.2] } */
-const MUSIC = window.__musicTest || {"title":{"name":"It Ain't Adding Up","loop":[1.0,96.049501],"vol":0.7,"src":"music/ne-it-aint-adding-up.72f04209.mp3"},"london":{"name":"1919","loop":[1.0,57.47059],"vol":0.7,"src":"music/ne-1919.5d166132.mp3"},"essex":{"name":"1926","loop":[1.0,97.0],"vol":0.7,"src":"music/ne-1926.d89adf94.mp3"},"mu":{"name":"Sega (island)","loop":[1.0,60.076916],"start":1.0,"vol":0.7,"src":"music/sega-mauritius.3275df74.mp3"}};
+const MUSIC = window.__musicTest || {"title":{"name":"It Ain't Adding Up","loop":[1.0,96.049501],"vol":0.35,"src":"music/ne-it-aint-adding-up.72f04209.mp3"},"london":{"name":"1919","loop":[1.0,57.47059],"vol":0.35,"src":"music/ne-1919.5d166132.mp3"},"essex":{"name":"1926","loop":[1.0,97.0],"vol":0.35,"src":"music/ne-1926.d89adf94.mp3"},"mu":{"name":"Sega (island)","loop":[1.0,60.076916],"start":1.0,"vol":0.35,"src":"music/sega-mauritius.691069e6.mp3"}};
 // the single-file copy of the game has no music folder beside it, so it borrows the files from the website
 const MUSIC_HOME = 'https://elyneel.github.io/street-kings/';
 const Music = {
@@ -6270,7 +6473,7 @@ const Music = {
       const g = c.createGain(), src = c.createBufferSource(), now = c.currentTime;
       src.buffer = buf; src.loop = true;
       if (t.loop) { src.loopStart = t.loop[0]; src.loopEnd = Math.min(t.loop[1], buf.duration); }
-      g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(t.vol || 0.55, now + 1.5);
+      g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(t.vol || 0.3, now + 1.5);
       src.connect(g); g.connect(c.destination); src.start(now, t.start || 0);
       this.cur = { t, src, g };
     });
@@ -6322,8 +6525,10 @@ function paintCar(c) {
   const look = c.dataset.draft === '1' && draft ? draft : own ? lookOf(S, id) : stockLook(id);
   renderCarPreview(c, id, look, own ? own.up : {}, { yaw: c.dataset.spin ? spin.yaw + (c._drag || 0) : -2.45, locked: c.dataset.locked === '1', focus: c.dataset.draft ? spin.zoom : 0 });
 }
-function topBar() {
+function backBtn(label) { return `<button class="bar-btn back-btn" type="button" data-act="back">&larr; ${label || 'Back'}</button>`; }
+function topBar(back) {
   return `<div class="bar">
+    ${backBtn(back)}
     <div class="brand">STREET <em>KINGS</em></div>
     <div class="stat"><small>Money</small><b class="money">${money(S.money)}</b></div>
     <div class="stat"><small>Reputation</small><b>${S.rep}</b></div>
@@ -6373,7 +6578,7 @@ function goTitle() {
 function goSelect() {
   mode = 'menu';
   $('select-body').innerHTML = `
-    <div class="bar"><div class="brand">STREET <em>KINGS</em></div><div class="stat"><small>Money</small><b class="money">£5,000</b></div><button class="bar-btn" type="button" data-act="music">${Music.on ? 'Music on' : 'Music off'}</button><button class="bar-btn" type="button" data-act="sound">${Sound.on ? 'Sound on' : 'Sound off'}</button></div>
+    <div class="bar">${backBtn()}<div class="brand">STREET <em>KINGS</em></div><div class="stat"><small>Money</small><b class="money">£5,000</b></div><button class="bar-btn" type="button" data-act="music">${Music.on ? 'Music on' : 'Music off'}</button><button class="bar-btn" type="button" data-act="sound">${Sound.on ? 'Sound on' : 'Sound off'}</button></div>
     <p class="kicker">New career · East London</p>
     <h2 class="h2">Choose your first car</h2>
     <p class="lede">You start with <b>£5,000</b>. The Civic is free and the BMW costs <b>£2,500</b>. Whatever you do not spend is yours for upgrades. Faster cars unlock as your reputation grows.</p>
@@ -6678,17 +6883,22 @@ function muImportCard(own) {
   return `<div class="invite import">
     <p class="kicker">Delivered to Port Louis</p><h3 class="invite-title">Your GT-R has landed</h3>
     <canvas class="slipcar" data-car="gtrx" data-stock="1" width="300" height="130" aria-label="${esc(car.name)}"></canvas>
-    <p class="story">Shipped over from London and rebuilt in Plaine Lauzun for one job: beating Le Boss. ${st2.bhp} bhp, every upgrade fitted, a time attack wing, canards, a splitter and arches out past the wheels.</p>
+    <p class="story">Shipped over from London and rebuilt in Plaine Lauzun for one job: beating Boss. ${st2.bhp} bhp, every upgrade fitted, a time attack wing, canards, a splitter and arches out past the wheels.</p>
     <dl class="facts"><div><dt>Power</dt><dd>${st2.bhp} <small>bhp</small></dd></div><div><dt>Top speed</dt><dd>${st2.topMph} <small>mph</small></dd></div><div><dt>Shipping and build</dt><dd>${money(car.price)}</dd></div><div><dt>Aero</dt><dd>Time attack</dd></div></dl>
     <div class="actions">${can ? `<button class="btn primary" data-act="buycar" data-arg="gtrx"><span>Collect it · ${money(car.price)}</span></button>` : `<span class="lock">You need ${money(car.price - S.money)} more. Island street races pay.</span>`}</div>
   </div>`;
 }
-/* island rivals drive better than their power suggests, so the tip says which car does the job */
+/* what it takes to race each island rival: the stage of engine upgrades, or the car to buy */
 function muTip(ev, st) {
-  const need = carById(ev.need), needMax = maxStats(need.id).bhp, curMax = maxStats(S.current).bhp, mine = carById(S.current);
-  if (st.bhp >= needMax * 0.97) return `Your ${st.bhp} bhp is enough for this one. Keep it clean and use every drop of nitro.`;
-  if (curMax >= needMax * 0.97) return `Your ${esc(mine.name)} can do this once it is fully upgraded (${curMax} bhp).`;
-  return `Word on the island: you need a fully built ${esc(need.name)} or better for this one${S.owned[need.id] ? '. Yours is in the garage.' : carUnlocked(S, need) ? '. It is in the showroom now.' : '.'}`;
+  const need = carById(ev.need), mine = carById(S.current), own = S.owned[S.current] || { up: {} }, theirs = ev.oppBhp, who = esc(CHARACTERS[ev.rival].name.split(' ')[0]);
+  if (st.bhp >= theirs * 1.07) return `Your ${st.bhp} bhp against ${who}'s ${theirs}. That is enough. Keep it clean and use every drop of nitro.`;
+  // the lowest stage on the engine upgrades that gets this car past them
+  for (let n = 1; n <= 3; n++) {
+    const up = Object.assign({}, own.up); for (const k of ['ecu', 'exhaust', 'turbo']) up[k] = Math.max(Number(up[k]) || 0, n);
+    const b = statsFor(S.current, up).bhp;
+    if (b >= theirs * 1.07) return `Your ${st.bhp} bhp against ${who}'s ${theirs}. Stage ${n} on the ECU, exhaust and turbo takes your ${esc(mine.name)} to ${b} bhp, enough to race ${who}. Short of cash? Win a few street races first.`;
+  }
+  return `Your ${st.bhp} bhp against ${who}'s ${theirs}. Even fully built, your ${esc(mine.name)} is not enough: you need a ${esc(need.name)} for this one${S.owned[need.id] ? '. Yours is in the garage.' : carUnlocked(S, need) ? '. It is in the showroom now.' : '.'}`;
 }
 function muMain(own, st) {
   const i = nextMuIndex(S), done = (S.mu && S.mu.completed) || [];
@@ -6698,7 +6908,7 @@ function muMain(own, st) {
   if (i >= MU.length) {
     body = `<p class="kicker">Mauritius complete</p>
       <h2 class="flyer-title">King of the Island</h2>
-      ${rivalCard('boss', CHARACTERS.boss.youWin, false, 'Le Boss')}
+      ${rivalCard('boss', CHARACTERS.boss.youWin, false, 'Boss')}
       <dl class="facts">
         <div><dt>Island stars</dt><dd>${stars} <small>of ${MU.length * 3}</small></dd></div><div><dt>Wins</dt><dd>${S.stats.wins}</dd></div>
         <div><dt>Money</dt><dd>${money(S.money)}</dd></div><div><dt>Reputation</dt><dd>${S.rep}</dd></div>
@@ -6720,12 +6930,12 @@ function muMain(own, st) {
       ${recordLine('mu:' + ev.rival, 'tip rec')}
       ${damageWarn(own)}
       ${boss ? muImportCard(own) : ''}
+      <p class="tip hint">${need ? 'Nothing on the island can live with Boss. Collect your GT-R, then race him in it.' : muTip(ev, st)}</p>
       <div class="actions">
         <button class="btn primary big" data-act="mu" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button>
         <button class="btn" data-act="garage"><span>Garage</span></button>
         <button class="btn" data-act="ladder"><span>Career ladder</span></button>
-      </div>
-      <p class="tip">${need ? 'Nothing on the island can live with Le Boss. Collect your GT-R, then race him in it.' : muTip(ev, st)}</p>`;
+      </div>`;
   }
   return `<div class="hub-main"><article class="flyer mu">
       ${hubTabs('mu')}
@@ -6749,9 +6959,9 @@ function goHub() {
   $('controls').hidden = true; $('b-pause').hidden = true; document.body.classList.remove('racing');
   // the first time the island opens, say so and take you there
   if (muOpen(S) && !(S.announced || {}).mu) {
-    S.announced = Object.assign(S.announced || {}, { mu: true }); openIsland(S); hubTab = 'mu'; goIsland(S, true);
+    S.announced = Object.assign(S.announced || {}, { mu: true, flown: true }); openIsland(S); hubTab = 'mu'; goIsland(S, true);
     S.news = 'Your cousin has left his Picanto at the airport for you. Welcome to Mauritius.'; S.street = streetOffers(S); save();
-    setTimeout(() => toast('Mauritius is open. Island cars only: you start again in a Picanto.'), 500);
+    setTimeout(() => Cine.play('fly', () => toast('Mauritius is open. Island cars only: you start again in a Picanto.')), 30);
   }
   if (hubTab === null && islandCar(S.current)) hubTab = 'mu';
   if (hubTab === 'mu' && muOpen(S) && !islandCar(S.current)) { goIsland(S, true); S.street = streetOffers(S); save(); }
@@ -6810,7 +7020,7 @@ function goHub() {
       <p class="tip">${ev.bike ? `A superbike weighs a fraction of your car, so it will pull away off the line. You need a fast car, clean driving and every drop of nitro to reel it in.` : `Your ${st.bhp} bhp against ${ev.oppBhp} bhp. ${tip}`}</p>
     </article>`;
   }
-  $('hub-body').innerHTML = `${topBar()}
+  $('hub-body').innerHTML = `${topBar('Menu')}
     <div class="hub-grid">
       ${main}
       <aside class="car-panel">
@@ -7128,7 +7338,7 @@ function showResults() {
   if (sum.slipLost) notes += `<div class="unlock-note bad"><small>Car lost</small>${esc(sum.slipLost)}</div>`;
   if (sum.essexOpened) notes += `<div class="unlock-note special"><small>New area unlocked</small>Essex</div>`;
   if (sum.muOpened) notes += `<div class="unlock-note special"><small>New area unlocked</small>Mauritius</div>`;
-  if (sum.imported) notes += `<div class="unlock-note special"><small>Delivered to Port Louis</small>Your GT-R, rebuilt for Le Boss</div>`;
+  if (sum.imported) notes += `<div class="unlock-note special"><small>Delivered to Port Louis</small>Your GT-R, rebuilt for Boss</div>`;
   let who = '';
   if (sum.careerDone) notes += `<div class="unlock-note special"><small>Invitation unlocked</small>${SPECIALS.ride3.title}</div>`;
   if (sum.careerDone) {
@@ -7138,8 +7348,8 @@ function showResults() {
     who = `<div class="reveal"><p class="kicker">King of Essex</p>${rivalCard('duke', CHARACTERS.duke.youWin, false, 'The Duke')}
       <p class="story">The Duke pulls over at the Kent end of the bridge, takes off his sunglasses and shakes your hand. Thirty years, and this is the first time anyone has seen his eyes.</p></div>`;
   } else if (sum.muDone) {
-    who = `<div class="reveal"><p class="kicker">King of the Island</p>${rivalCard('boss', CHARACTERS.boss.youWin, false, 'Le Boss')}
-      <p class="story">Le Boss pulls over under the mountain as the sun drops into the sea. Ten years unbeaten. He hands you the keys to the M3 for a photo, then takes them back.</p></div>`;
+    who = `<div class="reveal"><p class="kicker">King of the Island</p>${rivalCard('boss', CHARACTERS.boss.youWin, false, 'Boss')}
+      <p class="story">Boss pulls over under the mountain as the sun drops into the sea. Ten years unbeaten. He hands you the keys to the M3 for a photo, then takes them back.</p></div>`;
   } else if (ev.rival) who = rivalCard(ev.rival, sum.line, ev.rival === 'king' && !S.kingRevealed);
   let story = sum.story ? `<p class="news">“${esc(sum.story)}”</p>` : '';
   if (ev.kind === 'street' && ev.cp) story = res.won ? `<p class="story">Every gate, clean. There are fresh street races on the board.</p>` : `<p class="story">${res.how === 'wrecked' ? 'The car is in bits.' : 'One gate too many.'} There are fresh street races on the board.</p>`;
@@ -7155,7 +7365,7 @@ function showResults() {
   else btns = `<button class="btn primary big" data-act="retry" ${own.damage >= 100 ? 'disabled' : ''}><span>Retry event</span></button>
     ${own.damage >= 50 ? `<button class="btn" data-act="garage"><span>Garage</span></button>` : ''}
     <button class="btn" data-act="hub"><span>Career hub</span></button>`;
-  $('results-body').innerHTML = `
+  $('results-body').innerHTML = `<div class="topback">${backBtn('Hub')}</div>
     <p class="kicker">${ev.kind === 'daily' ? 'Daily challenge · ' + esc(ev.area) + ' · ' + esc(carById(ev.loaner).name) : ev.kind === 'street' ? 'Street race · ' + ev.label + ' · ' + esc(ev.area) : ev.kind === 'slip' ? 'Pink slip · ' + ev.title : (ev.kind === 'special' && !ev.brand ? 'Street race · ' : ev.kind === 'essex' ? 'Essex · ' : ev.kind === 'mu' ? 'Mauritius · ' : '') + ev.title + (ev.exhibition || ev.rematch ? (ev.kind === 'special' ? ' · Rematch' : ' · Exhibition') : '')}</p>
     ${ev.kind === 'special' && ev.brand ? `<img class="r3head" src="${RIDE3_LOGO}" alt="Ride3">` : ''}
     <h2 class="result-head ${res.won ? 'win' : 'lose'}">${head}</h2>
@@ -7198,7 +7408,7 @@ function startRace(spec) {
     const done = S.mu && S.mu.completed[spec.index];
     if (spec.exhibition ? !done : done || spec.index !== nextMuIndex(S)) return;
     if (!islandCar(S.current)) { toast('Island races need an island car. Switch to the Mauritius tab.', true); return; }
-    if (MU[spec.index].rival === 'boss' && !spec.exhibition && !S.owned.gtrx) { toast('Nothing on the island can beat Le Boss. Collect your GT-R first.', true); return; }
+    if (MU[spec.index].rival === 'boss' && !spec.exhibition && !S.owned.gtrx) { toast('Nothing on the island can beat Boss. Collect your GT-R first.', true); return; }
   }
   if ((spec.kind === 'essex' || spec.kind === 'career' || spec.kind === 'special' || spec.kind === 'slip') && islandCar(S.current)) { toast('Your island car stays on the island. Switch to London or Essex.', true); return; }
   if (spec.kind === 'slip' && (!slipReady(S, spec.id) || Object.keys(S.owned).length < 2 || S.current === slipCarFor(spec.id).id)) return;
@@ -7295,7 +7505,10 @@ function setDemo() {
 
 /* ---------- input ---------- */
 addEventListener('keydown', e => {
-  if (mode !== 'race') return;
+  if (mode !== 'race') {
+    if (e.code === 'Escape' && !(e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName))) { e.preventDefault(); goBack(); }
+    return;
+  }
   if (intro) { e.preventDefault(); if (!e.repeat) endIntro(); return; }   // any key skips the showcase
   const k = e.code;
   if (k === 'ArrowLeft' || k === 'KeyA') { e.preventDefault(); if (!e.repeat) steer(-1); }
@@ -7306,6 +7519,328 @@ addEventListener('keydown', e => {
 addEventListener('keyup', e => { if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') { input.nitro = false; if (mode === 'race') e.preventDefault(); } });
 addEventListener('blur', () => { input.nitro = false; });
 document.addEventListener('visibilitychange', () => { if (document.hidden && mode === 'race' && !paused && R && R.state !== 'finishing') setPause(true); });
+
+/* ---------- cut scenes: the flight to Mauritius, and the GT-R coming out of its container at Port Louis.
+   Drawn on their own canvas over everything. A tap, a key or the phone's back button skips them. ---------- */
+const Cine = {
+  on: false, t: 0, len: 0, kind: null, done: null, cv: null, g: null, last: 0, carCv: null, eng: null, cues: null,
+  play(kind, done, opts) {
+    if (this.on) this.finish();
+    if (window.__noIntro && !window.__cine) { if (done) done(); return; }   // automated tests skip the cut scenes
+    if (!this.cv) {
+      const cv = this.cv = document.createElement('canvas'); cv.id = 'cine'; cv.hidden = true; document.body.appendChild(cv);
+      const tip = this.tip = document.createElement('div'); tip.id = 'cine-skip'; tip.hidden = true; tip.textContent = 'Tap to skip'; document.body.appendChild(tip);
+      cv.addEventListener('pointerdown', e => { e.preventDefault(); if (this.t > 0.35) this.skip(); });
+      addEventListener('keydown', e => { if (this.on && !e.repeat && this.t > 0.35) { e.preventDefault(); e.stopPropagation(); this.skip(); } }, true);
+    }
+    this.kind = kind; this.done = done; this.opts = opts || {}; this.t = 0; this.last = performance.now(); this.on = true;
+    this.len = kind === 'fly' ? (this.opts.short ? 4.4 : 6.4) : 7.2;
+    this.cues = {}; this.seed = Math.random() * 1000;
+    this.cv.hidden = false; this.tip.hidden = false; this.tip.textContent = kind === 'crate' ? 'Tap to skip' : 'Tap to skip';
+    this.resize();
+    requestAnimationFrame(ts => this.frame(ts));
+  },
+  resize() {
+    const cw = innerWidth, ch = innerHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+    this.w = cw; this.h = ch;
+    if (this.cv.width !== Math.round(cw * dpr) || this.cv.height !== Math.round(ch * dpr)) { this.cv.width = Math.round(cw * dpr); this.cv.height = Math.round(ch * dpr); }
+    this.g = this.cv.getContext('2d'); this.g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  },
+  skip() { if (this.on) this.finish(); },
+  finish() {
+    this.on = false; this.cv.hidden = true; this.tip.hidden = true;
+    if (this.eng) { try { Sound.kill(this.eng); } catch (e) {} this.eng = null; }
+    const d = this.done; this.done = null; if (d) d();
+  },
+  cue(name, at, fn) { if (this.t >= at && !this.cues[name]) { this.cues[name] = true; try { fn(); } catch (e) {} } },
+  frame(ts) {
+    if (!this.on) return;
+    const dt = Math.min(0.05, Math.max(0, (ts - this.last) / 1000)); this.last = ts; this.t += dt;
+    this.resize();
+    try { if (this.kind === 'fly') this.fly(); else this.crate(dt); } catch (e) { console.error(e); this.finish(); return; }
+    if (this.t >= this.len) { this.finish(); return; }
+    requestAnimationFrame(t2 => this.frame(t2));
+  },
+
+  /* ---- London, the long haul, the island ---- */
+  fly() {
+    const g = this.g, w = this.w, h = this.h, t = this.t, short = !!this.opts.short;
+    const t1 = short ? 0 : 1.7, t2 = t1 + 1.9, L = this.len;   // phase ends: take off, cruise, arrive
+    if (!short) this.cue('roar', 0.05, () => Sound.swell && Sound.swell(2.4, 0.16, 300, 900));
+    this.cue('wind', t1 + 0.1, () => Sound.swell && Sound.swell(1.6, 0.07, 1200, 500));
+    if (t < t1) this.london(g, w, h, t / t1);
+    else if (t < t2) this.cruise(g, w, h, (t - t1) / (t2 - t1));
+    else this.island(g, w, h, (t - t2) / (L - t2));
+    // soft cuts between the scenes
+    const edge = [t1, t2].reduce((m, x) => Math.min(m, Math.abs(t - x)), 9);
+    if (edge < 0.28 && t > 0.2) { g.fillStyle = `rgba(250,250,245,${(1 - edge / 0.28) * 0.85})`; g.fillRect(0, 0, w, h); }
+    if (t < 0.25) { g.fillStyle = `rgba(0,0,0,${1 - t / 0.25})`; g.fillRect(0, 0, w, h); }
+    if (t > L - 0.35) { g.fillStyle = `rgba(0,0,0,${(t - (L - 0.35)) / 0.35})`; g.fillRect(0, 0, w, h); }
+  },
+  jet(g, x, y, s, rot, opt) {
+    const o = opt || {}, body = o.dark ? '#1e2329' : '#eef0f1', trim = o.dark ? '#14181c' : '#b7bec4';
+    g.save(); g.translate(x, y); g.rotate(rot); g.scale(s, s);
+    g.fillStyle = trim;   // far wing
+    g.beginPath(); g.moveTo(-0.05, -0.02); g.lineTo(0.22, -0.2); g.lineTo(0.3, -0.2); g.lineTo(0.16, -0.02); g.closePath(); g.fill();
+    g.fillStyle = body;   // fuselage
+    g.beginPath(); g.moveTo(-0.62, -0.02); g.quadraticCurveTo(-0.66, 0.05, -0.55, 0.07); g.lineTo(0.5, 0.07); g.quadraticCurveTo(0.68, 0.06, 0.7, 0.0); g.quadraticCurveTo(0.66, -0.06, 0.52, -0.065); g.lineTo(-0.5, -0.065); g.quadraticCurveTo(-0.6, -0.06, -0.62, -0.02); g.fill();
+    g.fillStyle = o.stripe || '#c8242f'; g.fillRect(-0.5, 0.012, 1.02, 0.018);
+    g.fillStyle = body;   // tail fin and tailplane
+    g.beginPath(); g.moveTo(-0.44, -0.06); g.lineTo(-0.6, -0.3); g.lineTo(-0.52, -0.3); g.lineTo(-0.3, -0.06); g.closePath(); g.fill();
+    g.fillStyle = o.stripe || '#c8242f'; g.beginPath(); g.moveTo(-0.5, -0.16); g.lineTo(-0.58, -0.28); g.lineTo(-0.53, -0.28); g.lineTo(-0.44, -0.16); g.closePath(); g.fill();
+    g.fillStyle = trim; g.beginPath(); g.moveTo(-0.5, 0.0); g.lineTo(-0.66, 0.04); g.lineTo(-0.6, 0.05); g.lineTo(-0.42, 0.02); g.closePath(); g.fill();
+    g.fillStyle = o.dark ? '#0d1013' : '#2b3440';   // windows and cockpit
+    for (let i = 0; i < 16; i++) g.fillRect(-0.4 + i * 0.056, -0.035, 0.022, 0.018);
+    g.beginPath(); g.moveTo(0.56, -0.045); g.lineTo(0.65, -0.03); g.lineTo(0.6, -0.022); g.lineTo(0.54, -0.028); g.closePath(); g.fill();
+    g.fillStyle = body; g.strokeStyle = trim; g.lineWidth = 0.01;   // near wing and engine
+    g.beginPath(); g.moveTo(-0.08, 0.03); g.lineTo(0.3, 0.3); g.lineTo(0.38, 0.3); g.lineTo(0.2, 0.03); g.closePath(); g.fill(); g.stroke();
+    g.fillStyle = trim; g.beginPath(); g.ellipse(0.2, 0.12, 0.1, 0.04, 0, 0, 7); g.fill();
+    g.fillStyle = o.dark ? '#050607' : '#39424b'; g.beginPath(); g.ellipse(0.29, 0.12, 0.012, 0.035, 0, 0, 7); g.fill();
+    if (o.gear) { g.fillStyle = '#20252a'; g.fillRect(0.34, 0.07, 0.012, 0.07 * o.gear); g.fillRect(-0.05, 0.07, 0.014, 0.08 * o.gear); g.beginPath(); g.arc(0.346, 0.07 + 0.07 * o.gear, 0.02 * o.gear, 0, 7); g.arc(-0.043, 0.07 + 0.08 * o.gear, 0.024 * o.gear, 0, 7); g.fill(); }
+    g.restore();
+    if (o.lights) { g.globalCompositeOperation = 'lighter'; drawGlow(g, [255, 70, 70], x - s * 0.02, y + s * 0.2, s * 0.08, 0.8); if ((this.t * 1.3) % 1 < 0.1) drawGlow(g, [255, 255, 255], x - s * 0.55 * Math.cos(rot), y - s * 0.3, s * 0.2, 0.9); g.globalCompositeOperation = 'source-over'; }
+  },
+  london(g, w, h, k) {
+    const sky = g.createLinearGradient(0, 0, 0, h); sky.addColorStop(0, '#46525e'); sky.addColorStop(0.7, '#8c979f'); sky.addColorStop(1, '#a9b1b6');
+    g.fillStyle = sky; g.fillRect(0, 0, w, h);
+    const gy = h * 0.78, R = seededRng(7);
+    // the skyline: towers, the Shard, cranes
+    g.fillStyle = '#5a646c';
+    for (let x = 0; x < w;) { const bw = 14 + R() * 40, bh = h * (0.05 + R() * 0.14); g.fillRect(x, gy - bh, bw, bh); x += bw + 2; }
+    g.fillStyle = '#4a535a';
+    const sx = w * 0.7; g.beginPath(); g.moveTo(sx - h * 0.05, gy); g.lineTo(sx + h * 0.004, gy - h * 0.36); g.lineTo(sx + h * 0.05, gy); g.fill();
+    g.fillRect(w * 0.3, gy - h * 0.24, h * 0.05, h * 0.24); g.fillRect(w * 0.42, gy - h * 0.2, h * 0.07, h * 0.2);
+    g.strokeStyle = '#4a535a'; g.lineWidth = 3; g.beginPath(); g.moveTo(w * 0.15, gy); g.lineTo(w * 0.15, gy - h * 0.26); g.lineTo(w * 0.28, gy - h * 0.26); g.stroke();
+    g.fillStyle = '#2a3036'; g.fillRect(0, gy, w, h - gy);
+    g.fillStyle = '#3a4147'; g.fillRect(0, gy + h * 0.03, w, h * 0.06);
+    // runway lights racing past
+    for (let i = 0; i < 18; i++) { const x = ((i * 90 - k * 2400) % (w + 200) + w + 200) % (w + 200) - 100; g.fillStyle = '#fff3c4'; g.fillRect(x, gy + h * 0.055, 8, 3); }
+    // drizzle
+    g.strokeStyle = 'rgba(220,228,235,0.35)'; g.lineWidth = 1;
+    for (let i = 0; i < 70; i++) { const x = (R() * w + k * 300) % w, y = (R() * h + k * 900) % h; g.beginPath(); g.moveTo(x, y); g.lineTo(x - 4, y + 12); g.stroke(); }
+    // the plane: rolls, rotates, lifts off and climbs out of frame
+    const s = Math.min(w * 0.55, h * 0.9), lift = Math.max(0, (k - 0.35) / 0.65);
+    const x = w * (0.08 + 0.55 * k + 0.35 * lift * lift), y = gy + h * 0.02 - s * 0.14 - lift * lift * h * 0.75, rot = -Math.min(0.3, lift * 0.6);
+    this.jet(g, x, y, s, rot, { gear: Math.max(0, 1 - lift * 2), lights: true });
+    this.caption(g, w, h, 'LONDON', 'Heathrow · 06:40 · rain', Math.min(1, k * 3) * (1 - Math.max(0, (k - 0.8) / 0.2)));
+  },
+  cruise(g, w, h, k) {
+    const sky = g.createLinearGradient(0, 0, 0, h); sky.addColorStop(0, '#0b1733'); sky.addColorStop(0.55, '#3b4d7a'); sky.addColorStop(0.8, '#f0925a'); sky.addColorStop(1, '#f6c27a');
+    g.fillStyle = sky; g.fillRect(0, 0, w, h);
+    g.globalCompositeOperation = 'lighter'; drawGlow(g, [255, 190, 120], w * 0.8, h * 0.78, h * 0.5, 0.5); g.globalCompositeOperation = 'source-over';
+    // a sea of cloud rushing under the plane
+    const R = seededRng(11);
+    for (let layer = 0; layer < 3; layer++) {
+      const y0 = h * (0.72 + layer * 0.09), sp = 900 + layer * 900;
+      g.fillStyle = ['rgba(246,214,190,0.55)', 'rgba(230,190,170,0.7)', 'rgba(210,170,160,0.9)'][layer];
+      for (let i = 0; i < 12; i++) { const r = h * (0.06 + R() * 0.06), x = ((i * w / 7 - k * sp) % (w + 3 * r) + w + 3 * r) % (w + 3 * r) - 1.5 * r; g.beginPath(); g.ellipse(x, y0 + R() * 10, r * 1.8, r * 0.55, 0, 0, 7); g.fill(); }
+    }
+    const s = Math.min(w * 0.6, h), x = w * 0.5, y = h * 0.42 + Math.sin(k * 7) * 4;
+    g.strokeStyle = 'rgba(255,255,255,0.3)'; g.lineWidth = s * 0.012; g.beginPath(); g.moveTo(x - s * 0.1, y + s * 0.11); g.lineTo(-10, y + s * 0.1); g.stroke();
+    this.jet(g, x, y, s, -0.02, { dark: false, lights: true });
+    // the route: LHR to MRU
+    const bx0 = w * 0.18, bx1 = w * 0.82, by = h * 0.12, px = bx0 + (bx1 - bx0) * (0.15 + 0.7 * k);
+    g.strokeStyle = 'rgba(255,255,255,0.35)'; g.setLineDash([6, 6]); g.lineWidth = 2; g.beginPath(); g.moveTo(bx0, by); g.lineTo(bx1, by); g.stroke(); g.setLineDash([]);
+    g.strokeStyle = '#f2a33a'; g.beginPath(); g.moveTo(bx0, by); g.lineTo(px, by); g.stroke();
+    g.fillStyle = '#f2a33a'; g.beginPath(); g.arc(px, by, 5, 0, 7); g.fill();
+    g.font = `700 ${Math.round(clamp(w * 0.02, 11, 15))}px ${FONT_M}`; g.fillStyle = '#e9e4d8'; g.textAlign = 'center';
+    g.fillText('LHR', bx0, by - 12); g.fillText('MRU', bx1, by - 12);
+    g.fillStyle = 'rgba(233,228,216,0.7)'; g.fillText(`${Math.round(9700 * (0.15 + 0.7 * k)).toLocaleString('en-GB')} km · 11 h 50`, w / 2, by + 24);
+  },
+  island(g, w, h, k) {
+    const sky = g.createLinearGradient(0, 0, 0, h * 0.55); sky.addColorStop(0, '#3f9ad6'); sky.addColorStop(1, '#bfe6f5');
+    g.fillStyle = sky; g.fillRect(0, 0, w, h);
+    const hz = h * 0.5, R = seededRng(5);
+    // clouds over the mountains
+    g.fillStyle = 'rgba(255,255,255,0.8)';
+    for (let i = 0; i < 6; i++) { const x = ((R() * w) - k * 60 * (1 + i % 2)), y = h * (0.08 + R() * 0.2); g.beginPath(); g.ellipse(x, y, 60 + R() * 60, 12 + R() * 10, 0, 0, 7); g.fill(); }
+    // the ocean, then the lagoon inside the reef
+    const sea = g.createLinearGradient(0, hz, 0, h); sea.addColorStop(0, '#0f5d8c'); sea.addColorStop(1, '#0a3f66');
+    g.fillStyle = sea; g.fillRect(0, hz, w, h - hz);
+    // mountains: the Moka range with Le Pouce's thumb and Pieter Both's head
+    const m = (x, y) => [w * x, hz - h * y];
+    g.fillStyle = '#2f6b45';
+    const ridge = [[0, 0], [0.04, 0.05], [0.12, 0.08], [0.2, 0.14], [0.26, 0.2], [0.28, 0.27], [0.3, 0.25], [0.34, 0.16], [0.42, 0.18], [0.5, 0.26], [0.515, 0.31], [0.53, 0.33], [0.545, 0.31], [0.56, 0.26], [0.62, 0.2], [0.7, 0.15], [0.78, 0.18], [0.82, 0.12], [0.9, 0.06], [1, 0.02], [1, 0]];
+    g.beginPath(); ridge.forEach((p, i) => { const q = m(p[0], p[1] * 0.9); if (i) g.lineTo(q[0], q[1]); else g.moveTo(q[0], q[1]); }); g.closePath(); g.fill();
+    g.beginPath(); g.arc(w * 0.53, hz - h * 0.33 * 0.9 - h * 0.012, h * 0.014, 0, 7); g.fill();
+    g.fillStyle = '#3d8453';
+    g.beginPath(); [[0, 0], [0.1, 0.04], [0.22, 0.06], [0.4, 0.05], [0.6, 0.08], [0.8, 0.05], [1, 0.03], [1, 0]].forEach((p, i) => { const q = m(p[0], p[1]); if (i) g.lineTo(q[0], q[1]); else g.moveTo(q[0], q[1]); }); g.closePath(); g.fill();
+    // sand, lagoon and the white line of the reef
+    g.fillStyle = '#efe0b5'; g.fillRect(0, hz, w, h * 0.02);
+    const lag = g.createLinearGradient(0, hz, 0, hz + h * 0.12); lag.addColorStop(0, '#58d6d0'); lag.addColorStop(1, '#2bb1c0');
+    g.fillStyle = lag; g.fillRect(0, hz + h * 0.02, w, h * 0.1);
+    g.strokeStyle = 'rgba(255,255,255,0.8)'; g.lineWidth = 2; g.beginPath();
+    for (let x = 0; x <= w; x += 12) { const y = hz + h * 0.12 + Math.sin(x * 0.05 + k * 6) * 2; if (x) g.lineTo(x, y); else g.moveTo(x, y); } g.stroke();
+    // palms on the shore
+    for (const [px, ph] of [[0.06, 0.2], [0.1, 0.16], [0.9, 0.18], [0.95, 0.22]]) this.palm(g, w * px, hz + h * 0.015, h * ph, Math.sin(k * 3 + px * 9) * 0.05);
+    // the plane coming down to land
+    const s = Math.min(w * 0.42, h * 0.7) * (1.3 - 0.75 * k), x = w * (0.1 + 0.62 * k), y = h * (0.2 + 0.24 * k);
+    this.jet(g, x, y, s, 0.1 - 0.12 * k, { gear: Math.min(1, k * 2.5), lights: true });
+    const a = clamp((k - 0.25) / 0.2, 0, 1);
+    if (a > 0) {
+      g.globalAlpha = a;
+      const fs = Math.round(clamp(w * 0.11, 40, 110));
+      g.font = `${fs}px ${FONT_D}`; g.textAlign = 'center'; g.fillStyle = '#10120e'; g.fillText('MAURITIUS', w / 2 + 3, h * 0.8 + 3);
+      g.fillStyle = '#f6f1e3'; g.fillText('MAURITIUS', w / 2, h * 0.8);
+      const fw = Math.min(w * 0.5, fs * 4.5), fx = w / 2 - fw / 2;
+      ['#ea2839', '#1a206d', '#ffd500', '#00a551'].forEach((c, i) => { g.fillStyle = c; g.fillRect(fx + i * fw / 4, h * 0.8 + fs * 0.18, fw / 4, 6); });
+      g.font = `700 ${Math.round(clamp(w * 0.022, 12, 17))}px ${FONT_M}`; g.fillStyle = '#f6f1e3'; g.fillText('BIENVINI · SSR INTERNATIONAL · 29°C', w / 2, h * 0.8 + fs * 0.5);
+      g.globalAlpha = 1;
+    }
+  },
+  palm(g, x, y, s, sway) {
+    g.strokeStyle = '#5b4631'; g.lineWidth = Math.max(2, s * 0.05); g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + s * 0.15, y - s * 0.5, x + s * (0.1 + sway), y - s); g.stroke();
+    g.fillStyle = '#23603a';
+    for (let i = 0; i < 6; i++) { const a = -Math.PI / 2 + (i - 2.5) * 0.55 + sway; g.save(); g.translate(x + s * (0.1 + sway), y - s); g.rotate(a); g.beginPath(); g.ellipse(s * 0.28, 0, s * 0.3, s * 0.05, 0.25, 0, 7); g.fill(); g.restore(); }
+  },
+  caption(g, w, h, big, small, a) {
+    if (a <= 0) return;
+    g.globalAlpha = a; g.textAlign = 'left';
+    const fs = Math.round(clamp(w * 0.07, 28, 64));
+    g.font = `${fs}px ${FONT_D}`; g.fillStyle = '#f6f1e3'; g.fillText(big, 24, fs + 24);
+    g.font = `700 ${Math.round(clamp(w * 0.02, 11, 15))}px ${FONT_M}`; g.fillStyle = 'rgba(246,241,227,0.8)'; g.fillText(small.toUpperCase(), 26, fs + 48);
+    g.globalAlpha = 1;
+  },
+
+  /* ---- Port Louis: the container doors open and the GT-R rolls out ---- */
+  crate(dt) {
+    const g = this.g, w = this.w, h = this.h, t = this.t;
+    const open = clamp((t - 1.1) / 1.5, 0, 1), eo = 1 - Math.pow(1 - open, 3);
+    const out = clamp((t - 3.6) / 1.8, 0, 1), eout = out * out * (3 - 2 * out);
+    // sounds: latches, doors, the engine firing up inside
+    this.cue('latch', 0.9, () => { Sound.clunk(0.35, 0); Sound.clunk(0.3, 0); });
+    this.cue('creak', 1.15, () => Sound.creak && Sound.creak());
+    this.cue('start', 2.9, () => { try { this.eng = Sound.voice(engineProfile('gtrx', { exhaust: 3, turbo: 3 }), 21); } catch (e) { this.eng = null; } });
+    if (this.eng) {
+      const blip = k => Math.pow(Math.max(0, Math.sin((t - k) / 0.45 * Math.PI)), 2) * (t > k && t < k + 0.45 ? 1 : 0);
+      const b = Math.max(blip(3.4), blip(4.1)), crank = t < 3.15 ? clamp((t - 2.9) / 0.25, 0, 1) : 1;
+      const P = this.eng.prof, rpm = P.idle * (0.6 + 0.4 * crank) + (P.red * 0.75 - P.idle) * b;
+      Sound.drive(this.eng, rpm, 0.25 + 0.75 * b, 0.55 * crank * (t > this.len - 0.6 ? Math.max(0, (this.len - t) / 0.6) : 1), 0, dt);
+      this.cue('bang1', 3.85, () => { Sound.bang(0.35, -0.1, 0); Sound.bang(0.25, 0.1, 0.09); });
+      this.cue('bang2', 4.55, () => { Sound.bang(0.4, 0.1, 0); Sound.bang(0.3, -0.1, 0.1); Sound.bang(0.2, 0, 0.2); });
+    }
+    // dusk over the harbour: sky, cranes, stacks, the quay
+    const sky = g.createLinearGradient(0, 0, 0, h * 0.62); sky.addColorStop(0, '#141b2c'); sky.addColorStop(0.7, '#6b4a5a'); sky.addColorStop(1, '#e08a4e');
+    g.fillStyle = sky; g.fillRect(0, 0, w, h);
+    const hz = h * 0.62;
+    g.fillStyle = '#1d2330';
+    for (const cx of [0.12, 0.88]) {   // ship to shore cranes
+      const x = w * cx, top = hz - h * 0.5;
+      g.fillRect(x - w * 0.04, top, 6, h * 0.5); g.fillRect(x + w * 0.04, top, 6, h * 0.5);
+      g.fillRect(x - w * 0.2 * (cx < 0.5 ? 0.3 : 1), top, w * 0.26, 8); g.fillRect(x - w * 0.05, top - h * 0.06, w * 0.1, h * 0.06);
+    }
+    const R = seededRng(3), cols = ['#8b2f2a', '#2a4f7a', '#3d6b3a', '#b0702a', '#5a5f66', '#7a2f5a'];
+    for (const side of [-1, 1]) for (let row = 0; row < 3; row++) for (let i = 0; i < 4; i++) {   // stacks either side
+      const cw2 = w * 0.09, ch2 = h * 0.06, x = side < 0 ? i * cw2 : w - (i + 1) * cw2, y = hz - (row + 1) * ch2;
+      g.fillStyle = cols[Math.floor(R() * cols.length)]; g.fillRect(x + 1, y + 1, cw2 - 2, ch2 - 2);
+      g.fillStyle = 'rgba(10,12,18,0.45)'; g.fillRect(x + 1, y + 1, cw2 - 2, ch2 - 2);
+    }
+    const quay = g.createLinearGradient(0, hz, 0, h); quay.addColorStop(0, '#3a3a3e'); quay.addColorStop(1, '#1b1b1e');
+    g.fillStyle = quay; g.fillRect(0, hz, w, h - hz);
+    g.strokeStyle = 'rgba(242,196,60,0.5)'; g.lineWidth = 3; g.beginPath(); g.moveTo(w * 0.5, hz); g.lineTo(w * 0.5, h); g.stroke();
+    g.globalCompositeOperation = 'lighter';
+    for (const fx of [0.25, 0.75]) drawGlow(g, [255, 214, 150], w * fx, h * 0.08, h * 0.25, 0.5);
+    g.globalCompositeOperation = 'source-over';
+    // the container, square on to us
+    const cwid = Math.min(w * 0.7, h * 0.58), cht = cwid * 1.06, cx0 = w / 2 - cwid / 2, cy1 = hz + h * 0.14, cy0 = cy1 - cht;
+    g.fillStyle = 'rgba(0,0,0,0.45)'; g.beginPath(); g.ellipse(w / 2, cy1 + cwid * 0.05, cwid * 0.75, cwid * 0.06, 0, 0, 7); g.fill();
+    // inside: dark, then lit
+    const lit = clamp((t - 2.2) / 0.5, 0, 1);
+    const inn = g.createRadialGradient(w / 2, cy0 + cht * 0.4, 5, w / 2, cy0 + cht * 0.5, cwid * 0.8);
+    inn.addColorStop(0, `rgba(${Math.round(40 + 200 * lit)},${Math.round(44 + 196 * lit)},${Math.round(50 + 180 * lit)},1)`); inn.addColorStop(1, '#07080a');
+    g.fillStyle = inn; g.fillRect(cx0, cy0, cwid, cht);
+    g.strokeStyle = `rgba(255,255,255,${0.08 + 0.1 * lit})`; g.lineWidth = 1;   // ribs inside
+    for (let i = 1; i < 10; i++) { const x = cx0 + cwid * (0.5 + (i / 10 - 0.5) * 0.7); g.beginPath(); g.moveTo(cx0 + cwid * i / 10, cy0); g.lineTo(x, cy0 + cht * 0.25); g.stroke(); }
+    // the car: inside at first, then rolling out towards us
+    if (t > 1.6) {
+      const car = carById('gtrx'), look = S && S.owned.gtrx ? lookOf(S, 'gtrx') : stockLook('gtrx');
+      if (!this.carCv) this.carCv = document.createElement('canvas');
+      const cwC = Math.round(cwid * 1.3), chC = Math.round(cwid * 0.62), scMax = Math.min(1.87, w * 1.02 / cwC), sc = 0.62 + (scMax - 0.62) * eout;
+      renderCarPreview(this.carCv, car.id, look, S && S.owned.gtrx ? S.owned.gtrx.up : { ecu: 3, exhaust: 3, turbo: 3, tyres: 3, nitrous: 3 }, { cssW: cwC, cssH: chC, transparent: true, yaw: Math.PI - 0.85 * eout + Math.sin(t * 0.8) * 0.03 * eout, zoom: 1.05 });
+      const dw = cwC * sc, dh = chC * sc, dx = w / 2 - dw / 2, dy = cy1 - dh * 0.8 + eout * h * 0.16;
+      g.globalAlpha = clamp((t - 1.6) / 0.6, 0, 1) * (0.35 + 0.65 * lit);
+      g.drawImage(this.carCv, dx, dy, dw, dh);
+      g.globalAlpha = 1;
+      // headlights come on with the engine
+      if (t > 3.0) { const hl = clamp((t - 3.0) / 0.2, 0, 1) * (0.8 + 0.2 * Math.sin(t * 40) * (t < 3.3 ? 1 : 0)); g.globalCompositeOperation = 'lighter';
+        for (const sd of [-1, 1]) drawGlow(g, [230, 240, 255], w / 2 + sd * dw * 0.19 * (1 - 0.35 * eout) + eout * dw * 0.05, dy + dh * 0.62, dw * 0.12, 0.75 * hl);
+        g.globalCompositeOperation = 'source-over'; }
+    }
+    // the steel frame round the door end: corner posts, header, sill, corner castings
+    const post = cwid * 0.045;
+    g.fillStyle = '#1a3f70'; g.fillRect(cx0 - post, cy0 - post, post, cht + post * 2); g.fillRect(cx0 + cwid, cy0 - post, post, cht + post * 2);
+    g.fillRect(cx0 - post, cy0 - post, cwid + post * 2, post); g.fillRect(cx0 - post, cy1, cwid + post * 2, post * 0.8);
+    g.fillStyle = 'rgba(0,0,0,0.35)'; g.fillRect(cx0 - post, cy0 - post, post * 0.3, cht + post * 2); g.fillRect(cx0 + cwid + post * 0.7, cy0 - post, post * 0.3, cht + post * 2);
+    g.fillStyle = '#14181d';
+    for (const [x, y] of [[cx0 - post, cy0 - post], [cx0 + cwid, cy0 - post], [cx0 - post, cy1 - post * 0.2], [cx0 + cwid, cy1 - post * 0.2]]) { g.fillRect(x, y, post, post); }
+    // the doors, swinging out towards us
+    const dwid = cwid / 2, depth = cwid * 2.2;
+    const vy = cy0 + cht * 0.6;
+    for (const sd of [-1, 1]) {
+      const ang = eo * 1.95, hx = w / 2 + sd * dwid, near = dwid * Math.sin(ang), pf = depth / Math.max(depth * 0.4, depth - near);
+      const fx = w / 2 + (hx - sd * dwid * Math.cos(ang) - w / 2) * pf, fyTop = vy + (cy0 - vy) * pf, fy1 = vy + (cy1 - vy) * pf;
+      g.fillStyle = Math.cos(ang) > 0 ? '#1f4e8c' : '#15345d';
+      g.beginPath(); g.moveTo(hx, cy0); g.lineTo(fx, fyTop); g.lineTo(fx, fy1); g.lineTo(hx, cy1); g.closePath(); g.fill();
+      // ribs and lock bars
+      g.strokeStyle = 'rgba(0,0,0,0.25)'; g.lineWidth = 2;
+      for (let i = 1; i < 6; i++) { const u = i / 6, x = hx + (fx - hx) * u, y0 = cy0 + (fyTop - cy0) * u, y1 = cy1 + (fy1 - cy1) * u; g.beginPath(); g.moveTo(x, y0); g.lineTo(x, y1); g.stroke(); }
+      g.strokeStyle = '#b9c0c6'; g.lineWidth = 3;
+      for (const u of [0.35, 0.8]) { const x = hx + (fx - hx) * u, y0 = cy0 + (fyTop - cy0) * u, y1 = cy1 + (fy1 - cy1) * u; g.beginPath(); g.moveTo(x, y0 + 4); g.lineTo(x, y1 - 4); g.stroke(); }
+      if (open < 0.05 && sd < 0) {
+        g.font = `700 ${Math.round(cwid * 0.045)}px ${FONT_M}`; g.fillStyle = 'rgba(240,240,235,0.85)'; g.textAlign = 'left';
+        g.fillText('SKGU 700135 2', hx + dwid * 0.1, cy0 + cht * 0.1); g.fillText('LONDON GATEWAY', hx + dwid * 0.1, cy0 + cht * 0.16); g.fillText('> PORT LOUIS', hx + dwid * 0.1, cy0 + cht * 0.22);
+      }
+    }
+    // light and haze spilling out
+    if (lit > 0) { g.globalCompositeOperation = 'lighter'; drawGlow(g, [255, 236, 200], w / 2, cy1 - cht * 0.2, cwid * (0.7 + 0.5 * eo), 0.35 * lit * eo); g.globalCompositeOperation = 'source-over'; }
+    // words
+    const a = clamp((t - 4.9) / 0.5, 0, 1);
+    if (a > 0) {
+      const st2 = maxStats('gtrx'), fs = Math.round(clamp(w * 0.08, 30, 84));
+      g.globalAlpha = a; g.textAlign = 'center';
+      g.font = `700 ${Math.round(clamp(w * 0.02, 11, 15))}px ${FONT_M}`; g.fillStyle = '#f2a33a'; g.fillText('DELIVERED TO PORT LOUIS', w / 2, h * 0.1);
+      g.font = `${fs}px ${FONT_D}`; g.fillStyle = '#10120e'; g.fillText('NISSAN GT-R', w / 2 + 3, h * 0.1 + fs + 3); g.fillStyle = '#f6f1e3'; g.fillText('NISSAN GT-R', w / 2, h * 0.1 + fs);
+      g.font = `700 ${Math.round(clamp(w * 0.022, 12, 17))}px ${FONT_M}`; g.fillStyle = '#f6f1e3';
+      g.fillText(`${st2.bhp} BHP · ${st2.topMph} MPH · BUILT TO BEAT BOSS`, w / 2, h * 0.1 + fs + 28);
+      g.globalAlpha = 1;
+    }
+    if (t < 0.3) { g.fillStyle = `rgba(0,0,0,${1 - t / 0.3})`; g.fillRect(0, 0, w, h); }
+    if (t > this.len - 0.4) { g.fillStyle = `rgba(0,0,0,${(t - (this.len - 0.4)) / 0.4})`; g.fillRect(0, 0, w, h); }
+  },
+};
+
+/* ---------- back: the phone's back button and the Back buttons at the top ---------- */
+let exitArmed = 0;
+function goBack() {
+  if (typeof Cine !== 'undefined' && Cine.on) { Cine.skip(); return true; }
+  if (mode === 'race' && R) {
+    if (intro) { endIntro(); setPause(true); return true; }
+    if (R.state !== 'finishing') setPause(!paused);
+    return true;
+  }
+  const vis = id => { const el = $(id); return el && !el.hidden; };
+  if (vis('scr-results') || vis('scr-garage') || vis('scr-ladder')) { goHub(); return true; }
+  if (vis('scr-board')) { if (S) goHub(); else goTitle(); return true; }
+  if (vis('scr-name')) { if (nameBack === 'hub' && S) goHub(); else goTitle(); return true; }
+  if (vis('scr-help') || vis('scr-select') || vis('scr-hub')) { goTitle(); return true; }
+  if (vis('scr-title') && !$('confirm-new').hidden) { $('confirm-new').hidden = true; return true; }
+  return false;
+}
+let histOn = false;
+function armHistory() {
+  if (histOn) return;
+  try { history.replaceState({ sk: 'base' }, ''); history.pushState({ sk: 'game' }, ''); histOn = true; } catch (e) {}
+}
+addEventListener('pointerdown', armHistory, true);
+addEventListener('keydown', armHistory, true);
+addEventListener('popstate', () => {
+  if (!histOn) return;
+  if (goBack()) { try { history.pushState({ sk: 'game' }, ''); } catch (e) {} return; }
+  // on the title screen: a second press within two seconds leaves the game
+  if (Date.now() - exitArmed < 2000) { histOn = false; try { history.back(); } catch (e) {} return; }
+  exitArmed = Date.now(); toast('Press back again to leave the game');
+  try { history.pushState({ sk: 'game' }, ''); } catch (e) {}
+});
 
 /* the rival showcase before the countdown */
 let intro = null;
@@ -7427,7 +7962,7 @@ const ordinal = n => n + (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', '
 let nameBack = 'title';
 function showNameScreen() {
   nameBack = !$('scr-hub').hidden || (S && $('scr-title').hidden) ? 'hub' : 'title';
-  $('name-body').innerHTML = `
+  $('name-body').innerHTML = `<div class="topback">${backBtn()}</div>
     <p class="kicker">Leaderboards</p>
     <h2 class="h2">${Online.name ? 'Change your racer name' : 'Pick your racer name'}</h2>
     <p class="lede">This is the name everyone sees next to your times. Your email is never shown.</p>
@@ -7461,13 +7996,14 @@ async function goBoard(route) {
   boardRoute = route && routes.includes(route) ? route : boardRoute && routes.includes(boardRoute) ? boardRoute : routes[0];
   const seq = ++boardSeq;
   const opt = r => `<option value="${r}" ${r === boardRoute ? 'selected' : ''}>${esc(Online.routeName(r))}</option>`;
-  $('board-body').innerHTML = `${S ? topBar() : ''}
+  $('board-body').innerHTML = `${S ? topBar() : `<div class="bar">${backBtn()}<div class="brand">STREET <em>KINGS</em></div></div>`}
     <p class="kicker">Leaderboards · real players' best times</p>
     <h2 class="h2">${esc(Online.routeName(boardRoute))}</h2>
     <label class="board-pick"><span>Route</span><select id="board-route">
       <optgroup label="Career">${routes.filter(r => r.startsWith('career:')).map(opt).join('')}</optgroup>
       ${routes.some(r => r.startsWith('special:')) ? `<optgroup label="Friends and invitations">${routes.filter(r => r.startsWith('special:')).map(opt).join('')}</optgroup>` : ''}
       ${routes.some(r => r.startsWith('essex:')) ? `<optgroup label="Essex">${routes.filter(r => r.startsWith('essex:')).map(opt).join('')}</optgroup>` : ''}
+      ${routes.some(r => r.startsWith('mu:')) ? `<optgroup label="Mauritius">${routes.filter(r => r.startsWith('mu:')).map(opt).join('')}</optgroup>` : ''}
       <optgroup label="Daily challenge">${routes.filter(r => r.startsWith('daily:')).map(opt).join('')}</optgroup>
     </select></label>
     <p class="tip">Everyone gets the same traffic on a route, so the times are fair. Only finished races count${boardRoute.startsWith('daily:') ? ', and everyone drives the same car' : ', in any car'}. ${routeSpec(boardRoute) ? 'Tap Race on anyone with a ghost to race their run.' : ''}</p>
@@ -7506,6 +8042,7 @@ document.getElementById('ui').addEventListener('click', e => {
       Online.flushSave(); S = null; try { localStorage.removeItem(SAVE_KEY); localStorage.removeItem(OLD_SAVE_KEY); } catch (err) {} goSelect(); break;
     case 'newno': $('confirm-new').hidden = true; break;
     case 'help': showScreen('scr-help'); break;
+    case 'back': goBack(); break;
     case 'title': goTitle(); break;
     case 'pick': { const ns = newCareer(arg); if (ns) { S = ns; save(); toast(carById(arg).name + ' is yours. Welcome to the streets.'); goHub(); } break; }
     case 'race': startRace({ kind: 'career', index: nextEventIndex(S) }); break;
@@ -7520,7 +8057,12 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'essexex': startRace({ kind: 'essex', index: +arg, exhibition: true }); break;
     case 'mu': startRace({ kind: 'mu', index: nextMuIndex(S) }); break;
     case 'muex': startRace({ kind: 'mu', index: +arg, exhibition: true }); break;
-    case 'hubtab': hubTab = arg; pendingSlip = null; goIsland(S, arg === 'mu'); S.street = streetOffers(S); save(); goHub(); Music.play(Music.area()); break;
+    case 'hubtab': {
+      const fly = arg === 'mu' && muOpen(S) && !islandCar(S.current);
+      hubTab = arg; pendingSlip = null; goIsland(S, arg === 'mu'); S.street = streetOffers(S); save(); goHub(); Music.play(Music.area());
+      if (fly) { Cine.play('fly', null, { short: !!(S.announced && S.announced.flown) }); S.announced = Object.assign(S.announced || {}, { flown: true }); save(); }
+      break;
+    }
     case 'slip': pendingSlip = arg; goHub(); break;
     case 'slipno': pendingSlip = null; goHub(); break;
     case 'slipyes': pendingSlip = null; startRace({ kind: 'slip', id: arg }); break;
@@ -7544,7 +8086,10 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'buyup': r = buyUpgrade(S, arg); save(); toast(r.msg, !r.ok); goGarage(null, true); break;
     case 'repair': r = repairCar(S); save(); toast(r.msg, !r.ok); goGarage(null, true); break;
     case 'bodge': r = bodgeCar(S); save(); toast(r.msg, !r.ok); goGarage(null, true); break;
-    case 'buycar': r = buyCar(S, arg); save(); toast(r.msg, !r.ok); goGarage(null, true); break;
+    case 'buycar': r = buyCar(S, arg); save();
+      // the GT-R arrives in a shipping container at Port Louis
+      if (r.ok && arg === 'gtrx') { goHub(); Cine.play('crate', () => toast(r.msg)); break; }
+      toast(r.msg, !r.ok); goGarage(null, true); break;
     case 'tradein': r = buyCar(S, arg, true); save(); toast(r.msg, !r.ok); goGarage(null, true); break;
     case 'select': r = selectCar(S, arg); save(); toast(r.msg, !r.ok); goGarage(null, true); break;
     case 'sell': pendingSell = arg; goGarage(null, true); break;
@@ -7577,7 +8122,7 @@ function frame(ts) {
       intro.t += dt;
       renderScene(R, 0);
       renderIntro(R, intro.t, intro.len);
-      Sound.update(R, intro);
+      Sound.update(R, intro, dt);
       if (intro.t >= intro.len) endIntro();
       requestAnimationFrame(frame);
       return;
@@ -7590,7 +8135,7 @@ function frame(ts) {
     updateFx(paused ? 0 : dt);
     renderScene(R || demo, paused ? 0 : dt);
     if (R && mode === 'race') drawHUD(R, $('controls').hidden ? 0 : $('controls').offsetHeight);
-    Sound.update(R && mode === 'race' && !paused ? R : null);
+    Sound.update(R && mode === 'race' && !paused ? R : null, null, dt);
     // turntables in the menus
     if (mode === 'menu') {
       const typing = document.activeElement && document.activeElement.id === 'plate-input';
@@ -7630,7 +8175,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) Onlin
 /* test hooks: lets automated checks drive the game */
 window.StreetKings = {
   get S() { return S; }, Music, engineProfile, loadGhosts, localGhost, routeSpec, setGhosts, goBoard, get R() { return R; }, get mode() { return mode; }, get paused() { return paused; }, input,
-  steer, startRace, goHub, goGarage, goLadder, setDemo, save, preview: renderCarPreview, portrait: drawPortrait, Sound,
+  steer, startRace, goHub, goGarage, goLadder, setDemo, save, preview: renderCarPreview, portrait: drawPortrait, Sound, engineProfile, ENGINE_OF, GEARS, Cine, goBack,
   get intro() { return intro; }, skipIntro: endIntro,
   step(sec, bot) { const h = 1 / 120; let n = Math.round(sec / h); while (n-- > 0 && R && mode !== 'menu') { if (bot) bot(R, input); updateRace(R, h, input); processEvents(); } },
   testCareer, testIsland, Online, core: { rematchPrize, specialUnlocked, makeWave, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
