@@ -1,5 +1,5 @@
 // Street Kings offline support. Online it always fetches the latest version; offline it plays from the saved copy.
-const CACHE = 'street-kings-4989b9f652';
+const CACHE = 'street-kings-7764ba9344';
 const FILES = ["./", "./index.html", "./privacy.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png", "./apple-touch-icon.png"];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });

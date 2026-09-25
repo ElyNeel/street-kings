@@ -1166,7 +1166,7 @@ const REP_TOTAL = EVENTS.reduce((a, e) => a + e.rep, 0);
    Wider, faster roads: the traffic is lighter and top speed matters more than weaving. */
 const ESSEX = [
   { title: 'THE BORDER', chapter: 'Essex', rival: 'tommy', oppBhp: 760, reward: 9000, rep: 3, dist: 7000,
-    area: 'Romford', road: 'A12 Eastern Avenue, Gallows Corner', time: 'night', env: 'suburb', sky: ['romford', 'cranes'], map: [0.18, 51.58],
+    area: 'Romford', road: 'A12 Eastern Avenue, Gallows Corner', time: 'day', env: 'suburb', sky: ['romford', 'cranes'], map: [0.18, 51.58],
     signs: [['green', 'A12', 'Brentwood', 'Chelmsford'], ['borough', 'County of Essex'], ['green', 'A127', 'Southend', 'Basildon'], ['green', 'A12', 'Gallows Corner', 'Harold Wood'], ['green', 'M25', 'Dartford', 'Stansted']],
     intro: 'Out past Gallows Corner the roads open right up. Tommy Hale runs the A12 out of Romford in a Golf R he swears is stock. Top speed matters out here, so keep your foot in.',
     win: 'Essex has noticed you. The Lakeside lot want a go next.', oppLook: { engine: 'golfr', model: 'golf', paint: '#1e4fa8', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', stance: 1, plate: 'TH19 GTR' },
@@ -1190,7 +1190,7 @@ const ESSEX = [
     win: 'Mick is still shaking his head. Sophie up in Chelmsford wants to meet you.', oppLook: { engine: 'svr', model: 'suv', paint: '#141517', finish: 'gloss', rims: 'split', rimColor: '#2a2d31', tint: 3, stance: 1, plate: 'MF69 SVR' },
     diff: { skill: 1.092, inc: [19, 25] } },
   { title: 'CITY LIGHTS', chapter: 'Essex', rival: 'sophie', oppBhp: 900, reward: 15000, rep: 5, dist: 7800,
-    area: 'Chelmsford', road: 'A12 Chelmsford bypass', time: 'late', env: 'bypass', sky: ['spire', 'chelmsford'], map: [0.47, 51.73],
+    area: 'Chelmsford', road: 'A12 Chelmsford bypass', time: 'day', env: 'bypass', sky: ['spire', 'chelmsford'], map: [0.47, 51.73],
     signs: [['green', 'A12', 'Chelmsford', 'Colchester'], ['borough', 'City of Chelmsford'], ['green', 'A138', 'Chelmsford', 'Springfield'], ['green', 'A414', 'Harlow', 'Maldon']],
     intro: 'Sophie Lane treats the Chelmsford bypass like a race track, because to her it is one. The GT3 turns in like nothing else. Beat her on the straights.',
     win: 'Chelmsford is yours. Jay in Brentwood has been waiting.', oppLook: { engine: 'gt3', model: 'p911', paint: '#1f6fd1', finish: 'gloss', rims: 'five', rimColor: '#c9a23a', tint: 1, spoiler: 'big', stance: 1, plate: 'GT33 SLN' },
@@ -1205,10 +1205,10 @@ const ESSEX = [
     area: 'Southend-on-Sea', road: 'Marine Parade, Southend seafront', time: 'late', env: 'seafront', twoWay: true, sky: ['pier', 'wheel', 'coaster'], map: [0.71, 51.535],
     signs: [['borough', 'City of Southend-on-Sea'], ['green', 'A13', 'Leigh-on-Sea', 'Westcliff'], ['borough', 'Southend Pier'], ['green', 'A1160', 'Town Centre', 'Station']],
     intro: 'The seafront meet on Marine Parade: one lane each way, arcades lit up and the pier stretching out into the dark. Saleenah\'s pink M4 has every tuning part and every bit of aero money can buy. Beat her and the Duke has to answer.',
-    win: 'The seafront went quiet when you crossed the line. The Duke has sent word: the bridge, tonight.', oppLook: { model: 'm4f82', paint: '#f0619f', finish: 'pearl', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, plate: 'SAL 33N' },
+    win: 'The seafront went quiet when you crossed the line. The Duke has sent word: the bridge, at sunset.', oppLook: { model: 'm4f82', paint: '#f0619f', finish: 'pearl', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, plate: 'SAL 33N' },
     diff: { skill: 1.095, inc: [21, 27] } },
   { title: 'THE CROSSING', chapter: 'Essex', rival: 'duke', oppBhp: 1100, reward: 30000, rep: 8, dist: 8200,
-    area: 'Dartford Crossing', road: 'A282 southbound over the QE2 Bridge', time: 'late', env: 'bridge', sky: ['tanks', 'lakeside', 'refinery'], map: [0.26, 51.465],
+    area: 'Dartford Crossing', road: 'A282 southbound over the QE2 Bridge', time: 'dusk', env: 'bridge', lanes: 4, hill: [2200, 3600, 4400, 5800, 75], towers: [3780, 4230], sky: ['tanks', 'lakeside', 'refinery'], map: [0.26, 51.465],
     signs: [['green', 'A282', 'Dartford', 'Kent'], ['dart', 'Dart Charge', 'Pay online by midnight tomorrow'], ['borough', 'Borough of Dartford'], ['green', 'M25', 'Gatwick', 'Channel Tunnel']],
     intro: 'Southbound over the QE2 Bridge, sixty metres above the Thames. The Duke has run Essex for thirty years and nobody has beaten his lime green Huracán over the bridge. Win this and Essex is yours.',
     win: 'Essex bows to a new name. The Duke handed over his keys to the bridge.', oppLook: { model: 'huracan', paint: '#6ccf2b', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, plate: 'DUK 3' },
@@ -1255,7 +1255,7 @@ function ghostEncode(R) {
 function ghostDecode(g, name) {
   if (!g || !Array.isArray(g.d) || !Array.isArray(g.x) || g.d.length !== g.x.length || !g.d.length) return null;
   const dist = new Float32Array(g.d.length), x = new Float32Array(g.x.length); let acc = 0;
-  for (let i = 0; i < g.d.length; i++) { acc += g.d[i]; dist[i] = acc / 10; x[i] = clamp(g.x[i] / 100, 0, 2); }
+  for (let i = 0; i < g.d.length; i++) { acc += g.d[i]; dist[i] = acc / 10; x[i] = clamp(g.x[i] / 100, 0, 3); }
   return { name, car: carById(g.car) ? g.car : 'gtr', look: g.look || {}, t: g.t, hz: g.hz || GHOST_HZ, dist, x };
 }
 /* where a ghost is at race time t */
@@ -1480,7 +1480,7 @@ function createRace(S, spec) {
     const dy = dailyFor(spec.date || dailyDate()), a = (dy.ch === 'essex' ? ESSEX : EVENTS)[dy.area % (dy.ch === 'essex' ? ESSEX.length : EVENTS.length)] || EVENTS[0];
     const paid = S.daily && S.daily.date === dy.date && S.daily.paid;
     ev = { kind: 'daily', title: 'DAILY CHALLENGE', date: dy.date, chapter: a.chapter, area: a.area, road: a.road, env: a.env, sky: a.sky, signs: a.signs,
-      time: dy.time, dawn: false, dist: dy.dist, oppBhp: 100, oppName: 'the clock', oppCar: '', oppLook: null, rival: null, twoWay: !!a.twoWay,
+      time: dy.time, dawn: false, dist: dy.dist, oppBhp: 100, oppName: 'the clock', oppCar: '', oppLook: null, rival: null, twoWay: !!a.twoWay, lanes: a.lanes, hill: a.hill,
       reward: paid ? 0 : dailyPrize(S), rep: 0, skill: 1, inc: [99, 99], d: dy.d, solo: true, loaner: dy.car, loanUp: dy.up };
     st = statsFor(dy.car, dy.up, stockLook(dy.car));
     own = { up: dy.up, damage: 0 };
@@ -1488,7 +1488,7 @@ function createRace(S, spec) {
     const o = spec.offer, a = (o.ch === 'essex' ? ESSEX : EVENTS)[o.area] || EVENTS[0];
     ev = { kind: 'street', title: 'STREET RACE', label: o.label, chapter: a.chapter, area: a.area, road: a.road, env: a.env, sky: a.sky, signs: a.signs,
       time: o.time, dawn: false, dist: o.dist, oppBhp: o.bhp, oppName: o.name, oppCar: o.car, oppLook: o.look, rival: null,
-      reward: o.prize, rep: 0, skill: o.skill, inc: o.inc, d: o.d, offerId: o.id, cp: o.mode === 'cp', twoWay: !!a.twoWay };
+      reward: o.prize, rep: 0, skill: o.skill, inc: o.inc, d: o.d, offerId: o.id, cp: o.mode === 'cp', twoWay: !!a.twoWay, lanes: a.lanes, hill: a.hill };
   } else if (spec.kind === 'special') {
     const e = SPECIALS[spec.id], ch = CHARACTERS[e.rival];
     const beaten = !!(S.specials && S.specials[spec.id]);
@@ -1516,7 +1516,7 @@ function createRace(S, spec) {
   else if (ev.open || (spec.kind === 'street' && spec.offer.ch === 'essex')) { traffic.two *= 0.8; traffic.extra *= 1.5; }   // Essex: wider, emptier roads
   return {
     ev, carId: ev.loaner || S.current, st, traffic, look: ev.loaner ? stockLook(ev.loaner) : lookOf(S, S.current), up: Object.assign({}, own.up), styleBonus: ev.loaner ? 0 : styleBonus(st.style),
-    rec: { next: 0, d: [], x: [] }, ghosts: [], twoWay: !!ev.twoWay,
+    rec: { next: 0, d: [], x: [] }, ghosts: [], twoWay: !!ev.twoWay, nl: ev.lanes || 3,
     state: 'countdown', countdown: 3.2, t: 0, doneT: 0, wrecked: false,
     p: { dist: 0, v: 0, lane: 1, x: 1, vx: 0, latV: 0, nitro: st.nitroCap, boosting: false, nitroLock: false,
          damage: own.damage, startDamage: own.damage, collisions: 0, topV: 0, finishTime: null },
@@ -1533,21 +1533,26 @@ function createRace(S, spec) {
 
 function makeWave(R) {
   const T = R.traffic, r = R.rw || Math.random, ri = n => Math.floor(r() * n), rf = (a, b) => a + r() * (b - a);
+  // most roads have 3 lanes; the QE2 Bridge has 4. With 3 lanes the random calls stay exactly as they always were,
+  // so every existing route keeps the same traffic (and its leaderboard stays fair).
+  const NL = R.nl || 3, ALL = NL === 3 ? [0, 1, 2] : [0, 1, 2, 3];
   let lanes, bus = false;
   if (R.waveCount === 0) {
     lanes = [1];                                   // first wave: one car in your lane, to learn the dodge
     R.lastOpen = r() < 0.5 ? 0 : 2;
   } else if (r() < T.two) {
-    const choices = [0, 1, 2].filter(l => l !== R.lastOpen);   // the open lane always moves
+    const choices = ALL.filter(l => l !== R.lastOpen);   // the open lane always moves
     const open = choices[ri(choices.length)];
-    lanes = [0, 1, 2].filter(l => l !== open);
+    lanes = ALL.filter(l => l !== open);
+    if (NL > 3 && r() < 0.45) lanes.splice(ri(lanes.length), 1);   // four lanes: sometimes two gaps
     R.lastOpen = open;
   } else {
-    const lane = r() < 0.65 ? R.lastOpen : ri(3);
+    const lane = r() < 0.65 ? R.lastOpen : ri(NL);
     lanes = [lane];
-    const opens = [0, 1, 2].filter(l => l !== lane);
-    R.lastOpen = opens[ri(2)];
-    bus = R.waveCount > 1 && r() < T.bus;
+    if (NL > 3 && r() < 0.5) { const others = ALL.filter(l => l !== lane); lanes.push(others[ri(others.length)]); }
+    const opens = ALL.filter(l => !lanes.includes(l));
+    R.lastOpen = opens[ri(opens.length)];
+    bus = lanes.length === 1 && R.waveCount > 1 && r() < T.bus;
   }
   const essex = R.ev.chapter === 'Essex';
   const cars = lanes.map(lane => {
@@ -1563,9 +1568,12 @@ function makeWave(R) {
     // stagger the two cars so they never reach you at the same moment
     const rel = Math.max(20, R.st.vmax - 13);
     cars[ri(2)].off = Math.max(9, rel * rf(0.24, 0.55));
+  } else if (cars.length === 3) {
+    const rel = Math.max(20, R.st.vmax - 13), k = ri(3), b = cars[(k + 1) % 3], c2 = cars[(k + 2) % 3];
+    b.off = Math.max(9, rel * rf(0.22, 0.4)); c2.off = b.off + Math.max(8, rel * rf(0.15, 0.3));
   }
   const span = Math.max(...cars.map(c => c.off + c.len));
-  const open = [0, 1, 2].filter(l => !lanes.includes(l));
+  const open = ALL.filter(l => !lanes.includes(l));
   // checkpoint gate: always in a lane this wave leaves open, a little ahead of it, so it can always be reached.
   // In a Checkpoint Run every wave has one; in other races about half of them do.
   let gate = null;
@@ -1609,12 +1617,13 @@ function updateTraffic(R, dt) {
 }
 
 /* smooth lane movement: a damped spring, so the car eases out and settles into the lane */
-function laneSpring(obj, dt, laneTime) {
+function laneSpring(obj, dt, laneTime, maxL) {
+  maxL = maxL || 2;
   const w = 3.4 / laneTime, z = 0.92;
   const a = w * w * (obj.lane - obj.x) - 2 * z * w * obj.vx;
   obj.vx += a * dt; obj.x += obj.vx * dt;
   if (obj.x < 0) { obj.x = 0; obj.vx = Math.max(0, obj.vx); }
-  if (obj.x > 2) { obj.x = 2; obj.vx = Math.min(0, obj.vx); }
+  if (obj.x > maxL) { obj.x = maxL; obj.vx = Math.min(0, obj.vx); }
 }
 
 function updateRival(R, dt) {
@@ -1648,7 +1657,7 @@ function updateRival(R, dt) {
     for (const l of w.open) if (Math.abs(l - o.x) < Math.abs(best - o.x)) best = l;
     o.lane = best; break;
   }
-  laneSpring(o, dt, 0.15);
+  laneSpring(o, dt, 0.15, (R.nl || 3) - 1);
 }
 
 function checkCollisions(R) {
@@ -1733,7 +1742,7 @@ function updateRace(R, dt, input) {
   if (racing) R.t += dt; else R.doneT += dt;
   if (racing && R.rec) while (R.t >= R.rec.next && R.rec.d.length < 12000) { R.rec.d.push(Math.round(p.dist * 10)); R.rec.x.push(Math.round(p.x * 100)); R.rec.next += 1 / GHOST_HZ; }
 
-  laneSpring(p, dt, st.laneTime);
+  laneSpring(p, dt, st.laneTime, (R.nl || 3) - 1);
   p.latV = p.vx;
 
   // nitro: once the tank runs dry it has to recharge to 25% before it fires again
@@ -1880,22 +1889,30 @@ const gctx = ghostCvs.getContext('2d');
 let W = 0, H = 0, DPR = 1;
 
 /* every object on screen goes through P() so all cars share the same perspective */
-const V = { cx: 0, hy: 0, f: 1, camH: 3, camX: 0, camBack: 0, curve: 0, boost: 0, shake: 0, zStart: 1 };
-function curveOff(z) { const d = z - Z_PLAYER; if (d <= 0) return 0; const t = d / 300; return V.curve * t * t * W * 0.2; }
+const V = { cx: 0, hy: 0, f: 1, camH: 3, camX: 0, camBack: 0, curve: 0, boost: 0, shake: 0, zStart: 1, hill: null, camW: 0, hP: 0, pitch: 0 };
+function curveOff(z) { const d = Math.min(z, Z_FAR) - Z_PLAYER; if (d <= 0) return 0; const t = d / 300; return V.curve * t * t * W * 0.2; }   // past the draw distance things sit where the road meets the horizon
+/* hills: the road's height at depth z, relative to your car, with the camera tilted to follow the slope you are on */
+function elev(z) { return V.hill ? V.hill(V.camW + z) - V.hP - (z - Z_PLAYER) * V.pitch : 0; }
 function P(x, y, z) {
   const s = V.f / (z + V.camBack);
-  return { x: V.cx + (x - V.camX) * s + curveOff(z), y: V.hy + (V.camH - y) * s, s };
+  return { x: V.cx + (x - V.camX) * s + curveOff(z), y: V.hy + (V.camH - y - elev(z)) * s, s };
 }
-function G(z) { const s = V.f / (z + V.camBack); return { cx: V.cx - V.camX * s + curveOff(z), y: V.hy + V.camH * s, s }; }
+function G(z) { const s = V.f / (z + V.camBack); return { cx: V.cx - V.camX * s + curveOff(z), y: V.hy + (V.camH - elev(z)) * s, s }; }
+/* a smooth climb up to a height, a level top and a smooth drop back down: [climb starts, top starts, top ends, back down, height] */
+function makeHill(h) {
+  if (!h) return null;
+  const [c0, t0, t1, d1, HH] = h, ss = t => t * t * (3 - 2 * t);
+  return d => d <= c0 || d >= d1 ? 0 : d < t0 ? HH * ss((d - c0) / (t0 - c0)) : d <= t1 ? HH + 2.5 * Math.sin(Math.PI * (d - t0) / (t1 - t0)) : HH * ss((d1 - d) / (d1 - t1));
+}
 const X = (g, x) => g.cx + x * g.s;
 
 /* the on-screen control bar height, mirrored from the CSS clamp() */
 function ctrlGuess() { return (W <= 520 ? clamp(H * 0.11, 48, 72) : clamp(H * 0.11, 44, 66)) + 20; }
-function computeView() {
+function computeView(roadHalf) {
   const land = W >= H * 0.9;
   const carBase = H - ctrlGuess() - Math.max(34, H * 0.08);
   const roadPx = land ? Math.min(W * 0.94, H * 1.35) : W * 1.04;
-  V.f = roadPx / (2 * ROAD_HALF) * Z_PLAYER;
+  V.f = roadPx / (2 * (roadHalf || ROAD_HALF)) * Z_PLAYER;   // a wider road (four lanes) pulls the camera back a little
   let hy = H * (land ? 0.40 : 0.38);
   let camH = (carBase - hy) * Z_PLAYER / V.f;
   const maxH = land ? 4.2 : 5.2;
@@ -2353,7 +2370,7 @@ function drawRoad(pal, dist, evDist) {
   const env = ENV[pal.env] || ENV.aroad;
   const camW = dist - Z_PLAYER;
   const zb = V.camH * V.f / (H - V.hy) - V.camBack;
-  const zStart = Math.max(0.8, zb - 1);
+  const zStart = Math.max(0.8, zb - 1 - (V.hill ? 4 : 0));
   V.zStart = zStart;
   const SEG = 4;
   const kFirst = Math.floor((camW + zStart) / SEG), kLast = Math.floor((camW + Z_FAR) / SEG);
@@ -2364,7 +2381,8 @@ function drawRoad(pal, dist, evDist) {
     if (z1 > Z_FAR) z1 = Z_FAR;
     if (z1 <= z0) continue;
     const a = G(z0), b = G(z1), fg = fogK((z0 + z1) * 0.5), odd = k & 1;
-    ctx.fillStyle = css(wc(pal, env.bridge ? MAT.river : env.reeds ? MAT.reed : MAT.verge, odd ? 1.08 : 1, fg));
+    const high = !V.hill || V.hill(camW + (z0 + z1) / 2) > 12;
+    ctx.fillStyle = css(wc(pal, env.bridge && high ? MAT.river : env.reeds ? MAT.reed : MAT.verge, odd ? 1.08 : 1, fg));
     ctx.fillRect(0, b.y - 0.5, W, a.y - b.y + 1.5);
     const oppR = env.opposite ? oppX1 : env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF;   // right hand edge of all the tarmac
     if (env.creeks) {
@@ -2862,18 +2880,32 @@ function tankSprites(list, pal, dist) {
 }
 /* the QE2 bridge: a tower each side of the deck with cables fanning down to the edges */
 const PYLON_SP = 1300;
-function bridgeSprites(list, pal, dist) {
+function bridgeSprites(list, pal, dist, towers) {
   const env = ENV[pal.env]; if (!env || !env.bridge) return;
   const camW = dist - Z_PLAYER, H_T = 72;
-  const k0 = Math.floor((camW - 160) / PYLON_SP), k1 = Math.floor((camW + Z_FAR + 160) / PYLON_SP);
-  for (let k = k0; k <= k1; k++) {
-    const zp = 700 + k * PYLON_SP - camW;
-    if (zp < -150 || zp > Z_FAR + 150) continue;
-    list.push({ z: clamp(zp, 2, Z_FAR), draw: () => {
-      const col = css(wc(pal, [170, 176, 182], 1, fogK(clamp(zp, 0, Z_FAR))));
+  const at = towers || [];
+  if (!towers) { const k0 = Math.floor((camW - 160) / PYLON_SP), k1 = Math.floor((camW + Z_FAR + 160) / PYLON_SP); for (let k = k0; k <= k1; k++) at.push(700 + k * PYLON_SP); }
+  // the rest of the bridge beyond the draw distance: the deck climbing away ahead of you, so you can see what is coming
+  if (V.hill) list.push({ z: 1e6, draw: () => {
+    const lit = pal.lit > 0.5, side = css(mix(wc(pal, [70, 74, 80], 1, 0), pal.fog, 0.5)), pts = [];
+    let up = false;
+    for (let z = Z_FAR - 20; z <= 3200; z += 30) { const h = V.hill(camW + z); if (h > 0.5) up = true; else if (up) break; if (up || z < Z_FAR) pts.push(z); }
+    if (pts.length < 2) return;
+    for (const xe of [-ROAD_HALF - 3.6, ROAD_HALF + LANE_W + 2.6]) {
+      const top = pts.map(z => P(xe, 1.3, z)), bot = pts.map(z => P(xe, -3.2, z));
+      ctx.fillStyle = side; ctx.beginPath(); top.forEach((q, i) => i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)); for (let i = bot.length - 1; i >= 0; i--) ctx.lineTo(bot[i].x, bot[i].y); ctx.closePath(); ctx.fill();
+      if (lit) { ctx.globalCompositeOperation = 'lighter'; top.forEach((q, i) => { if (i % 2 === 0) drawGlow(ctx, [255, 190, 110], q.x, q.y - 2, 5, 0.5); }); ctx.globalCompositeOperation = 'source-over'; }
+    }
+  } });
+  for (const tw of at) {
+    const zp = tw - camW;
+    if (zp < -150 || zp > 3000) continue;
+    const farT = zp > Z_FAR + 150;   // far off: just the towers and cross beam as a silhouette
+    list.push({ z: farT ? 1e6 - 1 : clamp(zp, 2, Z_FAR), draw: () => {
+      const col = farT ? css(mix(wc(pal, [70, 74, 80], 1, 0), pal.fog, 0.45)) : css(wc(pal, [170, 176, 182], 1, fogK(clamp(zp, 0, Z_FAR))));
       // cables first so the towers sit over them
       ctx.strokeStyle = css(wc(pal, [200, 205, 210], 1, fogK(clamp(zp, 0, Z_FAR))), 0.85);
-      for (const xt of [-ROAD_HALF - 4.2, ROAD_HALF + LANE_W + 3.4]) {
+      if (!farT) for (const xt of [-ROAD_HALF - 4.2, ROAD_HALF + LANE_W + 3.4]) {
         for (let i = 0; i < 9; i++) for (const dir of [-1, 1]) {
           let y1 = H_T - 6 - i * 3, z1 = zp, y2 = 1.3, z2 = zp + dir * (16 + i * 13);
           const zmin = 2;
@@ -2885,15 +2917,15 @@ function bridgeSprites(list, pal, dist) {
           ctx.lineWidth = Math.max(0.6, 0.05 * Math.min(a.s, b.s)); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
         }
       }
-      if (zp < 2 || zp > Z_FAR) return;
+      if (zp < 2) return;
       for (const xt of [-ROAD_HALF - 4.2, ROAD_HALF + LANE_W + 3.4]) {
-        const b0 = P(xt - 1.3, 0, zp), b1 = P(xt + 1.3, 0, zp), t0 = P(xt - 0.9, H_T, zp), t1 = P(xt + 0.9, H_T, zp);
-        ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(b0.x, b0.y); ctx.lineTo(b1.x, b1.y); ctx.lineTo(t1.x, t1.y); ctx.lineTo(t0.x, t0.y); ctx.closePath(); ctx.fill();
+        const b0 = P(xt - 2.4, -4, zp), b1 = P(xt + 2.4, -4, zp), t0 = P(xt - 1.5, H_T, zp), t1 = P(xt + 1.5, H_T, zp), mw = Math.max(0, 1.2 - (b1.x - b0.x) / 2);   // never thinner than a couple of pixels far away
+        ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(b0.x - mw, b0.y); ctx.lineTo(b1.x + mw, b1.y); ctx.lineTo(t1.x + mw, t1.y); ctx.lineTo(t0.x - mw, t0.y); ctx.closePath(); ctx.fill();
         if (pal.lit > 0.3) { ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, [255, 40, 40], (t0.x + t1.x) / 2, t0.y, clamp(1.2 * t0.s, 3, 40), 0.9); ctx.globalCompositeOperation = 'source-over'; }
       }
       // the cross beam between the towers, high over the road
-      const l = P(-ROAD_HALF - 4.2, H_T - 4, zp), r = P(ROAD_HALF + LANE_W + 3.4, H_T - 1.5, zp);
-      ctx.fillStyle = col; ctx.fillRect(l.x, r.y, r.x - l.x, l.y - r.y);
+      const l = P(-ROAD_HALF - 4.2, H_T - 5, zp), r = P(ROAD_HALF + LANE_W + 3.4, H_T - 1.5, zp), l2 = P(-ROAD_HALF - 4.2, 28, zp), r2 = P(ROAD_HALF + LANE_W + 3.4, 30.5, zp);
+      ctx.fillStyle = col; ctx.fillRect(l.x, r.y, r.x - l.x, Math.max(1.5, l.y - r.y)); ctx.fillRect(l2.x, r2.y, r2.x - l2.x, Math.max(1, l2.y - r2.y));
     } });
   }
 }
@@ -3007,13 +3039,6 @@ const oncoming = [];
 const ESSEX_ENVS = new Set(['fields', 'suburb', 'retail', 'arterial', 'marsh', 'bypass', 'highst', 'seafront', 'bridge']);
 function updateOncoming(pal, v, dt, active) {
   const env = ENV[pal.env];
-  if (env && env.sideLane && active) {
-    // the bridge's fourth lane: slower traffic heading the same way
-    for (const c of oncoming) c.z -= (v - c.v) * dt;
-    for (let i = oncoming.length - 1; i >= 0; i--) if (oncoming[i].z < -12 || oncoming[i].z > Z_FAR + 20) oncoming.splice(i, 1);
-    if (oncoming.length < 4 && v > 20 && Math.random() < dt * 0.9) { const ty = pickType(null, true); oncoming.push({ side: true, z: Z_FAR - 5, lane: 0, v: rand(18, 28), type: ty.id, color: ty.id === 'van' ? '#e9ebec' : TRAFFIC_COLORS[randInt(TRAFFIC_COLORS.length)] }); }
-    return;
-  }
   if (oncoming.some(c => c.side)) oncoming.length = 0;
   if (!env || !env.opposite || !active) { oncoming.length = 0; return; }
   for (const c of oncoming) c.z -= (v + c.v) * dt;
@@ -3073,12 +3098,19 @@ let lastPlayerRect = null, sceneT = 0;
 function renderScene(R, dt) {
   const p = R.p, pal = racePal(R), ev = R.ev;
   sceneT += dt;
-  computeView();
+  computeView((R.nl || 3) > 3 ? ROAD_HALF + LANE_W * 0.5 : ROAD_HALF);
   const px = laneToX(p.x);
-  V.camX += (px * 0.42 - V.camX) * Math.min(1, dt * 5);
+  V.camX += (px * 0.42 + ((R.nl || 3) > 3 ? 1.2 : 0) - V.camX) * Math.min(1, dt * 5);
   V.boost += ((p.boosting ? 1 : 0) - V.boost) * Math.min(1, dt * (p.boosting ? 5 : 2.5));
   V.camBack = V.boost * 1.1;
   V.curve = curveAt(p.dist, (R.ev.index || 0) + (R.ev.kind === 'street' ? 3 : 0));
+  if (R._hill === undefined) R._hill = makeHill(ev.hill);
+  V.hill = R._hill; V.camW = p.dist - Z_PLAYER;
+  if (V.hill) {
+    V.hP = V.hill(p.dist);
+    const slope = (V.hill(p.dist + 6) - V.hill(p.dist - 6)) / 12;
+    V.pitch += (slope * 0.55 - V.pitch) * Math.min(1, dt * 4 + (dt === 0 ? 1 : 0));
+  } else { V.hP = 0; V.pitch = 0; }
   const speedShake = R.demo ? 0 : clamp((p.v - 40) / 80, 0, 0.5) * 0.6 + V.boost * 0.8;
   const sh = V.shake * 14 + speedShake;
   const sx = (Math.random() - 0.5) * sh, sy = (Math.random() - 0.5) * sh;
@@ -3088,11 +3120,16 @@ function renderScene(R, dt) {
 
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   ctx.save(); ctx.translate(sx, sy);
-  const off = -W * 0.4 - V.curve * W * 0.12 - V.camX * 2;
-  ctx.fillStyle = css(pal.sky[0]); ctx.fillRect(-20, -20, W + 40, V.hy + 40);
+  const off = -W * 0.4 - V.curve * W * 0.12 - V.camX * 2, tilt = V.pitch * V.f;   // tilting the camera up moves the horizon down
+  ctx.fillStyle = css(pal.sky[0]); ctx.fillRect(-20, -20, W + 40, V.hy + tilt + 40);
   const sky = skyLayer(palFor(ev.time, ev.env), ev.sky || []);
-  ctx.drawImage(sky, off, V.hy - sky.height + 2);
-  if (ev.dawn && R._blend > 0) { const s2 = skyLayer(R._dawnPal, ev.sky || []); ctx.globalAlpha = R._blend; ctx.drawImage(s2, off, V.hy - s2.height + 2); ctx.globalAlpha = 1; }
+  ctx.drawImage(sky, off, V.hy + tilt - sky.height + 2);
+  if (ev.dawn && R._blend > 0) { const s2 = skyLayer(R._dawnPal, ev.sky || []); ctx.globalAlpha = R._blend; ctx.drawImage(s2, off, V.hy + tilt - s2.height + 2); ctx.globalAlpha = 1; }
+  if (V.hill) {
+    // from up on the bridge the land (or the river) stretches away below the horizon
+    const envD = ENV[pal.env] || ENV.aroad, far = V.hP > 15 && envD.bridge ? MAT.river : MAT.verge;
+    ctx.fillStyle = css(wc(pal, far, 1, 0.9)); ctx.fillRect(-20, V.hy + tilt, W + 40, H + 40);
+  }
   drawRoad(pal, p.dist, R.demo ? 1e9 : ev.dist);
   drawLampPools(pal, p.dist);
   drawBuildings(pal, p.dist, ev.rival);
@@ -3108,7 +3145,7 @@ function renderScene(R, dt) {
   lampSprites(list, pal, p.dist);
   treeSprites(list, pal, p.dist);
   woodSprites(list, pal, p.dist); reedSprites(list, pal, p.dist); flyoverSprites(list, pal, p.dist); pylonSprites(list, pal, p.dist); tankSprites(list, pal, p.dist);
-  bridgeSprites(list, pal, p.dist);
+  bridgeSprites(list, pal, p.dist, ev.towers);
   beaconSprites(list, pal, p.dist, R.demo ? 1e9 : ev.dist, sceneT);
   if (!R.demo) {
     signSprites(list, pal, p.dist, ev);
@@ -3275,6 +3312,7 @@ function renderCarPreview(canvas, carId, look, up, opts) {
   const g = canvas.getContext('2d');
   g.setTransform(dpr, 0, 0, dpr, 0, 0);
   const saved = Object.assign({}, V), savedW = W;
+  V.hill = null;
   const mesh = getMesh(opts.model || carById(carId).model, { spoiler: look.spoiler, kit: look.kit, stance: look.stance, stripes: look.stripes, exhaust: Number((up || {}).exhaust) || look.exhaust || 0, turbo: Number((up || {}).turbo) || 0, driver: look.driver });
   // one scale for every car, so a GT-R really is longer than a Civic
   const focus = opts.focus || 0;   // 0..1: close up on the number plate
@@ -6209,7 +6247,7 @@ function startRace(spec) {
 }
 function steer(d) {
   if (!R || mode !== 'race' || paused || R.state !== 'racing') return;
-  const nl = clamp(R.p.lane + d, 0, 2);
+  const nl = clamp(R.p.lane + d, 0, (R.nl || 3) - 1);
   if (nl !== R.p.lane) { R.p.lane = nl; Sound.whoosh(0.05, d * 0.3); }
 }
 function setPause(v) {
