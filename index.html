@@ -880,9 +880,12 @@ function lookCost(S, id, draft) {
 }
 function buyLook(S, id, draft) {
   if (!S.owned[id]) return { ok: false, msg: 'You do not own that car.' };
-  const plateCheck = checkPlate(draft.plate);
-  if (!plateCheck.ok) return plateCheck;
-  draft.plate = plateCheck.plate;
+  // the plate is only checked when it has been changed: stock island plates (1234 AB 19) are longer than a UK one
+  if (draft.plate !== lookOf(S, id).plate) {
+    const plateCheck = checkPlate(draft.plate, plateMax(id));
+    if (!plateCheck.ok) return plateCheck;
+    draft.plate = plateCheck.plate;
+  }
   const c = lookCost(S, id, draft);
   if (!c.items.length) return { ok: false, msg: 'Nothing has changed.' };
   if (c.locked.length) return { ok: false, msg: c.locked[0] + '.' };
@@ -891,13 +894,15 @@ function buyLook(S, id, draft) {
   S.owned[id].look = Object.assign({}, draft);
   return { ok: true, msg: 'Body Shop work done for £' + fmt(c.total) + '.' };
 }
-/* custom plates: UK style, up to 7 letters and numbers, no swearing */
+/* custom plates: UK style, up to 7 letters and numbers, no swearing. Mauritian plates take 8 (1234 AB 26) */
+const plateMax = id => (carById(id) || {}).chapter === 'mu' ? 8 : 7;
 const PLATE_BLOCK = ['RlVDSw==','RlVL','RlVR','UEhVSw==','U0hJVA==','Q1VOVA==','S1VOVA==','RElDSw==','Q09DSw==','UElTUw==','VFdBVA==','V0FOSw==','QklUQ0g=','QkFTVEFSRA==','U0xBRw==','U0xVVA==','V0hPUkU=','VElUUw==','UFJJQ0s=','Qk9MTE9DSw==','QVJTRQ==','Tk9C','S05PQg==','RkFOTlk=','UE9STg==','U0VY','TkFaSQ==','S0tL','TklHRw==','TklHR0E=','UEFLSQ==','Q0hJTks=','U1BJQw==','S0lLRQ==','RkFH','UkVUQVJE','Q09PTg==','V09H','R09PSw==','UkFQRQ==','UEVETw==','SElUTEVS','SVNJUw==','Q1VN','SklaWg==','VE9TU0VS','TUlOR0U=','Q0xJVA==','QU5BTA==','Qk9PQg==','UFVTU1k=','RElMRE8=','U1BVTks=','U0hBRw==','QkVMTEVORA=='].map(s => { try { return atob(s); } catch (e) { return ''; } }).filter(Boolean);
-function checkPlate(raw) {
+function checkPlate(raw, max) {
+  max = max || 7;
   const plate = String(raw || '').toUpperCase().replace(/[^A-Z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
   const chars = plate.replace(/ /g, '');
   if (!chars.length) return { ok: false, msg: 'Type at least one letter or number for your plate.' };
-  if (chars.length > 7) return { ok: false, msg: 'Plates can have up to 7 letters and numbers.' };
+  if (chars.length > max) return { ok: false, msg: `Plates can have up to ${max} letters and numbers.` };
   const flat = chars.replace(/0/g, 'O').replace(/1/g, 'I').replace(/3/g, 'E').replace(/4/g, 'A').replace(/5/g, 'S').replace(/7/g, 'T').replace(/8/g, 'B').replace(/9/g, 'G');
   const flat2 = flat.replace(/I/g, 'L');
   for (const w of PLATE_BLOCK) if (chars.includes(w) || flat.includes(w) || flat2.includes(w)) return { ok: false, msg: 'That plate is not allowed. Try another.' };
@@ -8210,8 +8215,8 @@ function bodyTab(own, car) {
       <section><h4>Underglow <small>${money(BODY.glowPrice)}</small></h4><div class="sws">${BODY.glows.map(gl => gl.id === 'none' ? `<button class="sw none ${d.glow === 'none' ? 'on' : ''}" data-act="bs" data-k="glow" data-v="none" aria-label="No underglow" title="None">✕</button>` : swatch('glow', gl.id, gl.name + ' underglow', d.glow === gl.id)).join('')}</div></section>
       <section><h4>Lights</h4><div class="opts">${opt('smoked', 'false', 'Standard', !d.smoked)}${opt('smoked', 'true', 'Smoked tail lights', d.smoked, BODY.smokedPrice)}</div></section>
       <section><h4>Custom plate <small>${money(BODY.platePrice)}</small></h4>
-        <div class="plate-row"><input id="plate-input" class="plate-input" maxlength="9" value="${esc(d.plate)}" aria-label="Number plate" autocomplete="off" spellcheck="false">
-        <span class="tip">Up to 7 letters and numbers.</span></div>
+        <div class="plate-row"><input id="plate-input" class="plate-input" maxlength="${plateMax(car.id) + 2}" value="${esc(d.plate)}" aria-label="Number plate" autocomplete="off" spellcheck="false">
+        <span class="tip">${plateMax(car.id) > 7 ? 'Up to 8 letters and numbers, like 1234 AB 26.' : 'Up to 7 letters and numbers.'}</span></div>
         ${plateMsg ? `<p class="tip bad">${esc(plateMsg)}</p>` : ''}</section>
     </div>
   </div>`;

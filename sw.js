@@ -1,5 +1,5 @@
 // Street Kings offline support. Online it always fetches the latest version; offline it plays from the saved copy.
-const CACHE = 'street-kings-2e85984818';
+const CACHE = 'street-kings-c9ca21a709';
 const FILES = ["./", "./index.html", "./privacy.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png", "./apple-touch-icon.png"];
 // music files never change (the hash is in the name), so they are kept in their own cache and served from it
 const MUSIC_CACHE = 'street-kings-music';
