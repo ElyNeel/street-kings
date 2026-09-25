@@ -6629,7 +6629,9 @@ function ownedActs(c) {
 const clsChip = bhp => `<span class="chip cls cls-${carClass(bhp)}">Class ${carClass(bhp)}</span>`;
 function dealerTab() {
   // pink slip cars are never for sale, and the Essex showroom only shows up once you have the crown
-  const list = CARS.filter(c => !c.slip && (!c.chapter || S.careerDone));
+  // on the island the showroom only has island cars; back home it never shows them
+  const island = islandCar(S.current);
+  const list = CARS.filter(c => !c.slip && (island ? c.chapter === 'mu' : c.chapter !== 'mu' && (!c.chapter || S.careerDone)));
   return `<div class="car-grid">${list.map(c => {
     const owned = S.owned[c.id], cur = S.current === c.id, unlocked = carUnlocked(S, c);
     const st2 = statsFor(c.id, owned ? owned.up : {}), mx = maxStats(c.id);
@@ -6655,7 +6657,7 @@ function dealerTab() {
 }
 /* every car you own, with its class. Cars won in pink slips show who you took them from. */
 function collectionTab() {
-  const ids = CARS.filter(c => S.owned[c.id]).map(c => c.id);
+  const island = islandCar(S.current), ids = CARS.filter(c => S.owned[c.id] && islandCar(c.id) === island).map(c => c.id);
   return `<p class="tip">Your garage. Classes go by how much power a car makes right now: D, C, B, A, then S at 800 bhp and up.</p>
   <div class="car-grid">${ids.map(id => {
     const c = carById(id), own = S.owned[id], st2 = statsFor(id, own.up, lookOf(S, id));
@@ -6707,7 +6709,7 @@ function goLadder() {
       <div><h4><img class="r3logo" src="${RIDE3_LOGO}" alt="Ride3"> Invitational</h4><p>${esc(ch.name)} · ${esc(ch.car)}</p><p class="where">${esc(sp.area)} · ${esc(sp.road)}</p></div>
       <div class="pz">${money(sp.reward)}<br>+${sp.rep} rep</div></div>`;
   }).join('') : '';
-  const unl = CARS.filter(c => !c.slip && (!c.chapter || S.careerDone)).map(c => `<div class="${carUnlocked(S, c) ? 'ok' : ''}"><span>${c.name}</span><b>${c.rep ? 'REP ' + c.rep : 'START'} ${carUnlocked(S, c) ? '✓' : '🔒'}</b></div>`).join('');
+  const unl = CARS.filter(c => !c.slip && c.chapter !== 'mu' && (!c.chapter || S.careerDone)).map(c => `<div class="${carUnlocked(S, c) ? 'ok' : ''}"><span>${c.name}</span><b>${c.rep ? 'REP ' + c.rep : 'START'} ${carUnlocked(S, c) ? '✓' : '🔒'}</b></div>`).join('');
   $('ladder-body').innerHTML = `${topBar()}
     <p class="kicker">Career ladder${totalStars(S) ? ` · ★ ${totalStars(S)} stars` : ''}</p>
     <h2 class="h2">${essexOpen(S) ? 'From Canning Town to the QE2 Bridge' : 'From Canning Town to the crown'}</h2>
