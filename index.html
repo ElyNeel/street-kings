@@ -496,6 +496,8 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 .ghostbtn { padding: 4px 10px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .board td:nth-child(3) { font-family: var(--fm); font-weight: 700; text-align: right; }
+
+#topbtns.in-bar #b-music, body.racing #b-music { display: none; }
 </style>
 </head>
 <body>
@@ -526,7 +528,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 
   <section class="screen" id="scr-help" hidden>
     <div class="wrap">
-      <div class="bar"><div class="brand">STREET <em>KINGS</em></div><button class="bar-btn" type="button" data-act="sound">Sound on</button></div>
+      <div class="bar"><div class="brand">STREET <em>KINGS</em></div><button class="bar-btn" type="button" data-act="music">Music on</button><button class="bar-btn" type="button" data-act="sound">Sound on</button></div>
       <p class="kicker">How to play</p>
       <h2 class="h2">The rules of the road</h2>
       <div class="help">
@@ -616,6 +618,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 </div>
 
 <div id="topbtns">
+  <button id="b-music" type="button">Music on</button>
   <button id="b-sound" type="button">Sound on</button>
   <button id="b-pause" type="button" hidden>Pause</button>
 </div>
@@ -5055,31 +5058,36 @@ function load() {
    Every car has its own engine voice built from its layout: the firing pulses of an inline four, a straight six, a V8,
    a boxer and so on, pushed through a bit of distortion and a filter that opens with the revs. On top of that: gear changes,
    turbo whistle and blow off, pops and bangs, nitro, wind and cars flying past. The rival has a voice too, heard when close. */
+/* how each engine layout sounds, from how it is built:
+   half/rough = how uneven the firing is (the burble), bright = how far up the harmonics reach,
+   lope = the lumpy pulse you hear at low revs: cross-plane V8s and boxers with unequal headers have it, flat-plane V8s and straight sixes do not */
 const ENGINE_TYPES = {
   i4: { cyl: 4, half: 0.22, rough: 0.1, bright: 2.8 },
-  i5: { cyl: 5, half: 0, rough: 0.26, bright: 2.8 },
-  i6: { cyl: 6, half: 0.1, rough: 0.05, bright: 3.3 },
+  i5: { cyl: 5, half: 0, rough: 0.26, bright: 2.8, lope: 0.08, lopeX: 1 },               // five cylinders: the odd warble
+  i6: { cyl: 6, half: 0.1, rough: 0.05, bright: 3.3 },                                    // perfectly balanced, silky
   v6: { cyl: 6, half: 0.32, rough: 0.12, bright: 2.8 },
-  v8: { cyl: 8, half: 0.6, rough: 0.3, bright: 2.3 },
-  v10: { cyl: 10, half: 0.35, rough: 0.14, bright: 3.0 },
-  boxer: { cyl: 4, half: 0.65, rough: 0.38, bright: 2.3 },
-  flat6: { cyl: 6, half: 0.38, rough: 0.14, bright: 3.2 },
+  v8: { cyl: 8, half: 0.6, rough: 0.3, bright: 2.3, lope: 0.16, lopeX: 1, idle: 720 },     // cross-plane: the burble
+  v8flat: { cyl: 8, half: 0.3, rough: 0.08, bright: 3.4, idle: 900 },                     // flat-plane: fires like two fours, smooth and screaming
+  v10: { cyl: 10, half: 0.35, rough: 0.14, bright: 3.0, idle: 950 },
+  boxer: { cyl: 4, half: 0.65, rough: 0.38, bright: 2.3, lope: 0.2, lopeX: 2 },            // unequal length headers: the Subaru rumble
+  flat6: { cyl: 6, half: 0.38, rough: 0.14, bright: 3.2, idle: 950 },
   bike4: { cyl: 4, half: 0.5, rough: 0.28, bright: 3.4 },
+  bike4cp: { cyl: 4, half: 0.7, rough: 0.45, bright: 3.0, lope: 0.18, lopeX: 1 },          // cross-plane R1: fires like a V4, lumpy
 };
 /* red = red line, turbo = how much whistle, dct = quick paddle shifts, pops = chance of a bang on each upshift */
 const ENGINE_OF = {
-  civic: { t: 'i4', red: 8600, vtec: 5800, drive: 2.2, rasp: 0.5 },
+  civic: { t: 'i4', red: 8600, vtec: 5800, drive: 2.2, rasp: 0.5, brightK: 1.1, idle: 900 },
   bmw: { t: 'i6', red: 6600, drive: 1.6, rasp: 0.25 },
   wrx: { t: 'boxer', red: 7000, turbo: 1, flutter: true, drive: 2.2, rasp: 0.45 },
-  supra: { t: 'i6', red: 6900, turbo: 1.2, flutter: true, drive: 1.9, rasp: 0.3 },
-  gtr: { t: 'v6', red: 7100, turbo: 0.9, dct: true, drive: 2.2, rasp: 0.35 },
+  supra: { t: 'i6', red: 6900, turbo: 1.2, flutter: true, drive: 1.9, rasp: 0.35 },
+  gtr: { t: 'v6', red: 7100, turbo: 0.9, dct: true, drive: 2.0, rasp: 0.3 },           // twin turbo V6: muffled by the turbos, lots of whoosh
   golf: { t: 'i4', red: 6700, turbo: 0.7, dct: true, drive: 1.8, rasp: 0.3 },
   hatch: { t: 'i4', red: 6400, drive: 1.4, rasp: 0.25 },
   evo: { t: 'i4', red: 7000, turbo: 1, flutter: true, drive: 2.2, rasp: 0.45 },
   rs3: { t: 'i5', red: 7000, turbo: 0.8, dct: true, drive: 2.2, rasp: 0.45, pops: 0.3 },
   c63: { t: 'v8', red: 7200, drive: 2.6, rasp: 0.55, deep: true, pops: 0.4 },
   saloon: { t: 'i4', red: 6200, drive: 1.3, rasp: 0.2 },
-  m3: { t: 'v8', red: 8300, drive: 2.1, rasp: 0.45 },
+  m3: { t: 'v8', red: 8300, drive: 2.1, rasp: 0.45, brightK: 1.1 },                    // E92 V8: revs like a race engine
   p911: { t: 'flat6', red: 7900, dct: true, drive: 2.1, rasp: 0.4 },
   r8: { t: 'v10', red: 8700, dct: true, drive: 2.2, rasp: 0.45, pops: 0.3 },
   suv: { t: 'i6', red: 6000, drive: 1.4, rasp: 0.2 },
@@ -5093,13 +5101,13 @@ const ENGINE_OF = {
   golfr: { t: 'i4', red: 6800, turbo: 0.9, dct: true, drive: 2.0, rasp: 0.4, pops: 0.4 },
   a45: { t: 'i4', red: 7200, turbo: 1.1, dct: true, drive: 2.3, rasp: 0.5, pops: 0.6 },
   svr: { t: 'v8', red: 6500, sc: 1, drive: 2.6, rasp: 0.6, deep: true, pops: 0.8 },
-  gt3: { t: 'flat6', red: 9000, dct: true, drive: 2.4, rasp: 0.5 },
-  gtrn: { t: 'v6', red: 7100, turbo: 1.1, dct: true, drive: 2.3, rasp: 0.4, pops: 0.3 },
+  gt3: { t: 'flat6', red: 9000, dct: true, drive: 2.4, rasp: 0.5, brightK: 1.15 },
+  gtrn: { t: 'v6', red: 7100, turbo: 1.1, dct: true, drive: 2.1, rasp: 0.35, pops: 0.3 },
   m4f82: { t: 'i6', red: 7600, turbo: 1.1, dct: true, drive: 2.2, rasp: 0.45, pops: 0.6 },
-  huracan: { t: 'v10', red: 8500, dct: true, drive: 2.5, rasp: 0.55, pops: 0.5 },
+  huracan: { t: 'v10', red: 8500, dct: true, drive: 2.5, rasp: 0.55, pops: 0.5, brightK: 1.08 },
   rs6: { t: 'v8', red: 6800, turbo: 0.8, dct: true, drive: 2.6, rasp: 0.5, deep: true, pops: 0.5 },
-  mcl720: { t: 'v8', red: 8200, turbo: 1.2, flutter: true, dct: true, drive: 2.3, rasp: 0.4, pops: 0.3 },
-  r1: { t: 'bike4', red: 14000, idle: 1400, dct: true, drive: 2.4, rasp: 0.55, pops: 0.35 },
+  mcl720: { t: 'v8flat', red: 8200, turbo: 1.2, flutter: true, dct: true, drive: 2.3, rasp: 0.4, pops: 0.3 },
+  r1: { t: 'bike4cp', red: 14000, idle: 1400, dct: true, drive: 2.4, rasp: 0.55, pops: 0.35 },
   h2r: { t: 'bike4', red: 14000, idle: 1400, dct: true, sc: 1, drive: 2.4, rasp: 0.5, pops: 0.3 },
 };
 /* share of the gearing's top speed each gear reaches at the red line */
@@ -5107,7 +5115,7 @@ const GEARS = [0.27, 0.43, 0.58, 0.72, 0.86, 1.0];
 
 function engineProfile(model, up) {
   const base = ENGINE_OF[model] || ENGINE_OF.hatch, u = up || {};
-  const p = Object.assign({ idle: 850, shiftAt: 0.94, turbo: 0, pops: 0 }, base);
+  const p = Object.assign({ idle: (ENGINE_TYPES[base.t] || {}).idle || 850, shiftAt: 0.94, turbo: 0, pops: 0 }, base);
   p.T = ENGINE_TYPES[p.t];
   p.shiftT = p.dct ? 0.07 : 0.16;
   // upgrades change the sound: a louder, raspier exhaust that crackles, a turbo you can hear
@@ -5184,7 +5192,7 @@ const Sound = {
     const c = this.ctx, T = prof.T, N = 72, re = new Float32Array(N + 1), im = new Float32Array(N + 1), half = T.cyl / 2;
     for (let k = 1; k <= N; k++) {
       let a = k % T.cyl === 0 ? 1 : Number.isInteger(half) && k % half === 0 ? T.half : T.rough * (0.4 + hash(k, seed));
-      a *= Math.exp(-k / (T.cyl * T.bright * 0.72 * (prof.deep ? 0.8 : 1)));
+      a *= Math.exp(-k / (T.cyl * T.bright * (prof.brightK || 1) * (1 - 0.12 * Math.min(1, prof.turbo || 0)) * 0.72 * (prof.deep ? 0.8 : 1)));
       const ph = hash(k, seed + 7) * Math.PI * 2;
       re[k] = a * Math.cos(ph); im[k] = a * Math.sin(ph);
     }
@@ -5195,6 +5203,9 @@ const Sound = {
     o1.setPeriodicWave(wave); o2.setPeriodicWave(wave); o2.detune.value = 9;
     const mix = c.createGain(); mix.gain.value = 0.5;
     o1.connect(mix); o2.connect(mix);
+    // the lope: a slow pulse in the volume, strongest at idle and low revs
+    let lo = null, loG = null;
+    if (T.lope) { lo = src(c.createOscillator()); lo.type = 'sine'; loG = c.createGain(); loG.gain.value = 0; lo.connect(loG); loG.connect(mix.gain); }
     const ns = src(c.createBufferSource()); ns.buffer = this.noise; ns.loop = true;
     const nbp = c.createBiquadFilter(); nbp.type = 'bandpass'; nbp.Q.value = 0.8;
     const nam = c.createGain(); nam.gain.value = 0;
@@ -5219,7 +5230,7 @@ const Sound = {
       tw = src(c.createOscillator()); tw.type = 'sine'; tg = c.createGain(); tg.gain.value = 0;
       tw.connect(tg); tg.connect(pan);
     }
-    Object.assign(V, { o1, o2, lfo, lfoG, nam, nbp, lp, vol, pan, tw, tg, sub });
+    Object.assign(V, { o1, o2, lfo, lfoG, nam, nbp, lp, vol, pan, tw, tg, sub, lo, loG });
     const t0 = c.currentTime;
     for (const n of V.nodes) { if (n === ns) n.start(t0, Math.random() * 1.5); else n.start(t0); }
     return V;
@@ -5262,6 +5273,7 @@ const Sound = {
     V.o1.frequency.setTargetAtTime(f, t, 0.02); V.o2.frequency.setTargetAtTime(f, t, 0.02);
     V.lfo.frequency.setTargetAtTime(fire, t, 0.02);
     V.sub.frequency.setTargetAtTime(fire / 2, t, 0.02);
+    if (V.lo) { V.lo.frequency.setTargetAtTime(f * (T.lopeX || 1), t, 0.02); V.loG.gain.setTargetAtTime(0.5 * T.lope * (1 - 0.7 * rf) * (0.6 + 0.4 * thr), t, 0.05); }
     V.nbp.frequency.setTargetAtTime(clamp(fire * 3.2, 250, 5200), t, 0.03);
     V.lp.frequency.setTargetAtTime(clamp(200 + Math.pow(rf, 1.3) * 2600 * (0.45 + 0.55 * thr) * vtec, 150, 4500), t, 0.03);
     const r = p.rasp * (0.15 + 0.85 * thr) * vtec * 0.18;
@@ -5327,10 +5339,10 @@ const Sound = {
       // traffic flying past
       for (const w of race.waves) for (const car of w.cars) {
         if (car.hit) continue;
-        const z = w.z + car.off, prev = Vs.passed.get(car);
+        const z = carRel(race, w, car), prev = Vs.passed.get(car);
         Vs.passed.set(car, z);
-        const side = car.lane - p.x;
-        if (prev !== undefined && prev > 0 && z <= 0 && Math.abs(side) < 1.5 && p.v > 14) this.whoosh(0.1 * clamp(p.v / 50, 0.4, 1.2) * (car.type === 'bus' ? 1.4 : 1), side * 0.6, car.type === 'bus' ? 0.5 : 0.32);
+        const side = car.lane - p.x, onc = race.twoWay && car.lane === 2;   // oncoming cars rush past harder
+        if (prev !== undefined && prev > 0 && z <= 0 && Math.abs(side) < 1.5 && p.v > 14) this.whoosh(0.1 * clamp(p.v / 50, 0.4, 1.2) * (car.type === 'bus' ? 1.4 : 1) * (onc ? 1.5 : 1), side * 0.6, car.type === 'bus' ? 0.5 : onc ? 0.22 : 0.32);
       }
     }
     // the rival, heard when close
@@ -5440,12 +5452,57 @@ document.addEventListener('visibilitychange', () => { if (!Sound.ctx) return; if
 
 /* ---------- helpers ---------- */
 let toastTimer = 0;
+/* ---------- music: N.E tracks in the menus, garage and results. Never during a race: that is just the car. ---------- */
+const MUSIC_KEY = 'streetkings.music';
+/* each part of the game can have its own track. loop: [start, end] in seconds is the part that repeats.
+   Filled in when the tracks arrive, e.g. london: { src: 'music/london.mp3', loop: [12.5, 98.2] } */
+const MUSIC = window.__musicTest || {};
+const Music = {
+  on: true, gain: null, cur: null, want: null, bufs: {}, loading: {},
+  area() { if (!S) return 'title'; return S.careerDone && essexOpen(S) && hubTab !== 'london' ? 'essex' : 'london'; },
+  track(area) { return MUSIC[area] || MUSIC.london || MUSIC.title || null; },
+  load(t) {
+    if (this.bufs[t.src]) return Promise.resolve(this.bufs[t.src]);
+    if (!this.loading[t.src]) this.loading[t.src] = fetch(t.src).then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+      .then(a => new Promise((ok, no) => Sound.ctx.decodeAudioData(a, ok, no))).then(b => (this.bufs[t.src] = b)).catch(() => { delete this.loading[t.src]; return null; });
+    return this.loading[t.src];
+  },
+  play(area) {
+    this.want = area;
+    const c = Sound.ctx, t = this.track(area);
+    if (!this.on || !c || !t || (this.cur && this.cur.t === t)) return;
+    this.load(t).then(buf => {
+      if (!buf || this.want !== area || !this.on || mode === 'race' || (this.cur && this.cur.t === t)) return;
+      this.stop(1.2);
+      const g = c.createGain(), src = c.createBufferSource(), now = c.currentTime;
+      src.buffer = buf; src.loop = true;
+      if (t.loop) { src.loopStart = t.loop[0]; src.loopEnd = Math.min(t.loop[1], buf.duration); }
+      g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(t.vol || 0.55, now + 1.5);
+      src.connect(g); g.connect(c.destination); src.start(now, t.start || 0);
+      this.cur = { t, src, g };
+    });
+  },
+  stop(fade) {
+    const c = Sound.ctx, cur = this.cur; this.cur = null;
+    if (!c || !cur) return;
+    const now = c.currentTime, f = fade === undefined ? 0.8 : fade;
+    cur.g.gain.cancelScheduledValues(now); cur.g.gain.setValueAtTime(cur.g.gain.value, now); cur.g.gain.linearRampToValueAtTime(0, now + f);
+    try { cur.src.stop(now + f + 0.05); } catch (e) {}
+  },
+  setOn(v) {
+    this.on = v; try { localStorage.setItem(MUSIC_KEY, v ? '1' : '0'); } catch (e) {}
+    if (v) { Sound.init(); if (mode !== 'race') this.play(this.area()); } else this.stop(0.4);
+    for (const b of document.querySelectorAll('#b-music, [data-act=music]')) b.textContent = v ? 'Music on' : 'Music off';
+  },
+};
+
 function toast(msg, bad) {
   const t = $('toast'); t.textContent = msg; t.classList.toggle('bad', !!bad); t.classList.add('show');
   clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
 function showScreen(id) {
   for (const s of document.querySelectorAll('.screen')) s.hidden = s.id !== id;
+  if (mode === 'race') Music.stop(); else if (id) Music.play(Music.area());
   const scr = id && $(id);
   $('topbtns').classList.toggle('in-bar', !!(scr && scr.querySelector('.bar')));
 }
@@ -5480,6 +5537,7 @@ function topBar() {
     ${totalStars(S) ? `<div class="stat stat-stars"><small>Stars</small><b class="star-n">★ ${totalStars(S)}</b></div>` : ''}
     <div class="stat stat-car"><small>Race car</small><b style="font-size:15px">${carById(S.current).name}</b></div>
     ${Online.on ? `<button class="bar-btn" type="button" data-act="board">Leaderboards</button>` : ''}
+    <button class="bar-btn" type="button" data-act="music">${Music.on ? 'Music on' : 'Music off'}</button>
     <button class="bar-btn" type="button" data-act="sound">${Sound.on ? 'Sound on' : 'Sound off'}</button>
   </div>`;
 }
@@ -5522,7 +5580,7 @@ function goTitle() {
 function goSelect() {
   mode = 'menu';
   $('select-body').innerHTML = `
-    <div class="bar"><div class="brand">STREET <em>KINGS</em></div><div class="stat"><small>Money</small><b class="money">£5,000</b></div><button class="bar-btn" type="button" data-act="sound">${Sound.on ? 'Sound on' : 'Sound off'}</button></div>
+    <div class="bar"><div class="brand">STREET <em>KINGS</em></div><div class="stat"><small>Money</small><b class="money">£5,000</b></div><button class="bar-btn" type="button" data-act="music">${Music.on ? 'Music on' : 'Music off'}</button><button class="bar-btn" type="button" data-act="sound">${Sound.on ? 'Sound on' : 'Sound off'}</button></div>
     <p class="kicker">New career · East London</p>
     <h2 class="h2">Choose your first car</h2>
     <p class="lede">You start with <b>£5,000</b>. The Civic is free and the BMW costs <b>£2,500</b>. Whatever you do not spend is yours for upgrades. Faster cars unlock as your reputation grows.</p>
@@ -6363,6 +6421,7 @@ bindTap($('c-right'), () => steer(1));
 $('controls').addEventListener('contextmenu', e => e.preventDefault());
 $('b-pause').addEventListener('click', () => setPause(!paused));
 $('b-sound').addEventListener('click', () => { Sound.init(); Sound.setOn(!Sound.on); });
+$('b-music').addEventListener('click', () => { Music.setOn(!Music.on); });
 
 /* drag to turn the car on the turntable */
 {
@@ -6523,10 +6582,12 @@ document.getElementById('ui').addEventListener('click', e => {
   const b = e.target.closest('[data-act]');
   if (!b || b.disabled) return;
   const act = b.dataset.act, arg = b.dataset.arg;
-  Sound.init(); if (act !== 'sound') Sound.click();
+  Sound.init(); if (act !== 'sound' && act !== 'music') Sound.click();
+  if (Music.on && !Music.cur && mode !== 'race') Music.play(Music.area());
   let r;
   switch (act) {
     case 'sound': Sound.setOn(!Sound.on); break;
+    case 'music': Music.setOn(!Music.on); break;
     case 'continue': if (S) goHub(); break;
     case 'new': if (S) { $('confirm-new').hidden = false; } else goSelect(); break;
     case 'newyes': if (TEST_MODE) { S = testCareer(); hubTab = null; save(false); goHub(); break; }
@@ -6545,7 +6606,7 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'ghosts': setGhosts(!ghostsOn); break;
     case 'ghostrace': { const [route, uid, name] = (arg || '').split('|'), spec = routeSpec(route); if (spec) { pickedGhost = { route, uid, name }; startRace(spec); } break; }
     case 'essexex': startRace({ kind: 'essex', index: +arg, exhibition: true }); break;
-    case 'hubtab': hubTab = arg; pendingSlip = null; goHub(); break;
+    case 'hubtab': hubTab = arg; pendingSlip = null; goHub(); Music.play(Music.area()); break;
     case 'slip': pendingSlip = arg; goHub(); break;
     case 'slipno': pendingSlip = null; goHub(); break;
     case 'slipyes': pendingSlip = null; startRace({ kind: 'slip', id: arg }); break;
@@ -6643,7 +6704,8 @@ resize();
 S = load();
 if (TEST_MODE && !S) { S = testCareer(); save(false); }
 if (TEST_MODE) $('test-note').hidden = false;
-try { Sound.on = localStorage.getItem(SOUND_KEY) !== '0'; } catch (e) {}
+try { Sound.on = localStorage.getItem(SOUND_KEY) !== '0'; Music.on = localStorage.getItem(MUSIC_KEY) !== '0'; } catch (e) {}
+$('b-music').textContent = Music.on ? 'Music on' : 'Music off';
 $('b-sound').textContent = Sound.on ? 'Sound on' : 'Sound off';
 goTitle();
 requestAnimationFrame(frame);
@@ -6652,7 +6714,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) Onlin
 
 /* test hooks: lets automated checks drive the game */
 window.StreetKings = {
-  get S() { return S; }, loadGhosts, localGhost, routeSpec, setGhosts, goBoard, get R() { return R; }, get mode() { return mode; }, get paused() { return paused; }, input,
+  get S() { return S; }, Music, engineProfile, loadGhosts, localGhost, routeSpec, setGhosts, goBoard, get R() { return R; }, get mode() { return mode; }, get paused() { return paused; }, input,
   steer, startRace, goHub, goGarage, goLadder, setDemo, save, preview: renderCarPreview, portrait: drawPortrait, Sound,
   get intro() { return intro; }, skipIntro: endIntro,
   step(sec, bot) { const h = 1 / 120; let n = Math.round(sec / h); while (n-- > 0 && R && mode !== 'menu') { if (bot) bot(R, input); updateRace(R, h, input); processEvents(); } },
