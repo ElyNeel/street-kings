@@ -417,6 +417,36 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 .rivalcar { background: #0d1519; border: 1px solid var(--line); padding: 6px 8px 8px; }
 .rivalcar canvas { width: 100%; height: clamp(120px, 20vh, 190px); display: block; }
 .rivalcar .kicker { margin: 4px 0 0; }
+
+/* ---------- online: account box, racer name, leaderboards ---------- */
+.account { display: flex; flex-direction: column; gap: 8px; max-width: 560px; margin-top: 4px; }
+.acc-note { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+.acc-note b { color: var(--ink); }
+.acc-link { color: var(--muted); text-decoration: underline; }
+.acc-link:hover { color: var(--ink); }
+.btn.gbtn { background: #f1f3f4; color: #1f1f1f; border-color: #f1f3f4; }
+.btn.gbtn:hover:not([disabled]) { background: #ffffff; border-color: #ffffff; }
+.btn.gbtn.small { font-size: 13px; padding: 6px 10px; }
+.chip.ai { color: #9fd2ff; border-color: rgba(74, 168, 255, 0.55); }
+.offer-rec { margin: 0; font-family: var(--fm); font-size: 12px; color: var(--muted); }
+.offer-rec b, .tip.rec b { color: var(--plate); font-weight: 700; }
+.lb-cell b { font-size: 15px; }
+.wrap.narrow { max-width: 560px; }
+.name-input { font-family: var(--fm); font-size: 22px; letter-spacing: 0.04em; padding: 12px 14px; background: var(--panel-2); color: var(--ink); border: 1px solid var(--line-2); width: 100%; max-width: 420px; }
+.name-input:focus { outline: none; border-color: var(--sodium); }
+.tip.bad { color: #ff8a80; }
+.board-pick { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.board-pick span { font-family: var(--fm); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.board-pick select { font-size: 16px; padding: 8px 10px; background: var(--panel-2); color: var(--ink); border: 1px solid var(--line-2); max-width: 100%; }
+.board table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); }
+.board th, .board td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); font-size: 15px; }
+.board th { font-family: var(--fm); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+.board td:first-child { font-family: var(--fm); color: var(--muted); width: 3em; }
+.board td:last-child { font-family: var(--fm); font-weight: 700; text-align: right; }
+.board th:last-child { text-align: right; }
+.board tr.me td { background: rgba(242, 163, 58, 0.12); }
+.board tr.me small { font-family: var(--fm); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sodium); margin-left: 6px; }
+@media (max-width: 560px) { .board th:nth-child(3), .board td:nth-child(3) { display: none; } .board th, .board td { padding: 8px; } }
 </style>
 </head>
 <body>
@@ -433,6 +463,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         <button class="btn big" id="btn-new" data-act="new"><span>New career</span></button>
         <button class="btn ghost" data-act="help"><span>How to play</span></button>
       </div>
+      <div id="account-box"></div>
       <div class="confirm" id="confirm-new" hidden>
         <p>Starting again wipes your current career, money and cars.</p>
         <div class="row">
@@ -485,7 +516,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         </section>
         <section>
           <h3>Garage</h3>
-          <p>Every upgrade has three stages. Stage 1 is the same on every car, later stages depend on how much tuning potential the car has. In the Body Shop, spoilers, body kits and lowered suspension change top speed, nitro speed and handling. Everything you customise also raises your style rating, and style adds up to 25% to your prize money.</p>
+          <p>Every upgrade has three stages, and how much each stage adds depends on the car. Small cars like the Civic run out of room early, so you will need something with more potential for North London. In the Body Shop, spoilers, body kits and lowered suspension change top speed, nitro speed and handling. Everything you customise also raises your style rating, and style adds up to 25% to your prize money.</p>
         </section>
         <section>
           <h3>Checkpoints</h3>
@@ -501,6 +532,8 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
   <section class="screen" id="scr-garage" hidden><div class="wrap" id="garage-body"></div></section>
   <section class="screen" id="scr-ladder" hidden><div class="wrap" id="ladder-body"></div></section>
   <section class="screen" id="scr-results" hidden><div class="wrap" id="results-body"></div></section>
+  <section class="screen" id="scr-board" hidden><div class="wrap" id="board-body"></div></section>
+  <section class="screen" id="scr-name" hidden><div class="wrap narrow" id="name-body"></div></section>
 
   <section class="screen clear" id="scr-pause" hidden>
     <div class="wrap" style="max-width:520px">
@@ -555,27 +588,31 @@ const MPH = 2.237;
 const rand = (a, b) => a + Math.random() * (b - a);
 const randInt = n => Math.floor(Math.random() * n);
 const pick = a => a[randInt(a.length)];
+/* seeded random numbers: every route gets the same traffic for everyone, so times can be compared */
+function seededRng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function hashStr(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const lerp = (a, b, t) => a + (b - a) * t;
 const laneToX = l => (l - 1) * LANE_W;   // lane 0 = left, 1 = middle, 2 = right
 function fmt(n) { return Math.round(n).toLocaleString('en-GB'); }
 
 /* ---------- cars ----------
-   pot = tuning potential: how much of the Stage 2 and 3 power gains the car can use */
+   pot = tuning potential: how much of the Stage 2 and 3 gains the car can use. s1 = share of the Stage 1 power gains.
+   The Civic and the E46 run out of room early on purpose: North London needs a car with more potential. */
 const CARS = [
-  { id: 'civic', name: 'Honda Civic EP3', price: 0, bhp: 200, handling: 7.0, rep: 0, pot: 0.4, model: 'civic',
+  { id: 'civic', name: 'Honda Civic EP3', price: 0, bhp: 200, handling: 7.0, rep: 0, pot: 0.1, s1: 0.55, model: 'civic',
     blurb: 'Light, balanced and forgiving. The classic first build.',
     look: { paint: '#c9252c', finish: 'gloss', rims: 'five', rimColor: '#c3c8cc', tint: 1, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ff3355', smoked: false, plate: 'EP03 VTC' } },
-  { id: 'bmw', name: 'BMW 330Ci E46', price: 2500, bhp: 240, handling: 6.5, rep: 0, pot: 0.45, model: 'bmw',
+  { id: 'bmw', name: 'BMW 330Ci E46', price: 2500, bhp: 240, handling: 6.5, rep: 0, pot: 0.15, s1: 0.65, model: 'bmw',
     blurb: 'Two door coupe with a smooth straight six. More grunt, a touch lazier on turn in.',
     look: { paint: '#9fb2c6', finish: 'metallic', rims: 'split', rimColor: '#c3c8cc', tint: 1, spoiler: 'none', kit: 0, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: '#4aa8ff', smoked: false, plate: 'E46 SXI' } },
   { id: 'wrx', name: 'Subaru WRX STI', price: 4500, bhp: 310, handling: 8.0, rep: 3, pot: 0.8, model: 'wrx',
     blurb: 'All wheel drive grip. Darts between lanes and loves boost.',
     look: { paint: '#1f4fb5', finish: 'metallic', rims: 'split', rimColor: '#c9a23a', tint: 1, spoiler: 'big', kit: 0, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ffd23f', smoked: false, plate: 'WR22 STI' } },
-  { id: 'supra', name: 'Toyota Supra', price: 7000, bhp: 390, handling: 7.0, rep: 6, pot: 0.95, model: 'supra',
+  { id: 'supra', name: 'Toyota Supra', price: 7000, bhp: 390, handling: 7.0, rep: 6, pot: 1.0, model: 'supra',
     blurb: 'Big power and a bigger reputation. The engine takes all the boost you give it.',
     look: { paint: '#e8761e', finish: 'gloss', rims: 'five', rimColor: '#c3c8cc', tint: 1, spoiler: 'gt', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ff8c1a', smoked: false, plate: 'JZ93 GTE' } },
-  { id: 'gtr', name: 'Nissan GT-R', price: 12000, bhp: 520, handling: 8.5, rep: 11, pot: 0.6, model: 'gtr',
+  { id: 'gtr', name: 'Nissan GT-R', price: 12000, bhp: 520, handling: 8.5, rep: 11, pot: 1.0, model: 'gtr',
     blurb: 'Brutal pace, huge grip. The car everyone wants to beat.',
     look: { paint: '#3d434b', finish: 'metallic', rims: 'fan', rimColor: '#2a2d31', tint: 2, spoiler: 'gt', kit: 1, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: '#b14bff', smoked: false, plate: 'R35 GTR' } },
 ];
@@ -589,10 +626,11 @@ const UPGRADES = [
   { id: 'turbo', name: 'Turbo', stages: [{ price: 1500, bhp: 50 }, { price: 2600, bhp: 45 }, { price: 4000, bhp: 35 }] },
   { id: 'nitrous', name: 'Nitrous', stages: [{ price: 700, nitro: 50 }, { price: 1200, nitro: 25 }, { price: 1900, nitro: 25 }] },
 ];
-/* the actual gain of a stage on a given car (Stage 1 is the same for every car) */
+/* the actual gain of a stage on a given car (small cars get less even from Stage 1) */
 function stageGain(car, u, stage) {
-  const s = u.stages[stage - 1], k = stage === 1 ? 1 : car.pot;
-  return { bhp: s.bhp ? Math.round(s.bhp * k) : 0, handling: s.handling || 0, nitro: s.nitro || 0, price: s.price };
+  const s = u.stages[stage - 1], k = stage === 1 ? (car.s1 || 1) : car.pot;
+  // bigger nitrous bottles only fit cars with the potential for them
+  return { bhp: s.bhp ? Math.round(s.bhp * k) : 0, handling: s.handling || 0, nitro: s.nitro ? Math.round(s.nitro * (stage === 1 ? 1 : Math.max(0.4, car.pot))) : 0, price: s.price };
 }
 /* look (optional): the car's Body Shop setup. Aero and suspension change top speed, nitro speed and grip
    compared with how the car left the factory. */
@@ -893,7 +931,7 @@ const SPECIALS = {
     win: 'The tunnel is yours. Ishaaq wants a rematch.',
     oppLook: { model: 'r1', paint: '#1740a8', stripeColor: '#e8e8e8', helmet: '#1b1c20', rims: 'five', rimColor: '#2a2d31' },
     diff: { skill: 0.975, inc: [13, 17] } },
-  ride3: { title: 'RIDE3 INVITATIONAL', chapter: 'Invitation', rival: 'ride3', brand: 'RIDE3', oppBhp: 800, unlock: { crown: true }, bike: true, accelK: 1.75, oppLabel: 'KAWASAKI NINJA H2R',
+  ride3: { title: 'RIDE3 INVITATIONAL', chapter: 'Invitation', rival: 'ride3', brand: 'RIDE3', oppBhp: 850, unlock: { crown: true }, bike: true, accelK: 1.75, oppLabel: 'KAWASAKI NINJA H2R',
     reward: 10000, rep: 5, dist: 6400, area: 'Royal Docks', road: 'A1020 Royal Docks Road, Silvertown', time: 'late', env: 'aroad',
     sky: ['canary', 'orbit', 'cranes', 'shard'], map: [0.045, 51.508],
     signs: [['green', 'A1020', 'Royal Docks', 'Beckton'], ['borough', 'London Borough of Newham'], ['green', 'A13', 'Canning Town', 'Dartford']],
@@ -938,54 +976,54 @@ const EVENTS = [
     intro: 'Junaid knows every gap in E16. His blue Cooper S has a forged engine, so the boost goes up as far as he likes. Under the DLR on Victoria Dock Road, small does not mean slow.',
     win: 'E16 knows your name now. Stratford is next.', oppLook: { model: 'mini', paint: '#1b4fae', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', stance: 1 },
     diff: { skill: 0.975, inc: [10, 14] } },
-  { title: 'NIGHT SHIFT', chapter: 'East London', rival: 'kemi', oppBhp: 300, reward: 1700, rep: 2, dist: 4800,
+  { title: 'NIGHT SHIFT', chapter: 'East London', rival: 'kemi', oppBhp: 310, reward: 1700, rep: 2, dist: 4800,
     area: 'Stratford', road: 'A12 East Cross Route', time: 'night', env: 'aroad', sky: ['orbit', 'stadium', 'canary', 'cranes'], map: [-0.016, 51.541],
     signs: [['green', 'A12', 'Stratford', 'Hackney Wick'], ['borough', 'London Borough of Hackney'], ['green', 'A12', 'Blackwall Tunnel', 'Canary Wharf'], ['green', 'A11', 'Bow', 'Stratford']],
     intro: 'Past midnight on the A12, with the Olympic Park lit up beside you. Kemi Adebayo takes the cleanest lines in East London. Beat her at her own game.',
     win: 'The A12 regulars are watching you now.', oppLook: { model: 'golf', paint: '#2456a8', rims: 'five', rimColor: '#1c1e21' },
-    diff: { skill: 0.975, inc: [10, 14] } },
-  { title: 'INDUSTRIAL HEAT', chapter: 'East London', rival: 'kasia', oppBhp: 360, reward: 2500, rep: 3, dist: 5400,
+    diff: { skill: 0.975, inc: [11, 15] } },
+  { title: 'INDUSTRIAL HEAT', chapter: 'East London', rival: 'kasia', oppBhp: 380, reward: 2500, rep: 3, dist: 5400,
     area: 'Lea Bridge', road: 'Lea Bridge Road', time: 'night', env: 'arches', sky: ['gasholder', 'cranes', 'shard'], map: [-0.044, 51.566],
     signs: [['green', 'A104', 'Lea Bridge', 'Leyton'], ['borough', 'London Borough of Waltham Forest'], ['green', 'A104', 'Clapton', 'Hackney'], ['green', 'A106', 'Leyton', 'Stratford']],
     intro: 'Railway arches, sodium lights and Kasia Nowak\'s Evo. She built half the engines in East London. This is where the serious money starts.',
     win: 'Kasia wants a look under your bonnet. People are starting to fear the name.', oppLook: { model: 'evo', paint: '#e4e4e0', rims: 'split', rimColor: '#c9a23a', spoiler: 'big' },
-    diff: { skill: 0.962, inc: [10, 14] } },
-  { title: 'THE ISLAND', chapter: 'East London', rival: 'mo', oppBhp: 390, reward: 3000, rep: 3, dist: 5700,
+    diff: { skill: 0.97, inc: [12, 16] } },
+  { title: 'THE ISLAND', chapter: 'East London', rival: 'mo', oppBhp: 430, reward: 3000, rep: 3, dist: 5700,
     area: 'Isle of Dogs', road: 'Westferry Road', time: 'night', env: 'towers', sky: ['canary', 'shard', 'cranes'], map: [-0.022, 51.500],
     signs: [['green', 'A1206', 'Canary Wharf', 'Isle of Dogs'], ['borough', 'London Borough of Tower Hamlets'], ['green', 'A1206', 'Limehouse', 'Blackwall'], ['green', 'A13', 'Canning Town', 'Barking']],
     intro: 'Mo Tran knows every camera and every empty road on the Isle of Dogs. Beat him under the Canary Wharf towers and East London is yours.',
     win: 'East London is yours. Word has reached North London.', oppLook: { model: 'rs3', paint: '#8f969b', rims: 'mesh', rimColor: '#1c1e21', tint: 3 },
-    diff: { skill: 0.965, inc: [11, 15] } },
-  { title: 'GREEN LANES', chapter: 'North London', rival: 'emre', oppBhp: 420, reward: 3300, rep: 3, dist: 5900,
+    diff: { skill: 0.97, inc: [13, 17] } },
+  { title: 'GREEN LANES', chapter: 'North London', rival: 'emre', oppBhp: 500, reward: 3300, rep: 3, dist: 5900,
     area: 'Harringay', road: 'Green Lanes', time: 'night', env: 'terrace', sky: ['allypally', 'bttower', 'cranes'], map: [-0.098, 51.578],
     signs: [['green', 'A105', 'Wood Green', 'Palmers Green'], ['borough', 'London Borough of Haringey'], ['green', 'A503', 'Finsbury Park', 'Seven Sisters'], ['green', 'A105', 'Harringay', 'Newington Green']],
     intro: 'North London now. Emre Yildiz races after closing time at his family\'s grill. Green Lanes after midnight, neon signs and a Mercedes that sounds like thunder.',
     win: 'Green Lanes knows your name. Next stop, Tottenham.', oppLook: { model: 'c63', paint: '#7a1420', rims: 'five', rimColor: '#2a2d31', tint: 2 },
-    diff: { skill: 0.965, inc: [12, 16] } },
-  { title: 'THE RIVAL', chapter: 'North London', rival: 'marcus', oppBhp: 480, reward: 3800, rep: 4, dist: 6200,
+    diff: { skill: 0.975, inc: [14, 18] } },
+  { title: 'THE RIVAL', chapter: 'North London', rival: 'marcus', oppBhp: 560, reward: 3800, rep: 4, dist: 6200,
     area: 'Tottenham', road: 'Seven Sisters Road', time: 'night', env: 'terrace', sky: ['stadium', 'bttower', 'shard'], map: [-0.072, 51.586],
     signs: [['green', 'A503', 'Seven Sisters', 'Tottenham'], ['borough', 'London Borough of Haringey'], ['green', 'A10', 'Tottenham', 'Edmonton'], ['green', 'A503', 'Finsbury Park', 'Holloway']],
     intro: 'Marcus Campbell has run North London in his M3 for three years. He has heard about you, and he does not like it.',
     win: 'Marcus threw his keys on the bonnet and walked off. North London is wide open.', oppLook: { model: 'm3', paint: '#e3c21c', rims: 'split', rimColor: '#1c1e21', spoiler: 'lip', stance: 1 },
-    diff: { skill: 0.965, inc: [12, 16] } },
-  { title: 'NORTH CIRCULAR', chapter: 'North London', rival: 'asha', oppBhp: 520, reward: 4400, rep: 4, dist: 6500,
+    diff: { skill: 0.975, inc: [15, 19] } },
+  { title: 'NORTH CIRCULAR', chapter: 'North London', rival: 'asha', oppBhp: 640, reward: 4400, rep: 4, dist: 6500,
     area: 'Walthamstow', road: 'A406 North Circular', time: 'late', env: 'aroad', sky: ['cranes', 'bttower', 'canary'], map: [-0.022, 51.595],
     signs: [['green', 'A406', 'North Circular', 'Walthamstow'], ['borough', 'London Borough of Waltham Forest'], ['green', 'A406', 'Edmonton', 'Palmers Green'], ['green', 'A112', 'Chingford', 'Leyton']],
     intro: 'Asha Warsame has never missed an apex, on the test route or on the North Circular at 1am. Mirror, signal, overtake.',
     win: 'Only two names left above yours.', oppLook: { model: 'p911', paint: '#1e4d2b', rims: 'five', rimColor: '#c3c8cc' },
-    diff: { skill: 0.97, inc: [12, 16] } },
-  { title: 'PALACE HILL', chapter: 'North London', rival: 'nikos', oppBhp: 560, reward: 5200, rep: 5, dist: 6800,
+    diff: { skill: 0.98, inc: [16, 20] } },
+  { title: 'PALACE HILL', chapter: 'North London', rival: 'nikos', oppBhp: 750, reward: 5200, rep: 5, dist: 6800,
     area: 'Alexandra Palace', road: 'Alexandra Palace Way', time: 'night', env: 'park', sky: ['shard', 'canary', 'bttower', 'gherkin', 'cranes'], map: [-0.130, 51.594],
     signs: [['green', 'A406', 'North Circular', 'Bounds Green'], ['borough', 'London Borough of Haringey'], ['green', 'A504', 'Muswell Hill', 'Crouch End'], ['green', 'A105', 'Wood Green', 'Palmers Green']],
     intro: 'Up to Alexandra Palace, with the whole of London lit up below you. Nikos Georgiou says the loser buys the city breakfast.',
     win: 'Only one name is left above yours. The King has been told.', oppLook: { model: 'r8', paint: '#b9c2cb', rims: 'split', rimColor: '#2a2d31', tint: 2 },
-    diff: { skill: 0.97, inc: [13, 17] } },
-  { title: 'FINAL RUN', chapter: 'The Final', rival: 'king', oppBhp: 600, reward: 7000, rep: 6, dist: 7200,
+    diff: { skill: 0.98, inc: [18, 22] } },
+  { title: 'FINAL RUN', chapter: 'The Final', rival: 'king', oppBhp: 850, reward: 7000, rep: 6, dist: 7200,
     area: 'North Circular to Blackwall', road: 'A406, A12, Blackwall Tunnel approach', time: 'late', dawn: true, env: 'aroad', sky: ['canary', 'orbit', 'shard', 'cranes'], map: [-0.012, 51.528],
     signs: [['green', 'A406', 'North Circular', 'Woodford'], ['green', 'A12', 'Stratford', 'Blackwall Tunnel'], ['borough', 'London Borough of Tower Hamlets'], ['green', 'A102', 'Blackwall Tunnel', 'Greenwich']],
     intro: '3am. Nobody has seen his face. Just a black GT-R, the North Circular, the A12 and the Blackwall Tunnel approach. Beat him and the streets are yours.',
     win: 'The city is yours. You are the Street King.', oppLook: { model: 'gtr', paint: '#101113', rims: 'fan', rimColor: '#1c1e21', tint: 3, spoiler: 'gt', kit: 1 },
-    diff: { skill: 0.965, inc: [13, 17] } },
+    diff: { skill: 0.985, inc: [20, 26] } },
 ];
 const NORTH_FROM = 7;   // index of the first North London event
 const REP_TOTAL = EVENTS.reduce((a, e) => a + e.rep, 0);
@@ -1161,8 +1199,8 @@ const TRAFFIC_TYPES = [
 const BUS = { id: 'bus', w: 2.52, len: 10.4 };
 const BUS_ROUTES = ['N25', 'N73', 'N29', 'N38', 'N55', 'N279', 'N15', 'N86', 'N205', '25', '73', '38', '149', '243', '254', '277'];
 const TRAFFIC_COLORS = ['#d9dadb', '#1d2b4d', '#8c1d1d', '#2f6f4f', '#c9a227', '#5b6770', '#eeeeee', '#2a2a2c', '#6a3d8a', '#b8551f', '#3f7fbf', '#8f9aa3'];
-function pickType() {
-  let t = Math.random() * TRAFFIC_TYPES.reduce((a, b) => a + b.wt, 0);
+function pickType(r) {
+  let t = (r || Math.random)() * TRAFFIC_TYPES.reduce((a, b) => a + b.wt, 0);
   for (const ty of TRAFFIC_TYPES) { if ((t -= ty.wt) <= 0) return ty; }
   return TRAFFIC_TYPES[0];
 }
@@ -1183,13 +1221,17 @@ function createRace(S, spec) {
   } else if (spec.kind === 'special') {
     const e = SPECIALS[spec.id], ch = CHARACTERS[e.rival];
     const beaten = !!(S.specials && S.specials[spec.id]);
-    ev = Object.assign({}, e, { kind: 'special', id: spec.id, exhibition: beaten && !e.friend, rematch: beaten, oppName: ch.name, oppCar: ch.car,
+    ev = Object.assign({}, e, { kind: 'special', id: spec.id, exhibition: beaten && !e.friend, rematch: beaten, oppName: e.friend ? ch.name + ' (AI)' : ch.name, oppCar: ch.car,
       reward: beaten && e.friend ? rematchPrize(S) : e.reward, skill: e.diff.skill, inc: e.diff.inc, d: 1 });
   } else {
     const e = EVENTS[spec.index], ch = CHARACTERS[e.rival];
     ev = Object.assign({}, e, { kind: 'career', index: spec.index, exhibition: !!spec.exhibition, oppName: ch.name, oppCar: ch.car,
       skill: e.diff.skill, inc: e.diff.inc, d: spec.index / (EVENTS.length - 1) });
   }
+  // the route a time counts for on the leaderboard (career events and friend races), and its traffic seed
+  ev.route = spec.kind === 'street' ? null : spec.kind === 'special' ? 'special:' + spec.id : 'career:' + ev.rival;
+  const seed = hashStr((ev.route || 'street:' + ev.offerId) + '|v1');
+  const rw = seededRng(seed), rr = seededRng(seed ^ 0x9E3779B9);
   const oppV = vmaxFor(ev.oppBhp) * ev.skill;
   const traffic = trafficFor(ev.d);
   return {
@@ -1198,8 +1240,8 @@ function createRace(S, spec) {
     p: { dist: 0, v: 0, lane: 1, x: 1, vx: 0, latV: 0, nitro: st.nitroCap, boosting: false, nitroLock: false,
          damage: own.damage, startDamage: own.damage, collisions: 0, topV: 0, finishTime: null },
     o: { dist: 0, v: 0, lane: 2, x: 2, vx: 0, nitro: 100, boosting: false, vmax: oppV, accel: accelFor(ev.oppBhp) * (ev.accelK || 1),
-         incT: rand(ev.inc[0], ev.inc[1]), finished: false, finishTime: null },
-    waves: [], lastOpen: 1, waveCount: 0, noMoreSpawns: false,
+         incT: ev.inc[0] + rr() * (ev.inc[1] - ev.inc[0]), finished: false, finishTime: null },
+    rw, rr, waves: [], lastOpen: 1, waveCount: 0, noMoreSpawns: false,
     // clear road needed between waves: your top nitro speed (relative to the slowest traffic) x reaction window
     gapMin: (st.vmax * st.nitroMult - traffic.vLo) * traffic.tClear,
     result: null, settled: false, resultsShown: false, events: [],
@@ -1209,51 +1251,51 @@ function createRace(S, spec) {
 }
 
 function makeWave(R) {
-  const T = R.traffic;
+  const T = R.traffic, r = R.rw || Math.random, ri = n => Math.floor(r() * n), rf = (a, b) => a + r() * (b - a);
   let lanes, bus = false;
   if (R.waveCount === 0) {
     lanes = [1];                                   // first wave: one car in your lane, to learn the dodge
-    R.lastOpen = Math.random() < 0.5 ? 0 : 2;
-  } else if (Math.random() < T.two) {
+    R.lastOpen = r() < 0.5 ? 0 : 2;
+  } else if (r() < T.two) {
     const choices = [0, 1, 2].filter(l => l !== R.lastOpen);   // the open lane always moves
-    const open = choices[randInt(choices.length)];
+    const open = choices[ri(choices.length)];
     lanes = [0, 1, 2].filter(l => l !== open);
     R.lastOpen = open;
   } else {
-    const lane = Math.random() < 0.65 ? R.lastOpen : randInt(3);
+    const lane = r() < 0.65 ? R.lastOpen : ri(3);
     lanes = [lane];
     const opens = [0, 1, 2].filter(l => l !== lane);
-    R.lastOpen = opens[randInt(2)];
-    bus = R.waveCount > 1 && Math.random() < T.bus;
+    R.lastOpen = opens[ri(2)];
+    bus = R.waveCount > 1 && r() < T.bus;
   }
   const cars = lanes.map(lane => {
-    const ty = bus ? BUS : pickType();
-    let color = TRAFFIC_COLORS[randInt(TRAFFIC_COLORS.length)];
-    if (ty.id === 'van') color = Math.random() < 0.7 ? '#e9ebec' : '#9aa3aa';
+    const ty = bus ? BUS : pickType(r);
+    let color = TRAFFIC_COLORS[ri(TRAFFIC_COLORS.length)];
+    if (ty.id === 'van') color = r() < 0.7 ? '#e9ebec' : '#9aa3aa';
     if (ty.id === 'cab') color = '#141517';
     if (ty.id === 'bus') color = '#c8161d';
     return { lane, off: 0, type: ty.id, w: ty.w, len: ty.len, color, hit: false, hitT: 0, push: 0, spin: 0,
-      route: bus ? pick(BUS_ROUTES) : null, brake: 0 };
+      route: bus ? BUS_ROUTES[ri(BUS_ROUTES.length)] : null, brake: 0 };
   });
   if (cars.length === 2) {
     // stagger the two cars so they never reach you at the same moment
     const rel = Math.max(20, R.st.vmax - 13);
-    cars[randInt(2)].off = Math.max(9, rel * rand(0.24, 0.55));
+    cars[ri(2)].off = Math.max(9, rel * rf(0.24, 0.55));
   }
   const span = Math.max(...cars.map(c => c.off + c.len));
   const open = [0, 1, 2].filter(l => !lanes.includes(l));
   // checkpoint gate: always in a lane this wave leaves open, a little ahead of it, so it can always be reached.
   // In a Checkpoint Run every wave has one; in other races about half of them do.
   let gate = null;
-  if (R.ev.cp || (R.waveCount > 0 && Math.random() < GATE_CHANCE)) {
-    const lane = open.length === 1 ? open[0] : open[randInt(open.length)];
+  if (R.ev.cp || (R.waveCount > 0 && r() < GATE_CHANCE)) {
+    const lane = open.length === 1 ? open[0] : open[ri(open.length)];
     gate = { lane, off: -Math.min(32, R.gapMin * 0.32), state: 0, t: 0 };
   }
-  let gapAfter = R.gapMin + rand(0, T.extra);
+  let gapAfter = R.gapMin + rf(0, T.extra);
   if (bus) gapAfter += 35;                          // a bus hides the road behind it, so leave extra room
-  if (Math.random() < 0.08) gapAfter += 60;         // the odd breather
+  if (r() < 0.08) gapAfter += 60;         // the odd breather
   R.waveCount++;
-  return { id: R.waveCount, z: SPAWN_D, speed: rand(T.vLo, T.vHi), cars, span, open, gapAfter, gate };
+  return { id: R.waveCount, z: SPAWN_D, speed: rf(T.vLo, T.vHi), cars, span, open, gapAfter, gate };
 }
 
 function updateTraffic(R, dt) {
@@ -1301,11 +1343,12 @@ function updateRival(R, dt) {
     if (o.boosting) { o.nitro -= NITRO_DRAIN * dt; if (o.nitro <= 0) { o.nitro = 0; o.boosting = false; } }
     else o.nitro = Math.min(100, o.nitro + 100 / NITRO_REFILL * dt);
     o.incT -= dt;
-    if (o.incT <= 0) { o.v *= 0.72; o.incT = rand(R.ev.inc[0], R.ev.inc[1]); }
+    const rr = R.rr || Math.random;
+    if (o.incT <= 0) { o.v *= 0.72; o.incT = R.ev.inc[0] + rr() * (R.ev.inc[1] - R.ev.inc[0]); }
     if (R.ev.pops) {                               // pops and bangs: flames out of the exhaust every second or two
       o.pop = Math.max(0, (o.pop || 0) - dt);
       o.popT = (o.popT === undefined ? 1 : o.popT) - dt;
-      if (o.popT <= 0) { o.popT = rand(0.5, 2.2); o.pop = 0.22; if (Math.abs(o.dist - R.p.dist) < 90) R.events.push({ type: 'pop' }); }
+      if (o.popT <= 0) { o.popT = 0.5 + rr() * 1.7; o.pop = 0.22; if (Math.abs(o.dist - R.p.dist) < 90) R.events.push({ type: 'pop' }); }
     }
     o.v = stepSpeed(o.v, dt, o.vmax, o.accel, o.boosting);
     o.dist += o.v * dt;
@@ -3717,6 +3760,224 @@ function drawLondonMap(canvas, S) {
 }
 
 /* =====================================================================
+   STREET KINGS : ONLINE (Google sign-in, racer names, cloud saves, leaderboards)
+   Talks to Supabase over plain fetch, no library. Only switched on for the
+   real website, so the copy inside Claude and local test files stay offline.
+   ===================================================================== */
+const SB_URL = 'https://wdtrktzxszfaftotrdyw.supabase.co';
+const SB_KEY = 'sb_publishable_Llb7ESB5jkatL60gq7vNpw_WXucSND0';   // publishable key: meant to be public, the database rules do the protecting
+const SESSION_KEY = 'streetkings.session', PENDING_KEY = 'streetkings.pending', BACKUP_KEY = 'streetkings.save.backup';
+const ONLINE_OK = /(^|\.)elyneel\.github\.io$/.test(location.hostname) || window.__online === true;
+
+const Online = {
+  session: null, uid: null, name: null, ready: false, saveTimer: 0, records: {}, recordsAt: 0, mine: {},
+  get on() { return ONLINE_OK; },
+  get signedIn() { return !!(this.session && this.session.access_token); },
+
+  /* ---- session ---- */
+  loadSession() {
+    try { this.session = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { this.session = null; }
+    this.uid = this.session ? this.session.uid : null;
+  },
+  storeSession() {
+    try { if (this.session) localStorage.setItem(SESSION_KEY, JSON.stringify(this.session)); else localStorage.removeItem(SESSION_KEY); } catch (e) {}
+    this.uid = this.session ? this.session.uid : null;
+  },
+  // Google sends people back with the sign-in tokens after the # in the address
+  fromRedirect() {
+    const h = location.hash || '';
+    if (h.indexOf('error_description=') >= 0) {
+      const q = new URLSearchParams(h.slice(1));
+      history.replaceState(null, '', location.pathname + location.search);
+      this.flash = 'Sign in did not work: ' + (q.get('error_description') || 'please try again');
+      return false;
+    }
+    if (h.indexOf('access_token=') < 0) return false;
+    const q = new URLSearchParams(h.slice(1));
+    history.replaceState(null, '', location.pathname + location.search);
+    this.setSession({ access_token: q.get('access_token'), refresh_token: q.get('refresh_token'),
+      expires_at: Number(q.get('expires_at')) || Math.floor(Date.now() / 1000) + Number(q.get('expires_in') || 3600) });
+    this.justSignedIn = true;
+    return true;
+  },
+  setSession(s) {
+    let uid = null;
+    try { uid = JSON.parse(atob(s.access_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).sub; } catch (e) {}
+    this.session = Object.assign({}, s, { uid });
+    this.storeSession();
+  },
+  signIn() {
+    if (!this.on) { toast('Sign in works on the website version of the game.', true); return; }
+    try { save(); } catch (e) {}
+    const back = location.origin + location.pathname;
+    location.href = SB_URL + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(back);
+  },
+  async signOut() {
+    await this.flushSave();
+    try { await this.fetch('/auth/v1/logout', { method: 'POST' }); } catch (e) {}
+    this.session = null; this.name = null; this.storeSession();
+    toast('Signed out. Your career stays on this device.');
+    refreshOnlineUi();
+  },
+  async token() {
+    if (!this.session) return null;
+    if ((this.session.expires_at || 0) - 60 < Date.now() / 1000) {
+      let r;
+      try {
+        r = await fetch(SB_URL + '/auth/v1/token?grant_type=refresh_token', { method: 'POST', headers: { apikey: SB_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refresh_token: this.session.refresh_token }) });
+      } catch (e) { return null; }                         // offline: try again later
+      if (!r.ok) { if (r.status >= 400 && r.status < 500) { this.session = null; this.name = null; this.storeSession(); refreshOnlineUi(); } return null; }
+      const j = await r.json();
+      this.setSession({ access_token: j.access_token, refresh_token: j.refresh_token, expires_at: j.expires_at || Math.floor(Date.now() / 1000) + (j.expires_in || 3600) });
+    }
+    return this.session.access_token;
+  },
+  async fetch(path, opts) {
+    opts = opts || {};
+    const tok = opts.anon ? null : await this.token();
+    const headers = Object.assign({ apikey: SB_KEY, 'Content-Type': 'application/json' }, tok ? { Authorization: 'Bearer ' + tok } : {}, opts.headers || {});
+    const r = await fetch(SB_URL + path, { method: opts.method || 'GET', headers, body: opts.body === undefined ? undefined : JSON.stringify(opts.body) });
+    const txt = await r.text();
+    let data = null; try { data = txt ? JSON.parse(txt) : null; } catch (e) { data = txt; }
+    if (!r.ok) { const err = new Error((data && (data.message || data.msg || data.error_description)) || ('Error ' + r.status)); err.status = r.status; err.code = data && data.code; throw err; }
+    return data;
+  },
+
+  /* ---- start up ---- */
+  async init() {
+    if (!this.on) return;
+    this.loadSession();
+    this.fromRedirect();
+    if (this.flash) toast(this.flash, true);
+    if (!this.signedIn) { this.ready = true; refreshOnlineUi(); return; }
+    try {
+      await this.token();
+      if (!this.signedIn) { this.ready = true; refreshOnlineUi(); return; }
+      const rows = await this.fetch('/rest/v1/profiles?select=racer_name&id=eq.' + this.uid);
+      this.name = rows && rows[0] ? rows[0].racer_name : null;
+      await this.syncSave();
+      await this.sendPending();
+      if (this.justSignedIn) toast(this.name ? 'Signed in as ' + this.name + '.' : 'Signed in. Pick your racer name.');
+    } catch (e) {
+      if (this.justSignedIn) toast('Signed in, but the game could not reach the server. It will try again.', true);
+    }
+    this.ready = true;
+    refreshOnlineUi();
+    if (this.signedIn && !this.name) showNameScreen();
+  },
+
+  /* ---- racer name ---- */
+  async setName(nm) {
+    nm = String(nm || '').trim().replace(/\s+/g, ' ');
+    if (nm.length < 3 || nm.length > 16) return 'Use 3 to 16 characters.';
+    if (!/^[A-Za-z0-9 _.-]+$/.test(nm)) return 'Letters, numbers, spaces, dots, dashes and underscores only.';
+    try {
+      if (this.name) await this.fetch('/rest/v1/profiles?id=eq.' + this.uid, { method: 'PATCH', body: { racer_name: nm }, headers: { Prefer: 'return=minimal' } });
+      else await this.fetch('/rest/v1/profiles', { method: 'POST', body: { id: this.uid, racer_name: nm }, headers: { Prefer: 'return=minimal' } });
+    } catch (e) {
+      if (e.code === '23505') return 'Someone already has that name. Try another.';
+      if (e.code === '23514') return 'That name is not allowed. Try another.';
+      return 'Could not save the name. Check your connection and try again.';
+    }
+    this.name = nm;
+    await this.sendPending();
+    return null;
+  },
+
+  /* ---- cloud save: whichever career has gone further wins, the other is kept as a backup on this device ---- */
+  progress(s) { if (!s) return -1; return (s.careerDone ? 100000 : 0) + (s.completed || []).filter(Boolean).length * 1000 + (s.rep || 0) * 10 + ((s.stats && s.stats.races) || 0); },
+  async syncSave() {
+    const rows = await this.fetch('/rest/v1/saves?select=data,updated_at&user_id=eq.' + this.uid);
+    const cloud = rows && rows[0] ? migrateSave(rows[0].data) : null;
+    if (cloud && this.progress(cloud) > this.progress(S)) {
+      if (S) { try { localStorage.setItem(BACKUP_KEY, JSON.stringify(S)); } catch (e) {} }
+      S = cloud; save(false);
+      if (this.justSignedIn) this.loadedCloud = true;
+    } else if (S) await this.pushSave();
+  },
+  queueSave() {
+    if (!this.on || !this.signedIn || !S) return;
+    clearTimeout(this.saveTimer);
+    this.saveTimer = setTimeout(() => this.pushSave().catch(() => {}), 2500);
+  },
+  async pushSave() {
+    clearTimeout(this.saveTimer); this.saveTimer = 0;
+    if (!this.signedIn || !S) return;
+    await this.fetch('/rest/v1/saves?on_conflict=user_id', { method: 'POST', body: { user_id: this.uid, data: S, updated_at: new Date().toISOString() },
+      headers: { Prefer: 'resolution=merge-duplicates,return=minimal' } });
+  },
+  async flushSave() { if (this.saveTimer) { try { await this.pushSave(); } catch (e) {} } },
+
+  /* ---- times ---- */
+  routeName(route) {
+    if (!route) return '';
+    const [kind, id] = route.split(':');
+    if (kind === 'career') { const i = EVENTS.findIndex(e => e.rival === id); return i >= 0 ? `${i + 1}. ${EVENTS[i].title}` : route; }
+    const sp = SPECIALS[id]; if (!sp) return route;
+    return sp.friend ? `${CHARACTERS[sp.rival].name} · ${sp.title}` : sp.title;
+  },
+  routes() {
+    return EVENTS.map(e => 'career:' + e.rival).concat(SPECIAL_ORDER.map(id => 'special:' + id));
+  },
+  // posts a finished time. Returns { best_ms, place, total, improved } or a reason it was not posted
+  async submit(route, ms, car) {
+    if (!this.on) return { off: true };
+    if (!this.signedIn) return { guest: true };
+    const item = { route, ms: Math.round(ms), car };
+    if (!this.name) { this.addPending(item); return { noName: true }; }
+    try {
+      const r = await this.fetch('/rest/v1/rpc/submit_time', { method: 'POST', body: { p_route: route, p_time_ms: item.ms, p_car: car } });
+      this.mine[route] = r.best_ms; this.recordsAt = 0;
+      return r;
+    } catch (e) {
+      if (!e.status) this.addPending(item);             // offline: send it next time
+      return { error: true, offline: !e.status };
+    }
+  },
+  addPending(item) {
+    let q = []; try { q = JSON.parse(localStorage.getItem(PENDING_KEY) || '[]'); } catch (e) {}
+    const old = q.find(x => x.route === item.route);
+    if (old) { if (item.ms < old.ms) Object.assign(old, item); } else q.push(item);
+    try { localStorage.setItem(PENDING_KEY, JSON.stringify(q.slice(-40))); } catch (e) {}
+  },
+  async sendPending() {
+    if (!this.signedIn || !this.name) return;
+    let q = []; try { q = JSON.parse(localStorage.getItem(PENDING_KEY) || '[]'); } catch (e) {}
+    if (!q.length) return;
+    const left = [];
+    for (const it of q) {
+      try { const r = await this.fetch('/rest/v1/rpc/submit_time', { method: 'POST', body: { p_route: it.route, p_time_ms: it.ms, p_car: it.car } }); this.mine[it.route] = r.best_ms; }
+      catch (e) { if (!e.status) left.push(it); }
+    }
+    try { localStorage.setItem(PENDING_KEY, JSON.stringify(left)); } catch (e) {}
+  },
+  async board(route) {
+    return this.fetch('/rest/v1/leaderboard?select=racer_name,time_ms,car,place,user_id&route=eq.' + encodeURIComponent(route) + '&order=time_ms.asc&limit=50', { anon: !this.signedIn });
+  },
+  // the real record on every route, for the friend cards. Cached for a minute.
+  async loadRecords() {
+    if (!this.on || Date.now() - this.recordsAt < 60000) return false;
+    this.recordsAt = Date.now();
+    try {
+      const rows = await this.fetch('/rest/v1/leaderboard?select=route,racer_name,time_ms&place=eq.1&order=route.asc', { anon: !this.signedIn });
+      const rec = {}; for (const r of rows || []) if (!rec[r.route]) rec[r.route] = r;
+      this.records = rec;
+      if (this.signedIn) {
+        const mine = await this.fetch('/rest/v1/times?select=route,time_ms&user_id=eq.' + this.uid);
+        this.mine = {}; for (const r of mine || []) this.mine[r.route] = r.time_ms;
+      }
+      return true;
+    } catch (e) { this.recordsAt = 0; return false; }
+  },
+  async deleteAccount() {
+    await this.fetch('/rest/v1/rpc/delete_my_account', { method: 'POST', body: {} });
+    this.session = null; this.name = null; this.storeSession();
+    try { localStorage.removeItem(PENDING_KEY); } catch (e) {}
+  },
+};
+
+/* =====================================================================
    STREET KINGS : UI, INPUT, AUDIO, SAVE, MAIN LOOP
    ===================================================================== */
 const $ = id => document.getElementById(id);
@@ -3730,7 +3991,10 @@ const input = { nitro: false };
 const TIME_NAMES = { day: 'Daytime', dusk: 'Dusk', night: 'Night', late: '3am', dawn: 'Dawn' };
 
 /* ---------- save ---------- */
-function save() { try { if (S) localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) { /* storage unavailable */ } }
+function save(sync) {
+  try { if (S) localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch (e) { /* storage unavailable */ }
+  if (sync !== false) Online.queueSave();          // signed in: the career is backed up to your account too
+}
 function load() {
   try {
     const t = localStorage.getItem(SAVE_KEY);
@@ -3864,7 +4128,7 @@ const Sound = {
     const c = this.ctx, T = prof.T, N = 72, re = new Float32Array(N + 1), im = new Float32Array(N + 1), half = T.cyl / 2;
     for (let k = 1; k <= N; k++) {
       let a = k % T.cyl === 0 ? 1 : Number.isInteger(half) && k % half === 0 ? T.half : T.rough * (0.4 + hash(k, seed));
-      a *= Math.exp(-k / (T.cyl * T.bright * (prof.deep ? 0.8 : 1)));
+      a *= Math.exp(-k / (T.cyl * T.bright * 0.72 * (prof.deep ? 0.8 : 1)));
       const ph = hash(k, seed + 7) * Math.PI * 2;
       re[k] = a * Math.cos(ph); im[k] = a * Math.sin(ph);
     }
@@ -3882,12 +4146,16 @@ const Sound = {
     const lfoG = c.createGain(); lfoG.gain.value = 0;
     lfo.connect(lfoG); lfoG.connect(nam.gain);
     ns.connect(nbp); nbp.connect(nam); nam.connect(mix);
-    const sh = c.createWaveShaper(); sh.curve = this.curve(prof.drive); sh.oversample = '2x';
+    const sh = c.createWaveShaper(); sh.curve = this.curve(Math.max(1.1, prof.drive * 0.7)); sh.oversample = '2x';
     mix.connect(sh);
     const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = 1.1;
-    const body = c.createBiquadFilter(); body.type = 'peaking'; body.frequency.value = prof.deep ? 190 : 320; body.Q.value = 0.9; body.gain.value = 4;
+    const body = c.createBiquadFilter(); body.type = 'peaking'; body.frequency.value = prof.deep ? 150 : 210; body.Q.value = 0.8; body.gain.value = 6;
+    const fizz = c.createBiquadFilter(); fizz.type = 'highshelf'; fizz.frequency.value = 2400; fizz.gain.value = -9;
     const vol = c.createGain(); vol.gain.value = 0;
-    sh.connect(lp); lp.connect(body); body.connect(vol);
+    sh.connect(lp); lp.connect(body); body.connect(fizz); fizz.connect(vol);
+    // a soft low layer at half the firing rate gives the engine weight on headphones and laptops
+    const sub = src(c.createOscillator()); sub.type = 'triangle';
+    const subG = c.createGain(); subG.gain.value = 0.35; sub.connect(subG); subG.connect(vol);
     const pan = c.createStereoPanner ? c.createStereoPanner() : c.createGain();
     vol.connect(pan); pan.connect(this.master);
     let tw = null, tg = null;
@@ -3895,7 +4163,7 @@ const Sound = {
       tw = src(c.createOscillator()); tw.type = 'sine'; tg = c.createGain(); tg.gain.value = 0;
       tw.connect(tg); tg.connect(pan);
     }
-    Object.assign(V, { o1, o2, lfo, lfoG, nam, nbp, lp, vol, pan, tw, tg });
+    Object.assign(V, { o1, o2, lfo, lfoG, nam, nbp, lp, vol, pan, tw, tg, sub });
     const t0 = c.currentTime;
     for (const n of V.nodes) { if (n === ns) n.start(t0, Math.random() * 1.5); else n.start(t0); }
     return V;
@@ -3937,9 +4205,10 @@ const Sound = {
     const vtec = p.vtec && rpm > p.vtec ? 1.35 : 1;
     V.o1.frequency.setTargetAtTime(f, t, 0.02); V.o2.frequency.setTargetAtTime(f, t, 0.02);
     V.lfo.frequency.setTargetAtTime(fire, t, 0.02);
+    V.sub.frequency.setTargetAtTime(fire / 2, t, 0.02);
     V.nbp.frequency.setTargetAtTime(clamp(fire * 3.2, 250, 5200), t, 0.03);
-    V.lp.frequency.setTargetAtTime(clamp(240 + Math.pow(rf, 1.25) * 5400 * (0.4 + 0.6 * thr) * vtec, 160, 11000), t, 0.03);
-    const r = p.rasp * (0.15 + 0.85 * thr) * vtec * 0.3;
+    V.lp.frequency.setTargetAtTime(clamp(200 + Math.pow(rf, 1.3) * 2600 * (0.45 + 0.55 * thr) * vtec, 150, 4500), t, 0.03);
+    const r = p.rasp * (0.15 + 0.85 * thr) * vtec * 0.18;
     V.nam.gain.setTargetAtTime(r, t, 0.03); V.lfoG.gain.setTargetAtTime(r, t, 0.03);
     V.vol.gain.setTargetAtTime(gain * p.loud * (0.3 + 0.7 * thr) * (0.55 + 0.45 * rf), t, 0.025);
     if (V.pan.pan) V.pan.pan.setTargetAtTime(clamp(pan, -1, 1), t, 0.05);
@@ -4153,6 +4422,7 @@ function topBar() {
     <div class="stat"><small>Money</small><b class="money">${money(S.money)}</b></div>
     <div class="stat"><small>Reputation</small><b>${S.rep}</b></div>
     <div class="stat stat-car"><small>Race car</small><b style="font-size:15px">${carById(S.current).name}</b></div>
+    ${Online.on ? `<button class="bar-btn" type="button" data-act="board">Leaderboards</button>` : ''}
     <button class="bar-btn" type="button" data-act="sound">${Sound.on ? 'Sound on' : 'Sound off'}</button>
   </div>`;
 }
@@ -4185,6 +4455,7 @@ function goTitle() {
   $('controls').hidden = true; $('b-pause').hidden = true; document.body.classList.remove('racing');
   $('btn-continue').hidden = !S;
   $('confirm-new').hidden = true;
+  $('account-box').innerHTML = accountBox();
   showScreen('scr-title');
 }
 
@@ -4240,11 +4511,12 @@ function friendCards() {
   return FRIENDS.filter(id => specialUnlocked(S, id)).map(id => {
     const sp = SPECIALS[id], ch = CHARACTERS[sp.rival], beaten = S.specials && S.specials[id], fresh = !S.found || !S.found[id];
     return `<div class="offer friend ${fresh ? 'fresh' : ''}">
-      <div class="offer-top"><span class="chip diff">${fresh ? 'New challenger' : beaten ? 'Rematch' : 'Challenge'}</span><span class="chip">${TIME_NAMES[sp.time]}</span></div>
+      <div class="offer-top"><span class="chip diff">${fresh ? 'New challenger' : beaten ? 'Rematch' : 'Challenge'}</span><span class="chip">${TIME_NAMES[sp.time]}</span><span class="chip ai">AI driver</span></div>
       <div class="co-head"><canvas class="portrait sm" data-portrait="${sp.rival}" data-hidden="0" width="44" height="44"></canvas>
         <div><h4>${esc(ch.name)}</h4><p class="offer-opp">${esc(ch.car)}</p></div></div>
       <p class="offer-road">${esc(sp.area)} · ${esc(sp.road)}</p>
       <p class="offer-opp"><i>“${esc(ch.pre)}”</i></p>
+      ${recordLine('special:' + id, 'offer-rec')}
       <div class="offer-foot"><span class="prize">${money(beaten ? rematchPrize(S) : sp.reward)}</span>
         <button class="btn small primary" data-act="special" data-arg="${id}" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button></div>
     </div>`;
@@ -4337,6 +4609,7 @@ function goHub() {
         <div><dt>Reputation</dt><dd>+${ev.rep}</dd></div>
         <div><dt>Route</dt><dd>${(ev.dist / 1000).toFixed(1)} km <small>${TIME_NAMES[ev.time]}</small></dd></div>
       </dl>
+      ${recordLine('career:' + ev.rival, 'tip rec')}
       ${warn}
       <div class="actions">
         <button class="btn primary big" data-act="race" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button>
@@ -4368,6 +4641,7 @@ function goHub() {
     const names = fresh.map(id => CHARACTERS[SPECIALS[id].rival].name), who = names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] + ' have' : names[0] + ' has';
     setTimeout(() => toast(`${who} heard about you. Check the street races.`), 600);
   }
+  if (Online.on) Online.loadRecords().then(changed => { if (changed) refreshRecords(); });
 }
 
 /* ---------- garage ---------- */
@@ -4425,7 +4699,7 @@ function upgradesTab(own, car, st) {
       <canvas data-car="${car.id}" data-spin="1" width="300" height="170" class="spin" aria-label="Your car. Drag to turn it."></canvas>
       <div class="car-name"><h3>${car.name}</h3><span class="plate">${esc(lookOf(S, car.id).plate)}</span></div>
       ${specRows(st, own.damage)}
-      <p class="tip">Fully upgraded this car makes <b>${mx.bhp} bhp</b>. ${car.pot >= 0.9 ? 'Huge tuning potential.' : car.pot >= 0.75 ? 'Strong tuning potential.' : car.pot >= 0.55 ? 'Decent tuning potential.' : 'Limited tuning potential, so later stages add less.'}</p>
+      <p class="tip">Fully upgraded this car makes <b>${mx.bhp} bhp</b>. ${car.pot >= 0.9 ? 'Huge tuning potential.' : car.pot >= 0.75 ? 'Strong tuning potential.' : car.pot >= 0.55 ? 'Decent tuning potential.' : 'Not much tuning potential. Fine for the early races, but it runs out of steam later on.'}</p>
     </aside>
     <div class="list">${rows}${repairRow}</div>
   </div>`;
@@ -4619,6 +4893,7 @@ function showResults() {
     <div class="actions">${btns}</div>
     <div class="res-grid">
       <div><small>Your time</small><b>${res.how === 'finish' ? fmtTime(res.time) : '--'}</b></div>
+      ${ev.route && Online.on && res.how === 'finish' ? `<div class="lb-cell"><small>Leaderboard</small><b id="lb-line">${Online.signedIn ? 'Posting…' : '--'}</b></div>` : ''}
       ${ev.cp ? `<div><small>Checkpoints</small><b>${gates.hit}${gates.missed ? ' · 1 missed' : ' · all'}</b></div>` : `<div><small>Against ${esc(ev.oppName)}</small><b>${gapTxt}</b></div>
       <div><small>Checkpoints</small><b>${gates.hit}${gates.best > 1 ? ' · best x' + Math.min(4, gates.best) : ''}</b></div>`}
       <div><small>Crashes</small><b>${R.p.collisions}</b></div>
@@ -4628,6 +4903,7 @@ function showResults() {
     ${!res.won && own.damage >= 100 ? '<p class="tip bad">Your car is wrecked. Repair it in the garage before racing again.</p>' : ''}`;
   showScreen('scr-results');
   paintCanvases();
+  postTime(R);
 }
 
 /* ---------- racing ---------- */
@@ -4791,6 +5067,121 @@ document.getElementById('ui').addEventListener('input', e => {
   if (inp) { inp.focus(); try { inp.setSelectionRange(pos, pos); } catch (err) {} }
 });
 
+/* ---------- online: account box, racer name, leaderboards ---------- */
+const fmtMs = ms => fmtTime(ms / 1000);
+function accountBox() {
+  if (!Online.on) return '';
+  const privacy = `<a class="acc-link" href="privacy.html" target="_blank" rel="noopener">Privacy</a>`;
+  if (!Online.ready) return `<div class="account"><p class="acc-note">Connecting…</p></div>`;
+  if (!Online.signedIn) return `<div class="account">
+      <div class="row"><button class="btn gbtn" data-act="signin"><span>Sign in with Google</span></button>
+      <button class="btn ghost small" data-act="board"><span>Leaderboards</span></button></div>
+      <p class="acc-note">Sign in to post your times and keep your career on any phone or laptop. You can still play without it. ${privacy}</p>
+    </div>`;
+  return `<div class="account signed">
+      <p class="acc-note">Signed in as <b>${esc(Online.name || 'no racer name yet')}</b> · ${privacy}</p>
+      <div class="row">
+        <button class="btn ghost small" data-act="board"><span>Leaderboards</span></button>
+        <button class="btn ghost small" data-act="rename"><span>${Online.name ? 'Change name' : 'Pick a name'}</span></button>
+        <button class="btn ghost small" data-act="signout"><span>Sign out</span></button>
+        <button class="btn ghost small" data-act="delacc"><span>Delete account</span></button>
+      </div>
+      <div class="confirm" id="confirm-del" hidden>
+        <p>This deletes your racer name, your times and the career saved on your account. The career on this device stays.</p>
+        <div class="row"><button class="btn danger small" data-act="delyes"><span>Delete my account</span></button><button class="btn ghost small" data-act="delno"><span>Keep it</span></button></div>
+      </div>
+    </div>`;
+}
+function refreshOnlineUi() {
+  if (!$('scr-title').hidden) { $('account-box').innerHTML = accountBox(); $('btn-continue').hidden = !S; }
+  if (!$('scr-hub').hidden && mode === 'menu' && S) goHub();
+  if (!$('scr-board').hidden) goBoard();
+  if (Online.loadedCloud) { Online.loadedCloud = false; toast('Loaded your career from your account.'); }
+}
+/* the real record on a route, and your own best */
+function recordLine(route, cls) {
+  if (!Online.on) return '';
+  return `<p class="${cls}" data-rec="${route}">${recordText(route)}</p>`;
+}
+function recordText(route) {
+  const rec = Online.records[route], mine = Online.mine[route];
+  if (!rec && !mine) return 'Leaderboard: no times yet. Be the first.';
+  return `Record ${rec ? `<b>${fmtMs(rec.time_ms)}</b> by ${esc(rec.racer_name)}` : '--'}${mine ? ` · your best ${fmtMs(mine)}` : ''}`;
+}
+function refreshRecords() { for (const el of document.querySelectorAll('[data-rec]')) el.innerHTML = recordText(el.dataset.rec); }
+/* posts the time from a finished race and shows where it landed */
+function postTime(race) {
+  if (!Online.on || !race || race.posted || !race.ev.route || !race.result || race.result.how !== 'finish') return;
+  race.posted = true;
+  const el = () => $('lb-line'), ms = Math.round(race.result.time * 1000), car = carById(race.carId).name;
+  if (!Online.signedIn) {
+    const l = el(); if (l) l.innerHTML = `<button class="btn small gbtn" data-act="signin" data-arg="post"><span>Sign in to post</span></button>`;
+    return;
+  }
+  Online.submit(race.ev.route, ms, car).then(r => {
+    const l = el(); if (!l) return;
+    if (r.noName) l.innerHTML = `<button class="btn small" data-act="rename"><span>Pick a name to post</span></button>`;
+    else if (r.error) l.textContent = r.offline ? 'Offline, will post later' : 'Could not post';
+    else l.innerHTML = `${ordinal(r.place)} of ${r.total}${r.improved ? ' · new best' : ` · best ${fmtMs(r.best_ms)}`}`;
+  });
+}
+const ordinal = n => n + (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
+let nameBack = 'title';
+function showNameScreen() {
+  nameBack = !$('scr-hub').hidden || (S && $('scr-title').hidden) ? 'hub' : 'title';
+  $('name-body').innerHTML = `
+    <p class="kicker">Leaderboards</p>
+    <h2 class="h2">${Online.name ? 'Change your racer name' : 'Pick your racer name'}</h2>
+    <p class="lede">This is the name everyone sees next to your times. Your email is never shown.</p>
+    <input id="name-input" class="name-input" maxlength="16" value="${esc(Online.name || '')}" placeholder="Racer name" autocomplete="off" spellcheck="false" aria-label="Racer name">
+    <p class="tip" id="name-msg">3 to 16 characters. Letters, numbers, spaces, dots and dashes.</p>
+    <div class="actions"><button class="btn primary" data-act="namesave"><span>Save name</span></button><button class="btn ghost" data-act="nameback"><span>${Online.name ? 'Cancel' : 'Later'}</span></button></div>`;
+  showScreen('scr-name');
+  setTimeout(() => { const i = $('name-input'); if (i) i.focus(); }, 60);
+}
+async function saveName() {
+  const i = $('name-input'), m = $('name-msg'); if (!i) return;
+  m.textContent = 'Saving…'; m.classList.remove('bad');
+  const err = await Online.setName(i.value);
+  if (err) { m.textContent = err; m.classList.add('bad'); return; }
+  toast('You are ' + Online.name + ' on the leaderboards.');
+  if (nameBack === 'hub' && S) goHub(); else goTitle();
+}
+let boardRoute = null, boardSeq = 0;
+function boardRoutes() {
+  const list = EVENTS.map(e => 'career:' + e.rival);
+  if (S) for (const id of SPECIAL_ORDER) if (specialUnlocked(S, id) || (S.specials && S.specials[id])) list.push('special:' + id);
+  return list;
+}
+async function goBoard(route) {
+  mode = 'menu';
+  const routes = boardRoutes();
+  boardRoute = route && routes.includes(route) ? route : boardRoute && routes.includes(boardRoute) ? boardRoute : S ? 'career:' + EVENTS[Math.min(nextEventIndex(S), EVENTS.length - 1)].rival : routes[0];
+  const seq = ++boardSeq;
+  const opt = r => `<option value="${r}" ${r === boardRoute ? 'selected' : ''}>${esc(Online.routeName(r))}</option>`;
+  $('board-body').innerHTML = `${S ? topBar() : ''}
+    <p class="kicker">Leaderboards · real players' best times</p>
+    <h2 class="h2">${esc(Online.routeName(boardRoute))}</h2>
+    <label class="board-pick"><span>Route</span><select id="board-route">
+      <optgroup label="Career">${routes.filter(r => r.startsWith('career:')).map(opt).join('')}</optgroup>
+      ${routes.some(r => r.startsWith('special:')) ? `<optgroup label="Friends and invitations">${routes.filter(r => r.startsWith('special:')).map(opt).join('')}</optgroup>` : ''}
+    </select></label>
+    <p class="tip">Everyone gets the same traffic on a route, so the times are fair. Only finished races count, in any car.</p>
+    <div id="board-table" class="board"><p class="tip">Loading…</p></div>
+    <div class="actions">${Online.signedIn ? '' : `<button class="btn gbtn" data-act="signin"><span>Sign in with Google to post times</span></button>`}
+      <button class="btn" data-act="${S ? 'hub' : 'title'}"><span>Back</span></button></div>`;
+  showScreen('scr-board');
+  let rows;
+  try { rows = await Online.board(boardRoute); } catch (e) { if (seq === boardSeq) $('board-table').innerHTML = `<p class="tip bad">Could not load the leaderboard. Check your connection.</p>`; return; }
+  if (seq !== boardSeq || $('scr-board').hidden) return;
+  if (!rows.length) { $('board-table').innerHTML = `<p class="tip">No times yet on this route. Be the first.</p>`; return; }
+  $('board-table').innerHTML = `<table><thead><tr><th>#</th><th>Racer</th><th>Car</th><th>Time</th></tr></thead><tbody>
+    ${rows.map(r => `<tr class="${r.user_id === Online.uid ? 'me' : ''}"><td>${r.place}</td><td>${esc(r.racer_name)}${r.user_id === Online.uid ? ' <small>you</small>' : ''}</td><td>${esc(r.car)}</td><td>${fmtMs(r.time_ms)}</td></tr>`).join('')}
+    </tbody></table>`;
+}
+document.getElementById('ui').addEventListener('change', e => { if (e.target.id === 'board-route') goBoard(e.target.value); });
+document.getElementById('ui').addEventListener('keydown', e => { if (e.target.id === 'name-input' && e.key === 'Enter') { e.preventDefault(); saveName(); } });
+
 /* all menu buttons */
 document.getElementById('ui').addEventListener('click', e => {
   const b = e.target.closest('[data-act]');
@@ -4802,7 +5193,7 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'sound': Sound.setOn(!Sound.on); break;
     case 'continue': if (S) goHub(); break;
     case 'new': if (S) { $('confirm-new').hidden = false; } else goSelect(); break;
-    case 'newyes': S = null; try { localStorage.removeItem(SAVE_KEY); localStorage.removeItem(OLD_SAVE_KEY); } catch (err) {} goSelect(); break;
+    case 'newyes': Online.flushSave(); S = null; try { localStorage.removeItem(SAVE_KEY); localStorage.removeItem(OLD_SAVE_KEY); } catch (err) {} goSelect(); break;
     case 'newno': $('confirm-new').hidden = true; break;
     case 'help': showScreen('scr-help'); break;
     case 'title': goTitle(); break;
@@ -4814,6 +5205,15 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'special': if (SPECIALS[arg] && specialUnlocked(S, arg)) { S.found = S.found || {}; S.found[arg] = true; startRace({ kind: 'special', id: arg }); } break;
     case 'retry': if (R && R.ev.kind === 'special') startRace({ kind: 'special', id: R.ev.id }); else if (R && R.ev.kind === 'career') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.careerDone) goHub(); else startRace({ kind: 'career', index: i, exhibition: ex }); } else goHub(); break;
     case 'hub': goHub(); break;
+    case 'signin': if (b.dataset.arg === 'post' && R && R.ev.route && R.result && R.result.how === 'finish') Online.addPending({ route: R.ev.route, ms: Math.round(R.result.time * 1000), car: carById(R.carId).name }); Online.signIn(); break;
+    case 'signout': Online.signOut(); break;
+    case 'rename': showNameScreen(); break;
+    case 'namesave': saveName(); break;
+    case 'nameback': if (nameBack === 'hub' && S) goHub(); else goTitle(); break;
+    case 'board': goBoard(arg); break;
+    case 'delacc': { const c = $('confirm-del'); if (c) c.hidden = false; break; }
+    case 'delno': { const c = $('confirm-del'); if (c) c.hidden = true; break; }
+    case 'delyes': Online.deleteAccount().then(() => { toast('Your account is deleted. Your career on this device is still here.'); goTitle(); }).catch(() => toast('Could not delete the account. Check your connection and try again.', true)); break;
     case 'garage': pendingSell = null; draft = null; plateMsg = ''; goGarage('upgrades'); break;
     case 'ladder': goLadder(); break;
     case 'tab': pendingSell = null; goGarage(arg); break;
@@ -4897,6 +5297,8 @@ try { Sound.on = localStorage.getItem(SOUND_KEY) !== '0'; } catch (e) {}
 $('b-sound').textContent = Sound.on ? 'Sound on' : 'Sound off';
 goTitle();
 requestAnimationFrame(frame);
+Online.init();
+document.addEventListener('visibilitychange', () => { if (document.hidden) Online.flushSave(); });
 
 /* test hooks: lets automated checks drive the game */
 window.StreetKings = {
@@ -4904,7 +5306,7 @@ window.StreetKings = {
   steer, startRace, goHub, goGarage, goLadder, setDemo, save, preview: renderCarPreview, portrait: drawPortrait, Sound,
   get intro() { return intro; }, skipIntro: endIntro,
   step(sec, bot) { const h = 1 / 120; let n = Math.round(sec / h); while (n-- > 0 && R && mode !== 'menu') { if (bot) bot(R, input); updateRace(R, h, input); processEvents(); } },
-  core: { rematchPrize, specialUnlocked, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
+  Online, core: { rematchPrize, specialUnlocked, makeWave, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
     migrateSave, buyLook, lookCost, lookOf, checkPlate, EVENTS, CARS, UPGRADES, CHARACTERS, BODY, Z_PLAYER, P_LEN, SPAWN_D, NITRO_MULT },
 };
 
