@@ -684,6 +684,29 @@ const CARS = [
   { id: 'mcl720', name: 'McLaren 720S', price: 45000, bhp: 710, handling: 9.3, rep: 55, pot: 1.35, model: 'mcl720', chapter: 'essex',
     blurb: 'Carbon tub, twin turbo V8 and the fastest thing in the showroom. This is the car for the bridge.',
     look: { paint: '#f07a14', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'none', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ff8c1a', smoked: false, plate: 'M720 SSS' } },
+  // Mauritius: island cars only. You start again in your cousin's Picanto; each island win opens the next car.
+  { id: 'picanto', name: 'Kia Picanto GT-Line', price: 0, bhp: 99, handling: 7.8, rep: 0, pot: 0.6, s1: 0.7, model: 'picanto', chapter: 'mu', muUnlock: 0,
+    blurb: 'Your cousin\'s Picanto. A 1.0 turbo triple that weighs next to nothing. Half the island started racing in one of these.',
+    look: { paint: '#c9252c', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: '2931 AP 19' } },
+  { id: 'hilux', name: 'Toyota Hilux GR Sport', price: 9000, bhp: 201, handling: 5.6, rep: 0, pot: 0.75, s1: 0.9, model: 'hilux', chapter: 'mu', muUnlock: 1,
+    blurb: 'The island\'s favourite truck. A big turbo diesel with torque everywhere, and it will go past you on the motorway.',
+    look: { paint: '#eeeeea', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'none', kit: 0, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: '1207 MR 22' } },
+  { id: 'raptor', name: 'Ford Ranger Raptor', price: 16000, bhp: 392, handling: 6.2, rep: 0, pot: 0.8, model: 'raptor', chapter: 'mu', muUnlock: 2,
+    blurb: 'Twin turbo V6, long travel suspension and a lot of attitude. The fastest truck on the island by a distance.',
+    look: { paint: '#e8761e', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'none', kit: 0, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: '640 JN 23' } },
+  { id: 'evo9', name: 'Mitsubishi Lancer Evo IX', price: 20000, bhp: 286, handling: 8.7, rep: 0, pot: 1.3, model: 'evo', chapter: 'mu', muUnlock: 3,
+    blurb: 'Four wheel drive, a turbo that loves boost and a rally car\'s grip. Build it properly and it takes on cars with twice the power.',
+    look: { paint: '#c9252c', finish: 'gloss', rims: 'split', rimColor: '#c3c8cc', tint: 2, spoiler: 'big', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: '9 EVO 06' } },
+  { id: 'a110', name: 'Alpine A110 S', price: 28000, bhp: 296, handling: 9.5, rep: 0, pot: 0.95, model: 'a110', chapter: 'mu', muUnlock: 4,
+    blurb: 'Mid engine, all aluminium and barely over a tonne. It changes lanes like nothing else, and on island roads that matters.',
+    look: { paint: '#1f5fb8', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'none', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: '110 SE 24' } },
+  { id: 'm3g80', name: 'BMW M3 Competition (G80)', price: 38000, bhp: 503, handling: 8.5, rep: 0, pot: 1.2, model: 'm3g80', chapter: 'mu', muUnlock: 5,
+    blurb: 'Twin turbo straight six, four wheel drive and that grille. The quickest thing you can buy on the island.',
+    look: { paint: '#1d6b4a', finish: 'metallic', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: '3 M3 25' } },
+  // your GT-R, shipped over and rebuilt for one race: comes with every upgrade fitted and aero nobody else can buy
+  { id: 'gtrx', name: 'Nissan GT-R (Island build)', price: 40000, bhp: 1050, handling: 9.9, rep: 0, pot: 1.4, model: 'gtr', chapter: 'mu', muUnlock: 7, built: 3,
+    blurb: 'Your GT-R, shipped to Port Louis and rebuilt in Plaine Lauzun to beat Le Boss. Over a thousand horsepower, a wing like a table, canards, a splitter you could stand on and arches out to here.',
+    look: { paint: '#f2f2ee', finish: 'gloss', rims: 'fan', rimColor: '#8c5f32', tint: 3, spoiler: 'ta', kit: 2, stance: 2, stripes: 'mu', stripeColor: '#c8161d', glow: '#ff3355', smoked: false, plate: 'GTR 230' } },
   // cars you can only win in a pink slip race. They come the way their owner raced them.
   { id: 'golfr', name: 'VW Golf R', price: 9000, bhp: 320, handling: 8.2, rep: 999, pot: 0.6, model: 'golf', slip: 'tommy', slipUp: 2,
     look: { paint: '#1e4fa8', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#4aa8ff', smoked: false, plate: 'TH19 GTR' } },
@@ -1014,15 +1037,64 @@ const CHARACTERS = {
     pre: 'Pink does not mean slow. Keep up.',
     youWin: 'Fair. The Duke is waiting at the bridge. Good luck, you will need it.',
     youLose: 'Told you. Pink does not mean slow.',
-    // her own picture; the drawn face underneath matches it (black scarf, warm tan skin, dark red lips)
-    face: { photo: 'saleenah', skin: '#d19a6e', hair: 'hijab', hairCol: '#151416', underscarf: '#0e0d0f',
-      browCol: '#1a1210', browW: 1.8, lashes: true, blush: true, lips: '#7e3128', top: '#151416', bg: '#c89a68' } },
+    // drawn from the picture she sent: plain black scarf, warm tan skin, big brown eyes, dark red lips, a sunlit brick wall
+    face: { skin: '#d59d70', hair: 'hijab', scarf: 'thin', hairCol: '#171618', eyes: 'big', iris: '#5b3a22', browCol: '#1a110c', browW: 1.9, lashes: true, blush: true,
+      lips: '#8a3a2e', lipsFull: true, top: '#2b2a2f', bg: '#e2b27c', bgBrick: true } },
   duke: { name: 'The Duke', from: 'Brentwood', car: 'Lamborghini Huracán', real: 'Vince Harlow',
     bio: 'Ran Essex before anyone else had a car worth racing. Lime green Huracán, sunglasses at midnight, and nobody has beaten him over the bridge.',
     pre: 'London sent their King? Cute.',
     youWin: 'Thirty years I have owned this bridge. It is yours now. Look after it.',
     youLose: 'Back over the river, son.',
     face: { skin: '#e8bf9f', hair: 'slick', hairCol: '#2e2e30', facial: 'stubble', facialCol: '#555', shades: 'wrap', mouth: 'smirk', top: '#101012', chain: '#e2b650', bg: '#4f8f1f' } },
+  // Mauritius
+  kevin: { name: 'Kevin Lam', from: 'Grand Baie', car: 'Kia Picanto GT-Line (tuned)',
+    bio: 'Runs the family snack bar on the coast road and races it after closing. His Picanto has more boost than sense.',
+    pre: 'Ki manyer, London? The coast road is mine. Try to keep up.',
+    youWin: 'Not bad for a tourist. Nawaz will want you on the motorway in Port Louis.',
+    youLose: 'The island does not care about London. Go again.',
+    face: { skin: '#e6c09a', hair: 'fade', hairCol: '#141210', mouth: 'smirk', top: '#f2f2ee', chain: '#c9ccd0', bg: '#16a3b3' } },
+  nawaz: { name: 'Nawaz Joomun', from: 'Plaine Verte, Port Louis', car: 'Toyota Hilux GR Sport',
+    bio: 'Delivers to the Central Market before dawn and owns the motorway through Port Louis after dark. The Hilux is a truck. It is also quick.',
+    pre: 'Port Louis is my city. Try not to get lost.',
+    youWin: 'Respect. Cindy is waiting on the Ring Road, and she does not lose.',
+    youLose: 'Stay in Grand Baie, my friend.',
+    face: { skin: '#ad7650', hair: 'crop', hairCol: '#15100d', facial: 'fullbeard', facialCol: '#15100d', hat: 'cap', hatCol: '#f2f2ee', top: '#1d3a5c', bg: '#2f6f4f' } },
+  cindy: { name: 'Cindy Laval', from: 'Pailles', car: 'Ford Ranger Raptor',
+    bio: 'Works at a garage in Pailles and fixes whatever she breaks. Her orange Raptor sits a foot higher than everything else on the Ring Road.',
+    pre: 'You will see me in your mirrors. Then you will not.',
+    youWin: 'Fair. Vikash in Ebène thinks he is untouchable. Show him.',
+    youLose: 'Too slow for the Ring Road.',
+    face: { skin: '#7a4a31', hair: 'braids', hairCol: '#141010', earrings: '#e2b650', lashes: true, lips: '#7a3a34', top: '#e8761e', bg: '#c45a14' } },
+  vikash: { name: 'Vikash Seegoolam', from: 'Ebène', car: 'BMW M3 (E92)',
+    bio: 'Software engineer in a Cybercity tower by day. At night the V8 M3 comes out and the motorway past Ebène goes quiet.',
+    pre: 'Eight thousand rpm. You will hear me through the towers.',
+    youWin: 'Alright. Chloé is waiting on the hill at Verdun, and she is quick.',
+    youLose: 'Back to Pailles.',
+    face: { skin: '#a8724c', hair: 'slick', hairCol: '#120e0b', facial: 'stubble', facialCol: '#120e0b', glasses: 'rect', top: '#15171b', bg: '#3a4a66' } },
+  chloe: { name: 'Chloé Maurel', from: 'Moka', car: 'Alpine A110',
+    bio: 'Grew up on the hill roads above Moka. The Alpine is light, blue and quicker up the Verdun hill than cars with twice the power.',
+    pre: 'The hill is mine. Power will not help you here.',
+    youWin: 'Well driven. The airport road is next. Kavish flies.',
+    youLose: 'Come back when you can drive a hill.',
+    face: { skin: '#f0cdb0', hair: 'bun', hairCol: '#a8783e', browCol: '#6a4a2a', lashes: true, lips: '#b8626c', earrings: '#e2b650', top: '#1f5fb8', bg: '#1c4f96' } },
+  kavish: { name: 'Kavish Moonsamy', from: 'Mahébourg', car: 'Subaru WRX STI',
+    bio: 'Works nights at the airport and races the M1 once the last flight is in. The Subaru has been rebuilt three times and it still sounds like a rally car.',
+    pre: 'Last flight is in. Road is empty. Allez.',
+    youWin: 'You are the real thing. Rouz is waiting up in Chamarel. Good luck.',
+    youLose: 'Missed your flight.',
+    face: { skin: '#6a432d', hair: 'buzz', hairCol: '#0f0c0a', facial: 'goatee', facialCol: '#0f0c0a', mouth: 'grin', top: '#1f4fb5', bg: '#27408a' } },
+  rouz: { name: 'Yannick "Rouz" Casimir', from: 'Chamarel', car: 'Mitsubishi Lancer Evo IX',
+    bio: 'Everyone on the island knows the red Evo. Rouz built it himself in a shed above the waterfall, and nobody has beaten him on the Chamarel road.',
+    pre: 'Red Evo, mountain road. You know how this ends.',
+    youWin: 'Nobody has done that. Le Boss will have heard by tonight.',
+    youLose: 'The mountain is mine.',
+    face: { skin: '#5c3a26', hair: 'curly', hairCol: '#120d0a', facial: 'shortbeard', facialCol: '#120d0a', top: '#c9252c', chain: '#e2b650', bg: '#8f1c1c' } },
+  boss: { name: 'Le Boss', from: 'Le Morne', car: 'BMW M3 Competition (G80), 1000 bhp', real: 'Raj Ramdin',
+    bio: 'Nobody on the island has beaten him in ten years. A green G80 M3 built to a thousand horsepower, and he only races at sunset under Le Morne.',
+    pre: 'You came a long way to lose.',
+    youWin: 'Ten years and nobody. The island is yours now. Look after it.',
+    youLose: 'Go home, London.',
+    face: { skin: '#9a6a48', hair: 'slick', hairCol: '#2a2a2c', facial: 'stubble', facialCol: '#555', shades: 'wrap', mouth: 'smirk', top: '#101012', chain: '#e2b650', bg: '#1d6b4a' } },
   // Adam, owner of Ride3
   ride3: { name: 'Adam', from: 'Ride3', car: 'Kawasaki Ninja H2R',
     bio: 'Owner of Ride3 and first out on every ride. His H2R is supercharged, over 300 horsepower and barely 200 kilos. Nobody on four wheels has beaten him yet.',
@@ -1233,17 +1305,96 @@ function slipReady(S, rival) {
   return i >= 0 && !!(S.essex && S.essex.completed[i]) && !!slipCarFor(rival) && !S.owned[slipCarFor(rival).id];
 }
 
+/* ---------- Mauritius: opens once Essex is done. Island cars only, and island roads are narrow:
+   one lane each way on the coast and in the mountains, two lanes each way on the motorways. ---------- */
+const MU = [
+  { title: 'LA CÔTE', chapter: 'Mauritius', rival: 'kevin', oppBhp: 150, reward: 5000, rep: 2, dist: 5200, d: 0.2,
+    area: 'Grand Baie', road: 'Royal Road along the bay', time: 'day', env: 'lagoon', twoWay: true, sky: ['coindemire', 'islets'], map: [57.583, -20.012],
+    signs: [['borough', 'Grand Baie'], ['green', 'B13', 'Pereybère', 'Cap Malheureux'], ['green', 'M2', 'Port Louis', 'Pamplemousses'], ['borough', 'District of Rivière du Rempart']],
+    intro: 'Your cousin has lent you his Picanto, and half of Grand Baie has come out to see what London looks like. One lane each way along the bay, pirogues out on the lagoon, and Kevin Lam in a Picanto with far too much boost.',
+    win: 'Grand Baie is talking about you. Nawaz wants you on the motorway through Port Louis.', oppLook: { engine: 'picanto', model: 'picanto', paint: '#f2f2ee', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', stance: 2, plate: '77 KL 21' },
+    diff: { skill: 0.98, inc: [10, 14] } },
+  { title: 'THE CAPITAL', chapter: 'Mauritius', rival: 'nawaz', oppBhp: 260, reward: 6000, rep: 2, dist: 5600, d: 0.3,
+    area: 'Port Louis', road: 'M1 Motorway past the harbour', time: 'night', env: 'harbour', sky: ['pouce', 'signal', 'citadel', 'cranes'], map: [57.502, -20.16],
+    signs: [['green', 'M1', 'Plaisance', 'Curepipe'], ['borough', 'City of Port Louis'], ['green', 'M2', 'Grand Baie', 'Pamplemousses'], ['green', 'A1', 'Caudan', 'Place d\'Armes']],
+    intro: 'After midnight the motorway through Port Louis empties out: the harbour cranes on one side, the old town and Le Pouce on the other. Nawaz Joomun runs it in a white Hilux, and it is quicker than it has any right to be.',
+    win: 'Port Louis knows your name. Cindy is waiting on the Ring Road.', oppLook: { engine: 'hilux', model: 'hilux', paint: '#eeeeea', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 3, plate: '4521 JN 18' },
+    diff: { skill: 0.98, inc: [11, 15] } },
+  { title: 'LA RING ROAD', chapter: 'Mauritius', rival: 'cindy', oppBhp: 420, reward: 7000, rep: 3, dist: 6000, d: 0.4,
+    area: 'Pailles', road: 'Ring Road, Pailles to Terre Rouge', time: 'dusk', env: 'ringroad', lanes: 2, hill: [1500, 2300, 3000, 3900, 24], sky: ['pouce', 'pieterboth', 'moka'], map: [57.49, -20.19],
+    signs: [['green', 'M1', 'Port Louis', 'Pailles'], ['borough', 'District of Moka'], ['green', 'M3', 'Terre Rouge', 'Grand Baie'], ['green', 'A1', 'Pailles', 'Soreze']],
+    intro: 'Two lanes each way cut into the hills above Port Louis, bridges over the valleys and the city lighting up below. Cindy Laval sits a foot above everyone in her orange Raptor. Two lanes means nowhere to hide.',
+    win: 'The Ring Road is yours. Vikash is waiting past Ebène.', oppLook: { engine: 'raptor', model: 'raptor', paint: '#e8761e', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, plate: '808 CL 21' },
+    diff: { skill: 0.98, inc: [12, 16] } },
+  { title: 'CYBERCITY', chapter: 'Mauritius', rival: 'vikash', oppBhp: 480, reward: 8500, rep: 3, dist: 6400, d: 0.5,
+    area: 'Ebène', road: 'M1 Motorway past Ebène Cybercity', time: 'late', env: 'cyber', lanes: 2, sky: ['cybercity', 'trois'], map: [57.49, -20.245],
+    signs: [['green', 'M1', 'Curepipe', 'Plaisance'], ['borough', 'Ebène Cybercity'], ['green', 'M1', 'Port Louis', 'Réduit'], ['green', 'A7', 'Rose Hill', 'Quatre Bornes']],
+    intro: 'Glass towers lit up all night and two lanes of motorway running between them. Vikash Seegoolam writes code in one of those towers, then takes his V8 M3 out when the traffic dies.',
+    win: 'Ebène went quiet. Chloé is waiting on the hill at Verdun.', oppLook: { engine: 'm3', model: 'm3', paint: '#101113', finish: 'metallic', rims: 'split', rimColor: '#2a2d31', tint: 3, stance: 1, plate: '8 VS 12' },
+    diff: { skill: 0.98, inc: [13, 17] } },
+  { title: 'MONSTER HILL', chapter: 'Mauritius', rival: 'chloe', oppBhp: 440, reward: 10000, rep: 4, dist: 6600, d: 0.55,
+    area: 'Verdun', road: 'M3 link road, Terre Rouge to Verdun', time: 'day', env: 'cane', lanes: 2, hill: [1100, 2700, 3300, 5000, 64], sky: ['pieterboth', 'moka', 'pouce'], map: [57.56, -20.13],
+    signs: [['green', 'M3', 'Verdun', 'Trianon'], ['borough', 'District of Moka'], ['green', 'M3', 'Terre Rouge', 'Port Louis'], ['green', 'B49', 'Verdun', 'Montagne Blanche']],
+    intro: 'The link road climbs through the cane fields to Verdun and drops back down with the whole north of the island below you, all the way to the sea. Chloé Maurel says power does not matter on the hill. Two lanes, a big climb and a long way down.',
+    win: 'The hill is yours. Kavish is waiting on the airport road.', oppLook: { engine: 'a110', model: 'a110', paint: '#1f5fb8', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, stance: 2, plate: '110 CM 22' },
+    diff: { skill: 0.98, inc: [13, 17] } },
+  { title: 'LAST FLIGHT', chapter: 'Mauritius', rival: 'kavish', oppBhp: 520, reward: 12000, rep: 4, dist: 6800, d: 0.62,
+    area: 'Plaisance', road: 'M1 Motorway to the airport', time: 'night', env: 'airport', lanes: 2, sky: ['lionmtn', 'tower'], map: [57.67, -20.43],
+    signs: [['green', 'M1', 'SSR International Airport', 'Plaisance'], ['borough', 'District of Grand Port'], ['green', 'A10', 'Mahébourg', 'Blue Bay'], ['green', 'M1', 'Curepipe', 'Port Louis']],
+    intro: 'The last flight of the night comes in low over the road with its lights on. Kavish Moonsamy races the M1 once it has landed, in a Subaru that has been rebuilt three times and still sounds like a rally car.',
+    win: 'The airport road is yours. Rouz is waiting up in Chamarel.', oppLook: { engine: 'wrx', model: 'wrx', paint: '#1f4fb5', finish: 'metallic', rims: 'split', rimColor: '#c9a23a', tint: 2, spoiler: 'big', plate: '22 KM 15' },
+    diff: { skill: 0.98, inc: [14, 18] } },
+  { title: 'LA MONTAGNE', chapter: 'Mauritius', rival: 'rouz', oppBhp: 640, reward: 14000, rep: 5, dist: 6400, d: 0.72, curvy: 1.8,
+    area: 'Chamarel', road: 'Chamarel road, down to Case Noyale', time: 'day', env: 'gorge', twoWay: true, hill: [700, 1900, 2500, 4600, 42], sky: ['lemorne', 'rempart'], map: [57.39, -20.43],
+    signs: [['borough', 'Chamarel'], ['green', 'B103', 'Case Noyale', 'Le Morne'], ['borough', 'District of Rivière Noire'], ['green', 'B103', 'Chamarel', 'Seven Coloured Earth']],
+    intro: 'The road down from Chamarel is one lane each way through the forest, with red earth in the banks and Le Morne out on the coast below. Rouz and his red Evo have never lost on it. Mind the tourists coming up.',
+    win: 'The mountain is yours. Le Boss has sent word: Le Morne, at sunset.', oppLook: { engine: 'evo9', model: 'evo', paint: '#c9252c', finish: 'gloss', rims: 'split', rimColor: '#c3c8cc', tint: 2, spoiler: 'big', stance: 1, plate: 'ROUZ 9' },
+    diff: { skill: 0.98, inc: [15, 19] } },
+  { title: 'LE MORNE', chapter: 'Mauritius', rival: 'boss', oppBhp: 1000, reward: 25000, rep: 8, dist: 7400, d: 0.8,
+    area: 'Le Morne', road: 'Coast road under Le Morne Brabant', time: 'dusk', env: 'morne', twoWay: true, sky: ['lemorne'], map: [57.33, -20.46],
+    signs: [['borough', 'Le Morne'], ['green', 'B9', 'La Gaulette', 'Baie du Cap'], ['borough', 'District of Rivière Noire'], ['green', 'B9', 'Le Morne', 'Black River']],
+    intro: 'Sunset under Le Morne Brabant. One lane each way along the lagoon, kite surfers packing up on the beach, and Le Boss waiting in a green M3 built to a thousand horsepower. Nothing on the island can beat it. That is why your GT-R is here.',
+    win: 'The whole island saw it. Le Boss handed you the keys to Le Morne.', oppLook: { engine: 'm3g80', model: 'm3g80', paint: '#1d6b4a', finish: 'metallic', rims: 'split', rimColor: '#1c1e21', tint: 3, spoiler: 'gt', kit: 1, stance: 2, plate: 'BOSS 1' },
+    diff: { skill: 1.0, inc: [18, 24] } },
+];
+const muOpen = S => !!(S && S.essex && S.essex.done);
+const muWins = S => ((S && S.mu && S.mu.completed) || []).filter(Boolean).length;
+const nextMuIndex = S => { const c = (S.mu && S.mu.completed) || []; const i = MU.findIndex((e, k) => !c[k]); return i < 0 ? MU.length : i; };
+const islandCar = id => { const c = carById(id); return !!(c && c.chapter === 'mu'); };
+const areaList = ch => ch === 'essex' ? ESSEX : ch === 'mu' ? MU : EVENTS;
+/* the first time the island opens: your cousin lends you his Picanto */
+function openIsland(S) {
+  if (!S.mu) S.mu = { completed: MU.map(() => false), done: false, cur: 'picanto', home: null };
+  if (!S.owned.picanto) S.owned.picanto = { up: {}, damage: 0, spent: 0, look: stockLook('picanto') };
+  return S.mu;
+}
+/* island cars stay on the island: switching between London/Essex and Mauritius swaps which car you race */
+function goIsland(S, on) {
+  if (!muOpen(S)) return;
+  openIsland(S);
+  if (on && !islandCar(S.current)) { S.mu.home = S.current; S.current = S.owned[S.mu.cur] ? S.mu.cur : 'picanto'; }
+  else if (!on && islandCar(S.current)) {
+    S.mu.cur = S.current;
+    S.current = S.owned[S.mu.home] && !islandCar(S.mu.home) ? S.mu.home : Object.keys(S.owned).find(id => !islandCar(id)) || S.current;
+  }
+}
+
 /* ---------- daily challenge: one route, one car and one lot of traffic for everyone, new every day (UK date) ---------- */
 const DAILY_CARS = [['civic', 3], ['bmw', 3], ['wrx', 2], ['supra', 2], ['gtr', 1], ['gtr', 3], ['golfr', 2], ['a45', 2], ['gt3', 2], ['rs6', 2], ['m4', 3], ['mcl720', 1], ['huracan', 2]];
 function dailyDate(d) {
   try { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d || new Date()); }
   catch (e) { return (d || new Date()).toISOString().slice(0, 10); }
 }
+const DAILY_MU_FROM = '2026-09-28', DAILY_MU_CARS = [['picanto', 3], ['hilux', 3], ['evo9', 2], ['a110', 2], ['m3g80', 1]];
 function dailyFor(date) {
-  const r = seededRng(hashStr('daily|' + date)), pool = EVENTS.concat(ESSEX);
-  const area = Math.floor(r() * pool.length), pickCar = DAILY_CARS[Math.floor(r() * DAILY_CARS.length)];
+  const island = date >= DAILY_MU_FROM;
+  const r = seededRng(hashStr('daily|' + date)), pool = island ? EVENTS.concat(ESSEX, MU) : EVENTS.concat(ESSEX), cars = island ? DAILY_CARS.concat(DAILY_MU_CARS) : DAILY_CARS;
+  const area = Math.floor(r() * pool.length), pickCar = cars[Math.floor(r() * cars.length)];
   const up = {}; for (const u of UPGRADES) up[u.id] = pickCar[1];
-  return { date, area: area % pool.length, ch: area >= EVENTS.length ? 'essex' : 'london', car: pickCar[0], lvl: pickCar[1], up,
+  const ch = area >= EVENTS.length + ESSEX.length ? 'mu' : area >= EVENTS.length ? 'essex' : 'london';
+  // idx: where the route sits in its own list. Before the island joined, Essex dailies took area % 8 (kept so old dailies do not change)
+  const idx = island ? (ch === 'mu' ? area - EVENTS.length - ESSEX.length : ch === 'essex' ? area - EVENTS.length : area) : area % areaList(ch).length;
+  return { date, area: area % pool.length, idx, ch, car: pickCar[0], lvl: pickCar[1], up,
     time: ['dusk', 'night', 'late', 'day', 'night'][Math.floor(r() * 5)], dist: 4000 + Math.floor(r() * 21) * 100, d: 0.45 + r() * 0.45 };
 }
 const dailyPrize = S => rematchPrize(S);
@@ -1290,12 +1441,25 @@ const LOCAL_CARS = [
   { name: 'Tuned Supra', lo: 650, hi: 900, model: 'supra' }, { name: 'Tuned GT-R', lo: 700, hi: 1000, model: 'gtr' },
   { name: 'McLaren 765LT', lo: 750, hi: 900, model: 'mcl720' }, { name: 'Twin turbo Huracán', lo: 850, hi: 1100, model: 'huracan' },
 ];
+// the island street scene
+const MU_NAMES = ['Ravi', 'Yannick', 'Priscilla', 'Ashvin', 'Jessie', 'Zaheer', 'Kevin', 'Anjali', 'Stéphane', 'Nadia', 'Rishi', 'Mélanie', 'Fabrice', 'Pooja', 'Imran', 'Cédric',
+  'Vishal', 'Laetitia', 'Jean-Marc', 'Yasmine', 'Dimitri', 'Kavya', 'Christophe', 'Sanjay', 'Aurélie', 'Nitin', 'Joanna', 'Ludovic', 'Shabnam', 'Loïc', 'Deepa', 'Kelvin'];
+const MU_CARS = [
+  { name: 'Suzuki Swift Sport', lo: 90, hi: 170, model: 'hatch' }, { name: 'Toyota Vitz', lo: 90, hi: 150, model: 'hatch' }, { name: 'Kia Picanto GT-Line', lo: 90, hi: 190, model: 'picanto' },
+  { name: 'Honda Fit', lo: 100, hi: 160, model: 'jazz' }, { name: 'Toyota Hilux', lo: 150, hi: 280, model: 'hilux' }, { name: 'VW Polo GTI', lo: 180, hi: 260, model: 'hatch' },
+  { name: 'Nissan Navara', lo: 160, hi: 260, model: 'pickup' }, { name: 'Honda Civic Type R', lo: 280, hi: 380, model: 'civic' }, { name: 'VW Golf GTI', lo: 220, hi: 320, model: 'golf' },
+  { name: 'Subaru Impreza WRX', lo: 260, hi: 420, model: 'wrx' }, { name: 'Ford Ranger Raptor', lo: 290, hi: 450, model: 'raptor' }, { name: 'Mitsubishi Evo IX', lo: 300, hi: 520, model: 'evo' },
+  { name: 'Alpine A110', lo: 250, hi: 380, model: 'a110' }, { name: 'BMW M3 (E92)', lo: 400, hi: 560, model: 'm3' }, { name: 'Mercedes C63', lo: 450, hi: 620, model: 'c63' },
+  { name: 'BMW M3 Competition', lo: 500, hi: 800, model: 'm3g80' }, { name: 'Nissan GT-R', lo: 550, hi: 900, model: 'gtr' },
+];
 const LOCAL_PAINTS = ['#eeeeea', '#15171b', '#3d434b', '#b9c2cb', '#c9252c', '#e8761e', '#f2c418', '#1f4fb5', '#12a3a8', '#5b2a8c', '#8a5a2b', '#7fc241', '#e0508f'];
 const TIMES = ['day', 'dusk', 'night', 'night', 'late'];
 function streetOffers(S) {
-  const rep = S.rep * 33 / REP_TOTAL, pb = curStats(S).bhp, rb = 175 + rep * 11;   // scaled so the board keeps the same curve with more events
-  const essex = essexOpen(S), list = essex ? ESSEX : EVENTS;
-  const areas = list.map((e, i) => i).filter(i => essex || i < NORTH_FROM || nextEventIndex(S) >= NORTH_FROM || S.careerDone);
+  const onIsland = islandCar(S.current) && muOpen(S);
+  const rep = onIsland ? 6 + muWins(S) * 3.2 : S.rep * 33 / REP_TOTAL, pb = curStats(S).bhp, rb = onIsland ? 140 + muWins(S) * 70 : 175 + rep * 11;   // scaled so the board keeps the same curve with more events
+  const island = islandCar(S.current) && muOpen(S), essex = !island && essexOpen(S), list = island ? MU : essex ? ESSEX : EVENTS;
+  const ch = island ? 'mu' : essex ? 'essex' : 'london';
+  const areas = list.map((e, i) => i).filter(i => island ? i <= Math.max(1, nextMuIndex(S)) : essex || i < NORTH_FROM || nextEventIndex(S) >= NORTH_FROM || S.careerDone);
   const base = 220 + rep * 22;
   const tiers = [
     { label: 'Easy', bhp: Math.min(rb, pb) * 0.88, prize: base, skill: 0.95, inc: [9, 13], dd: -0.12 },
@@ -1305,15 +1469,16 @@ function streetOffers(S) {
   const used = new Set();
   const offers = tiers.map(t => {
     const bhp = Math.round(Math.max(150, t.bhp));
-    const fits = LOCAL_CARS.filter(c => bhp >= c.lo && bhp <= c.hi);
-    const car = fits.length ? pick(fits) : LOCAL_CARS.reduce((a, c) => Math.abs((c.lo + c.hi) / 2 - bhp) < Math.abs((a.lo + a.hi) / 2 - bhp) ? c : a);
-    let name; do { name = pick(LOCAL_NAMES); } while (used.has(name)); used.add(name);
-    return { id: Math.random().toString(36).slice(2, 9), label: t.label, ch: essex ? 'essex' : 'london', area: pick(areas), time: pick(TIMES), name: name + ' ' + String.fromCharCode(65 + randInt(26)) + '.',
+    const pool = island ? MU_CARS : LOCAL_CARS, fits = pool.filter(c => bhp >= c.lo && bhp <= c.hi);
+    const car = fits.length ? pick(fits) : pool.reduce((a, c) => Math.abs((c.lo + c.hi) / 2 - bhp) < Math.abs((a.lo + a.hi) / 2 - bhp) ? c : a);
+    const names = island ? MU_NAMES : LOCAL_NAMES;
+    let name; do { name = pick(names); } while (used.has(name)); used.add(name);
+    return { id: Math.random().toString(36).slice(2, 9), label: t.label, ch, area: pick(areas), time: pick(TIMES), name: name + ' ' + String.fromCharCode(65 + randInt(26)) + '.',
       car: car.name, bhp, prize: Math.round(t.prize / 10) * 10, dist: Math.round((3600 + rep * 60) / 100) * 100, skill: t.skill, inc: t.inc,
       d: clamp(rep / 33 + t.dd, 0, 1), look: { model: car.model, paint: pick(LOCAL_PAINTS), rims: pick(['five', 'mesh', 'split', 'dish']), rimColor: pick(['#c3c8cc', '#1c1e21', '#4a4f55']) } };
   });
   // Checkpoint Run: no rival, a shorter route, and every wave has a gate. Miss one and you are out.
-  offers.push({ id: Math.random().toString(36).slice(2, 9), label: 'Checkpoint Run', mode: 'cp', ch: essex ? 'essex' : 'london', area: pick(areas), time: pick(TIMES), name: 'Checkpoint Run', car: '',
+  offers.push({ id: Math.random().toString(36).slice(2, 9), label: 'Checkpoint Run', mode: 'cp', ch, area: pick(areas), time: pick(TIMES), name: 'Checkpoint Run', car: '',
     bhp: 0, prize: Math.round(base * 1.8 / 10) * 10, dist: Math.round((2400 + rep * 40) / 100) * 100, skill: 1, inc: [99, 99], d: clamp(rep / 33, 0, 1), look: null });
   return offers;
 }
@@ -1324,7 +1489,7 @@ function streetOffers(S) {
 function blankState() {
   return { v: 2, money: 5000, rep: 0, current: 'civic', owned: {}, eventIndex: 0, completed: EVENTS.map(() => false),
     careerDone: false, kingRevealed: false, news: '', stats: { races: 0, wins: 0, streetWins: 0, street: 0 }, street: [], specials: {}, found: {},
-    essex: null, stars: {}, announced: {}, daily: null };
+    essex: null, stars: {}, announced: {}, daily: null, mu: null };
 }
 function newCareer(starterId) {
   const car = carById(starterId);
@@ -1370,7 +1535,8 @@ function migrateSave(old) {
     S.stars = Object.assign({}, old.stars || {});
     if (old.daily && typeof old.daily.date === 'string') S.daily = { date: old.daily.date, paid: !!old.daily.paid, best: +old.daily.best || 0, runs: +old.daily.runs || 0 };
     if (old.essex && Array.isArray(old.essex.completed)) S.essex = { completed: ESSEX.map((e, i) => !!old.essex.completed[i]), done: !!old.essex.done };
-    S.street = Array.isArray(old.street) && old.street.length === 4 && old.street.every(o => (o.ch === 'essex' ? ESSEX : EVENTS)[o.area]) ? old.street : [];
+    if (old.mu && Array.isArray(old.mu.completed)) S.mu = { completed: MU.map((e, i) => !!old.mu.completed[i]), done: !!old.mu.done, cur: carById(old.mu.cur) ? old.mu.cur : 'picanto', home: carById(old.mu.home) ? old.mu.home : null };
+    S.street = Array.isArray(old.street) && old.street.length === 4 && old.street.every(o => areaList(o.ch)[o.area]) ? old.street : [];
 
   } else {
     const map = [0, 2, 4, 5, 8, 11];
@@ -1384,7 +1550,7 @@ function migrateSave(old) {
 }
 
 const curStats = S => statsFor(S.current, S.owned[S.current].up, lookOf(S, S.current));
-const carUnlocked = (S, car) => S.rep >= car.rep;
+const carUnlocked = (S, car) => car.chapter === 'mu' ? muOpen(S) && muWins(S) >= (car.muUnlock || 0) : S.rep >= car.rep;
 const repairCost = S => Math.round(S.owned[S.current].damage * REPAIR_PER_PCT);
 
 function buyUpgrade(S, upId) {
@@ -1423,8 +1589,10 @@ function buyCar(S, id, tradeIn) {
   if (!carUnlocked(S, c)) return { ok: false, msg: 'Locked. Needs Rep ' + c.rep + '.' };
   const old = S.current, credit = tradeIn ? sellValue(S, old) : 0;
   if (S.money + credit < c.price) return { ok: false, msg: 'Not enough money. You need £' + fmt(c.price - S.money - credit) + ' more.' };
+  if (tradeIn && islandCar(old) !== islandCar(id)) return { ok: false, msg: 'Island cars stay on the island, and London cars stay in London.' };
   if (tradeIn) { delete S.owned[old]; S.money += credit; }
-  S.money -= c.price; S.owned[id] = { up: {}, damage: 0, spent: 0, look: stockLook(id) }; S.current = id;
+  const up = {}; if (c.built) for (const u of UPGRADES) up[u.id] = c.built;
+  S.money -= c.price; S.owned[id] = { up, damage: 0, spent: 0, look: stockLook(id) }; S.current = id;
   return { ok: true, msg: c.name + ' is yours' + (tradeIn ? ' (traded in your ' + carById(old).name + ' for £' + fmt(credit) + ')' : '') + '. It is now your race car.' };
 }
 function selectCar(S, id) {
@@ -1451,11 +1619,16 @@ const TRAFFIC_TYPES = [
 ];
 const BUS = { id: 'bus', w: 2.52, len: 10.4 };
 const BUS_ROUTES = ['N25', 'N73', 'N29', 'N38', 'N55', 'N279', 'N15', 'N86', 'N205', '25', '73', '38', '149', '243', '254', '277'];
+// island buses: single deckers painted every colour, with the destination up front
+const BUS1 = { id: 'bus1', w: 2.5, len: 10.8 };
+const MU_BUS = { colors: ['#e9e6de', '#2c8a4a', '#d8342c', '#f0b323', '#1f5fb8', '#8a2f8f'], routes: ['PORT LOUIS', 'CUREPIPE', 'GRAND BAIE', 'ROSE HILL', 'QUATRE BORNES', 'MAHEBOURG', 'FLACQ', 'VACOAS', 'TRIOLET', 'GOODLANDS', 'ROSE BELLE', 'BAMBOUS', 'CHAMAREL', 'LE MORNE'] };
+// island traffic: small hatches, pickups, no cabs
+const MU_TYPES = [{ id: 'hatch', w: 1.72, len: 4.0, wt: 4 }, { id: 'saloon', w: 1.8, len: 4.6, wt: 2.2 }, { id: 'suv', w: 1.88, len: 4.6, wt: 1.6 }, { id: 'pickup', w: 1.86, len: 5.3, wt: 1.4 }, { id: 'van', w: 1.98, len: 5.4, wt: 0.8 }];
 // Essex buses are not London red, and there are no black cabs out there
 const ESSEX_BUS = { colors: ['#6b2c91', '#1aa39a', '#e2e4e6'], routes: ['X1', '1', '9', '21', '25', '66', '70', '100', '151', '200', '351', 'X30'] };
 const TRAFFIC_COLORS = ['#d9dadb', '#1d2b4d', '#8c1d1d', '#2f6f4f', '#c9a227', '#5b6770', '#eeeeee', '#2a2a2c', '#6a3d8a', '#b8551f', '#3f7fbf', '#8f9aa3'];
-function pickType(r, noCab) {
-  const types = noCab ? TRAFFIC_TYPES.filter(t => t.id !== 'cab') : TRAFFIC_TYPES;
+function pickType(r, noCab, island) {
+  const types = island ? MU_TYPES : noCab ? TRAFFIC_TYPES.filter(t => t.id !== 'cab') : TRAFFIC_TYPES;
   let t = (r || Math.random)() * types.reduce((a, b) => a + b.wt, 0);
   for (const ty of types) { if ((t -= ty.wt) <= 0) return ty; }
   return types[0];
@@ -1481,18 +1654,18 @@ function createRace(S, spec) {
   let ev;
   if (spec.kind === 'daily') {
     // no rival: you against the clock and the ghosts, in a car everyone gets
-    const dy = dailyFor(spec.date || dailyDate()), a = (dy.ch === 'essex' ? ESSEX : EVENTS)[dy.area % (dy.ch === 'essex' ? ESSEX.length : EVENTS.length)] || EVENTS[0];
+    const dy = dailyFor(spec.date || dailyDate()), a = areaList(dy.ch)[dy.idx] || EVENTS[0];
     const paid = S.daily && S.daily.date === dy.date && S.daily.paid;
     ev = { kind: 'daily', title: 'DAILY CHALLENGE', date: dy.date, chapter: a.chapter, area: a.area, road: a.road, env: a.env, sky: a.sky, signs: a.signs,
-      time: dy.time, dawn: false, dist: dy.dist, oppBhp: 100, oppName: 'the clock', oppCar: '', oppLook: null, rival: null, twoWay: !!a.twoWay, lanes: a.lanes, hill: a.hill,
+      time: dy.time, dawn: false, dist: dy.dist, oppBhp: 100, oppName: 'the clock', oppCar: '', oppLook: null, rival: null, twoWay: !!a.twoWay, lanes: a.lanes, hill: a.hill, curvy: a.curvy,
       reward: paid ? 0 : dailyPrize(S), rep: 0, skill: 1, inc: [99, 99], d: dy.d, solo: true, loaner: dy.car, loanUp: dy.up };
     st = statsFor(dy.car, dy.up, stockLook(dy.car));
     own = { up: dy.up, damage: 0 };
   } else if (spec.kind === 'street') {
-    const o = spec.offer, a = (o.ch === 'essex' ? ESSEX : EVENTS)[o.area] || EVENTS[0];
+    const o = spec.offer, a = areaList(o.ch)[o.area] || EVENTS[0];
     ev = { kind: 'street', title: 'STREET RACE', label: o.label, chapter: a.chapter, area: a.area, road: a.road, env: a.env, sky: a.sky, signs: a.signs,
       time: o.time, dawn: false, dist: o.dist, oppBhp: o.bhp, oppName: o.name, oppCar: o.car, oppLook: o.look, rival: null,
-      reward: o.prize, rep: 0, skill: o.skill, inc: o.inc, d: o.d, offerId: o.id, cp: o.mode === 'cp', twoWay: !!a.twoWay, lanes: a.lanes, hill: a.hill };
+      reward: o.prize, rep: 0, skill: o.skill, inc: o.inc, d: o.d, offerId: o.id, cp: o.mode === 'cp', twoWay: !!a.twoWay, lanes: a.lanes, hill: a.hill, curvy: a.curvy };
   } else if (spec.kind === 'special') {
     const e = SPECIALS[spec.id], ch = CHARACTERS[e.rival];
     const beaten = !!(S.specials && S.specials[spec.id]);
@@ -1505,26 +1678,32 @@ function createRace(S, spec) {
     ev = Object.assign({}, e, { kind: spec.kind, index: idx, exhibition: spec.kind === 'essex' && !!spec.exhibition, oppName: ch.name, oppCar: ch.car,
       skill: e.diff.skill, inc: e.diff.inc, d: 1, open: true, slipCar: spec.kind === 'slip' ? slipCarFor(e.rival).id : null, betCar: spec.kind === 'slip' ? S.current : null,
       reward: spec.kind === 'slip' ? 0 : e.reward });
+  } else if (spec.kind === 'mu') {
+    // the island: career races on island roads, island cars only
+    const e = MU[spec.index], ch = CHARACTERS[e.rival];
+    ev = Object.assign({}, e, { kind: 'mu', index: spec.index, exhibition: !!spec.exhibition, oppName: ch.name, oppCar: ch.car,
+      skill: e.diff.skill, inc: e.diff.inc, d: e.d, reward: e.reward });
   } else {
     const e = EVENTS[spec.index], ch = CHARACTERS[e.rival];
     ev = Object.assign({}, e, { kind: 'career', index: spec.index, exhibition: !!spec.exhibition, oppName: ch.name, oppCar: ch.car,
       skill: e.diff.skill, inc: e.diff.inc, d: spec.index / (EVENTS.length - 1) });
   }
   // the route a time counts for on the leaderboard (career events and friend races), and its traffic seed
-  ev.route = spec.kind === 'street' ? null : spec.kind === 'daily' ? 'daily:' + ev.date : spec.kind === 'special' ? 'special:' + spec.id : spec.kind === 'essex' || spec.kind === 'slip' ? 'essex:' + ev.rival : 'career:' + ev.rival;
+  ev.route = spec.kind === 'street' ? null : spec.kind === 'daily' ? 'daily:' + ev.date : spec.kind === 'special' ? 'special:' + spec.id : spec.kind === 'essex' || spec.kind === 'slip' ? 'essex:' + ev.rival : spec.kind === 'mu' ? 'mu:' + ev.rival : 'career:' + ev.rival;
   const seed = hashStr((ev.route || 'street:' + ev.offerId) + '|v1');
   const rw = seededRng(seed), rr = seededRng(seed ^ 0x9E3779B9);
   const oppV = vmaxFor(ev.oppBhp) * ev.skill;
   const traffic = trafficFor(ev.d);
   if (ev.twoWay) { traffic.tClear *= 1.2; traffic.bus *= 0.5; }       // on a two way road the oncoming cars come at you fast, so leave a bit more room
+  else if (ev.lanes === 2) { traffic.tClear *= 1.1; traffic.extra *= 1.15; }   // two lanes: fewer places to go, so a little more room
   else if (ev.open || (spec.kind === 'street' && spec.offer.ch === 'essex')) { traffic.two *= 0.8; traffic.extra *= 1.5; }   // Essex: wider, emptier roads
   return {
     ev, carId: ev.loaner || S.current, st, traffic, look: ev.loaner ? stockLook(ev.loaner) : lookOf(S, S.current), up: Object.assign({}, own.up), styleBonus: ev.loaner ? 0 : styleBonus(st.style),
     rec: { next: 0, d: [], x: [] }, ghosts: [], twoWay: !!ev.twoWay, nl: ev.lanes || 3,
     state: 'countdown', countdown: 3.2, t: 0, doneT: 0, wrecked: false,
-    p: { dist: 0, v: 0, lane: 1, x: 1, vx: 0, latV: 0, nitro: st.nitroCap, boosting: false, nitroLock: false,
+    p: { dist: 0, v: 0, lane: 1, x: 1, vx: 0, latV: 0, nitro: st.nitroCap, boosting: false, nitroLock: false,   // lane 1: the middle lane, or the outside lane of two
          damage: own.damage, startDamage: own.damage, collisions: 0, topV: 0, finishTime: null },
-    o: { dist: 0, v: 0, lane: 2, x: 2, vx: 0, nitro: 100, boosting: false, vmax: oppV, accel: accelFor(ev.oppBhp) * (ev.accelK || 1),
+    o: { dist: 0, v: 0, lane: Math.min(2, (ev.lanes || 3) - 1), x: Math.min(2, (ev.lanes || 3) - 1), vx: 0, nitro: 100, boosting: false, vmax: oppV, accel: accelFor(ev.oppBhp) * (ev.accelK || 1),
          incT: ev.inc[0] + rr() * (ev.inc[1] - ev.inc[0]), finished: false, finishTime: null },
     rw, rr, waves: [], lastOpen: 1, waveCount: 0, noMoreSpawns: false,
     // clear road needed between waves: your top nitro speed (relative to the slowest traffic) x reaction window
@@ -1535,7 +1714,49 @@ function createRace(S, spec) {
   };
 }
 
+/* one traffic car. island: Mauritian mix and buses; essex: no cabs, Essex buses */
+function trafficCar(R, r, ri, lane, bus) {
+  const essex = R.ev.chapter === 'Essex', island = R.ev.chapter === 'Mauritius';
+  const ty = bus ? (island ? BUS1 : BUS) : pickType(r, essex, island);
+  let color = TRAFFIC_COLORS[ri(TRAFFIC_COLORS.length)];
+  if (ty.id === 'van') color = r() < 0.7 ? '#e9ebec' : '#9aa3aa';
+  if (ty.id === 'cab') color = '#141517';
+  if (ty.id === 'bus') color = essex ? ESSEX_BUS.colors[ri(ESSEX_BUS.colors.length)] : '#c8161d';
+  if (ty.id === 'bus1') color = MU_BUS.colors[ri(MU_BUS.colors.length)];
+  const routes = island ? MU_BUS.routes : essex ? ESSEX_BUS.routes : BUS_ROUTES;
+  return { lane, off: 0, type: ty.id, w: ty.w, len: ty.len, color, hit: false, hitT: 0, push: 0, spin: 0, route: bus ? routes[ri(routes.length)] : null, brake: 0 };
+}
+/* two lanes (the island's motorways): one car to go round, or two in a row, one in each lane, to weave through */
+function makeWave2(R) {
+  const T = R.traffic, r = R.rw || Math.random, ri = n => Math.floor(r() * n), rf = (a, b) => a + r() * (b - a);
+  let lanes, bus = false, slalom = false;
+  if (R.waveCount === 0) { lanes = [1]; R.lastOpen = 0; }
+  else if (r() < T.two * 0.55) {
+    const first = r() < 0.5 ? 0 : 1;
+    lanes = [first, 1 - first]; slalom = true; R.lastOpen = first;
+  } else {
+    const lane = r() < 0.62 ? R.lastOpen : ri(2);   // usually sits where you were heading, so you have to move
+    lanes = [lane]; R.lastOpen = 1 - lane;
+    bus = R.waveCount > 1 && r() < T.bus;
+  }
+  const cars = lanes.map(l => trafficCar(R, r, ri, l, bus));
+  if (slalom) {
+    // room to get across between the two: more than on a three lane road, because you have to move twice
+    const rel = Math.max(20, R.st.vmax - 13);
+    cars[1].off = cars[0].len + Math.max(14, rel * rf(0.62, 0.95));
+  }
+  const span = Math.max(...cars.map(c => c.off + c.len));
+  const open = [1 - lanes[0]];   // the way past the first car
+  let gate = null;
+  if (R.ev.cp || (R.waveCount > 0 && r() < GATE_CHANCE)) gate = { lane: open[0], off: -Math.min(32, R.gapMin * 0.32), state: 0, t: 0 };
+  let gapAfter = R.gapMin + rf(0, T.extra);
+  if (bus) gapAfter += 35;
+  if (r() < 0.08) gapAfter += 60;
+  R.waveCount++;
+  return { id: R.waveCount, z: SPAWN_D, speed: rf(T.vLo, T.vHi), cars, span, open, gapAfter, gate, slalom };
+}
 function makeWave(R) {
+  if ((R.nl || 3) === 2) return makeWave2(R);
   const T = R.traffic, r = R.rw || Math.random, ri = n => Math.floor(r() * n), rf = (a, b) => a + r() * (b - a);
   // most roads have 3 lanes; the QE2 Bridge has 4. With 3 lanes the random calls stay exactly as they always were,
   // so every existing route keeps the same traffic (and its leaderboard stays fair).
@@ -1558,16 +1779,7 @@ function makeWave(R) {
     R.lastOpen = opens[ri(opens.length)];
     bus = lanes.length === 1 && R.waveCount > 1 && r() < T.bus;
   }
-  const essex = R.ev.chapter === 'Essex';
-  const cars = lanes.map(lane => {
-    const ty = bus ? BUS : pickType(r, essex);
-    let color = TRAFFIC_COLORS[ri(TRAFFIC_COLORS.length)];
-    if (ty.id === 'van') color = r() < 0.7 ? '#e9ebec' : '#9aa3aa';
-    if (ty.id === 'cab') color = '#141517';
-    if (ty.id === 'bus') color = essex ? ESSEX_BUS.colors[ri(ESSEX_BUS.colors.length)] : '#c8161d';
-    return { lane, off: 0, type: ty.id, w: ty.w, len: ty.len, color, hit: false, hitT: 0, push: 0, spin: 0,
-      route: bus ? (essex ? ESSEX_BUS.routes : BUS_ROUTES)[ri((essex ? ESSEX_BUS.routes : BUS_ROUTES).length)] : null, brake: 0 };
-  });
+  const cars = lanes.map(lane => trafficCar(R, r, ri, lane, bus));
   if (cars.length === 2) {
     // stagger the two cars so they never reach you at the same moment
     const rel = Math.max(20, R.st.vmax - 13);
@@ -1659,6 +1871,7 @@ function updateRival(R, dt) {
     if (w.z + w.span + 2 < rel) continue;
     let best = w.open[0];
     for (const l of w.open) if (Math.abs(l - o.x) < Math.abs(best - o.x)) best = l;
+    if (w.slalom && rel > w.z + w.cars[0].off + w.cars[0].len) best = w.cars[0].lane;
     o.lane = best; break;
   }
   laneSpring(o, dt, 0.15, (R.nl || 3) - 1);
@@ -1709,7 +1922,7 @@ function crash(R, w, c, d) {
   p.v = Math.max(Math.min(p.v, HIT_MIN_V), p.v * HIT_SLOW);
   p.damage = Math.min(100, p.damage + dmg);
   p.collisions++;
-  c.hit = true; c.hitT = 0; c.push = c.type === 'bus' ? 6 : 16; c.spin = Math.random() < 0.5 ? -1 : 1;
+  c.hit = true; c.hitT = 0; c.push = c.type === 'bus' || c.type === 'bus1' ? 6 : 16; c.spin = Math.random() < 0.5 ? -1 : 1;
   R.events.push({ type: 'hit', dmg, lane: c.lane });
   if (p.damage >= 100) { p.damage = 100; R.wrecked = true; endRace(R, 'wrecked'); }
 }
@@ -1787,7 +2000,7 @@ function payout(R, base, out) {
 function settleRace(S, R) {
   if (R.settled || !R.result) return R.summary || null;
   R.settled = true;
-  const essexBefore = essexOpen(S);
+  const essexBefore = essexOpen(S), muBefore = muOpen(S);
   const ev = R.ev, own = ev.loaner ? null : S.owned[R.carId];
   if (own) own.damage = Math.round(Math.min(100, R.p.damage));
   const out = { kind: ev.kind, won: R.result.won, how: R.result.how, reward: 0, rep: 0, newCars: [], nextEvent: null, chapter: null,
@@ -1860,6 +2073,23 @@ function settleRace(S, R) {
         S.street = streetOffers(S);
       }
     }
+  } else if (ev.kind === 'mu') {
+    if (R.result.won) {
+      S.stats.wins++;
+      openIsland(S);
+      if (!ev.exhibition && !S.mu.completed[ev.index] && ev.index === nextMuIndex(S)) {
+        const winsBefore = muWins(S);
+        S.mu.completed[ev.index] = true;
+        S.money += payout(R, ev.reward, out); S.rep += ev.rep;
+        out.rep = ev.rep; out.story = ev.win; S.news = ev.win;
+        out.newCars = CARS.filter(c => c.chapter === 'mu' && c.muUnlock > winsBefore && c.muUnlock <= muWins(S)).map(c => c.name);
+        out.imported = CARS.some(c => c.id === 'gtrx' && c.muUnlock > winsBefore && c.muUnlock <= muWins(S));
+        const nx = nextMuIndex(S);
+        if (nx >= MU.length) { out.muDone = !S.mu.done; S.mu.done = true; }
+        else out.nextEvent = MU[nx].title;
+        S.street = streetOffers(S);
+      }
+    }
   } else if (R.result.won) {
     S.stats.wins++;
     if (!ev.exhibition && !S.completed[ev.index] && ev.index === nextEventIndex(S)) {
@@ -1879,6 +2109,7 @@ function settleRace(S, R) {
     }
   }
   if (!essexBefore && essexOpen(S)) out.essexOpened = true;
+  if (!muBefore && muOpen(S)) out.muOpened = true;
   R.summary = out;
   return out;
 }
@@ -2045,7 +2276,13 @@ const TOD = {
   dawn:  { sky: [[45, 61, 99], [178, 125, 134], [247, 181, 109]], haze: [255, 170, 110], hazeA: 0.42, fog: [150, 128, 132], light: 0.72, keyCol: [1.1, 0.9, 0.8],
            amb: 0.5, key: [0.2, 0.4, 0.9], keyI: 0.5, spec: 0.45, refl: [250, 180, 140], lit: 0.4, win: 0.12, stars: 0, moon: 0, sun: 0.97, clouds: 0.7, sunny: 0 },
 };
-function palFor(time, env) { return Object.assign({ time, env }, TOD[time] || TOD.night); }
+/* the island: a deeper blue sky by day, pinker sunsets, warmer light */
+const ISLAND_TOD = {
+  day: { sky: [[48, 116, 196], [112, 172, 226], [190, 222, 238]], haze: [255, 255, 255], hazeA: 0.22, fog: [168, 200, 218], light: 1.06, keyCol: [1.03, 1, 0.93], refl: [190, 214, 240] },
+  dusk: { sky: [[36, 38, 94], [176, 78, 112], [252, 152, 70]], haze: [255, 136, 80], hazeA: 0.46, fog: [150, 94, 102] },
+};
+const MU_ENVS = new Set(['lagoon', 'harbour', 'ringroad', 'cyber', 'cane', 'airport', 'gorge', 'morne']);
+function palFor(time, env) { const o = Object.assign({ time, env }, TOD[time] || TOD.night); if (MU_ENVS.has(env) && ISLAND_TOD[time]) Object.assign(o, ISLAND_TOD[time]); return o; }
 function blendPal(a, b, t) {
   const o = { time: a.time, env: a.env };
   for (const k in a) {
@@ -2065,7 +2302,10 @@ function carEnv(pal) {
 const MAT = { road: [86, 88, 92], pave: [150, 148, 142], kerb: [176, 173, 166], line: [240, 240, 230], verge: [72, 98, 58], bus: [150, 48, 44],
   brick: [150, 114, 84], brick2: [132, 70, 54], render: [196, 190, 178], concrete: [146, 146, 142], glass: [78, 98, 118], steel: [118, 124, 130],
   viaduct: [118, 80, 60], barrier: [150, 156, 160], median: [96, 110, 80], sea: [44, 72, 92], sand: [168, 150, 112], river: [40, 58, 70], hedge: [52, 78, 44],
-  reed: [118, 110, 66], mud: [70, 66, 54], chalk: [214, 210, 196], lake: [38, 66, 84], bay: [96, 98, 102] };
+  reed: [118, 110, 66], mud: [70, 66, 54], chalk: [214, 210, 196], lake: [38, 66, 84], bay: [96, 98, 102],
+  // the island
+  lagoon: [52, 176, 178], ocean: [22, 74, 128], wsand: [228, 214, 176], cane: [112, 150, 58], redearth: [158, 76, 44], basalt: [72, 72, 74], lush: [72, 128, 52],
+  creole1: [70, 172, 164], creole2: [228, 142, 152], creole3: [238, 204, 92], creole4: [150, 198, 108], creole5: [120, 170, 220], tin: [150, 150, 146], quay: [128, 126, 118], gravel: [150, 132, 104] };
 function wc(pal, base, k, fg) {
   const l = pal.light * (k || 1), c = [base[0] * l * pal.keyCol[0], base[1] * l * pal.keyCol[1], base[2] * l * pal.keyCol[2]];
   return fg > 0 ? mix(c, pal.fog, fg) : c;
@@ -2097,14 +2337,34 @@ const ENV = {
   seafront:   { skyH: 0.45, block: 14, density: 0.95, set: [9, 9.6], h: [7, 11], mats: ['render', 'render', 'brick'], win: 'sash', shops: 0.92, names: 'seaside', sea: true, twoWay: true, lampSp: 26, festoon: true },
   // the QE2 Bridge carries southbound traffic only (northbound goes through the tunnels): four lanes, no oncoming carriageway
   bridge:     { skyH: 0.7, block: 100, density: 0, set: [30, 40], h: [0, 0], mats: ['concrete'], win: 'none', shops: 0, barrier: true, lampSp: 44, bridge: true, sideLane: true },
+  // Mauritius
+  // Grand Baie: one lane each way, the bay on the left with boats on the lagoon, snack bars and Creole houses on the right
+  lagoon:     { skyH: 0.25, block: 12, density: 0.9, set: [9.2, 9.8], h: [3.6, 7.5], mats: ['creole1', 'creole2', 'render', 'creole3', 'creole5', 'creole4'], win: 'sash', shops: 0.8, names: 'mu', sea: true, lagoon: true, twoWay: true, lampSp: 36, palms: 1, rebar: 0.35, ground: 'lush', boats: true },
+  // Port Louis: the M1 with the harbour, containers and cranes on the left and the city on the right
+  harbour:    { skyH: 0.8, block: 22, density: 0.85, set: [24, 32], h: [10, 30], mats: ['render', 'concrete', 'creole3', 'glass', 'render'], win: 'estate', shops: 0, barrier: true, opposite: true, lampSp: 32, harbour: true, palms: 0.4, leftClear: true },
+  // the Ring Road: two lanes each way along the hills above Pailles, bridges over the valleys
+  ringroad:   { skyH: 0.35, block: 70, density: 0.3, set: [34, 60], h: [5, 9], mats: ['render', 'creole1', 'concrete', 'creole3'], win: 'sparse', shops: 0, barrier: true, opposite: true, lanes2: true, lampSp: 44, trees: 1, palms: 0.4, ground: 'lush', viaduct2: true, rebar: 0.5, noPave: true },
+  // Ebène: two lanes past the glass towers of Cybercity
+  cyber:      { skyH: 1, block: 42, density: 0.72, set: [20, 34], h: [28, 95], mats: ['glass', 'glass', 'concrete'], win: 'tower', shops: 0, barrier: true, opposite: true, lanes2: true, lampSp: 30, palms: 0.8 },
+  // Verdun: two lanes climbing through the cane fields, basalt stone piles in the fields, mountains all round
+  cane:       { skyH: 0.2, block: 160, density: 0.04, set: [40, 70], h: [4, 6], mats: ['render', 'creole1'], win: 'sparse', shops: 0, barrier: true, opposite: true, lanes2: true, lampSp: 90, cane: true, stones: true, ground: 'cane', noPave: true },
+  // Plaisance: the M1 down to the airport, flat cane country and the planes coming in
+  airport:    { skyH: 0.2, block: 160, density: 0.05, set: [40, 70], h: [4, 6], mats: ['render', 'creole3'], win: 'sparse', shops: 0, barrier: true, opposite: true, lanes2: true, lampSp: 46, cane: true, stones: true, ground: 'cane', planes: true, noPave: true },
+  // Chamarel: one lane each way through the forest, red earth banks, the odd car pulled in at a fruit stall
+  gorge:      { skyH: 0.3, block: 100, density: 0, set: [30, 40], h: [0, 0], mats: ['concrete'], win: 'none', shops: 0, twoWay: true, shoulder: 'redearth', lampSp: 0, woods: true, redbank: true, ground: 'lush', earths: true, noPave: true },
+  // Le Morne: the coast road, the lagoon on the left with kite surfers, filaos along the beach, the mountain over everything
+  morne:      { skyH: 0.15, block: 30, density: 0.22, set: [14, 24], h: [3.5, 6], mats: ['render', 'creole1', 'creole3', 'creole2'], win: 'sash', shops: 0, sea: true, lagoon: true, twoWay: true, shoulder: 'wsand', lampSp: 70, filaos: true, palms: 0.5, ground: 'lush', kites: true, noPave: true },
 };
+const groundOf = env => MAT[env.ground] || MAT.verge;
 const ESSEX_NAMES = ['NAIL BAR', 'TANNING', 'LASH & BROW', 'COCKTAIL BAR', 'WINE BAR', 'STEAKHOUSE', 'BOUTIQUE', 'ESTATE AGENTS', 'BARBERS', 'COFFEE',
   'GASTRO PUB', 'BRIDAL', 'JEWELLERS', 'AESTHETICS', 'PROSECCO BAR', 'DELI', 'TAPAS', 'BLOW DRY BAR', 'VAPE SHOP', 'TAILORS', 'GIN BAR', 'SUSHI'];
 const SEASIDE_NAMES = ['AMUSEMENTS', 'ARCADE', 'FISH & CHIPS', 'ROCK SHOP', 'ICE CREAM', 'DOUGHNUTS', 'BINGO', 'CASINO', 'GIFTS', 'SEAFRONT CAFE', 'CANDY FLOSS', 'PENNY FALLS', 'SEAFOOD', 'KEBAB'];
 const RETAIL_NAMES = ['HOMEWARE', 'SPORTS', 'ELECTRICALS', 'CINEMA', 'DRIVE THRU', 'TYRES & EXHAUSTS', 'FURNITURE', 'GYM', 'TOYS', 'PETS', 'DIY', 'CARPETS', 'BOWLING', 'FASHION OUTLET'];
 const SHOP_NAMES = ['GRILL', 'CAFE', 'BARBERS', 'MINI MARKET', 'PHONE REPAIR', 'BAKERY', 'SWEET CENTRE', 'OFF LICENCE', 'LAUNDERETTE', 'CHICKEN', 'PHARMACY',
   'CASH & CARRY', 'NAILS', 'TAILOR', 'PIZZA', 'MONEY TRANSFER', 'FISH BAR', 'OPTICIANS', 'HARDWARE', 'FLORIST', 'DRY CLEANERS', 'JEWELLERS'];
-const SHOP_SPECIAL = { tariq: 'RAHMAN PHARMACY', kasia: 'NOWAK TUNING', emre: 'YILDIZ GRILL', marcus: 'CAMPBELL DETAILING', asha: 'WARSAME DRIVING SCHOOL' };
+const SHOP_SPECIAL = { tariq: 'RAHMAN PHARMACY', kasia: 'NOWAK TUNING', emre: 'YILDIZ GRILL', marcus: 'CAMPBELL DETAILING', asha: 'WARSAME DRIVING SCHOOL', kevin: 'SNACK LAM' };
+const MU_SHOP_NAMES = ['BOUTIK', 'SNACK', 'DHOLL PURI', 'FARATA', 'BRIANI', 'MINE FRIT', 'ALOUDA', 'QUINCAILLERIE', 'PHARMACIE', 'TABAGIE', 'SUPERETTE', 'BOULANGERIE',
+  'GATO PIMENT', 'RESTAURANT', 'MOBILE SHOP', 'COIFFURE', 'DIVE CENTRE', 'CAR HIRE', 'BEACH BAR', 'GLACES', 'FRUITS', 'PIROGUE TRIPS', 'SOUVENIRS', 'CAR WASH'];
 const ARCH_NAMES = ['MOT & TYRES', 'BODY SHOP', 'COFFEE', 'GYM', 'BREWERY', 'SCAFFOLDING', 'MOTOR REPAIRS', 'CAR WASH'];
 const NEON = [[255, 60, 90], [60, 200, 255], [120, 255, 140], [255, 190, 60], [200, 110, 255], [255, 255, 255]];
 const WIN_COL = [[247, 197, 107], [217, 226, 232], [240, 154, 62], [190, 215, 240]];
@@ -2378,15 +2638,18 @@ function drawRoad(pal, dist, evDist) {
   V.zStart = zStart;
   const SEG = 4;
   const kFirst = Math.floor((camW + zStart) / SEG), kLast = Math.floor((camW + Z_FAR) / SEG);
-  const oppX0 = ROAD_HALF + 2.4, oppX1 = ROAD_HALF + 13.2;
+  // two lanes (island motorways): your lanes are the left two, the tarmac stops just past lane 1, then a wide central reservation
+  const L2 = !!env.lanes2, RE = L2 ? LANE_W / 2 + 0.7 : ROAD_HALF;
+  const oppX0 = ROAD_HALF + 2.4, oppX1 = L2 ? oppX0 + 7.6 : ROAD_HALF + 13.2;
+  V.roadR = RE;
   for (let k = kLast; k >= kFirst; k--) {
     let z0 = k * SEG - camW, z1 = z0 + SEG;
     if (z0 < zStart) z0 = zStart;
     if (z1 > Z_FAR) z1 = Z_FAR;
     if (z1 <= z0) continue;
     const a = G(z0), b = G(z1), fg = fogK((z0 + z1) * 0.5), odd = k & 1;
-    const high = !V.hill || V.hill(camW + (z0 + z1) / 2) > 12;
-    ctx.fillStyle = css(wc(pal, env.bridge && high ? MAT.river : env.reeds ? MAT.reed : MAT.verge, odd ? 1.08 : 1, fg));
+    const high = !V.hill || V.hill(camW + (z0 + z1) / 2) > 12, lifted = env.viaduct2 && V.hill && V.hill(camW + (z0 + z1) / 2) > 8;
+    ctx.fillStyle = css(wc(pal, env.bridge && high ? MAT.river : env.reeds ? MAT.reed : lifted ? shade(groundOf(env), 0.62) : groundOf(env), odd ? 1.08 : 1, fg));
     ctx.fillRect(0, b.y - 0.5, W, a.y - b.y + 1.5);
     const oppR = env.opposite ? oppX1 : env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF;   // right hand edge of all the tarmac
     if (env.creeks) {
@@ -2405,10 +2668,23 @@ function drawRoad(pal, dist, evDist) {
       // the service road in front of the houses
       ctx.fillStyle = css(wc(pal, MAT.road, odd ? 1.03 : 0.97, fg)); quadX(ctx, a, b, -ROAD_HALF - 12.5, -ROAD_HALF - 7.5); quadX(ctx, a, b, oppR + 7.5, oppR + 12.5);
     }
-    if (env.sea) {
+    if (env.sea && env.lagoon) {
+      // white sand, the turquoise lagoon, surf breaking on the reef and the deep blue beyond it
+      ctx.fillStyle = css(wc(pal, MAT.ocean, odd ? 1.04 : 0.97, fg)); quadX(ctx, a, b, -4000, -ROAD_HALF - 330);
+      ctx.fillStyle = css(wc(pal, [236, 242, 240], 1, fg)); quadX(ctx, a, b, -ROAD_HALF - 330, -ROAD_HALF - 318);
+      ctx.fillStyle = css(wc(pal, shade(MAT.lagoon, 0.86), odd ? 1.04 : 0.97, fg)); quadX(ctx, a, b, -ROAD_HALF - 318, -ROAD_HALF - 60);
+      ctx.fillStyle = css(wc(pal, MAT.lagoon, odd ? 1.05 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF - 60, -ROAD_HALF - 17);
+      ctx.fillStyle = css(wc(pal, MAT.wsand, odd ? 1.03 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF - 17, -ROAD_HALF - (env.noPave ? 0.6 : 3.6));
+    } else if (env.sea) {
       // beach below the promenade, then the estuary out to the horizon
       ctx.fillStyle = css(wc(pal, MAT.sea, odd ? 1.06 : 0.96, fg)); quadX(ctx, a, b, -4000, -ROAD_HALF - 14);
       ctx.fillStyle = css(wc(pal, MAT.sand, odd ? 1.04 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF - 14, -ROAD_HALF - 3.6);
+    }
+    if (env.harbour) {
+      // the quay, then the harbour water
+      ctx.fillStyle = css(wc(pal, shade(MAT.sea, 0.9), odd ? 1.05 : 0.97, fg)); quadX(ctx, a, b, -4000, -ROAD_HALF - 64);
+      ctx.fillStyle = css(wc(pal, MAT.quay, odd ? 1.03 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF - 64, -ROAD_HALF - 3.6);
+      if (pal.lit > 0.5 && hash(k, 64) < 0.3) { const y = (a.y + b.y) / 2; ctx.fillStyle = css(mix([255, 200, 120], pal.fog, fg), 0.5); ctx.fillRect(X(a, -ROAD_HALF - 70 - hash(k, 65) * 90), y, Math.max(2, 0.8 * a.s), 1); }
     }
     if (env.bridge && pal.lit > 0.5 && hash(k, 61) < 0.25) {
       // lights from the shore glinting on the river far below
@@ -2416,18 +2692,21 @@ function drawRoad(pal, dist, evDist) {
       ctx.fillStyle = css(mix([255, 200, 120], pal.fog, fg), 0.5); ctx.fillRect(xg, y, Math.max(2, 0.8 * a.s), 1);
     }
     const paveR = env.opposite ? oppX1 : oppR + 0.25;
-    ctx.fillStyle = css(wc(pal, MAT.pave, odd ? 1.05 : 0.97, fg));
-    quadX(ctx, a, b, -ROAD_HALF - 3.6, -ROAD_HALF - 0.25); quadX(ctx, a, b, paveR, paveR + 3.4);
-    ctx.fillStyle = css(wc(pal, MAT.kerb, odd ? 1.2 : 1, fg));
-    quadX(ctx, a, b, -ROAD_HALF - 0.25, -ROAD_HALF); if (!env.opposite && !env.sideLane) quadX(ctx, a, b, ROAD_HALF, ROAD_HALF + 0.25);
+    if (!env.noPave) {
+      ctx.fillStyle = css(wc(pal, MAT.pave, odd ? 1.05 : 0.97, fg));
+      quadX(ctx, a, b, -ROAD_HALF - 3.6, -ROAD_HALF - 0.25); quadX(ctx, a, b, paveR, paveR + 3.4);
+      ctx.fillStyle = css(wc(pal, MAT.kerb, odd ? 1.2 : 1, fg));
+      quadX(ctx, a, b, -ROAD_HALF - 0.25, -ROAD_HALF); if (!env.opposite && !env.sideLane) quadX(ctx, a, b, ROAD_HALF, ROAD_HALF + 0.25);
+    }
     ctx.fillStyle = css(wc(pal, MAT.road, odd ? 1.04 : 0.98, fg));
-    quadX(ctx, a, b, -ROAD_HALF, env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF);
-    if (env.twoWay) { ctx.fillStyle = css(wc(pal, MAT.bay, odd ? 1.04 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF, -LANE_W / 2 - 0.05); }   // parking bays
+    quadX(ctx, a, b, env.shoulder ? -LANE_W / 2 - 0.3 : -ROAD_HALF, env.sideLane ? ROAD_HALF + LANE_W : RE);
+    if (env.twoWay && env.shoulder) { ctx.fillStyle = css(wc(pal, MAT[env.shoulder], (odd ? 1.05 : 0.97) * (hash(k, 66) < 0.2 ? 0.92 : 1), fg)); quadX(ctx, a, b, -ROAD_HALF - 0.4, -LANE_W / 2 - 0.3); }   // a dirt or sand verge people pull onto
+    else if (env.twoWay) { ctx.fillStyle = css(wc(pal, MAT.bay, odd ? 1.04 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF, -LANE_W / 2 - 0.05); }   // parking bays
     if (env.busLane) { ctx.fillStyle = css(wc(pal, MAT.bus, odd ? 1.04 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF, -LANE_W / 2 - 0.1); }
     if (env.opposite) {
-      ctx.fillStyle = css(wc(pal, MAT.median, 1, fg)); quadX(ctx, a, b, ROAD_HALF, oppX0);
+      ctx.fillStyle = css(wc(pal, L2 ? groundOf(env) : MAT.median, L2 ? 0.92 : 1, fg)); quadX(ctx, a, b, RE, oppX0);
       ctx.fillStyle = css(wc(pal, MAT.road, odd ? 1.02 : 0.96, fg)); quadX(ctx, a, b, oppX0, oppX1);
-      if (((k % 3) + 3) % 3 === 0 && z0 < 220) { ctx.fillStyle = css(wc(pal, MAT.line, 0.9, fg * 1.05)); quadX(ctx, a, b, oppX0 + 3.55, oppX0 + 3.7); quadX(ctx, a, b, oppX0 + 7.15, oppX0 + 7.3); }
+      if (((k % 3) + 3) % 3 === 0 && z0 < 220) { ctx.fillStyle = css(wc(pal, MAT.line, 0.9, fg * 1.05)); if (L2) quadX(ctx, a, b, oppX0 + 3.72, oppX0 + 3.87); else { quadX(ctx, a, b, oppX0 + 3.55, oppX0 + 3.7); quadX(ctx, a, b, oppX0 + 7.15, oppX0 + 7.3); } }
     }
     // markings (white lines stay bright, lit by headlights and lamps)
     const lineC = css(mix([232, 232, 222].map(v => v * Math.max(0.62, pal.light + 0.25)), pal.fog, fg * 1.05));
@@ -2439,7 +2718,19 @@ function drawRoad(pal, dist, evDist) {
       quadX(ctx, a, b, -LANE_W / 2 - 0.12, -LANE_W / 2 - 0.02);
       quadX(ctx, a, b, ROAD_HALF - 0.45, ROAD_HALF - 0.3);
       if (m3 !== 2) quadX(ctx, a, b, LANE_W / 2 - 0.08, LANE_W / 2 + 0.08);
-      if (((k % 2) + 2) % 2 === 0 && z0 < 200) { const t0 = G(z0), t1 = G(Math.min(z1, z0 + 0.14)); quadX(ctx, t0, t1, -ROAD_HALF + 0.2, -LANE_W / 2 - 0.1); }
+      if (!env.shoulder && ((k % 2) + 2) % 2 === 0 && z0 < 200) { const t0 = G(z0), t1 = G(Math.min(z1, z0 + 0.14)); quadX(ctx, t0, t1, -ROAD_HALF + 0.2, -LANE_W / 2 - 0.1); }
+    } else if (L2) {
+      // two lanes: edge lines both sides and one dashed line between the lanes
+      quadX(ctx, a, b, -ROAD_HALF + 0.3, -ROAD_HALF + 0.45); quadX(ctx, a, b, RE - 0.45, RE - 0.3);
+      if (m3 === 0) quadX(ctx, a, b, -LANE_W / 2 - 0.07, -LANE_W / 2 + 0.07);
+      else if (m3 === 1 && z0 < 140 && z0 > Z_PLAYER + 2 && pal.lit > 0.3) {
+        const r = clamp(0.07 * a.s, 1, 3.2), y = a.y - (a.y - b.y) * 0.5;
+        for (const [sx, cc] of [[-ROAD_HALF + 0.37, [255, 60, 50]], [-LANE_W / 2, [235, 235, 225]], [RE - 0.37, [255, 170, 40]]]) {
+          const px = (X(a, sx) + X(b, sx)) / 2;
+          ctx.fillStyle = css(mix(cc, pal.fog, fg)); ctx.fillRect(px - r, y - r * 0.6, r * 2, r * 1.2);
+          if (z0 < 70) { ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, cc, px, y, r * 4, 0.3 * (1 - z0 / 70)); ctx.globalCompositeOperation = 'source-over'; }
+        }
+      }
     } else {
     quadX(ctx, a, b, -ROAD_HALF + 0.3, -ROAD_HALF + 0.45); quadX(ctx, a, b, (env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF) - 0.45, (env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF) - 0.3);
     if (env.sideLane && m3 === 0) quadX(ctx, a, b, LANE_W * 1.5 - 0.07, LANE_W * 1.5 + 0.07);
@@ -2459,7 +2750,7 @@ function drawRoad(pal, dist, evDist) {
     }
     // steel barriers on the open road stages
     if (env.barrier && z0 < 260) {
-      const bars = env.opposite ? [-(ROAD_HALF + 0.9), ROAD_HALF + 1.2] : [-(ROAD_HALF + 0.9), oppR + 0.9];
+      const bars = env.opposite ? [-(ROAD_HALF + 0.9), L2 ? RE + 2.6 : ROAD_HALF + 1.2] : [-(ROAD_HALF + 0.9), oppR + 0.9];
       for (const xb of bars) {
         ctx.fillStyle = css(wc(pal, MAT.barrier, 1, fg)); vquad(ctx, xb, 0.45, 0.8, z0, z1);
         if (!odd) { const q0 = P(xb, 0, z0), q1 = P(xb, 0.8, z0); ctx.fillStyle = css(wc(pal, [70, 74, 78], 1, fg)); ctx.fillRect(q0.x - 0.06 * q0.s, q1.y, Math.max(1, 0.12 * q0.s), q0.y - q1.y); }
@@ -2481,6 +2772,19 @@ function drawRoad(pal, dist, evDist) {
       ctx.fillStyle = css(wc(pal, MAT.chalk, 0.72, fg)); vquad(ctx, xc + 0.02, hc * 0.35, hc * 0.35 + 0.8, z0, z1); vquad(ctx, xc + 0.02, hc * 0.7, hc * 0.7 + 0.6, z0, z1);
       ctx.fillStyle = css(wc(pal, MAT.hedge, 0.8, fg)); vquad(ctx, xc + 0.03, hc - 1.2, hc + 0.8, z0, z1);
     }
+    if (lifted && z0 < 260) for (const xb of [-ROAD_HALF - 0.5, oppR + 0.5]) { ctx.fillStyle = css(wc(pal, MAT.concrete, 0.86, fg)); vquad(ctx, xb, 0, 1.1, z0, z1); }   // the bridge parapets over the valley
+    if (env.cane && z0 < 320) for (const xb of [-ROAD_HALF - 7, oppR + 7]) {
+      // sugar cane right up to the verge, taller than a car, with a ragged pale top
+      const hc = 2.7 + hash(k, xb > 0 ? 73 : 74) * 0.9;
+      ctx.fillStyle = css(wc(pal, MAT.cane, odd ? 1.04 : 0.93, fg)); vquad(ctx, xb, 0, hc, z0, z1);
+      ctx.fillStyle = css(wc(pal, [168, 184, 98], 1, fg)); vquad(ctx, xb + (xb > 0 ? 0.01 : -0.01), hc - 0.25, hc + 0.35 * hash(k, 75), z0, z1);
+    }
+    if (env.redbank && z0 < 280) for (const xb of [-ROAD_HALF - 0.9, ROAD_HALF + 1.1]) {
+      // the road is cut into the hillside: red earth banks topped with forest
+      const hb = 2 + hash(Math.floor(k / 3), xb > 0 ? 76 : 77) * 2.6;
+      ctx.fillStyle = css(wc(pal, MAT.redearth, (odd ? 1.05 : 0.95) * (0.9 + hash(k, 78) * 0.15), fg)); vquad(ctx, xb, 0, hb, z0, z1);
+      ctx.fillStyle = css(wc(pal, [48, 86, 40], 1, fg)); vquad(ctx, xb + (xb > 0 ? 0.01 : -0.01), hb - 0.2, hb + 1.4, z0, z1);
+    }
     if (env.hedge && z0 < 240) for (const xb of [-ROAD_HALF - 6.5, oppR + 6]) { ctx.fillStyle = css(wc(pal, MAT.hedge, odd ? 1.05 : 0.95, fg)); vquad(ctx, xb, 0, 1.6 + hash(k, xb > 0 ? 71 : 72) * 0.5, z0, z1); }
   }
   // zebra crossings
@@ -2498,15 +2802,15 @@ function drawRoad(pal, dist, evDist) {
 }
 function chequer(z, depth, pal) {
   if (z + depth < V.zStart || z > Z_FAR) return;
-  const cols = 12, rows = 2, fg = fogK(z), l = Math.max(0.55, pal.light + 0.2);
+  const cols = 12, rows = 2, fg = fogK(z), l = Math.max(0.55, pal.light + 0.2), xr = V.roadR || ROAD_HALF, cw = (xr + ROAD_HALF) / cols;
   for (let r = 0; r < rows; r++) {
     const za = Math.max(V.zStart, z + r * depth / rows), zb = z + (r + 1) * depth / rows;
     if (zb <= za) continue;
     const a = G(za), b = G(zb);
     for (let c = 0; c < cols; c++) {
       ctx.fillStyle = css(mix((c + r) & 1 ? [20, 20, 20] : [230 * l, 230 * l, 230 * l], pal.fog, fg));
-      const x0 = -ROAD_HALF + c * (2 * ROAD_HALF / cols);
-      quadX(ctx, a, b, x0, x0 + 2 * ROAD_HALF / cols);
+      const x0 = -ROAD_HALF + c * cw;
+      quadX(ctx, a, b, x0, x0 + cw);
     }
   }
 }
@@ -2515,6 +2819,7 @@ function chequer(z, depth, pal) {
 function drawLampPools(pal, dist) {
   if (pal.lit < 0.3) return;
   const env = ENV[pal.env] || ENV.aroad, SP = env.lampSp, camW = dist - Z_PLAYER;
+  if (!SP) return;
   const lamp = pal.time === 'dusk' || pal.time === 'dawn' ? [242, 163, 58] : pal.env === 'towers' ? [220, 230, 255] : [242, 163, 58];
   ctx.globalCompositeOperation = 'lighter';
   for (const sd of [-1, 1]) {
@@ -2524,7 +2829,7 @@ function drawLampPools(pal, dist) {
       const z = k * SP + off - camW;
       if (z < V.zStart - 6 || z > Z_FAR - 10) continue;
       const zn = Math.max(V.zStart, z - 9), zf = z + 10;
-      const n = G(zn), f = G(zf), xl = sd * (ROAD_HALF - 1.5);
+      const n = G(zn), f = G(zf), xl = sd < 0 ? -(ROAD_HALF - 1.5) : env.lanes2 ? LANE_W / 2 - 0.8 : ROAD_HALF - 1.5;
       drawGlowRect(ctx, lamp, X(n, xl - 8), f.y, X(n, xl + 8), n.y + (n.y - f.y) * 0.15, 0.5 * pal.lit * (1 - fogK(z)));
     }
   }
@@ -2536,7 +2841,7 @@ function drawBuildings(pal, dist, rival) {
   const env = ENV[pal.env] || ENV.aroad, camW = dist - Z_PLAYER, BL = env.block, night = pal.lit > 0.5;
   for (const sd of [-1, 1]) {
     if (sd < 0 && env.viaduct) { drawViaduct(pal, dist, rival); continue; }
-    if ((sd < 0 && env.sea) || !env.density) continue;
+    if ((sd < 0 && (env.sea || env.leftClear)) || !env.density) continue;
     const bFirst = Math.floor((camW + 1) / BL), bLast = Math.floor((camW + Z_FAR) / BL);
     for (let bi = bLast; bi >= bFirst; bi--) {
       if (hash(bi, sd + 5) > env.density) continue;
@@ -2560,6 +2865,14 @@ function drawBuildings(pal, dist, rival) {
         ctx.fillRect(Math.min(face[0].x, c0.x), face[1].y, Math.abs(c0.x - face[0].x), face[0].y - face[1].y);
         ctx.fillStyle = css(wc(pal, baseC, 1.3, fg));
         ctx.fillRect(Math.min(face[0].x, c0.x), face[1].y, Math.abs(c0.x - face[0].x), Math.max(1, 0.25 * face[0].s));
+      }
+      if (env.rebar && !clipped && hash(bi, sd + 44) < env.rebar && z0 < 160) {
+        // steel starter bars left sticking out of the flat roof, ready for the next floor
+        const n = 3 + Math.floor(hash(bi, sd + 45) * 4);
+        ctx.strokeStyle = css(wc(pal, [84, 70, 60], 1, fg)); ctx.lineWidth = Math.max(1, 0.04 * face[0].s);
+        ctx.beginPath();
+        for (let i = 0; i < n; i++) { const zz = z0 + 0.4 + (z1 - z0 - 0.8) * i / Math.max(1, n - 1), q0 = P(xs, hgt, zz), q1 = P(xs, hgt + 0.9, zz); ctx.moveTo(q0.x, q0.y); ctx.lineTo(q1.x, q1.y); }
+        ctx.stroke();
       }
       if (env.roof && (env.roof === true || hash(bi, sd + 43) < env.roof)) {
         // hipped tile roof sloping back from the front wall
@@ -2622,7 +2935,7 @@ function drawBuildings(pal, dist, rival) {
       }
       // shop fronts with signs
       if (env.shops && hash(bi, sd + 21) < env.shops) {
-        const names = env.names === 'seaside' ? SEASIDE_NAMES : env.names === 'essex' ? ESSEX_NAMES : SHOP_NAMES;
+        const names = env.names === 'seaside' ? SEASIDE_NAMES : env.names === 'essex' ? ESSEX_NAMES : env.names === 'mu' ? MU_SHOP_NAMES : SHOP_NAMES;
         const nm = SHOP_SPECIAL[rival] && hash(bi, sd + 25) < 0.22 ? SHOP_SPECIAL[rival] : names[Math.floor(hash(bi, sd + 23) * names.length)];
         const za = Math.max(z0, bi * BL - camW + 1.2), zb2 = Math.min(z1, bi * BL - camW + BL - 1.2);
         if (zb2 > za) {
@@ -2703,6 +3016,7 @@ function drawViaduct(pal, dist, rival) {
 /* ---------- roadside sprites ---------- */
 function lampSprites(list, pal, dist) {
   const env = ENV[pal.env] || ENV.aroad, SP = env.lampSp, camW = dist - Z_PLAYER;
+  if (!SP) return;
   const lamp = pal.env === 'towers' ? [220, 230, 255] : [242, 163, 58];
   for (const sd of [-1, 1]) {
     const off = sd < 0 ? 0 : SP / 2;
@@ -2882,6 +3196,159 @@ function tankSprites(list, pal, dist) {
     } });
   }
 }
+
+/* ---------- the island's roadside ---------- */
+function drawPalm(x, z, h, lean, seed, pal) {
+  const fg = fogK(z), b = P(x, 0, z);
+  const pts = []; for (let i = 0; i <= 6; i++) { const t = i / 6; pts.push(P(x + lean * t * t, h * t, z)); }
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = css(wc(pal, [122, 102, 78], 1, fg)); ctx.lineWidth = Math.max(1, 0.34 * b.s);
+  ctx.beginPath(); pts.forEach((q, i) => i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)); ctx.stroke();
+  const top = pts[6], L = 3.8 * b.s;
+  ctx.strokeStyle = css(wc(pal, shade([62, 116, 50], 0.8 + hash(seed, 3) * 0.35), 1, fg)); ctx.lineWidth = Math.max(1, 0.3 * b.s);
+  for (let i = 0; i < 11; i++) {
+    const a = -Math.PI - 0.45 + i / 10 * (Math.PI + 0.9) + (hash(seed, i + 7) - 0.5) * 0.25, l = L * (0.8 + hash(seed, i + 20) * 0.35);
+    const ex = top.x + Math.cos(a) * l, ey = top.y + Math.sin(a) * l * 0.45 + l * 0.62;
+    ctx.beginPath(); ctx.moveTo(top.x, top.y); ctx.quadraticCurveTo(top.x + Math.cos(a) * l * 0.55, top.y + Math.sin(a) * l * 0.7 - l * 0.12, ex, ey); ctx.stroke();
+  }
+  ctx.fillStyle = css(wc(pal, [92, 70, 36], 1, fg));
+  for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.arc(top.x + (i - 1) * 0.28 * b.s, top.y + 0.35 * b.s, Math.max(0.8, 0.2 * b.s), 0, 7); ctx.fill(); }
+  ctx.lineCap = 'butt';
+}
+function drawFilao(x, z, h, seed, pal) {
+  const fg = fogK(z), b = P(x, 0, z), t = P(x, h, z), w = h * 0.2 * b.s;
+  ctx.fillStyle = css(wc(pal, [84, 70, 60], 1, fg)); ctx.fillRect(b.x - 0.12 * b.s, t.y + (b.y - t.y) * 0.3, 0.24 * b.s, (b.y - t.y) * 0.7);
+  ctx.fillStyle = css(wc(pal, shade([50, 74, 58], 0.85 + hash(seed, 5) * 0.3), 1, fg));
+  for (let i = 0; i < 4; i++) {
+    const yy = t.y + (b.y - t.y) * (0.12 + i * 0.16), ww = w * (0.6 + i * 0.22) * (0.8 + hash(seed, i) * 0.4);
+    ctx.beginPath(); ctx.ellipse(b.x + (hash(seed, i + 9) - 0.5) * w * 0.6, yy, ww, (b.y - t.y) * 0.13, 0, 0, 7); ctx.fill();
+  }
+}
+const BOAT_COLS = [[210, 50, 44], [36, 96, 176], [240, 196, 50], [44, 150, 80], [236, 236, 230], [230, 120, 40]];
+function islandSprites(list, pal, dist, t) {
+  const env = ENV[pal.env]; if (!env || !MU_ENVS.has(pal.env)) return;
+  const camW = dist - Z_PLAYER, RE = env.lanes2 ? LANE_W / 2 + 0.7 : ROAD_HALF, oppX1 = env.lanes2 ? ROAD_HALF + 10 : ROAD_HALF + 13.2;
+  const each = (SP, seed, fn, reach) => { const k0 = Math.floor((camW - 20) / SP), k1 = Math.floor((camW + (reach || Z_FAR)) / SP); for (let k = k0; k <= k1; k++) fn(k, k * SP - camW + hash(k, seed) * SP * 0.6); };
+  // coconut palms
+  if (env.palms) each(11, 120, (k, z) => {
+    if (z < 2 || z > Z_FAR || hash(k, 121) > env.palms * 0.75) return;
+    const side = env.sea ? (hash(k, 122) < 0.72 ? -1 : 1) : hash(k, 122) < 0.5 ? -1 : 1;
+    let x;
+    if (side < 0) x = env.sea ? -(ROAD_HALF + 5 + hash(k, 123) * 10) : env.harbour ? -(ROAD_HALF + 4) : -(ROAD_HALF + 4.5 + hash(k, 123) * 5);
+    else x = env.opposite ? (env.lanes2 && hash(k, 124) < 0.5 ? RE + 4 : oppX1 + 4 + hash(k, 123) * 4) : ROAD_HALF + 4.5 + hash(k, 123) * 2;
+    const h = 8 + hash(k, 125) * 5, lean = (hash(k, 126) - 0.5) * 3 + (env.sea && side < 0 ? -1.2 : 0);
+    list.push({ z, draw: () => drawPalm(x, z, h, lean, k, pal) });
+  });
+  // filaos along the beach
+  if (env.filaos) each(6, 130, (k, z) => {
+    if (z < 2 || z > Z_FAR || hash(k, 131) < 0.25) return;
+    const x = -(ROAD_HALF + 3 + hash(k, 132) * 9), h = 10 + hash(k, 133) * 7;
+    list.push({ z, draw: () => drawFilao(x, z, h, k, pal) });
+  });
+  // pirogues and the odd catamaran on the lagoon
+  if (env.boats) each(34, 140, (k, z) => {
+    if (z < 8 || z > Z_FAR || hash(k, 141) < 0.3) return;
+    const x = -(ROAD_HALF + 26 + hash(k, 142) * 130), col = BOAT_COLS[Math.floor(hash(k, 143) * BOAT_COLS.length)], mast = hash(k, 144) < 0.4;
+    list.push({ z, draw: () => {
+      const fg = fogK(z), bob = Math.sin(t * 1.3 + k) * 0.06, q = P(x, bob, z), w = 5.4 * q.s, hh = 0.75 * q.s;
+      ctx.fillStyle = css(wc(pal, col, 1, fg));
+      ctx.beginPath(); ctx.moveTo(q.x - w / 2, q.y - hh); ctx.lineTo(q.x + w / 2, q.y - hh * 1.2); ctx.lineTo(q.x + w * 0.38, q.y); ctx.lineTo(q.x - w * 0.4, q.y); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = css(wc(pal, [240, 240, 236], 1, fg)); ctx.fillRect(q.x - w / 2, q.y - hh, w, Math.max(1, hh * 0.18));
+      if (mast) { const m = P(x, 6 + bob, z); ctx.strokeStyle = css(wc(pal, [200, 200, 196], 1, fg)); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(q.x, q.y - hh); ctx.lineTo(m.x, m.y); ctx.stroke(); }
+      if (pal.lit > 0.5) { ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, [255, 230, 170], q.x, q.y - hh * 2, Math.max(3, hh * 2), 0.5 * (1 - fg)); ctx.globalCompositeOperation = 'source-over'; }
+    } });
+  });
+  // kite surfers off Le Morne
+  if (env.kites) each(55, 150, (k, z) => {
+    if (z < 20 || z > Z_FAR || hash(k, 151) < 0.35) return;
+    const x = -(ROAD_HALF + 50 + hash(k, 152) * 160), y = 12 + hash(k, 153) * 14, col = NEON[Math.floor(hash(k, 154) * NEON.length)];
+    list.push({ z, draw: () => {
+      const fg = fogK(z), q = P(x, y + Math.sin(t * 0.7 + k) * 0.8, z), s0 = P(x + 6, 0.4, z), r = 3.2 * q.s;
+      ctx.strokeStyle = css(mix(col, pal.fog, fg)); ctx.lineWidth = Math.max(1.2, 0.5 * q.s);
+      ctx.beginPath(); ctx.arc(q.x, q.y + r * 0.6, r, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke();
+      ctx.strokeStyle = 'rgba(40,40,40,0.35)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(q.x, q.y); ctx.lineTo(s0.x, s0.y); ctx.stroke();
+      ctx.fillStyle = css(wc(pal, [30, 30, 32], 1, fg)); ctx.fillRect(s0.x - 0.2 * s0.s, s0.y - 1.6 * s0.s, 0.4 * s0.s, 1.6 * s0.s);
+    } });
+  });
+  // basalt stone piles cleared from the cane fields
+  if (env.stones) each(64, 160, (k, z) => {
+    if (z < 6 || z > Z_FAR || hash(k, 161) < 0.4) return;
+    const sd = hash(k, 162) < 0.5 ? -1 : 1, x = sd < 0 ? -(ROAD_HALF + 16 + hash(k, 163) * 50) : oppX1 + 14 + hash(k, 163) * 50, w = 6 + hash(k, 164) * 5, h = 3 + hash(k, 165) * 2.5;
+    list.push({ z, draw: () => {
+      const fg = fogK(z), l = P(x - w / 2, 0, z), r = P(x + w / 2, 0, z), tp = P(x + (hash(k, 166) - 0.5) * 1.5, h, z);
+      ctx.fillStyle = css(wc(pal, MAT.basalt, 0.95 + hash(k, 167) * 0.15, fg));
+      ctx.beginPath(); ctx.moveTo(l.x, l.y); ctx.lineTo(tp.x - (r.x - l.x) * 0.08, tp.y); ctx.lineTo(tp.x + (r.x - l.x) * 0.08, tp.y); ctx.lineTo(r.x, r.y); ctx.closePath(); ctx.fill();
+      if (hash(k, 168) < 0.4) { ctx.fillStyle = css(wc(pal, [60, 98, 46], 1, fg)); ctx.beginPath(); ctx.arc(tp.x, tp.y - 0.6 * l.s, 1.2 * l.s, 0, 7); ctx.fill(); }
+    } });
+  });
+  // the harbour: containers stacked along the quay and ship to shore cranes
+  if (env.harbour) {
+    each(13, 170, (k, z0) => {
+      const z = k * 13 - camW; if (z + 12 < 2 || z > Z_FAR || hash(k, 171) < 0.18) return;
+      const n = 1 + Math.floor(hash(k, 172) * 4), xf = -(ROAD_HALF + 12 + hash(Math.floor(k / 4), 173) * 10);
+      list.push({ z: Math.max(2, z), draw: () => {
+        const za = Math.max(2, z), zb = Math.min(Z_FAR, z + 12); if (zb <= za) return;
+        const fg = fogK(za);
+        for (let i = 0; i < n; i++) {
+          const cc = [[26, 92, 150], [176, 44, 40], [40, 120, 70], [214, 120, 30], [128, 132, 136], [226, 226, 220]][Math.floor(hash(k * 5 + i, 174) * 6)];
+          ctx.fillStyle = css(wc(pal, cc, 0.92, fg)); vquad(ctx, xf, i * 2.6, i * 2.6 + 2.5, za, zb);
+        }
+      } });
+    });
+    each(170, 175, (k, z0) => {
+      const z = 60 + k * 170 - camW; if (z < 3 || z > Z_FAR) return;
+      const xl = -(ROAD_HALF + 44), col = hash(k, 176) < 0.5 ? [196, 58, 44] : [70, 110, 170];
+      list.push({ z, draw: () => {
+        const fg = fogK(z), c2 = css(wc(pal, col, 1, fg));
+        ctx.strokeStyle = c2; ctx.lineWidth = Math.max(1, 0.35 * P(xl, 0, z).s);
+        const pt = (x, y) => P(x, y, z);
+        const legs = [[xl, 0], [xl, 40], [xl - 18, 0], [xl - 18, 40]];
+        ctx.beginPath();
+        ctx.moveTo(pt(xl, 0).x, pt(xl, 0).y); ctx.lineTo(pt(xl, 40).x, pt(xl, 40).y);
+        ctx.moveTo(pt(xl - 18, 0).x, pt(xl - 18, 0).y); ctx.lineTo(pt(xl - 18, 40).x, pt(xl - 18, 40).y);
+        ctx.moveTo(pt(xl + 14, 40).x, pt(xl + 14, 40).y); ctx.lineTo(pt(xl - 70, 40).x, pt(xl - 70, 40).y);
+        ctx.moveTo(pt(xl, 40).x, pt(xl, 40).y); ctx.lineTo(pt(xl - 9, 52).x, pt(xl - 9, 52).y); ctx.lineTo(pt(xl - 18, 40).x, pt(xl - 18, 40).y);
+        ctx.moveTo(pt(xl - 9, 52).x, pt(xl - 9, 52).y); ctx.lineTo(pt(xl - 70, 40).x, pt(xl - 70, 40).y);
+        ctx.stroke();
+        if (pal.lit > 0.5) { const q = pt(xl - 9, 52); ctx.fillStyle = '#ff3030'; ctx.fillRect(q.x - 1, q.y - 1, 2.2, 2.2); ctx.globalCompositeOperation = 'lighter'; for (let i = 0; i < 4; i++) { const g = pt(xl - i * 20, 39); drawGlow(ctx, [255, 220, 160], g.x, g.y, clamp(1.2 * g.s, 3, 30), 0.5 * (1 - fg)); } ctx.globalCompositeOperation = 'source-over'; }
+      } });
+    });
+  }
+  // the Seven Coloured Earths by the Chamarel road
+  if (env.earths) for (const wz of [1250, 4150]) {
+    const z = wz - camW; if (z < 4 || z > Z_FAR) continue;
+    list.push({ z, draw: () => {
+      const fg = fogK(z), x0 = ROAD_HALF + 12, bands = [[160, 78, 46], [128, 70, 96], [104, 112, 150], [176, 124, 62], [96, 112, 70], [196, 146, 96]];
+      const pts = []; for (let i = 0; i <= 14; i++) { const xx = x0 + i * 3, hh = 2.2 + Math.sin(i * 1.3) * 1.2 + Math.sin(i * 0.5 + 1) * 1.4; pts.push(P(xx, Math.max(0.4, hh), z + i * 1.5)); }
+      const base = [P(x0 + 42, 0, z + 21), P(x0, 0, z)];
+      ctx.save(); ctx.beginPath(); ctx.moveTo(base[1].x, base[1].y); for (const q of pts) ctx.lineTo(q.x, q.y); ctx.lineTo(base[0].x, base[0].y); ctx.closePath(); ctx.clip();
+      const top = Math.min(...pts.map(q => q.y)), bot = Math.max(base[0].y, base[1].y), hh = (bot - top) / bands.length;
+      bands.forEach((bc, i) => { ctx.fillStyle = css(wc(pal, bc, 1, fg)); ctx.fillRect(Math.min(base[1].x, base[0].x) - 5, top + i * hh - 1, Math.abs(base[0].x - base[1].x) + 400, hh + 2); });
+      ctx.restore();
+    } });
+  }
+}
+/* the last flight of the night coming in over the M1 */
+function drawPlane(pal, t, off) {
+  const cyc = 24, ph = ((t % cyc) + cyc) % cyc / cyc;
+  if (ph > 0.75) return;
+  const k = ph / 0.75, x = W * (1.15 - 1.4 * k) + off * 0.15, y = V.hy * (0.18 + 0.55 * k), s = clamp(W * 0.05, 26, 70) * (0.7 + k * 0.6);
+  const night = pal.lit > 0.5, body = night ? '#20242a' : '#dfe3e6', dark = night ? '#15181c' : '#9aa2a8';
+  ctx.save(); ctx.translate(x, y); ctx.rotate(0.12);
+  ctx.fillStyle = dark; ctx.beginPath(); ctx.moveTo(-s * 0.05, 0); ctx.lineTo(s * 0.35, s * 0.34); ctx.lineTo(s * 0.5, s * 0.34); ctx.lineTo(s * 0.25, 0); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = body; ctx.beginPath(); ctx.ellipse(0, 0, s * 0.62, s * 0.075, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = dark; ctx.beginPath(); ctx.moveTo(s * 0.44, -s * 0.02); ctx.lineTo(s * 0.62, -s * 0.24); ctx.lineTo(s * 0.64, -s * 0.02); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-s * 0.05, 0); ctx.lineTo(s * 0.3, -s * 0.18); ctx.lineTo(s * 0.4, -s * 0.18); ctx.lineTo(s * 0.22, 0); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = dark; ctx.beginPath(); ctx.ellipse(s * 0.2, s * 0.13, s * 0.07, s * 0.03, 0, 0, 7); ctx.fill();
+  ctx.restore();
+  ctx.globalCompositeOperation = 'lighter';
+  const strobe = (t * 1.2) % 1 < 0.08;
+  if (night || pal.time === 'dusk') drawGlow(ctx, [255, 250, 230], x - s * 0.6, y - s * 0.02, s * 0.9, 0.85);
+  drawGlow(ctx, [255, 60, 60], x + s * 0.02, y + s * 0.3, s * 0.12, 0.8);
+  if (strobe) drawGlow(ctx, [255, 255, 255], x + s * 0.64, y - s * 0.2, s * 0.3, 0.9);
+  ctx.globalCompositeOperation = 'source-over';
+}
+
 /* the QE2 bridge: a tower each side of the deck with cables fanning down to the edges */
 const PYLON_SP = 1300;
 function bridgeSprites(list, pal, dist, towers) {
@@ -3049,7 +3516,7 @@ function updateOncoming(pal, v, dt, active) {
   // c.z is the far end of an oncoming car; drop it once its front has passed the camera
   for (let i = oncoming.length - 1; i >= 0; i--) if (oncoming[i].z < 7) oncoming.splice(i, 1);
   if (oncoming.length < 5 && Math.random() < dt * 1.4) {
-    const lane = randInt(3), ty = pickType(null, ESSEX_ENVS.has(pal.env));
+    const lane = randInt(env.lanes2 ? 2 : 3), ty = pickType(null, ESSEX_ENVS.has(pal.env), MU_ENVS.has(pal.env));
     if (!oncoming.some(c => c.lane === lane && c.z > Z_FAR - 40))
       oncoming.push({ z: Z_FAR - 5, lane, v: rand(14, 24), type: ty.id, color: ty.id === 'cab' ? '#141517' : ty.id === 'van' ? '#e9ebec' : TRAFFIC_COLORS[randInt(TRAFFIC_COLORS.length)] });
   }
@@ -3104,10 +3571,10 @@ function renderScene(R, dt) {
   sceneT += dt;
   computeView((R.nl || 3) > 3 ? ROAD_HALF + LANE_W * 0.5 : ROAD_HALF);
   const px = laneToX(p.x);
-  V.camX += (px * 0.42 + ((R.nl || 3) > 3 ? 1.2 : 0) - V.camX) * Math.min(1, dt * 5);
+  V.camX += (px * 0.42 + ((R.nl || 3) > 3 ? 1.2 : (R.nl || 3) < 3 ? -1.2 : 0) - V.camX) * Math.min(1, dt * 5);
   V.boost += ((p.boosting ? 1 : 0) - V.boost) * Math.min(1, dt * (p.boosting ? 5 : 2.5));
   V.camBack = V.boost * 1.1;
-  V.curve = curveAt(p.dist, (R.ev.index || 0) + (R.ev.kind === 'street' ? 3 : 0));
+  V.curve = curveAt(p.dist, (R.ev.index || 0) + (R.ev.kind === 'street' ? 3 : 0)) * (R.ev.curvy || 1);
   if (R._hill === undefined) R._hill = makeHill(ev.hill);
   V.hill = R._hill; V.camW = p.dist - Z_PLAYER;
   if (V.hill) {
@@ -3131,9 +3598,10 @@ function renderScene(R, dt) {
   if (ev.dawn && R._blend > 0) { const s2 = skyLayer(R._dawnPal, ev.sky || []); ctx.globalAlpha = R._blend; ctx.drawImage(s2, off, V.hy + tilt - s2.height + 2); ctx.globalAlpha = 1; }
   if (V.hill) {
     // from up on the bridge the land (or the river) stretches away below the horizon
-    const envD = ENV[pal.env] || ENV.aroad, far = V.hP > 15 && envD.bridge ? MAT.river : MAT.verge;
+    const envD = ENV[pal.env] || ENV.aroad, far = V.hP > 15 && envD.bridge ? MAT.river : groundOf(envD);
     ctx.fillStyle = css(wc(pal, far, 1, 0.9)); ctx.fillRect(-20, V.hy + tilt, W + 40, H + 40);
   }
+  if ((ENV[pal.env] || {}).planes) drawPlane(pal, sceneT, off);
   drawRoad(pal, p.dist, R.demo ? 1e9 : ev.dist);
   drawLampPools(pal, p.dist);
   drawBuildings(pal, p.dist, ev.rival);
@@ -3149,6 +3617,7 @@ function renderScene(R, dt) {
   lampSprites(list, pal, p.dist);
   treeSprites(list, pal, p.dist);
   woodSprites(list, pal, p.dist); reedSprites(list, pal, p.dist); flyoverSprites(list, pal, p.dist); pylonSprites(list, pal, p.dist); tankSprites(list, pal, p.dist);
+  islandSprites(list, pal, p.dist, sceneT);
   bridgeSprites(list, pal, p.dist, ev.towers);
   beaconSprites(list, pal, p.dist, R.demo ? 1e9 : ev.dist, sceneT);
   if (!R.demo) {
@@ -4369,15 +4838,6 @@ function drawRim(g, f, tx, look, env, fg, simple) {
 const STUDIO = { glowK: 0.45, amb: 0.52, key: vnorm([-0.4, 0.8, -0.45]), keyI: 0.62, keyCol: [1, 1, 1], spec: 0.55, sky: [200, 210, 225], fog: [0, 0, 0], tint: [1, 1, 1], lit: true };
 
 /* ---------- rival portraits (flat illustrated style) ---------- */
-/* portraits people have sent in: drawn instead of the illustrated face */
-const PHOTOS = { saleenah: 'data:image/jpeg;base64,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' };
-const photoImgs = {};
-function photoFor(id) {
-  if (!PHOTOS[id]) return null;
-  let im = photoImgs[id];
-  if (!im) { im = photoImgs[id] = new Image(); im.onload = () => { if (typeof paintCanvases === 'function') paintCanvases(); if (typeof introFor !== 'undefined') introFor = null; }; im.src = PHOTOS[id]; }
-  return im.complete && im.naturalWidth ? im : null;
-}
 function drawPortrait(canvas, face, hidden) {
   const cw = canvas.clientWidth || 96, ch = canvas.clientHeight || 96, dpr = Math.min(2, window.devicePixelRatio || 1);
   if (canvas.width !== Math.round(cw * dpr)) { canvas.width = Math.round(cw * dpr); canvas.height = Math.round(ch * dpr); }
@@ -4386,8 +4846,16 @@ function drawPortrait(canvas, face, hidden) {
   g.clearRect(0, 0, 100, 100);
   const bg = hex2rgb(face.bg || '#333');
   const gr = g.createLinearGradient(0, 0, 0, 100);
-  gr.addColorStop(0, css(shade(bg, 0.75))); gr.addColorStop(1, css(shade(bg, 0.35)));
+  if (face.bgBrick && !hidden) { gr.addColorStop(0, css(shade(bg, 1.08))); gr.addColorStop(1, css(shade(bg, 0.7))); }
+  else { gr.addColorStop(0, css(shade(bg, 0.75))); gr.addColorStop(1, css(shade(bg, 0.35))); }
   g.fillStyle = gr; g.fillRect(0, 0, 100, 100);
+  if (face.bgBrick && !hidden) {
+    // a sunlit brick wall: warm light top left, soft mortar lines
+    const lg = g.createRadialGradient(22, 18, 4, 22, 18, 90); lg.addColorStop(0, 'rgba(255,226,170,0.55)'); lg.addColorStop(1, 'rgba(255,226,170,0)');
+    g.fillStyle = lg; g.fillRect(0, 0, 100, 100);
+    g.strokeStyle = 'rgba(255,236,200,0.28)'; g.lineWidth = 0.9;
+    for (let r = 0, y = 4; y < 100; r++, y += 9) { g.beginPath(); g.moveTo(0, y); g.lineTo(100, y); for (let x = (r % 2) * 11 - 11; x < 100; x += 22) { g.moveTo(x, y); g.lineTo(x, y + 9); } g.stroke(); }
+  }
   if (hidden) {
     g.fillStyle = '#050506';
     g.beginPath(); g.ellipse(50, 44, 17, 21, 0, 0, 7); g.fill();
@@ -4397,8 +4865,6 @@ function drawPortrait(canvas, face, hidden) {
     g.fillStyle = 'rgba(242,163,58,0.9)'; g.font = '700 26px ' + FONT_D; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('?', 50, 46);
     return;
   }
-  const photo = face.photo && photoFor(face.photo);
-  if (photo) { g.drawImage(photo, 0, 0, 100, 100); return; }
   if (face.initials) {
     // head and shoulders in the rival's colours with their initials, until a photo is sent over
     const tone = face.dark ? 'rgba(20,22,26,' : 'rgba(255,255,255,';
@@ -4450,7 +4916,13 @@ function drawPortrait(canvas, face, hidden) {
     g.beginPath(); g.moveTo(18, 100); g.bezierCurveTo(20, 70, 34, 62, 50, 62); g.bezierCurveTo(66, 62, 80, 70, 82, 100); g.fill();
   }
   // hijab sits behind the face and over the shoulders
-  if (face.hair === 'hijab') {
+  const thin = face.hair === 'hijab' && face.scarf === 'thin';
+  // thin fabric: only a little bigger than her head, then it drops past the neck and lies over the chest
+  const thinScarf = () => { g.beginPath(); g.moveTo(50, 21.5);
+    g.bezierCurveTo(60.5, 21.5, 67.6, 30, 67.8, 43); g.bezierCurveTo(68, 55, 66, 63, 69, 72); g.bezierCurveTo(71.5, 80, 75.5, 86, 76, 92); g.lineTo(76.5, 100);
+    g.lineTo(23.5, 100); g.lineTo(24, 92); g.bezierCurveTo(24.5, 86, 28.5, 80, 31, 72); g.bezierCurveTo(34, 63, 32, 55, 32.2, 43); g.bezierCurveTo(32.4, 30, 39.5, 21.5, 50, 21.5); g.closePath(); };
+  if (thin) { g.fillStyle = hair; thinScarf(); g.fill(); }
+  else if (face.hair === 'hijab') {
     const back = () => { g.beginPath(); g.ellipse(50, 46, 24, 28, 0, 0, 7); g.moveTo(22, 100); g.bezierCurveTo(24, 72, 36, 62, 50, 62); g.bezierCurveTo(64, 62, 76, 72, 78, 100); g.closePath(); };
     g.fillStyle = hair; back(); g.fill();
     scarfPrint(back, 20, 16, 80, 100, 81);
@@ -4475,7 +4947,20 @@ function drawPortrait(canvas, face, hidden) {
     }
     g.globalAlpha = 1; g.restore();
   }
-  if (face.hair === 'hijab') {
+  if (thin) {
+    // the scarf lies over her top, so draw the part below the chin again on top of it
+    g.save(); g.beginPath(); g.rect(0, 60, 100, 40); g.clip(); g.fillStyle = hair; thinScarf(); g.fill(); g.restore();
+    // wrapped under the chin, then soft folds where the thin fabric falls
+    g.strokeStyle = 'rgba(255,255,255,0.09)'; g.lineWidth = 0.8; g.lineCap = 'round';
+    g.beginPath();
+    g.moveTo(37, 70.5); g.bezierCurveTo(42, 76, 58, 76, 63, 70.5);
+    g.moveTo(34, 50); g.bezierCurveTo(33, 60, 32, 72, 28.5, 90);
+    g.moveTo(66, 50); g.bezierCurveTo(67, 60, 68, 72, 71.5, 90);
+    g.moveTo(40, 79); g.bezierCurveTo(48, 84, 58, 83, 66, 90);
+    g.stroke();
+    g.strokeStyle = 'rgba(0,0,0,0.35)'; g.beginPath(); g.moveTo(35.5, 76); g.bezierCurveTo(44, 82, 57, 81.5, 65, 76); g.stroke();
+  }
+  else if (face.hair === 'hijab') {
     const drape = () => { g.beginPath(); g.moveTo(30, 100); g.bezierCurveTo(32, 78, 40, 70, 50, 70); g.bezierCurveTo(60, 70, 68, 78, 70, 100); g.closePath(); };
     g.fillStyle = hair; drape(); g.fill(); scarfPrint(drape, 28, 68, 72, 100, 91);
     // a soft fold where the scarf crosses under the chin
@@ -4508,7 +4993,8 @@ function drawPortrait(canvas, face, hidden) {
   if (big) { g.translate(50, 50); g.scale(1.16, 1.03); g.translate(-50, -50); }
   // ears and head
   if (face.hair !== 'hijab' && !lhl) { g.fillStyle = Sd; g.beginPath(); g.ellipse(33, 47, 3.2, 5, 0, 0, 7); g.ellipse(67, 47, 3.2, 5, 0, 0, 7); g.fill(); }
-  g.fillStyle = S; g.beginPath(); g.ellipse(50, 45, face.hair === 'hijab' ? 14.5 : 17, face.hair === 'hijab' ? 18 : 21, 0, 0, 7); g.fill();
+  if (thin) { g.fillStyle = S; g.beginPath(); g.moveTo(50, 28.5); g.bezierCurveTo(59.5, 28.5, 65.6, 34, 65.4, 45); g.bezierCurveTo(65.2, 56, 59.5, 67.2, 50, 67.4); g.bezierCurveTo(40.5, 67.2, 34.8, 56, 34.6, 45); g.bezierCurveTo(34.4, 34, 40.5, 28.5, 50, 28.5); g.fill(); }
+  else { g.fillStyle = S; g.beginPath(); g.ellipse(50, 45, face.hair === 'hijab' ? 14.5 : 17, face.hair === 'hijab' ? 18 : 21, 0, 0, 7); g.fill(); }
   g.fillStyle = Sl; g.beginPath(); g.ellipse(45, 38, 6, 8, -0.3, 0, 7); g.globalAlpha = 0.35; g.fill(); g.globalAlpha = 1;
   if (face.earrings && face.hair !== 'braids' && !face.bigEarrings) { g.fillStyle = face.earrings; g.beginPath(); g.arc(33, 53, 1.6, 0, 7); g.arc(67, 53, 1.6, 0, 7); g.fill(); }
   // hair on top
@@ -4536,6 +5022,12 @@ function drawPortrait(canvas, face, hidden) {
   else if (face.hair === 'crop') { cap(24.5); g.globalAlpha = 0.55; g.beginPath(); g.ellipse(34, 42, 2.6, 7, 0, 0, 7); g.ellipse(66, 42, 2.6, 7, 0, 0, 7); g.fill(); g.globalAlpha = 1; }
   else if (face.hair === 'topknot') { cap(24); g.beginPath(); g.ellipse(50, 20, 8, 5.5, 0, 0, 7); g.fill(); for (const [x, y] of [[37, 31], [42, 28], [62, 30], [35, 36]]) { g.beginPath(); g.arc(x, y, 3.2, 0, 7); g.fill(); } }
   else if (face.hair === 'bald') { g.fillStyle = 'rgba(255,255,255,0.22)'; g.beginPath(); g.ellipse(45, 29, 7, 3.2, -0.3, 0, 7); g.fill(); g.fillStyle = css(shade(skin, 0.8)); g.globalAlpha = 0.35; g.beginPath(); g.ellipse(34, 42, 2, 5, 0, 0, 7); g.ellipse(66, 42, 2, 5, 0, 0, 7); g.fill(); g.globalAlpha = 1; }
+  else if (thin) {
+    // the scarf's front edge lies close along the forehead and down the cheeks
+    g.fillStyle = hair; g.beginPath(); g.moveTo(34.8, 44); g.bezierCurveTo(35, 30, 42, 26.2, 50, 26.2); g.bezierCurveTo(58, 26.2, 65, 30, 65.2, 44);
+    g.bezierCurveTo(63.5, 35.4, 57.5, 31.4, 50, 31.2); g.bezierCurveTo(42.5, 31.4, 36.5, 35.4, 34.8, 44); g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(255,255,255,0.12)'; g.lineWidth = 0.7; g.beginPath(); g.moveTo(36.3, 41); g.bezierCurveTo(38.5, 33.5, 44, 31.6, 50, 31.4); g.stroke();
+  }
   else if (face.hair === 'hijab') {
     const crown = () => { g.beginPath(); g.moveTo(35.5, 40); g.bezierCurveTo(36, 28, 44, 25, 50, 25); g.bezierCurveTo(56, 25, 64, 28, 64.5, 40); g.bezierCurveTo(60, 32, 55, 30, 50, 30); g.bezierCurveTo(45, 30, 40, 32, 35.5, 40); g.closePath(); };
     g.fillStyle = hair; crown(); g.fill(); scarfPrint(crown, 34, 24, 66, 41, 101);
@@ -4576,22 +5068,48 @@ function drawPortrait(canvas, face, hidden) {
   if (face.facial === 'shortbeard') { g.fillStyle = fh; g.globalAlpha = 0.55; g.beginPath(); g.moveTo(34, 47); g.bezierCurveTo(35, 61, 42, 66, 50, 66); g.bezierCurveTo(58, 66, 65, 61, 66, 47); g.bezierCurveTo(62, 55, 57, 55, 50, 55); g.bezierCurveTo(43, 55, 38, 55, 34, 47); g.fill(); g.globalAlpha = 1; }
   if (face.facial === 'goatee') { g.fillStyle = fh; g.globalAlpha = 0.25; g.beginPath(); g.ellipse(50, 58, 12, 7, 0, 0, Math.PI); g.fill(); g.globalAlpha = 0.6; g.beginPath(); g.ellipse(50, 64.6, 4.4, 2.4, 0, 0, 7); g.fill(); g.globalAlpha = 1; }
   if (face.facial === 'moustache' || face.facial === 'beard' || face.facial === 'fullbeard' || face.facial === 'shortbeard' || face.facial === 'goatee') { g.fillStyle = fh; g.globalAlpha = face.facial === 'goatee' || face.facial === 'shortbeard' ? 0.75 : 1; g.beginPath(); g.ellipse(50, 55.2, 6, 1.7, 0, 0, 7); g.fill(); g.globalAlpha = 1; }
-  if (face.blush) for (const bx of [39.5, 60.5]) { const bg2 = g.createRadialGradient(bx, 52, 0, bx, 52, 6); bg2.addColorStop(0, 'rgba(232,105,118,0.32)'); bg2.addColorStop(1, 'rgba(232,105,118,0)'); g.fillStyle = bg2; g.beginPath(); g.ellipse(bx, 52, 6, 4.2, 0, 0, 7); g.fill(); }
+  if (face.blush) { const hj = face.hair === 'hijab'; for (const bx of hj ? [41.8, 58.2] : [39.5, 60.5]) { const by = hj ? 51.5 : 52, br = hj ? 4.6 : 6; const bg2 = g.createRadialGradient(bx, by, 0, bx, by, br); bg2.addColorStop(0, 'rgba(232,105,118,0.34)'); bg2.addColorStop(1, 'rgba(232,105,118,0)'); g.fillStyle = bg2; g.beginPath(); g.ellipse(bx, by, br, br * 0.7, 0, 0, 7); g.fill(); } }
   // features
+  if (face.eyes === 'big') {
+    for (const sd of [-1, 1]) {
+      const ex = 50 + sd * 6.9, ey = 46.2;
+      const eye = () => { g.beginPath(); g.moveTo(ex - 3.6, ey + 0.3); g.bezierCurveTo(ex - 2.6, ey - 2.9, ex + 2.6, ey - 2.9, ex + 3.6, ey - 0.1); g.bezierCurveTo(ex + 2.4, ey + 2.4, ex - 2.4, ey + 2.5, ex - 3.6, ey + 0.3); g.closePath(); };
+      g.fillStyle = '#f6efe6'; eye(); g.fill();
+      g.save(); eye(); g.clip();
+      g.fillStyle = face.iris || '#5b3a22'; g.beginPath(); g.arc(ex + sd * 0.25, ey - 0.1, 2.35, 0, 7); g.fill();
+      g.fillStyle = 'rgba(0,0,0,0.35)'; g.beginPath(); g.arc(ex + sd * 0.25, ey - 1.4, 2.35, Math.PI, 0); g.fill();
+      g.fillStyle = '#1a100c'; g.beginPath(); g.arc(ex + sd * 0.25, ey - 0.1, 1.15, 0, 7); g.fill();
+      g.restore();
+      g.fillStyle = '#fff'; g.beginPath(); g.arc(ex + sd * 0.25 + 0.8, ey - 0.95, 0.72, 0, 7); g.fill();
+      g.globalAlpha = 0.7; g.beginPath(); g.arc(ex + sd * 0.25 - 0.7, ey + 0.8, 0.32, 0, 7); g.fill(); g.globalAlpha = 1;
+      // heavy upper lash line with a little flick at the outer corner, a thin lower line
+      g.strokeStyle = '#120c0a'; g.lineCap = 'round'; g.lineWidth = 1.25;
+      g.beginPath(); g.moveTo(ex - sd * 3.7, ey + 0.4); g.bezierCurveTo(ex - sd * 2.6, ey - 3.1, ex + sd * 2.6, ey - 3.1, ex + sd * 3.8, ey - 0.3); g.lineTo(ex + sd * 5.1, ey - 1.9); g.stroke();
+      g.lineWidth = 0.45; g.beginPath(); g.moveTo(ex - sd * 2.8, ey + 1.8); g.quadraticCurveTo(ex, ey + 2.9, ex + sd * 3.2, ey + 1.1); g.stroke();
+    }
+  } else {
   g.fillStyle = '#1a1210';
   g.beginPath(); g.ellipse(43.5, 45.5, 1.9, 1.5, 0, 0, 7); g.ellipse(56.5, 45.5, 1.9, 1.5, 0, 0, 7); g.fill();
   g.fillStyle = 'rgba(255,255,255,0.7)'; g.beginPath(); g.arc(44.1, 45, 0.5, 0, 7); g.arc(57.1, 45, 0.5, 0, 7); g.fill();
+  }
   g.strokeStyle = face.browCol || (face.hair === 'hijab' || face.hair === 'bun' ? css(shade(skin, 0.45)) : hair); g.lineWidth = face.browW || 1.3; g.lineCap = 'round';
   g.beginPath();
-  if (face.lashes) { g.moveTo(39.5, 42.2); g.quadraticCurveTo(43, 39.2, 47, 40.9); g.moveTo(60.5, 42.2); g.quadraticCurveTo(57, 39.2, 53, 40.9); }
+  if (face.eyes === 'big') { g.moveTo(38.9, 40.3); g.quadraticCurveTo(42.2, 35.6, 47.2, 37.5); g.moveTo(61.1, 40.3); g.quadraticCurveTo(57.8, 35.6, 52.8, 37.5); }
+  else if (face.lashes) { g.moveTo(39.5, 42.2); g.quadraticCurveTo(43, 39.2, 47, 40.9); g.moveTo(60.5, 42.2); g.quadraticCurveTo(57, 39.2, 53, 40.9); }
   else { g.moveTo(40, 41.5); g.lineTo(46.5, 40.8); g.moveTo(53.5, 40.8); g.lineTo(60, 41.5); }
   g.stroke();
-  if (face.lashes) { g.strokeStyle = '#120c0a'; g.lineWidth = 1.1; g.beginPath();
+  if (face.lashes && face.eyes !== 'big') { g.strokeStyle = '#120c0a'; g.lineWidth = 1.1; g.beginPath();
     g.moveTo(40.8, 45.2); g.quadraticCurveTo(43.5, 43.1, 46.3, 44.6); g.lineTo(47.4, 43.9); g.moveTo(59.2, 45.2); g.quadraticCurveTo(56.5, 43.1, 53.7, 44.6); g.lineTo(52.6, 43.9); g.stroke(); }
   g.strokeStyle = css(shade(skin, 0.72)); g.lineWidth = 1;
-  g.beginPath(); g.moveTo(50, 46); g.lineTo(48.6, 51.5); g.lineTo(51, 51.8); g.stroke();
+  if (face.eyes === 'big') { g.lineWidth = 0.8; g.beginPath(); g.moveTo(49.6, 48.6); g.quadraticCurveTo(48.2, 51.2, 49.2, 51.9); g.quadraticCurveTo(50.4, 52.3, 51.4, 51.7); g.stroke(); }
+  else { g.beginPath(); g.moveTo(50, 46); g.lineTo(48.6, 51.5); g.lineTo(51, 51.8); g.stroke(); }
   g.strokeStyle = css(shade(skin, 0.55)); g.lineWidth = 1.2;
-  if (face.lips) {
+  if (face.lips && face.lipsFull) {
+    g.fillStyle = face.lips; g.beginPath(); g.moveTo(44.3, 58.4); g.bezierCurveTo(46, 55.6, 48.4, 55.9, 50, 57); g.bezierCurveTo(51.6, 55.9, 54, 55.6, 55.7, 58.4);
+    g.bezierCurveTo(54.2, 62.8, 45.8, 62.8, 44.3, 58.4); g.fill();
+    g.strokeStyle = css(shade(hex2rgb(face.lips), 0.55)); g.lineWidth = 0.7; g.beginPath(); g.moveTo(44.6, 58.5); g.quadraticCurveTo(50, 59.6, 55.4, 58.5); g.stroke();
+    g.fillStyle = 'rgba(255,200,200,0.35)'; g.beginPath(); g.ellipse(51.2, 60.4, 1.8, 0.65, -0.1, 0, 7); g.fill();
+  } else if (face.lips) {
     g.fillStyle = face.lips; g.beginPath(); g.moveTo(45, 58.3); g.quadraticCurveTo(47.5, 56.2, 50, 57.3); g.quadraticCurveTo(52.5, 56.2, 55, 58.3);
     g.quadraticCurveTo(50, 62.4, 45, 58.3); g.fill();
     g.strokeStyle = css(shade(hex2rgb(face.lips), 0.65)); g.lineWidth = 0.6; g.beginPath(); g.moveTo(45.3, 58.4); g.quadraticCurveTo(50, 59.3, 54.7, 58.4); g.stroke();
@@ -5754,7 +6272,7 @@ function routeSpec(route) {
 
 /* ---------- daily challenge card ---------- */
 function dailyCard() {
-  const dy = dailyFor(dailyDate()), a = (dy.ch === 'essex' ? ESSEX : EVENTS)[dy.area] || EVENTS[0], car = carById(dy.car);
+  const dy = dailyFor(dailyDate()), a = areaList(dy.ch)[dy.idx] || EVENTS[0], car = carById(dy.car);
   const today = S.daily && S.daily.date === dy.date ? S.daily : null, prize = today && today.paid ? 0 : dailyPrize(S);
   const st = statsFor(dy.car, dy.up, stockLook(dy.car));
   return `<div class="offer daily">
