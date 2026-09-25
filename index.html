@@ -489,6 +489,13 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 .unlocks canvas.map + canvas.map { margin-top: 10px; }
 .offer.slip .offer-foot { flex-direction: column; align-items: stretch; }
 .test-note { margin: 4px 0 0; color: #ff8cc0; }
+.offer.daily { border-top-color: #5ac8ff; }
+.offer.daily .chip.diff { color: #9fdcff; border-color: #5ac8ff; }
+.offer.daily canvas.slipcar { width: 100%; height: 90px; display: block; background: linear-gradient(180deg, #0d1519, #121c21); }
+.board td.lb-go { text-align: right; width: 1%; white-space: nowrap; }
+.ghostbtn { padding: 4px 10px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.board td:nth-child(3) { font-family: var(--fm); font-weight: 700; text-align: right; }
 </style>
 </head>
 <body>
@@ -595,6 +602,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         <div class="row">
           <button class="btn primary" data-act="resume"><span>Resume</span></button>
           <button class="btn danger" data-act="quit"><span>Quit race</span></button>
+          <button class="btn ghost" id="b-ghosts" data-act="ghosts"><span>Ghosts on</span></button>
         </div>
       </div>
     </div>
@@ -1221,6 +1229,43 @@ function slipReady(S, rival) {
   return i >= 0 && !!(S.essex && S.essex.completed[i]) && !!slipCarFor(rival) && !S.owned[slipCarFor(rival).id];
 }
 
+/* ---------- daily challenge: one route, one car and one lot of traffic for everyone, new every day (UK date) ---------- */
+const DAILY_CARS = [['civic', 3], ['bmw', 3], ['wrx', 2], ['supra', 2], ['gtr', 1], ['gtr', 3], ['golfr', 2], ['a45', 2], ['gt3', 2], ['rs6', 2], ['m4', 3], ['mcl720', 1], ['huracan', 2]];
+function dailyDate(d) {
+  try { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d || new Date()); }
+  catch (e) { return (d || new Date()).toISOString().slice(0, 10); }
+}
+function dailyFor(date) {
+  const r = seededRng(hashStr('daily|' + date)), pool = EVENTS.concat(ESSEX);
+  const area = Math.floor(r() * pool.length), pickCar = DAILY_CARS[Math.floor(r() * DAILY_CARS.length)];
+  const up = {}; for (const u of UPGRADES) up[u.id] = pickCar[1];
+  return { date, area: area % pool.length, ch: area >= EVENTS.length ? 'essex' : 'london', car: pickCar[0], lvl: pickCar[1], up,
+    time: ['dusk', 'night', 'late', 'day', 'night'][Math.floor(r() * 5)], dist: 4000 + Math.floor(r() * 21) * 100, d: 0.45 + r() * 0.45 };
+}
+const dailyPrize = S => rematchPrize(S);
+
+/* ---------- ghosts: your line through a race, 10 samples a second, so it can be raced again ---------- */
+const GHOST_HZ = 10;
+function ghostEncode(R) {
+  const rec = R.rec; if (!rec || !rec.d.length) return null;
+  const d = []; let prev = 0;
+  for (const v of rec.d) { d.push(v - prev); prev = v; }
+  return { v: 1, hz: GHOST_HZ, car: R.carId, look: R.look, t: Math.round((R.result ? R.result.time : R.t) * 1000), d, x: rec.x.slice() };
+}
+function ghostDecode(g, name) {
+  if (!g || !Array.isArray(g.d) || !Array.isArray(g.x) || g.d.length !== g.x.length || !g.d.length) return null;
+  const dist = new Float32Array(g.d.length), x = new Float32Array(g.x.length); let acc = 0;
+  for (let i = 0; i < g.d.length; i++) { acc += g.d[i]; dist[i] = acc / 10; x[i] = clamp(g.x[i] / 100, 0, 2); }
+  return { name, car: carById(g.car) ? g.car : 'gtr', look: g.look || {}, t: g.t, hz: g.hz || GHOST_HZ, dist, x };
+}
+/* where a ghost is at race time t */
+function ghostAt(g, t) {
+  const f = Math.max(0, t * g.hz), i = Math.floor(f), n = g.dist.length;
+  if (i >= n - 1) return { dist: g.dist[n - 1], x: g.x[n - 1], done: true };
+  const k = f - i;
+  return { dist: g.dist[i] + (g.dist[i + 1] - g.dist[i]) * k, x: g.x[i] + (g.x[i + 1] - g.x[i]) * k, done: false };
+}
+
 /* ---------- street races: repeatable, pay every win, get harder with rep ---------- */
 const LOCAL_NAMES = ['Jay', 'Rico', 'Sam', 'Leah', 'Dev', 'Sade', 'Ollie', 'Priya', 'Kofi', 'Aaron', 'Zain', 'Mia', 'Kyle', 'Nadia', 'Reece', 'Bilal',
   'Chloe', 'Tunde', 'Luca', 'Imran', 'Ayo', 'Rhys', 'Shanice', 'Yusuf', 'Callum', 'Hana', 'Deniz', 'Jordan', 'Ellie', 'Kwame', 'Tomasz', 'Aisha', 'Connor', 'Femi', 'Lena', 'Hassan'];
@@ -1275,7 +1320,7 @@ function streetOffers(S) {
 function blankState() {
   return { v: 2, money: 5000, rep: 0, current: 'civic', owned: {}, eventIndex: 0, completed: EVENTS.map(() => false),
     careerDone: false, kingRevealed: false, news: '', stats: { races: 0, wins: 0, streetWins: 0, street: 0 }, street: [], specials: {}, found: {},
-    essex: null, stars: {}, announced: {} };
+    essex: null, stars: {}, announced: {}, daily: null };
 }
 function newCareer(starterId) {
   const car = carById(starterId);
@@ -1319,6 +1364,7 @@ function migrateSave(old) {
     S.found = Object.assign({}, old.found || {}, S.specials);
     S.announced = Object.assign({}, old.announced || {});
     S.stars = Object.assign({}, old.stars || {});
+    if (old.daily && typeof old.daily.date === 'string') S.daily = { date: old.daily.date, paid: !!old.daily.paid, best: +old.daily.best || 0, runs: +old.daily.runs || 0 };
     if (old.essex && Array.isArray(old.essex.completed)) S.essex = { completed: ESSEX.map((e, i) => !!old.essex.completed[i]), done: !!old.essex.done };
     S.street = Array.isArray(old.street) && old.street.length === 4 && old.street.every(o => (o.ch === 'essex' ? ESSEX : EVENTS)[o.area]) ? old.street : [];
 
@@ -1414,9 +1460,18 @@ function trafficFor(d) {
 
 /* spec: { kind: 'career', index, exhibition } or { kind: 'street', offer } */
 function createRace(S, spec) {
-  const st = curStats(S), own = S.owned[S.current];
+  let st = curStats(S), own = S.owned[S.current];
   let ev;
-  if (spec.kind === 'street') {
+  if (spec.kind === 'daily') {
+    // no rival: you against the clock and the ghosts, in a car everyone gets
+    const dy = dailyFor(spec.date || dailyDate()), a = (dy.ch === 'essex' ? ESSEX : EVENTS)[dy.area % (dy.ch === 'essex' ? ESSEX.length : EVENTS.length)] || EVENTS[0];
+    const paid = S.daily && S.daily.date === dy.date && S.daily.paid;
+    ev = { kind: 'daily', title: 'DAILY CHALLENGE', date: dy.date, chapter: a.chapter, area: a.area, road: a.road, env: a.env, sky: a.sky, signs: a.signs,
+      time: dy.time, dawn: false, dist: dy.dist, oppBhp: 100, oppName: 'the clock', oppCar: '', oppLook: null, rival: null,
+      reward: paid ? 0 : dailyPrize(S), rep: 0, skill: 1, inc: [99, 99], d: dy.d, solo: true, loaner: dy.car, loanUp: dy.up };
+    st = statsFor(dy.car, dy.up, stockLook(dy.car));
+    own = { up: dy.up, damage: 0 };
+  } else if (spec.kind === 'street') {
     const o = spec.offer, a = (o.ch === 'essex' ? ESSEX : EVENTS)[o.area] || EVENTS[0];
     ev = { kind: 'street', title: 'STREET RACE', label: o.label, chapter: a.chapter, area: a.area, road: a.road, env: a.env, sky: a.sky, signs: a.signs,
       time: o.time, dawn: false, dist: o.dist, oppBhp: o.bhp, oppName: o.name, oppCar: o.car, oppLook: o.look, rival: null,
@@ -1439,14 +1494,15 @@ function createRace(S, spec) {
       skill: e.diff.skill, inc: e.diff.inc, d: spec.index / (EVENTS.length - 1) });
   }
   // the route a time counts for on the leaderboard (career events and friend races), and its traffic seed
-  ev.route = spec.kind === 'street' ? null : spec.kind === 'special' ? 'special:' + spec.id : spec.kind === 'essex' || spec.kind === 'slip' ? 'essex:' + ev.rival : 'career:' + ev.rival;
+  ev.route = spec.kind === 'street' ? null : spec.kind === 'daily' ? 'daily:' + ev.date : spec.kind === 'special' ? 'special:' + spec.id : spec.kind === 'essex' || spec.kind === 'slip' ? 'essex:' + ev.rival : 'career:' + ev.rival;
   const seed = hashStr((ev.route || 'street:' + ev.offerId) + '|v1');
   const rw = seededRng(seed), rr = seededRng(seed ^ 0x9E3779B9);
   const oppV = vmaxFor(ev.oppBhp) * ev.skill;
   const traffic = trafficFor(ev.d);
   if (ev.open || (spec.kind === 'street' && spec.offer.ch === 'essex')) { traffic.two *= 0.8; traffic.extra *= 1.5; }   // Essex: wider, emptier roads
   return {
-    ev, carId: S.current, st, traffic, look: lookOf(S, S.current), up: Object.assign({}, own.up), styleBonus: styleBonus(st.style),
+    ev, carId: ev.loaner || S.current, st, traffic, look: ev.loaner ? stockLook(ev.loaner) : lookOf(S, S.current), up: Object.assign({}, own.up), styleBonus: ev.loaner ? 0 : styleBonus(st.style),
+    rec: { next: 0, d: [], x: [] }, ghosts: [],
     state: 'countdown', countdown: 3.2, t: 0, doneT: 0, wrecked: false,
     p: { dist: 0, v: 0, lane: 1, x: 1, vx: 0, latV: 0, nitro: st.nitroCap, boosting: false, nitroLock: false,
          damage: own.damage, startDamage: own.damage, collisions: 0, topV: 0, finishTime: null },
@@ -1457,7 +1513,7 @@ function createRace(S, spec) {
     gapMin: (st.vmax * st.nitroMult - traffic.vLo) * traffic.tClear,
     result: null, settled: false, resultsShown: false, events: [],
     // checkpoint gates: cash per gate grows with the streak (x1 to x4). No gate cash in a Checkpoint Run or an exhibition.
-    cp: { base: ev.cp || ev.exhibition ? 0 : Math.max(10, Math.round(ev.reward * 0.005 / 5) * 5), hit: 0, missed: 0, streak: 0, best: 0, cash: 0 },
+    cp: { base: ev.cp || ev.exhibition || ev.solo ? 0 : Math.max(10, Math.round(ev.reward * 0.005 / 5) * 5), hit: 0, missed: 0, streak: 0, best: 0, cash: 0 },
   };
 }
 
@@ -1548,7 +1604,7 @@ function laneSpring(obj, dt, laneTime) {
 
 function updateRival(R, dt) {
   const o = R.o, D = R.ev.dist;
-  if (R.ev.cp) return;                            // a Checkpoint Run is you against the gates
+  if (R.ev.cp || R.ev.solo) return;               // a Checkpoint Run or the daily: you against the gates or the clock
   if (R.state === 'racing' || R.state === 'finishing') {
     if (!o.boosting && o.nitro >= 100 && R.t > 4) o.boosting = true;
     if (o.boosting) { o.nitro -= NITRO_DRAIN * dt; if (o.nitro <= 0) { o.nitro = 0; o.boosting = false; } }
@@ -1638,7 +1694,8 @@ function endRace(R, how) {
     p.finishTime = R.t - (p.dist + P_LEN - D) / Math.max(1, p.v);
     const won = !o.finished || o.finishTime > p.finishTime;
     let gap;
-    if (won) gap = o.finished ? o.finishTime - p.finishTime : (D - o.dist - P_LEN) / Math.max(10, o.v);
+    if (R.ev.solo) gap = 0;
+    else if (won) gap = o.finished ? o.finishTime - p.finishTime : (D - o.dist - P_LEN) / Math.max(10, o.v);
     else gap = p.finishTime - o.finishTime;
     R.result = { how, won, time: p.finishTime, gap: Math.max(0, gap) };
   } else {
@@ -1659,6 +1716,7 @@ function updateRace(R, dt, input) {
   }
   const racing = R.state === 'racing';
   if (racing) R.t += dt; else R.doneT += dt;
+  if (racing && R.rec) while (R.t >= R.rec.next && R.rec.d.length < 12000) { R.rec.d.push(Math.round(p.dist * 10)); R.rec.x.push(Math.round(p.x * 100)); R.rec.next += 1 / GHOST_HZ; }
 
   laneSpring(p, dt, st.laneTime);
   p.latV = p.vx;
@@ -1702,9 +1760,8 @@ function settleRace(S, R) {
   if (R.settled || !R.result) return R.summary || null;
   R.settled = true;
   const essexBefore = essexOpen(S);
-  const own = S.owned[R.carId];
+  const ev = R.ev, own = ev.loaner ? null : S.owned[R.carId];
   if (own) own.damage = Math.round(Math.min(100, R.p.damage));
-  const ev = R.ev;
   const out = { kind: ev.kind, won: R.result.won, how: R.result.how, reward: 0, rep: 0, newCars: [], nextEvent: null, chapter: null,
     careerDone: false, story: '', line: '', rival: ev.rival };
   S.stats.races++;
@@ -1712,14 +1769,22 @@ function settleRace(S, R) {
   if (R.result.how === 'finish' && R.cp.cash > 0) { S.money += R.cp.cash; out.cpCash = R.cp.cash; }
   if (ev.rival) out.line = R.result.won ? CHARACTERS[ev.rival].youWin : CHARACTERS[ev.rival].youLose;
   // stars on every fixed route: the win, a clean win, and a win that hit every gate
-  if (ev.route && R.result.won) {
+  if (ev.route && R.result.won && ev.kind !== 'daily') {
     const bits = STAR_WIN | (R.p.collisions === 0 ? STAR_CLEAN : 0) | (R.cp.hit > 0 && R.cp.missed === 0 ? STAR_GATES : 0);
     S.stars = S.stars || {};
     const before = S.stars[ev.route] || 0;
     S.stars[ev.route] = before | bits;
     out.stars = bits; out.newStars = starCount(S.stars[ev.route]) - starCount(before);
   }
-  if (ev.kind === 'street') {
+  if (ev.kind === 'daily') {
+    if (!S.daily || S.daily.date !== ev.date) S.daily = { date: ev.date, paid: false, best: 0, runs: 0 };
+    S.daily.runs = (S.daily.runs || 0) + 1;
+    if (R.result.how === 'finish') {
+      const ms = Math.round(R.result.time * 1000);
+      if (!S.daily.best || ms < S.daily.best) { out.dailyBest = !!S.daily.best; S.daily.best = ms; }
+      if (!S.daily.paid && ev.reward) { S.daily.paid = true; S.money += payout(R, ev.reward, out); }
+    }
+  } else if (ev.kind === 'street') {
     S.stats.street = (S.stats.street || 0) + 1;
     if (R.result.won && S.street.some(o => o.id === ev.offerId)) {
       const pay = payout(R, ev.reward, out);
@@ -2443,7 +2508,9 @@ function drawBuildings(pal, dist, rival) {
           }
           // the glass entrance
           ctx.fillStyle = css(night ? mix([255, 230, 180], pal.fog, fg * 0.7) : wc(pal, [70, 84, 96], 1, fg), night ? 0.55 : 1);
-          const zm = (za + zb2) / 2; vquad(ctx, xs + sd * 0.01, 0, 3.2, zm - 4, zm + 4);
+          // clamp to the unit, or the doors of a unit you are passing get projected from behind the camera
+          const zm = (za + zb2) / 2, e0 = Math.max(za, zm - 4), e1 = Math.min(zb2, zm + 4);
+          if (e1 > e0) vquad(ctx, xs + sd * 0.01, 0, 3.2, e0, e1);
           if (night) { ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, sb.map(v => Math.min(255, v * 2.4)), (q[1].x + q[2].x) / 2, (q[1].y + q[0].y) / 2, Math.min(3 * q[0].s, Math.max(W, H) * 0.14), 0.3 * (1 - fg)); ctx.globalCompositeOperation = 'source-over'; }
         }
       }
@@ -2816,9 +2883,13 @@ function renderScene(R, dt) {
     const g = w.gate, z = Z_PLAYER + w.z + g.off;
     if (z > 2.5 && z < Z_FAR) list.push({ z: z + 0.02, draw: () => drawGate(g, z, pal, R.ev.cp) });
   }
-  if (R.o && !R.demo && !R.ev.cp) {
+  if (R.o && !R.demo && !R.ev.cp && !R.ev.solo) {
     const rel = R.o.dist - p.dist, z = Z_PLAYER + rel;
     if (z > Z_PLAYER - 1 && z < Z_FAR) list.push({ z: z + 0.01, draw: () => drawRival(R, z, pal, env) });
+  }
+  if (R.ghosts && !R.demo) for (const g of R.ghosts) {
+    const at = ghostAt(g, R.t), z = Z_PLAYER + at.dist - p.dist;
+    if (z > Z_PLAYER - 1.5 && z < Z_FAR) list.push({ z: z + 0.005, draw: () => drawGhost(R, g, at, z, env) });
   }
   list.push({ z: Z_PLAYER, draw: () => drawPlayer(R, pal, env, lampK(Z_PLAYER)) });
   list.sort((a, b) => b.z - a.z);
@@ -2893,6 +2964,34 @@ function drawRival(R, z, pal, env) {
     ctx.font = `${fs}px ${FONT_D}`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
     const tw = ctx.measureText(tag).width + 10, cx = (x0 + x1) / 2, ty = y0 + fs + 4;
     ctx.fillStyle = 'rgba(255,59,59,0.85)'; ctx.fillRect(cx - tw / 2, ty - fs - 4, tw, fs + 4);
+    ctx.fillStyle = '#fff'; ctx.fillText(tag, cx, ty - 1);
+  }
+}
+
+const ordinalTxt = n => n + (n % 100 >= 11 && n % 100 <= 13 ? 'TH' : ['TH', 'ST', 'ND', 'RD'][n % 10] || 'TH');
+/* a ghost: someone's best run on this route, see-through, with their name over it */
+function drawGhost(R, g, at, z, env) {
+  const xm = laneToX(at.x), car = carById(g.car), lk = Object.assign(stockLook(g.car), g.look || {});
+  const mesh = getMesh(car.model, { spoiler: lk.spoiler, kit: lk.kit, stance: lk.stance, stripes: lk.stripes });
+  let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+  for (const x of [xm - mesh.W / 2 - 0.8, xm + mesh.W / 2 + 0.8]) for (const y of [0, mesh.H + 1.4]) for (const zz of [z - 0.6, z + mesh.L]) {
+    const q = P(x, y, Math.max(0.5, zz)); x0 = Math.min(x0, q.x); x1 = Math.max(x1, q.x); y0 = Math.min(y0, q.y); y1 = Math.max(y1, q.y);
+  }
+  const bx = Math.max(0, Math.floor(x0)), by = Math.max(0, Math.floor(y0));
+  const bw = Math.min(W, Math.ceil(x1)) - bx, bh = Math.min(H, Math.ceil(y1)) - by;
+  if (bw <= 0 || bh <= 0) return;
+  gctx.clearRect(bx - 2, by - 2, bw + 4, bh + 4);
+  drawCar(gctx, mesh, { x: xm, z, yaw: 0, fog: fogK(z), env, look: lk, plateText: lk.plate, brake: at.done });
+  // fade right down when it sits on top of you, so it never hides the road
+  const near = Math.abs(at.x - R.p.x) < 0.8 && Math.abs(z - Z_PLAYER) < 7;
+  ctx.globalAlpha = (near ? 0.16 : 0.34) * clamp((Z_FAR - z) / 45, 0, 1);
+  ctx.drawImage(ghostCvs, bx * DPR, by * DPR, bw * DPR, bh * DPR, bx, by, bw, bh);
+  ctx.globalAlpha = 1;
+  if (bw > 26 && !near) {
+    const tag = g.name.length > 14 ? g.name.slice(0, 13) + '…' : g.name, fs = clamp(bw * 0.11, 9, 14);
+    ctx.font = `${fs}px ${FONT_D}`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    const tw = ctx.measureText(tag).width + 10, cx = (x0 + x1) / 2, ty = y0 + fs + 4;
+    ctx.fillStyle = 'rgba(90,200,255,0.55)'; ctx.fillRect(cx - tw / 2, ty - fs - 4, tw, fs + 4);
     ctx.fillStyle = '#fff'; ctx.fillText(tag, cx, ty - 1);
   }
 }
@@ -3023,7 +3122,18 @@ function drawHUD(R, ctrlH) {
   const py = pad + Math.round(posF * 0.88);
   ctx.textAlign = 'left';
   let ly;
-  if (R.ev.cp) {
+  const gh = (R.ghosts || []).map(g => ({ g, at: ghostAt(g, R.t) }));
+  if (R.ev.solo) {
+    const ahead = gh.filter(q => q.at.dist > p.dist && !q.at.done).length + gh.filter(q => q.at.done && (!R.result || q.g.t < R.result.time * 1000)).length;
+    const txt = gh.length ? ordinalTxt(ahead + 1) : 'SOLO';
+    ctx.font = `${posF}px ${FONT_D}`; ctx.fillStyle = ahead === 0 ? '#f2a33a' : '#5ac8ff';
+    ctx.fillText(txt, pad, py);
+    const pw = ctx.measureText(txt).width;
+    ctx.font = `${F(16, 11)}px ${FONT_D}`; ctx.fillStyle = 'rgba(233,228,216,0.7)';
+    ctx.fillText(gh.length ? '/ ' + (gh.length + 1) : 'DAILY', pad + pw + 6, py);
+    ctx.font = `700 ${lineF}px ${FONT_M}`; ctx.fillStyle = '#e9e4d8';
+    ly = py + lineH + 2; ctx.fillText(gh.length ? 'AGAINST THE GHOSTS' : 'SAME CAR AND TRAFFIC FOR EVERYONE', pad, ly);
+  } else if (R.ev.cp) {
     ctx.font = `${posF}px ${FONT_D}`; ctx.fillStyle = cp.missed ? '#ff5a4a' : '#5ac8ff';
     ctx.fillText(String(cp.hit), pad, py);
     const pw = ctx.measureText(String(cp.hit)).width;
@@ -3050,6 +3160,12 @@ function drawHUD(R, ctrlH) {
       ly += lineH; ctx.fillStyle = '#ffc43c';
       ctx.fillText(`CHECKPOINTS ${cp.hit}` + (cp.streak > 1 ? `  x${Math.min(4, cp.streak)}` : '') + (cp.cash ? `  +£${cp.cash.toLocaleString('en-GB')}` : ''), pad, ly);
     }
+  }
+  // one line per ghost: how far ahead or behind their run is
+  if (!short || R.ev.solo) for (const q of gh.slice(0, 2)) {
+    const m = Math.round(q.at.dist - p.dist);
+    ly += lineH; ctx.fillStyle = 'rgba(90,200,255,0.9)'; ctx.font = `700 ${lineF}px ${FONT_M}`; ctx.textAlign = 'left';
+    ctx.fillText(`${q.g.name} ${q.at.done ? 'FINISHED ' + fmtTime(q.g.t / 1000) : m >= 0 ? m + ' M AHEAD' : -m + ' M BEHIND'}`, pad, ly);
   }
   const blockBottom = ly + 4;
 
@@ -3082,7 +3198,8 @@ function drawHUD(R, ctrlH) {
     if (up) { ctx.moveTo(x, trackY + barH); ctx.lineTo(x - mk, trackY + barH + mk * 1.6); ctx.lineTo(x + mk, trackY + barH + mk * 1.6); }
     else { ctx.moveTo(x, trackY); ctx.lineTo(x - mk * 0.85, trackY - mk * 1.4); ctx.lineTo(x + mk * 0.85, trackY - mk * 1.4); }
     ctx.closePath(); ctx.fill(); };
-  if (!R.ev.cp) mark(fo, '#ff3b3b', false);
+  if (!R.ev.cp && !R.ev.solo) mark(fo, '#ff3b3b', false);
+  for (const q of gh) mark(clamp((q.at.dist + P_LEN) / D, 0, 1), 'rgba(90,200,255,0.85)', false);
   mark(fp, '#f2a33a', true);
   ctx.font = `700 ${labF}px ${FONT_M}`; ctx.fillStyle = '#e9e4d8'; ctx.textAlign = 'center';
   const left = Math.max(0, D - p.dist - P_LEN);
@@ -4516,6 +4633,7 @@ const Online = {
     const [kind, id] = route.split(':');
     if (kind === 'career') { const i = EVENTS.findIndex(e => e.rival === id); return i >= 0 ? `${i + 1}. ${EVENTS[i].title}` : route; }
     if (kind === 'essex') { const i = ESSEX.findIndex(e => e.rival === id); return i >= 0 ? `Essex ${i + 1}. ${ESSEX[i].title}` : route; }
+    if (kind === 'daily') { const d = new Date(id + 'T12:00:00Z'); return 'Daily challenge · ' + (isNaN(d) ? id : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })); }
     const sp = SPECIALS[id]; if (!sp) return route;
     return sp.friend ? `${CHARACTERS[sp.rival].name} · ${sp.title}` : sp.title;
   },
@@ -4549,10 +4667,32 @@ const Online = {
     if (!q.length) return;
     const left = [];
     for (const it of q) {
-      try { const r = await this.fetch('/rest/v1/rpc/submit_time', { method: 'POST', body: { p_route: it.route, p_time_ms: it.ms, p_car: it.car } }); this.mine[it.route] = r.best_ms; }
+      try {
+        const r = await this.fetch('/rest/v1/rpc/submit_time', { method: 'POST', body: { p_route: it.route, p_time_ms: it.ms, p_car: it.car } }); this.mine[it.route] = r.best_ms;
+        const g = localGhost(it.route);                  // the run you did as a guest goes up with it
+        if (r.improved && g && g.t === it.ms) await this.submitGhost(it.route, g);
+      }
       catch (e) { if (!e.status) left.push(it); }
     }
     try { localStorage.setItem(PENDING_KEY, JSON.stringify(left)); } catch (e) {}
+  },
+  /* ---- ghosts: the line behind each best time ---- */
+  async submitGhost(route, g) {
+    if (!this.on || !this.signedIn || !g) return false;
+    try { await this.fetch('/rest/v1/rpc/submit_ghost', { method: 'POST', body: { p_route: route, p_time_ms: g.t, p_data: g } }); return true; }
+    catch (e) { return false; }
+  },
+  async ghost(route, uid) {
+    if (!this.on || !uid) return null;
+    try {
+      const rows = await this.fetch('/rest/v1/ghosts?select=data,time_ms&route=eq.' + encodeURIComponent(route) + '&user_id=eq.' + uid + '&limit=1', { anon: !this.signedIn });
+      return rows && rows[0] ? rows[0].data : null;
+    } catch (e) { return null; }
+  },
+  async ghostIds(route) {
+    if (!this.on) return [];
+    try { return ((await this.fetch('/rest/v1/ghosts?select=user_id&route=eq.' + encodeURIComponent(route), { anon: !this.signedIn })) || []).map(r => r.user_id); }
+    catch (e) { return []; }
   },
   async board(route) {
     return this.fetch('/rest/v1/leaderboard?select=racer_name,time_ms,car,place,user_id&route=eq.' + encodeURIComponent(route) + '&order=time_ms.asc&limit=50', { anon: !this.signedIn });
@@ -4562,7 +4702,7 @@ const Online = {
     if (!this.on || Date.now() - this.recordsAt < 60000) return false;
     this.recordsAt = Date.now();
     try {
-      const rows = await this.fetch('/rest/v1/leaderboard?select=route,racer_name,time_ms,car&place=eq.1&order=route.asc', { anon: !this.signedIn });
+      const rows = await this.fetch('/rest/v1/leaderboard?select=route,racer_name,time_ms,car,user_id&place=eq.1&order=route.asc', { anon: !this.signedIn });
       const rec = {}; for (const r of rows || []) if (!rec[r.route]) rec[r.route] = r;
       this.records = rec;
       if (this.signedIn) {
@@ -4837,7 +4977,7 @@ const Sound = {
     this.kill(this.voices && this.voices.me); this.kill(this.voices && this.voices.opp);
     const car = carById(race.carId), me = this.voice(engineProfile(car ? (ENGINE_OF[car.id] ? car.id : car.model) : 'hatch', race.up), 3);
     const om = race.ev.oppLook && (race.ev.oppLook.engine || race.ev.oppLook.model);
-    const opp = race.ev.cp ? null : this.voice(engineProfile(om, race.ev.oppUp || { exhaust: race.ev.pops ? 3 : 1 }), 11);
+    const opp = race.ev.cp || race.ev.solo ? null : this.voice(engineProfile(om, race.ev.oppUp || { exhaust: race.ev.pops ? 3 : 1 }), 11);
     this.voices = { me, opp, pops: 0, passed: new WeakMap(), boosting: false };
     this.race = race;
   },
@@ -5024,7 +5164,7 @@ function paintCar(c) {
     renderCarPreview(c, null, lk, {}, { model: c.dataset.model, yaw: spin.yaw + (c._drag || 0) + 0.6, zoom: c.dataset.model === 'h2r' || c.dataset.model === 'r1' ? 1.7 : 1.05 });
     return;
   }
-  const id = c.dataset.car, own = S && S.owned[id];
+  const id = c.dataset.car, own = !c.dataset.stock && S && S.owned[id];
   const look = c.dataset.draft === '1' && draft ? draft : own ? lookOf(S, id) : stockLook(id);
   renderCarPreview(c, id, look, own ? own.up : {}, { yaw: c.dataset.spin ? spin.yaw + (c._drag || 0) : -2.45, locked: c.dataset.locked === '1', focus: c.dataset.draft ? spin.zoom : 0 });
 }
@@ -5106,7 +5246,7 @@ function streetBoard() {
     <div class="street-head"><div><p class="kicker">Street races · repeatable</p><h3 class="h3">Quick cash on the side</h3></div>
       <button class="link" data-act="reroll">New races</button></div>
     <p class="tip">Win as many as you like. They pay cash every time, but no reputation. Harder races pay more. In a Checkpoint Run there is no rival: go through every gate or you are out. Keep racing out here and a few familiar faces might turn up.</p>
-    <div class="offers">${friendCards()}${S.street.map(o => {
+    <div class="offers">${dailyCard()}${friendCards()}${S.street.map(o => {
       const a = (o.ch === 'essex' ? ESSEX : EVENTS)[o.area] || EVENTS[0], cpRun = o.mode === 'cp';
       return `<div class="offer ${cpRun ? 'cp' : o.label.toLowerCase()}">
         <div class="offer-top"><span class="chip diff">${o.label}</span><span class="chip">${TIME_NAMES[o.time]}</span></div>
@@ -5182,6 +5322,77 @@ function ride3Card() {
     <div class="actions"><button class="btn primary" data-act="special" data-arg="ride3" ${own.damage >= 100 ? 'disabled' : ''}><span>${done ? 'Rematch' : 'Accept the invitation'}</span></button></div>
   </div>`;
 }
+/* ---------- ghosts ---------- */
+const GHOST_KEY = TEST_MODE ? 'streetkings.test.ghosts' : 'streetkings.ghosts', GHOSTS_ON_KEY = 'streetkings.ghostson';
+let ghostsOn = true, pickedGhost = null;   // pickedGhost: a run chosen on the leaderboard, raced next time you run that route
+try { ghostsOn = localStorage.getItem(GHOSTS_ON_KEY) !== '0'; } catch (e) {}
+function localGhosts() { try { return JSON.parse(localStorage.getItem(GHOST_KEY) || '{}') || {}; } catch (e) { return {}; } }
+function localGhost(route) { return localGhosts()[route] || null; }
+/* keeps your best run on each route on this device, so you can race it offline or as a guest */
+function keepGhost(race) {
+  if (!race.ev.route || !race.result || race.result.how !== 'finish') return null;
+  const g = ghostEncode(race); if (!g) return null;
+  const all = localGhosts(), old = all[race.ev.route];
+  if (old && old.t <= g.t) return null;
+  all[race.ev.route] = g;
+  for (const k of Object.keys(all)) if (k.startsWith('daily:') && k !== 'daily:' + dailyDate()) delete all[k];   // yesterday's daily is no use
+  try { localStorage.setItem(GHOST_KEY, JSON.stringify(all)); } catch (e) {}
+  return g;
+}
+/* your best, the route record and anyone you picked on the leaderboard. They turn up during the countdown. */
+async function loadGhosts(race) {
+  const route = race.ev.route;
+  if (!route || !ghostsOn) return;
+  const add = (g, name, key) => {
+    if (R !== race || !g || race.ghosts.some(x => x.key === key) || race.ghosts.length >= 3) return;
+    const d = ghostDecode(g, String(name || 'GHOST').toUpperCase()); if (d) { d.key = key; race.ghosts.push(d); }
+  };
+  const mine = localGhost(route);
+  if (mine) add(mine, 'Your best', 'me');
+  const pick = pickedGhost && pickedGhost.route === route ? pickedGhost : null; pickedGhost = null;
+  if (!Online.on) return;
+  try {
+    if (pick && pick.uid !== Online.uid) add(await Online.ghost(route, pick.uid), pick.name, pick.uid);
+    await Online.loadRecords();
+    const rec = Online.records[route];
+    if (rec && rec.user_id && rec.user_id !== Online.uid) add(await Online.ghost(route, rec.user_id), rec.racer_name, rec.user_id);
+    if (!mine && Online.signedIn) add(await Online.ghost(route, Online.uid), 'Your best', 'me');
+  } catch (e) { /* ghosts are a bonus, the race goes on without them */ }
+}
+function setGhosts(v) {
+  ghostsOn = v; try { localStorage.setItem(GHOSTS_ON_KEY, v ? '1' : '0'); } catch (e) {}
+  if (!v && R) R.ghosts.length = 0; else if (v && R) loadGhosts(R);
+  const b = $('b-ghosts'); if (b) b.innerHTML = `<span>${v ? 'Ghosts on' : 'Ghosts off'}</span>`;
+}
+/* the race spec for a leaderboard route, if you can race it right now */
+function routeSpec(route) {
+  if (!S || !route) return null;
+  const [kind, id] = route.split(':');
+  if (kind === 'career') { const i = EVENTS.findIndex(e => e.rival === id); if (i < 0) return null; if (!S.careerDone && i === nextEventIndex(S)) return { kind: 'career', index: i }; return S.careerDone && S.completed[i] ? { kind: 'career', index: i, exhibition: true } : null; }
+  if (kind === 'essex') { const i = ESSEX.findIndex(e => e.rival === id); if (i < 0 || !essexOpen(S)) return null; const done = S.essex && S.essex.completed[i]; return done ? { kind: 'essex', index: i, exhibition: true } : i === nextEssexIndex(S) ? { kind: 'essex', index: i } : null; }
+  if (kind === 'special') return SPECIALS[id] && specialUnlocked(S, id) ? { kind: 'special', id } : null;
+  if (kind === 'daily') return id === dailyDate() ? { kind: 'daily' } : null;
+  return null;
+}
+
+/* ---------- daily challenge card ---------- */
+function dailyCard() {
+  const dy = dailyFor(dailyDate()), a = (dy.ch === 'essex' ? ESSEX : EVENTS)[dy.area] || EVENTS[0], car = carById(dy.car);
+  const today = S.daily && S.daily.date === dy.date ? S.daily : null, prize = today && today.paid ? 0 : dailyPrize(S);
+  const st = statsFor(dy.car, dy.up, stockLook(dy.car));
+  return `<div class="offer daily">
+    <div class="offer-top"><span class="chip diff">Daily challenge</span><span class="chip">${TIME_NAMES[dy.time]}</span><span class="chip cls cls-${carClass(st.bhp)}">Class ${carClass(st.bhp)}</span></div>
+    <h4>${esc(a.area)}</h4>
+    <p class="offer-road">${esc(a.road)} · ${(dy.dist / 1000).toFixed(1)} km</p>
+    <canvas class="slipcar" data-car="${dy.car}" data-stock="1" width="300" height="110" aria-label="${esc(car.name)}"></canvas>
+    <p class="offer-opp">Everyone drives the <b>${esc(car.name)}</b> today${dy.lvl ? `, stage ${dy.lvl} on everything` : ''}. Same traffic for everyone, no rival. Just the clock and the ghosts.</p>
+    ${today && today.best ? `<p class="offer-opp">Your best today: <b>${fmtMs(today.best)}</b></p>` : ''}
+    ${recordLine('daily:' + dy.date, 'offer-rec')}
+    <div class="offer-foot"><span class="prize">${prize ? money(prize) : 'Paid today'}</span>
+      <button class="btn small primary" data-act="daily"><span>${today && today.runs ? 'Go again' : 'Race'}</span></button></div>
+  </div>`;
+}
+
 /* the test garage: London done, Ishaaq beaten, a maxed GT-R and some cash, so Essex can be tried straight away */
 function testCareer() {
   const T = newCareer('civic');
@@ -5626,8 +5837,9 @@ function showResults() {
   mode = 'results';
   $('controls').hidden = true; $('b-pause').hidden = true; document.body.classList.remove('racing');
   // a car lost in a pink slip is no longer in the garage, so fall back to what the race knows about it
-  const res = R.result, sum = R.summary || settleRace(S, R), own = S.owned[R.carId] || { damage: Math.round(R.p.damage), up: {} }, ev = R.ev;
-  const head = res.how === 'wrecked' ? 'Wrecked' : res.how === 'missed' ? 'Out' : res.won ? (ev.kind === 'slip' ? 'Pink slip won' : 'You win') : 'You lost';
+  const res = R.result, sum = R.summary || settleRace(S, R), ev = R.ev;
+  const own = (!ev.loaner && S.owned[R.carId]) || { damage: Math.round(R.p.damage), up: R.up || {} };
+  const head = res.how === 'wrecked' ? 'Wrecked' : res.how === 'missed' ? 'Out' : ev.solo ? (sum.dailyBest ? 'New best' : 'Finished') : res.won ? (ev.kind === 'slip' ? 'Pink slip won' : 'You win') : 'You lost';
   const gapTxt = res.how === 'finish' ? (res.won ? `${res.gap.toFixed(2)} s ahead` : `${res.gap.toFixed(2)} s behind`) : res.how === 'wrecked' ? 'Did not finish' : res.how === 'missed' ? 'Missed a checkpoint' : 'Quit';
   const gates = sum.gates || { hit: 0, missed: 0, best: 0 };
   let pay = '';
@@ -5643,7 +5855,7 @@ function showResults() {
   else if (res.won && ev.exhibition) pay = `<p class="tip">${ev.kind === 'special' ? 'Rematch. Pride only, no prize money.' : 'Exhibition race. No prize money.'}</p>`;
   // stars for this route: what you got this time and what you have
   let starRow = '';
-  if (ev.route && ev.kind !== 'special' && ev.kind !== 'street') {
+  if (ev.route && ev.kind !== 'special' && ev.kind !== 'street' && ev.kind !== 'daily') {
     const have = (S.stars || {})[ev.route] || 0;
     starRow = `<div class="star-row">${starsHtml(have, true)}<span>${STAR_NAMES.map((n, i) => `<b class="${have & (1 << i) ? 'on' : ''}">${n}</b>`).join(' · ')}${sum.newStars ? ` <em>+${sum.newStars} new</em>` : ''}</span></div>`;
   }
@@ -5666,10 +5878,12 @@ function showResults() {
   } else if (ev.rival) who = rivalCard(ev.rival, sum.line, ev.rival === 'king' && !S.kingRevealed);
   let story = sum.story ? `<p class="news">“${esc(sum.story)}”</p>` : '';
   if (ev.kind === 'street' && ev.cp) story = res.won ? `<p class="story">Every gate, clean. There are fresh street races on the board.</p>` : `<p class="story">${res.how === 'wrecked' ? 'The car is in bits.' : 'One gate too many.'} There are fresh street races on the board.</p>`;
+  else if (ev.kind === 'daily') story = `<p class="story">${res.how === 'wrecked' ? 'Wrecked. The daily car is on loan, so your own garage is untouched. Go again.' : sum.reward ? 'Today\'s prize is yours. Go again as many times as you like to get your time down.' : 'Go again as many times as you like. Your best time today is the one that counts.'}</p>`;
   else if (ev.kind === 'street') story = res.won ? `<p class="story">Easy money. There are fresh street races on the board.</p>` : `<p class="story">${esc(ev.oppName)} got there first. There are fresh street races on the board.</p>`;
   else if (!res.won && !story) story = `<p class="story">${res.how === 'wrecked' ? 'The car is in bits. Get it repaired, then go again.' : 'Study the gaps, save nitro for the straights and try again. Street races can earn you cash for upgrades.'}</p>`;
   let btns;
-  if (ev.kind === 'slip') btns = `<button class="btn primary big" data-act="hub"><span>Continue to career hub</span></button>${res.won ? `<button class="btn" data-act="tab" data-arg="mine"><span>See it in your garage</span></button>` : ''}`;
+  if (ev.kind === 'daily') btns = `<button class="btn primary big" data-act="retry"><span>Go again</span></button><button class="btn" data-act="hub"><span>Career hub</span></button>${Online.on ? `<button class="btn" data-act="board" data-arg="${ev.route}"><span>Today's leaderboard</span></button>` : ''}`;
+  else if (ev.kind === 'slip') btns = `<button class="btn primary big" data-act="hub"><span>Continue to career hub</span></button>${res.won ? `<button class="btn" data-act="tab" data-arg="mine"><span>See it in your garage</span></button>` : ''}`;
   else if (ev.kind === 'special' && !res.won) btns = `<button class="btn primary big" data-act="retry" ${own.damage >= 100 ? 'disabled' : ''}><span>Go again</span></button>
     <button class="btn" data-act="garage"><span>Garage</span></button><button class="btn" data-act="hub"><span>Career hub</span></button>`;
   else if (res.won || ev.kind === 'street') btns = `<button class="btn primary big" data-act="hub"><span>${sum.careerDone ? 'Claim your crown' : 'Continue to career hub'}</span></button>`;
@@ -5677,7 +5891,7 @@ function showResults() {
     ${own.damage >= 50 ? `<button class="btn" data-act="garage"><span>Garage</span></button>` : ''}
     <button class="btn" data-act="hub"><span>Career hub</span></button>`;
   $('results-body').innerHTML = `
-    <p class="kicker">${ev.kind === 'street' ? 'Street race · ' + ev.label + ' · ' + esc(ev.area) : ev.kind === 'slip' ? 'Pink slip · ' + ev.title : (ev.kind === 'special' && !ev.brand ? 'Street race · ' : ev.kind === 'essex' ? 'Essex · ' : '') + ev.title + (ev.exhibition || ev.rematch ? (ev.kind === 'special' ? ' · Rematch' : ' · Exhibition') : '')}</p>
+    <p class="kicker">${ev.kind === 'daily' ? 'Daily challenge · ' + esc(ev.area) + ' · ' + esc(carById(ev.loaner).name) : ev.kind === 'street' ? 'Street race · ' + ev.label + ' · ' + esc(ev.area) : ev.kind === 'slip' ? 'Pink slip · ' + ev.title : (ev.kind === 'special' && !ev.brand ? 'Street race · ' : ev.kind === 'essex' ? 'Essex · ' : '') + ev.title + (ev.exhibition || ev.rematch ? (ev.kind === 'special' ? ' · Rematch' : ' · Exhibition') : '')}</p>
     ${ev.kind === 'special' && ev.brand ? `<img class="r3head" src="${RIDE3_LOGO}" alt="Ride3">` : ''}
     <h2 class="result-head ${res.won ? 'win' : 'lose'}">${head}</h2>
     ${story}
@@ -5689,7 +5903,7 @@ function showResults() {
     <div class="res-grid">
       <div><small>Your time</small><b>${res.how === 'finish' ? fmtTime(res.time) : '--'}</b></div>
       ${ev.route && Online.on && res.how === 'finish' ? `<div class="lb-cell"><small>Leaderboard</small><b id="lb-line">${Online.signedIn ? 'Posting…' : '--'}</b></div>` : ''}
-      ${ev.cp ? `<div><small>Checkpoints</small><b>${gates.hit}${gates.missed ? ' · 1 missed' : ' · all'}</b></div>` : `<div><small>Against ${esc(ev.oppName)}</small><b>${gapTxt}</b></div>
+      ${ev.solo ? `<div><small>Best today</small><b>${S.daily && S.daily.best ? fmtMs(S.daily.best) : '--'}</b></div><div><small>Checkpoints</small><b>${gates.hit}</b></div>` : ev.cp ? `<div><small>Checkpoints</small><b>${gates.hit}${gates.missed ? ' · 1 missed' : ' · all'}</b></div>` : `<div><small>Against ${esc(ev.oppName)}</small><b>${gapTxt}</b></div>
       <div><small>Checkpoints</small><b>${gates.hit}${gates.best > 1 ? ' · best x' + Math.min(4, gates.best) : ''}</b></div>`}
       <div><small>Crashes</small><b>${R.p.collisions}</b></div>
       <div><small>Car damage</small><b>${own ? own.damage : 0}%</b></div>
@@ -5698,13 +5912,14 @@ function showResults() {
     ${!res.won && own.damage >= 100 ? '<p class="tip bad">Your car is wrecked. Repair it in the garage before racing again.</p>' : ''}`;
   showScreen('scr-results');
   paintCanvases();
+  keepGhost(R);
   postTime(R);
 }
 
 /* ---------- racing ---------- */
 function startRace(spec) {
   const own = S.owned[S.current];
-  if (own.damage >= 100) { toast('Your car is wrecked. Repair it in the garage first.', true); return; }
+  if (own.damage >= 100 && spec.kind !== 'daily') { toast('Your car is wrecked. Repair it in the garage first.', true); return; }
   if (spec.kind === 'career' && !spec.exhibition && (S.completed[spec.index] || spec.index !== nextEventIndex(S))) return;
   if (spec.kind === 'career' && spec.exhibition && !S.careerDone) return;
   if (spec.kind === 'special' && (!SPECIALS[spec.id] || !specialUnlocked(S, spec.id))) return;
@@ -5715,11 +5930,13 @@ function startRace(spec) {
   }
   if (spec.kind === 'slip' && (!slipReady(S, spec.id) || Object.keys(S.owned).length < 2 || S.current === slipCarFor(spec.id).id)) return;
   R = createRace(S, spec);
+  loadGhosts(R);
   mode = 'race'; paused = false; input.nitro = false;
+  { const b = $('b-ghosts'); if (b) b.innerHTML = `<span>${ghostsOn ? 'Ghosts on' : 'Ghosts off'}</span>`; }
   parts.length = 0; popups.length = 0; banner = null; flashT = 0; V.shake = 0; V.boost = 0; V.camX = 0;
   showScreen(null);
   // show off the rival's motor first (not in a Checkpoint Run, where there is no rival)
-  intro = R.ev.cp || window.__noIntro ? null : { t: 0, len: R.ev.kind === 'street' ? 3.4 : 4.8 };
+  intro = R.ev.cp || R.ev.solo || window.__noIntro ? null : { t: 0, len: R.ev.kind === 'street' ? 3.4 : 4.8 };
   $('controls').hidden = !!intro; $('b-pause').hidden = !!intro; document.body.classList.add('racing');
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   Sound.init();
@@ -5778,6 +5995,7 @@ function processEvents() {
         const cash = R.summary ? (R.summary.reward || 0) + (R.summary.cpCash || 0) : 0;
         if (e.how === 'wrecked') { showBanner('WRECKED', '100% damage', 2.4, '#ff3b3b'); Sound.crash(); }
         else if (e.how === 'missed') { showBanner('OUT', 'Missed a checkpoint', 2.4, '#ff3b3b'); Sound.tone(300, 0.5, 0.12); }
+        else if (R.ev.solo) { showBanner('FINISHED', fmtTime(R.result.time), 2.4, '#5ac8ff'); Sound.tone(660, 0.2, 0.12); }
         else if (e.won) { showBanner('YOU WIN', cash ? '+' + money(cash) : '', 2.4, '#f2a33a'); Sound.tone(660, 0.2, 0.12); setTimeout(() => Sound.tone(990, 0.4, 0.12), 180); }
         else { showBanner('YOU LOST', R.ev.oppName + ' took it', 2.4, '#ff3b3b'); Sound.tone(300, 0.5, 0.12); }
         $('b-pause').hidden = true;
@@ -5924,6 +6142,7 @@ function postTime(race) {
     return;
   }
   Online.submit(race.ev.route, ms, car).then(r => {
+    if (r && r.improved) Online.submitGhost(race.ev.route, ghostEncode(race));   // your best time carries its ghost
     const l = el(); if (!l) return;
     if (r.noName) l.innerHTML = `<button class="btn small" data-act="rename"><span>Pick a name to post</span></button>`;
     else if (r.error) l.textContent = r.offline ? 'Offline, will post later' : 'Could not post';
@@ -5957,6 +6176,8 @@ function boardRoutes() {
   const list = EVENTS.map(e => 'career:' + e.rival);
   if (S) for (const id of SPECIAL_ORDER) if (specialUnlocked(S, id) || (S.specials && S.specials[id])) list.push('special:' + id);
   if (S && essexOpen(S)) list.push(...ESSEX.map(e => 'essex:' + e.rival));
+  const today = dailyDate(), yday = dailyDate(new Date(Date.now() - 864e5));
+  list.push('daily:' + today); if (yday !== today) list.push('daily:' + yday);
   return list;
 }
 async function goBoard(route) {
@@ -5972,19 +6193,22 @@ async function goBoard(route) {
       <optgroup label="Career">${routes.filter(r => r.startsWith('career:')).map(opt).join('')}</optgroup>
       ${routes.some(r => r.startsWith('special:')) ? `<optgroup label="Friends and invitations">${routes.filter(r => r.startsWith('special:')).map(opt).join('')}</optgroup>` : ''}
       ${routes.some(r => r.startsWith('essex:')) ? `<optgroup label="Essex">${routes.filter(r => r.startsWith('essex:')).map(opt).join('')}</optgroup>` : ''}
+      <optgroup label="Daily challenge">${routes.filter(r => r.startsWith('daily:')).map(opt).join('')}</optgroup>
     </select></label>
-    <p class="tip">Everyone gets the same traffic on a route, so the times are fair. Only finished races count, in any car.</p>
+    <p class="tip">Everyone gets the same traffic on a route, so the times are fair. Only finished races count${boardRoute.startsWith('daily:') ? ', and everyone drives the same car' : ', in any car'}. ${routeSpec(boardRoute) ? 'Tap Race on anyone with a ghost to race their run.' : ''}</p>
     <div id="board-table" class="board"><p class="tip">Loading…</p></div>
     <div class="actions">${Online.signedIn ? '' : gsiSlot()}
       <button class="btn" data-act="${S ? 'hub' : 'title'}"><span>Back</span></button></div>`;
   showScreen('scr-board');
   Online.mountButtons();
-  let rows;
-  try { rows = await Online.board(boardRoute); } catch (e) { if (seq === boardSeq) $('board-table').innerHTML = `<p class="tip bad">Could not load the leaderboard. Check your connection.</p>`; return; }
+  let rows, ghostIds = [];
+  try { [rows, ghostIds] = await Promise.all([Online.board(boardRoute), Online.ghostIds(boardRoute)]); } catch (e) { if (seq === boardSeq) $('board-table').innerHTML = `<p class="tip bad">Could not load the leaderboard. Check your connection.</p>`; return; }
   if (seq !== boardSeq || $('scr-board').hidden) return;
   if (!rows.length) { $('board-table').innerHTML = `<p class="tip">No times yet on this route. Be the first.</p>`; return; }
-  $('board-table').innerHTML = `<table><thead><tr><th>#</th><th>Racer and car</th><th>Time</th></tr></thead><tbody>
-    ${rows.map(r => `<tr class="${r.user_id === Online.uid ? 'me' : ''}"><td>${r.place}</td><td><span class="lb-name">${esc(r.racer_name)}${r.user_id === Online.uid ? ' <small>you</small>' : ''}</span><span class="lb-car">${esc(r.car || 'Unknown car')}</span></td><td>${fmtMs(r.time_ms)}</td></tr>`).join('')}
+  const canRace = !!routeSpec(boardRoute);
+  const ghostBtn = r => canRace && r.user_id !== Online.uid && ghostIds.includes(r.user_id) ? `<button class="btn small ghostbtn" data-act="ghostrace" data-arg="${esc(boardRoute + '|' + r.user_id + '|' + r.racer_name)}"><span>Race</span></button>` : '';
+  $('board-table').innerHTML = `<table><thead><tr><th>#</th><th>Racer and car</th><th>Time</th>${canRace ? '<th><span class="sr">Ghost</span></th>' : ''}</tr></thead><tbody>
+    ${rows.map(r => `<tr class="${r.user_id === Online.uid ? 'me' : ''}"><td>${r.place}</td><td><span class="lb-name">${esc(r.racer_name)}${r.user_id === Online.uid ? ' <small>you</small>' : ''}</span><span class="lb-car">${esc(r.car || 'Unknown car')}</span></td><td>${fmtMs(r.time_ms)}</td>${canRace ? `<td class="lb-go">${ghostBtn(r)}</td>` : ''}</tr>`).join('')}
     </tbody></table>`;
 }
 document.getElementById('ui').addEventListener('change', e => { if (e.target.id === 'board-route') goBoard(e.target.value); });
@@ -6013,12 +6237,16 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'reroll': S.street = streetOffers(S); save(); goHub(); break;
     case 'special': if (SPECIALS[arg] && specialUnlocked(S, arg)) { S.found = S.found || {}; S.found[arg] = true; startRace({ kind: 'special', id: arg }); } break;
     case 'essex': startRace({ kind: 'essex', index: nextEssexIndex(S) }); break;
+    case 'daily': startRace({ kind: 'daily' }); break;
+    case 'ghosts': setGhosts(!ghostsOn); break;
+    case 'ghostrace': { const [route, uid, name] = (arg || '').split('|'), spec = routeSpec(route); if (spec) { pickedGhost = { route, uid, name }; startRace(spec); } break; }
     case 'essexex': startRace({ kind: 'essex', index: +arg, exhibition: true }); break;
     case 'hubtab': hubTab = arg; pendingSlip = null; goHub(); break;
     case 'slip': pendingSlip = arg; goHub(); break;
     case 'slipno': pendingSlip = null; goHub(); break;
     case 'slipyes': pendingSlip = null; startRace({ kind: 'slip', id: arg }); break;
-    case 'retry': if (R && R.ev.kind === 'essex') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.essex && S.essex.completed[i]) goHub(); else startRace({ kind: 'essex', index: i, exhibition: ex }); }
+    case 'retry': if (R && R.ev.kind === 'daily') startRace({ kind: 'daily' });
+      else if (R && R.ev.kind === 'essex') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.essex && S.essex.completed[i]) goHub(); else startRace({ kind: 'essex', index: i, exhibition: ex }); }
       else if (R && R.ev.kind === 'special') startRace({ kind: 'special', id: R.ev.id }); else if (R && R.ev.kind === 'career') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.careerDone) goHub(); else startRace({ kind: 'career', index: i, exhibition: ex }); } else goHub(); break;
     case 'hub': goHub(); break;
     case 'signin': e.preventDefault(); Online.signIn(); break;
@@ -6120,12 +6348,12 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) Onlin
 
 /* test hooks: lets automated checks drive the game */
 window.StreetKings = {
-  get S() { return S; }, get R() { return R; }, get mode() { return mode; }, get paused() { return paused; }, input,
+  get S() { return S; }, loadGhosts, localGhost, routeSpec, setGhosts, goBoard, get R() { return R; }, get mode() { return mode; }, get paused() { return paused; }, input,
   steer, startRace, goHub, goGarage, goLadder, setDemo, save, preview: renderCarPreview, portrait: drawPortrait, Sound,
   get intro() { return intro; }, skipIntro: endIntro,
   step(sec, bot) { const h = 1 / 120; let n = Math.round(sec / h); while (n-- > 0 && R && mode !== 'menu') { if (bot) bot(R, input); updateRace(R, h, input); processEvents(); } },
   Online, core: { rematchPrize, specialUnlocked, makeWave, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
-    migrateSave, buyLook, lookCost, lookOf, checkPlate, EVENTS, ESSEX, essexOpen, nextEssexIndex, slipReady, slipCarFor, carClass, totalStars, starCount, CARS, UPGRADES, CHARACTERS, BODY, Z_PLAYER, P_LEN, SPAWN_D, NITRO_MULT },
+    migrateSave, buyLook, lookCost, lookOf, checkPlate, dailyFor, dailyDate, dailyPrize, ghostEncode, ghostDecode, ghostAt, EVENTS, ESSEX, essexOpen, nextEssexIndex, slipReady, slipCarFor, carClass, totalStars, starCount, CARS, UPGRADES, CHARACTERS, BODY, Z_PLAYER, P_LEN, SPAWN_D, NITRO_MULT },
 };
 
 })();
