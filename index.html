@@ -1166,53 +1166,53 @@ const REP_TOTAL = EVENTS.reduce((a, e) => a + e.rep, 0);
    Wider, faster roads: the traffic is lighter and top speed matters more than weaving. */
 const ESSEX = [
   { title: 'THE BORDER', chapter: 'Essex', rival: 'tommy', oppBhp: 760, reward: 9000, rep: 3, dist: 7000,
-    area: 'Romford', road: 'A12 Eastern Avenue', time: 'night', env: 'fields', sky: ['cranes', 'canary'], map: [0.18, 51.58],
-    signs: [['green', 'A12', 'Brentwood', 'Chelmsford'], ['borough', 'County of Essex'], ['green', 'A127', 'Southend', 'Basildon'], ['green', 'M25', 'Dartford', 'Stansted']],
-    intro: 'Over the border and the roads open right up. Tommy Hale runs the A12 out of Romford in a Golf R he swears is stock. Top speed matters out here, so keep your foot in.',
+    area: 'Romford', road: 'A12 Eastern Avenue, Gallows Corner', time: 'night', env: 'suburb', sky: ['romford', 'cranes'], map: [0.18, 51.58],
+    signs: [['green', 'A12', 'Brentwood', 'Chelmsford'], ['borough', 'County of Essex'], ['green', 'A127', 'Southend', 'Basildon'], ['green', 'A12', 'Gallows Corner', 'Harold Wood'], ['green', 'M25', 'Dartford', 'Stansted']],
+    intro: 'Out past Gallows Corner the roads open right up. Tommy Hale runs the A12 out of Romford in a Golf R he swears is stock. Top speed matters out here, so keep your foot in.',
     win: 'Essex has noticed you. The Lakeside lot want a go next.', oppLook: { engine: 'golfr', model: 'golf', paint: '#1e4fa8', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', stance: 1, plate: 'TH19 GTR' },
     diff: { skill: 1.084, inc: [18, 24] } },
   { title: 'LAKESIDE', chapter: 'Essex', rival: 'priya', oppBhp: 780, reward: 10000, rep: 3, dist: 7200,
-    area: 'West Thurrock', road: 'A1306 around Lakeside', time: 'late', env: 'retail', sky: ['lakeside', 'qe2'], map: [0.28, 51.49],
-    signs: [['green', 'A1306', 'Lakeside', 'Grays'], ['borough', 'Borough of Thurrock'], ['green', 'A13', 'Southend', 'London'], ['green', 'A282', 'Dartford Crossing', 'M25']],
-    intro: 'When the shutters come down at Lakeside, the ring road belongs to Priya Mistry and her A45. Empty car parks, orange lights and one clean run.',
+    area: 'West Thurrock', road: 'A1306 Arterial Road, Lakeside', time: 'late', env: 'retail', sky: ['lakeside', 'qe2', 'tanks'], map: [0.28, 51.49],
+    signs: [['green', 'A1306', 'Lakeside', 'Grays'], ['borough', 'Borough of Thurrock'], ['green', 'A13', 'Southend', 'London'], ['green', 'A282', 'Dartford Crossing', 'M25'], ['green', 'A126', 'Lakeside', 'Chafford Hundred']],
+    intro: 'When the shutters come down at Lakeside, the A1306 belongs to Priya Mistry and her A45. Retail parks under the old chalk cliffs, empty car parks and the bridge lit up in the distance. One clean run.',
     win: 'Lakeside is quiet again. Callum on the Arterial has heard about you.', oppLook: { engine: 'a45', model: 'hatch', paint: '#e9e9e6', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'big', stance: 1, plate: 'PM21 AMG' },
     diff: { skill: 1.091, inc: [18, 24] } },
   { title: 'THE ARTERIAL', chapter: 'Essex', rival: 'callum', oppBhp: 800, reward: 11500, rep: 4, dist: 7600,
-    area: 'Basildon', road: 'A127 Southend Arterial Road', time: 'dusk', env: 'fields', sky: ['cranes'], map: [0.46, 51.58],
-    signs: [['green', 'A127', 'Southend', 'Rayleigh'], ['borough', 'Borough of Basildon'], ['green', 'A130', 'Chelmsford', 'Canvey Island'], ['green', 'A127', 'London', 'Romford']],
+    area: 'Basildon', road: 'A127 Southend Arterial Road', time: 'dusk', env: 'arterial', sky: ['brooke', 'cranes'], map: [0.46, 51.58],
+    signs: [['green', 'A127', 'Southend', 'Rayleigh'], ['borough', 'Borough of Basildon'], ['green', 'A176', 'Basildon', 'Billericay'], ['green', 'A130', 'Chelmsford', 'Canvey Island'], ['green', 'A132', 'Wickford', 'Basildon']],
     intro: 'The A127 runs straight as a ruler to the sea. Callum Reid and his Nardo grey RS3 own it every Friday. Nitro on the straights, and do not lift.',
     win: 'The Arterial is yours. Big Mick on Canvey wants a word.', oppLook: { model: 'rs3', paint: '#7d8084', finish: 'matte', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 1, stance: 2, plate: 'CR22 RSS' },
     diff: { skill: 1.093, inc: [19, 25] } },
   { title: 'CANVEY', chapter: 'Essex', rival: 'mick', oppBhp: 880, reward: 13000, rep: 4, dist: 7400,
-    area: 'Canvey Island', road: 'A130 Canvey Way', time: 'night', env: 'fields', sky: ['tanks', 'cranes'], map: [0.57, 51.53],
-    signs: [['green', 'A130', 'Canvey Island', 'Benfleet'], ['borough', 'Borough of Castle Point'], ['green', 'A13', 'Southend', 'Basildon'], ['green', 'A127', 'London', 'Chelmsford']],
+    area: 'Canvey Island', road: 'A130 Canvey Way', time: 'night', env: 'marsh', sky: ['tanks', 'refinery'], map: [0.57, 51.53],
+    signs: [['green', 'A130', 'Canvey Island', 'Benfleet'], ['borough', 'Borough of Castle Point'], ['green', 'A130', 'Canvey Island', 'Seafront'], ['green', 'A13', 'Southend', 'Basildon']],
     intro: 'One road on, one road off. Big Mick Farrow owns the scrapyards on Canvey and his SVR weighs as much as a small house. The oil terminals are lit up like a city.',
     win: 'Mick is still shaking his head. Sophie up in Chelmsford wants to meet you.', oppLook: { engine: 'svr', model: 'suv', paint: '#141517', finish: 'gloss', rims: 'split', rimColor: '#2a2d31', tint: 3, stance: 1, plate: 'MF69 SVR' },
     diff: { skill: 1.092, inc: [19, 25] } },
   { title: 'CITY LIGHTS', chapter: 'Essex', rival: 'sophie', oppBhp: 900, reward: 15000, rep: 5, dist: 7800,
-    area: 'Chelmsford', road: 'A12 Chelmsford bypass', time: 'late', env: 'aroad', sky: ['spire', 'cranes'], map: [0.47, 51.73],
-    signs: [['green', 'A12', 'Chelmsford', 'Colchester'], ['borough', 'City of Chelmsford'], ['green', 'A130', 'Southend', 'Basildon'], ['green', 'A414', 'Harlow', 'Maldon']],
+    area: 'Chelmsford', road: 'A12 Chelmsford bypass', time: 'late', env: 'bypass', sky: ['spire', 'chelmsford'], map: [0.47, 51.73],
+    signs: [['green', 'A12', 'Chelmsford', 'Colchester'], ['borough', 'City of Chelmsford'], ['green', 'A138', 'Chelmsford', 'Springfield'], ['green', 'A414', 'Harlow', 'Maldon']],
     intro: 'Sophie Lane treats the Chelmsford bypass like a race track, because to her it is one. The GT3 turns in like nothing else. Beat her on the straights.',
     win: 'Chelmsford is yours. Jay in Brentwood has been waiting.', oppLook: { engine: 'gt3', model: 'p911', paint: '#1f6fd1', finish: 'gloss', rims: 'five', rimColor: '#c9a23a', tint: 1, spoiler: 'big', stance: 1, plate: 'GT33 SLN' },
     diff: { skill: 1.096, inc: [20, 26] } },
   { title: 'HIGH STREET', chapter: 'Essex', rival: 'jay', oppBhp: 1000, reward: 17000, rep: 5, dist: 7200,
-    area: 'Brentwood', road: 'A1023 Brentwood High Street', time: 'night', env: 'terrace', sky: ['canary'], map: [0.3, 51.62],
-    signs: [['green', 'A1023', 'Brentwood', 'Shenfield'], ['borough', 'Borough of Brentwood'], ['green', 'A12', 'Chelmsford', 'London'], ['green', 'A128', 'Ongar', 'Tilbury']],
-    intro: 'Brentwood High Street, every table outside the bars full. Jay Okafor has not lost in two years and his white GT-R Nismo knows every gap.',
+    area: 'Brentwood', road: 'A1023 Brentwood High Street', time: 'night', env: 'highst', twoWay: true, sky: ['bcathedral'], map: [0.3, 51.62],
+    signs: [['borough', 'Borough of Brentwood'], ['green', 'A1023', 'Shenfield', 'Chelmsford'], ['borough', 'Brentwood Town Centre'], ['green', 'A128', 'Ongar', 'Tilbury']],
+    intro: 'Brentwood High Street on a Saturday night, one lane each way and every table outside the bars full. Jay Okafor has not lost in two years. Getting past means going onto the wrong side, so watch for headlights coming at you.',
     win: 'Brentwood is talking about you. There is one more before the Duke. Pink M4, Southend seafront.', oppLook: { engine: 'gtrn', model: 'gtr', paint: '#ececec', finish: 'gloss', rims: 'fan', rimColor: '#2a2d31', tint: 2, spoiler: 'gt', kit: 1, stance: 1, stripes: 'racing', stripeColor: '#c8161d', plate: 'JO23 NSM' },
     diff: { skill: 1.103, inc: [20, 26] } },
   { title: 'THE GOLDEN MILE', chapter: 'Essex', rival: 'saleenah', oppBhp: 1020, reward: 20000, rep: 6, dist: 7600,
-    area: 'Southend-on-Sea', road: 'Marine Parade, Southend seafront', time: 'late', env: 'seafront', sky: ['pier', 'wheel'], map: [0.71, 51.535],
-    signs: [['green', 'A13', 'Southend', 'Leigh-on-Sea'], ['borough', 'City of Southend-on-Sea'], ['green', 'A1159', 'Shoeburyness', 'Airport'], ['green', 'A127', 'London', 'Basildon']],
-    intro: 'The seafront meet, arcades lit up and the pier stretching out into the dark. Saleenah\'s pink M4 has every tuning part and every bit of aero money can buy. Beat her and the Duke has to answer.',
+    area: 'Southend-on-Sea', road: 'Marine Parade, Southend seafront', time: 'late', env: 'seafront', twoWay: true, sky: ['pier', 'wheel', 'coaster'], map: [0.71, 51.535],
+    signs: [['borough', 'City of Southend-on-Sea'], ['green', 'A13', 'Leigh-on-Sea', 'Westcliff'], ['borough', 'Southend Pier'], ['green', 'A1160', 'Town Centre', 'Station']],
+    intro: 'The seafront meet on Marine Parade: one lane each way, arcades lit up and the pier stretching out into the dark. Saleenah\'s pink M4 has every tuning part and every bit of aero money can buy. Beat her and the Duke has to answer.',
     win: 'The seafront went quiet when you crossed the line. The Duke has sent word: the bridge, tonight.', oppLook: { model: 'm4f82', paint: '#f0619f', finish: 'pearl', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, plate: 'SAL 33N' },
     diff: { skill: 1.095, inc: [21, 27] } },
   { title: 'THE CROSSING', chapter: 'Essex', rival: 'duke', oppBhp: 1100, reward: 30000, rep: 8, dist: 8200,
-    area: 'Dartford Crossing', road: 'A282 over the QE2 Bridge', time: 'late', env: 'bridge', sky: ['tanks', 'canary', 'cranes'], map: [0.26, 51.465],
-    signs: [['green', 'A282', 'Dartford', 'Kent'], ['borough', 'Borough of Dartford'], ['green', 'M25', 'Gatwick', 'Heathrow'], ['green', 'A13', 'London', 'Southend']],
-    intro: 'The QE2 Bridge, sixty metres above the Thames. The Duke has run Essex for thirty years and nobody has beaten his lime green Huracán over the bridge. Win this and Essex is yours.',
+    area: 'Dartford Crossing', road: 'A282 southbound over the QE2 Bridge', time: 'late', env: 'bridge', sky: ['tanks', 'lakeside', 'refinery'], map: [0.26, 51.465],
+    signs: [['green', 'A282', 'Dartford', 'Kent'], ['dart', 'Dart Charge', 'Pay online by midnight tomorrow'], ['borough', 'Borough of Dartford'], ['green', 'M25', 'Gatwick', 'Channel Tunnel']],
+    intro: 'Southbound over the QE2 Bridge, sixty metres above the Thames. The Duke has run Essex for thirty years and nobody has beaten his lime green Huracán over the bridge. Win this and Essex is yours.',
     win: 'Essex bows to a new name. The Duke handed over his keys to the bridge.', oppLook: { model: 'huracan', paint: '#6ccf2b', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, plate: 'DUK 3' },
-    diff: { skill: 1.081, inc: [22, 28] } },
+    diff: { skill: 1.097, inc: [22, 28] } },
 ];
 const essexOpen = S => !!(S && S.careerDone && S.specials && S.specials.ishaaq);
 const nextEssexIndex = S => { const c = (S.essex && S.essex.completed) || []; const i = ESSEX.findIndex((e, k) => !c[k]); return i < 0 ? ESSEX.length : i; };
@@ -1447,11 +1447,24 @@ const TRAFFIC_TYPES = [
 ];
 const BUS = { id: 'bus', w: 2.52, len: 10.4 };
 const BUS_ROUTES = ['N25', 'N73', 'N29', 'N38', 'N55', 'N279', 'N15', 'N86', 'N205', '25', '73', '38', '149', '243', '254', '277'];
+// Essex buses are not London red, and there are no black cabs out there
+const ESSEX_BUS = { colors: ['#6b2c91', '#1aa39a', '#e2e4e6'], routes: ['X1', '1', '9', '21', '25', '66', '70', '100', '151', '200', '351', 'X30'] };
 const TRAFFIC_COLORS = ['#d9dadb', '#1d2b4d', '#8c1d1d', '#2f6f4f', '#c9a227', '#5b6770', '#eeeeee', '#2a2a2c', '#6a3d8a', '#b8551f', '#3f7fbf', '#8f9aa3'];
-function pickType(r) {
-  let t = (r || Math.random)() * TRAFFIC_TYPES.reduce((a, b) => a + b.wt, 0);
-  for (const ty of TRAFFIC_TYPES) { if ((t -= ty.wt) <= 0) return ty; }
-  return TRAFFIC_TYPES[0];
+function pickType(r, noCab) {
+  const types = noCab ? TRAFFIC_TYPES.filter(t => t.id !== 'cab') : TRAFFIC_TYPES;
+  let t = (r || Math.random)() * types.reduce((a, b) => a + b.wt, 0);
+  for (const ty of types) { if ((t -= ty.wt) <= 0) return ty; }
+  return types[0];
+}
+/* two way roads (Brentwood High Street, Southend seafront): the left lane is parking bays, the middle is your side and the
+   right lane comes towards you. Each car still arrives with its wave, so there is always a way through; it just closes
+   in at its own speed: parked cars at your full speed, oncoming cars at your speed plus theirs. */
+const ONCOMING_V = 13;
+function carRel(R, w, c) {
+  const base = w.z + c.off;
+  if (!R.twoWay || c.lane === 1) return base;
+  const pv = Math.max(R.p.v, w.speed + 8), vc = c.lane === 0 ? 0 : -ONCOMING_V;
+  return base * (pv - vc) / (pv - w.speed);
 }
 /* traffic gets busier as difficulty d (0..1) rises, but one lane is always left open */
 function trafficFor(d) {
@@ -1467,7 +1480,7 @@ function createRace(S, spec) {
     const dy = dailyFor(spec.date || dailyDate()), a = (dy.ch === 'essex' ? ESSEX : EVENTS)[dy.area % (dy.ch === 'essex' ? ESSEX.length : EVENTS.length)] || EVENTS[0];
     const paid = S.daily && S.daily.date === dy.date && S.daily.paid;
     ev = { kind: 'daily', title: 'DAILY CHALLENGE', date: dy.date, chapter: a.chapter, area: a.area, road: a.road, env: a.env, sky: a.sky, signs: a.signs,
-      time: dy.time, dawn: false, dist: dy.dist, oppBhp: 100, oppName: 'the clock', oppCar: '', oppLook: null, rival: null,
+      time: dy.time, dawn: false, dist: dy.dist, oppBhp: 100, oppName: 'the clock', oppCar: '', oppLook: null, rival: null, twoWay: !!a.twoWay,
       reward: paid ? 0 : dailyPrize(S), rep: 0, skill: 1, inc: [99, 99], d: dy.d, solo: true, loaner: dy.car, loanUp: dy.up };
     st = statsFor(dy.car, dy.up, stockLook(dy.car));
     own = { up: dy.up, damage: 0 };
@@ -1475,7 +1488,7 @@ function createRace(S, spec) {
     const o = spec.offer, a = (o.ch === 'essex' ? ESSEX : EVENTS)[o.area] || EVENTS[0];
     ev = { kind: 'street', title: 'STREET RACE', label: o.label, chapter: a.chapter, area: a.area, road: a.road, env: a.env, sky: a.sky, signs: a.signs,
       time: o.time, dawn: false, dist: o.dist, oppBhp: o.bhp, oppName: o.name, oppCar: o.car, oppLook: o.look, rival: null,
-      reward: o.prize, rep: 0, skill: o.skill, inc: o.inc, d: o.d, offerId: o.id, cp: o.mode === 'cp' };
+      reward: o.prize, rep: 0, skill: o.skill, inc: o.inc, d: o.d, offerId: o.id, cp: o.mode === 'cp', twoWay: !!a.twoWay };
   } else if (spec.kind === 'special') {
     const e = SPECIALS[spec.id], ch = CHARACTERS[e.rival];
     const beaten = !!(S.specials && S.specials[spec.id]);
@@ -1499,10 +1512,11 @@ function createRace(S, spec) {
   const rw = seededRng(seed), rr = seededRng(seed ^ 0x9E3779B9);
   const oppV = vmaxFor(ev.oppBhp) * ev.skill;
   const traffic = trafficFor(ev.d);
-  if (ev.open || (spec.kind === 'street' && spec.offer.ch === 'essex')) { traffic.two *= 0.8; traffic.extra *= 1.5; }   // Essex: wider, emptier roads
+  if (ev.twoWay) { traffic.tClear *= 1.2; traffic.bus *= 0.5; }       // on a two way road the oncoming cars come at you fast, so leave a bit more room
+  else if (ev.open || (spec.kind === 'street' && spec.offer.ch === 'essex')) { traffic.two *= 0.8; traffic.extra *= 1.5; }   // Essex: wider, emptier roads
   return {
     ev, carId: ev.loaner || S.current, st, traffic, look: ev.loaner ? stockLook(ev.loaner) : lookOf(S, S.current), up: Object.assign({}, own.up), styleBonus: ev.loaner ? 0 : styleBonus(st.style),
-    rec: { next: 0, d: [], x: [] }, ghosts: [],
+    rec: { next: 0, d: [], x: [] }, ghosts: [], twoWay: !!ev.twoWay,
     state: 'countdown', countdown: 3.2, t: 0, doneT: 0, wrecked: false,
     p: { dist: 0, v: 0, lane: 1, x: 1, vx: 0, latV: 0, nitro: st.nitroCap, boosting: false, nitroLock: false,
          damage: own.damage, startDamage: own.damage, collisions: 0, topV: 0, finishTime: null },
@@ -1535,14 +1549,15 @@ function makeWave(R) {
     R.lastOpen = opens[ri(2)];
     bus = R.waveCount > 1 && r() < T.bus;
   }
+  const essex = R.ev.chapter === 'Essex';
   const cars = lanes.map(lane => {
-    const ty = bus ? BUS : pickType(r);
+    const ty = bus ? BUS : pickType(r, essex);
     let color = TRAFFIC_COLORS[ri(TRAFFIC_COLORS.length)];
     if (ty.id === 'van') color = r() < 0.7 ? '#e9ebec' : '#9aa3aa';
     if (ty.id === 'cab') color = '#141517';
-    if (ty.id === 'bus') color = '#c8161d';
+    if (ty.id === 'bus') color = essex ? ESSEX_BUS.colors[ri(ESSEX_BUS.colors.length)] : '#c8161d';
     return { lane, off: 0, type: ty.id, w: ty.w, len: ty.len, color, hit: false, hitT: 0, push: 0, spin: 0,
-      route: bus ? BUS_ROUTES[ri(BUS_ROUTES.length)] : null, brake: 0 };
+      route: bus ? (essex ? ESSEX_BUS.routes : BUS_ROUTES)[ri((essex ? ESSEX_BUS.routes : BUS_ROUTES).length)] : null, brake: 0 };
   });
   if (cars.length === 2) {
     // stagger the two cars so they never reach you at the same moment
@@ -1642,7 +1657,7 @@ function checkCollisions(R) {
     if (w.z > P_LEN) break;                        // later waves are further away
     for (const c of w.cars) {
       if (c.hit) continue;
-      const d = w.z + c.off;                       // traffic rear bumper relative to your rear bumper
+      const d = carRel(R, w, c);                   // traffic rear bumper relative to your rear bumper
       const reach = Math.min(0.62, (1.84 + c.w) / 2 / LANE_W * 0.97);
       if (d < P_LEN && d > -c.len && Math.abs(p.x - c.lane) < reach) { crash(R, w, c, d); return; }
     }
@@ -2028,7 +2043,8 @@ function carEnv(pal) {
 /* daylight colours of the world; time of day darkens and tints them */
 const MAT = { road: [86, 88, 92], pave: [150, 148, 142], kerb: [176, 173, 166], line: [240, 240, 230], verge: [72, 98, 58], bus: [150, 48, 44],
   brick: [150, 114, 84], brick2: [132, 70, 54], render: [196, 190, 178], concrete: [146, 146, 142], glass: [78, 98, 118], steel: [118, 124, 130],
-  viaduct: [118, 80, 60], barrier: [150, 156, 160], median: [96, 110, 80], sea: [44, 72, 92], sand: [168, 150, 112], river: [40, 58, 70], hedge: [52, 78, 44] };
+  viaduct: [118, 80, 60], barrier: [150, 156, 160], median: [96, 110, 80], sea: [44, 72, 92], sand: [168, 150, 112], river: [40, 58, 70], hedge: [52, 78, 44],
+  reed: [118, 110, 66], mud: [70, 66, 54], chalk: [214, 210, 196], lake: [38, 66, 84], bay: [96, 98, 102] };
 function wc(pal, base, k, fg) {
   const l = pal.light * (k || 1), c = [base[0] * l * pal.keyCol[0], base[1] * l * pal.keyCol[1], base[2] * l * pal.keyCol[2]];
   return fg > 0 ? mix(c, pal.fog, fg) : c;
@@ -2042,12 +2058,27 @@ const ENV = {
   arches:     { block: 44, density: 0.72, set: [12, 16], h: [6, 10], mats: ['steel', 'brick2'], win: 'sparse', shops: 0, stripe: true, viaduct: true, lampSp: 38 },
   aroad:      { block: 70, density: 0.4, set: [28, 42], h: [24, 58], mats: ['concrete'], win: 'estate', shops: 0, trees: 1, barrier: true, opposite: true, lampSp: 40 },
   park:       { block: 60, density: 0.1, set: [20, 30], h: [6, 9], mats: ['render'], win: 'sash', shops: 0, trees: 2, wall: true, lampSp: 36 },
-  // Essex: open dual carriageway through fields, a retail park ring road, the seafront and the bridge
+  // Essex
   fields:     { block: 110, density: 0.16, set: [34, 60], h: [5, 8.5], mats: ['render', 'brick'], win: 'sparse', shops: 0, trees: 1, barrier: true, opposite: true, lampSp: 64, hedge: true },
-  retail:     { block: 74, density: 0.72, set: [26, 40], h: [9, 14], mats: ['steel', 'concrete', 'render'], win: 'none', shops: 0, retail: true, barrier: true, opposite: true, lampSp: 34, trees: 0.5 },
-  seafront:   { block: 14, density: 0.95, set: [9, 9.6], h: [7, 11], mats: ['render', 'render', 'brick'], win: 'sash', shops: 0.92, names: 'seaside', sea: true, lampSp: 26, festoon: true },
-  bridge:     { block: 100, density: 0, set: [30, 40], h: [0, 0], mats: ['concrete'], win: 'none', shops: 0, barrier: true, opposite: true, lampSp: 44, bridge: true },
+  // A12 through Romford: 1930s semis behind service roads and grass, street trees, the Gallows Corner flyover
+  suburb:     { skyH: 0.7, block: 16, density: 0.9, set: [23, 25], h: [6.4, 7.2], mats: ['render', 'brick', 'render', 'brick2'], win: 'house', roof: true, shops: 0, trees: 1, barrier: true, opposite: true, lampSp: 36, flyover: 1150 },
+  // A1306 at Lakeside: big retail sheds under the old chalk quarry cliffs, the lake behind the other carriageway
+  retail:     { skyH: 0.8, block: 74, density: 0.72, set: [26, 40], h: [9, 14], mats: ['steel', 'concrete', 'render'], win: 'none', shops: 0, retail: true, barrier: true, opposite: true, lampSp: 34, trees: 0.5, cliffs: true, lake: true },
+  // A127 at Basildon: open fields, pylons marching alongside and the odd industrial estate
+  arterial:   { skyH: 0.55, block: 130, density: 0.28, set: [34, 60], h: [7, 11], mats: ['steel', 'concrete'], win: 'sparse', stripe: true, shops: 0, trees: 1, barrier: true, opposite: true, lampSp: 52, hedge: true, pylons: 300 },
+  // A130 Canvey Way: flat marsh, reeds and creeks, the sea wall on one side and the oil and gas tanks on the other
+  marsh:      { skyH: 0.25, block: 100, density: 0, set: [30, 40], h: [0, 0], mats: ['concrete'], win: 'none', shops: 0, barrier: true, opposite: true, lampSp: 70, reeds: true, creeks: true, seawall: true, tanks: 360 },
+  // A12 Chelmsford bypass: a dual carriageway cut through woodland and fields
+  bypass:     { skyH: 0.45, block: 140, density: 0.06, set: [48, 70], h: [6, 8], mats: ['render', 'brick'], win: 'sparse', shops: 0, trees: 1, woods: true, barrier: true, opposite: true, lampSp: 120 },
+  // Brentwood High Street: one lane each way with parking bays, Georgian shop fronts, bars and salons
+  highst:     { block: 11, density: 0.97, set: [9.4, 9.8], h: [7.5, 11], roof: 0.55, mats: ['render', 'render', 'brick', 'brick2'], win: 'sash', shops: 0.92, names: 'essex', twoWay: true, zebra: true, lampSp: 28 },
+  // Marine Parade: one lane each way, parking bays along the promenade, the sea on one side and the arcades on the other
+  seafront:   { skyH: 0.45, block: 14, density: 0.95, set: [9, 9.6], h: [7, 11], mats: ['render', 'render', 'brick'], win: 'sash', shops: 0.92, names: 'seaside', sea: true, twoWay: true, lampSp: 26, festoon: true },
+  // the QE2 Bridge carries southbound traffic only (northbound goes through the tunnels): four lanes, no oncoming carriageway
+  bridge:     { skyH: 0.7, block: 100, density: 0, set: [30, 40], h: [0, 0], mats: ['concrete'], win: 'none', shops: 0, barrier: true, lampSp: 44, bridge: true, sideLane: true },
 };
+const ESSEX_NAMES = ['NAIL BAR', 'TANNING', 'LASH & BROW', 'COCKTAIL BAR', 'WINE BAR', 'STEAKHOUSE', 'BOUTIQUE', 'ESTATE AGENTS', 'BARBERS', 'COFFEE',
+  'GASTRO PUB', 'BRIDAL', 'JEWELLERS', 'AESTHETICS', 'PROSECCO BAR', 'DELI', 'TAPAS', 'BLOW DRY BAR', 'VAPE SHOP', 'TAILORS', 'GIN BAR', 'SUSHI'];
 const SEASIDE_NAMES = ['AMUSEMENTS', 'ARCADE', 'FISH & CHIPS', 'ROCK SHOP', 'ICE CREAM', 'DOUGHNUTS', 'BINGO', 'CASINO', 'GIFTS', 'SEAFRONT CAFE', 'CANDY FLOSS', 'PENNY FALLS', 'SEAFOOD', 'KEBAB'];
 const RETAIL_NAMES = ['HOMEWARE', 'SPORTS', 'ELECTRICALS', 'CINEMA', 'DRIVE THRU', 'TYRES & EXHAUSTS', 'FURNITURE', 'GYM', 'TOYS', 'PETS', 'DIY', 'CARPETS', 'BOWLING', 'FASHION OUTLET'];
 const SHOP_NAMES = ['GRILL', 'CAFE', 'BARBERS', 'MINI MARKET', 'PHONE REPAIR', 'BAKERY', 'SWEET CENTRE', 'OFF LICENCE', 'LAUNDERETTE', 'CHICKEN', 'PHARMACY',
@@ -2086,7 +2117,7 @@ function mapImage(g, img, p0, p1, p3, alpha) {
 /* ---------- sky layer with London landmarks ---------- */
 let skyCache = {}, vignette = null;
 function skyLayer(pal, list) {
-  const key = pal.time + '|' + list.join(',');
+  const key = pal.time + '|' + pal.env + '|' + list.join(',');
   if (skyCache[key]) return skyCache[key];
   const c = document.createElement('canvas');
   const cw = Math.ceil(W * 1.8), ch = Math.ceil(Math.max(60, V.hy));
@@ -2131,11 +2162,12 @@ function skyLayer(pal, list) {
       x += bw; i++;
     }
   };
-  skyline(farCol, 0.06, 0.24, 14, 40, 10, true);
+  const sk = (ENV[pal.env] && ENV[pal.env].skyH) || 1;   // out in the Essex countryside the far skyline is low
+  skyline(farCol, 0.06 * sk, 0.24 * sk, 14, 40, 10, true);
   // landmarks
   const spots = [0.5, 0.34, 0.66, 0.42, 0.58, 0.27, 0.74];
   list.forEach((id, i) => drawLandmark(g, id, cw * spots[i % spots.length] + (hash(i, 77) - 0.5) * cw * 0.04, ch, u, pal, i));
-  skyline(nearCol, 0.02, 0.1, 20, 60, 40, false);
+  skyline(nearCol, 0.02 * sk, 0.1 * sk, 20, 60, 40, false);
   return (skyCache[key] = c);
 }
 function drawLandmark(g, id, x, base, u, pal, seed) {
@@ -2265,6 +2297,41 @@ function drawLandmark(g, id, x, base, u, pal, seed) {
       g.fillStyle = css(c); g.fillRect(x + Math.cos(a) * r - 1, cy + Math.sin(a) * r - 1, 2.2, 2.2);
       drawGlow(g, c, x + Math.cos(a) * r, cy + Math.sin(a) * r, 5 * u, 0.4);
     }
+  } else if (id === 'romford') {
+    // Romford from the A12: a few tower blocks and the lit town centre
+    for (const [dx, w, h] of [[-60, 14, 58], [-38, 12, 46], [30, 16, 64], [52, 12, 40]]) {
+      const bx = x + dx * u - w * u / 2, by = base - h * u; fillC(sil); g.fillRect(bx, by, w * u, h * u); windows(bx, by, w * u, h * u, 0.45);
+    }
+  } else if (id === 'brooke') {
+    // Brooke House in Basildon: a tall slab block standing on legs
+    const w = 26 * u, h = 92 * u, bx = x - w / 2, legs = 12 * u;
+    fillC(sil); g.fillRect(bx, base - h, w, h - legs);
+    for (let i = 0; i < 4; i++) g.fillRect(bx + i * (w - 3 * u) / 3, base - legs, 3 * u, legs);
+    windows(bx, base - h, w, h - legs, 0.4);
+    if (night) redLight(x, base - h - 2 * u);
+  } else if (id === 'refinery') {
+    // the refinery across the water: columns, chimneys and a lot of lights
+    for (let i = 0; i < 9; i++) { const cx = x + (i - 4) * 16 * u, h = (18 + hash(i, seed + 3) * 34) * u, w = (3 + hash(i, seed + 4) * 5) * u; fillC(sil); g.fillRect(cx - w / 2, base - h, w, h); if (night) for (let j = 0; j < 6; j++) { g.fillStyle = 'rgba(255,214,140,0.85)'; g.fillRect(cx - w / 2 + hash(i * 7 + j, 5) * w, base - hash(i * 5 + j, 6) * h, 1.6, 1.6); } }
+    drawGlow(g, [255, 150, 40], x + 60 * u, base - 50 * u, 10 * u, night ? 0.9 : 0.4);
+    g.fillStyle = '#ffb040'; g.beginPath(); g.ellipse(x + 60 * u, base - 50 * u, 1.8 * u, 3.6 * u, 0, 0, 7); g.fill();
+    fillC(sil); g.fillRect(x + 59 * u, base - 46 * u, 2 * u, 46 * u);
+  } else if (id === 'chelmsford') {
+    // Chelmsford across the fields: low town, a couple of taller blocks, lit up orange
+    for (let i = 0; i < 10; i++) { const cx = x + (i - 5) * 12 * u, h = (8 + hash(i, seed + 7) * 22) * u, w = 10 * u; fillC(sil); g.fillRect(cx, base - h, w, h); windows(cx, base - h, w, h, 0.35); }
+    if (night) drawGlow(g, [255, 170, 80], x, base, 90 * u, 0.25);
+  } else if (id === 'bcathedral') {
+    // Brentwood Cathedral: a pale classical church with a lantern on top
+    const w = 70 * u, h = 26 * u;
+    fillC(night ? [42, 40, 38] : mix([200, 190, 170], pal.fog, 0.35)); g.fillRect(x - w / 2, base - h, w, h);
+    g.beginPath(); g.moveTo(x - w / 2 - 2 * u, base - h); g.lineTo(x, base - h - 10 * u); g.lineTo(x + w / 2 + 2 * u, base - h); g.closePath(); g.fill();
+    g.fillRect(x - 7 * u, base - h - 26 * u, 14 * u, 18 * u); g.beginPath(); g.arc(x, base - h - 26 * u, 7 * u, Math.PI, 0); g.fill();
+    if (night) { drawGlow(g, [255, 220, 170], x, base - h, 40 * u, 0.3); g.fillStyle = 'rgba(255,220,160,0.7)'; for (let i = 0; i < 7; i++) g.fillRect(x - w / 2 + 6 * u + i * 9 * u, base - h * 0.7, 3 * u, 9 * u); }
+  } else if (id === 'coaster') {
+    // the rollercoaster at the foot of the pier
+    g.strokeStyle = css(night ? [70, 74, 80] : mix([150, 154, 160], pal.fog, 0.3)); g.lineWidth = Math.max(1, 1.2 * u);
+    g.beginPath(); for (let i = 0; i <= 40; i++) { const t = i / 40, px = x - 60 * u + t * 120 * u, py = base - (14 + Math.abs(Math.sin(t * 7.5)) * 26 * (1 - t * 0.4)) * u; if (i) g.lineTo(px, py); else g.moveTo(px, py); } g.stroke();
+    for (let i = 0; i <= 12; i++) { const t = i / 12, px = x - 60 * u + t * 120 * u, py = base - (14 + Math.abs(Math.sin(t * 7.5)) * 26 * (1 - t * 0.4)) * u; g.beginPath(); g.moveTo(px, base); g.lineTo(px, py); g.stroke(); }
+    if (night) for (let i = 0; i < 30; i++) { const t = i / 29, px = x - 60 * u + t * 120 * u, py = base - (14 + Math.abs(Math.sin(t * 7.5)) * 26 * (1 - t * 0.4)) * u; g.fillStyle = css(NEON[i % NEON.length]); g.fillRect(px - 1, py - 1, 2, 2); }
   } else if (id === 'cranes') {
     for (const dx of [-120, 90, 170]) {
       const cx = x + dx * u, h = (60 + hash(dx, seed) * 40) * u;
@@ -2297,8 +2364,25 @@ function drawRoad(pal, dist, evDist) {
     if (z1 > Z_FAR) z1 = Z_FAR;
     if (z1 <= z0) continue;
     const a = G(z0), b = G(z1), fg = fogK((z0 + z1) * 0.5), odd = k & 1;
-    ctx.fillStyle = css(wc(pal, env.bridge ? MAT.river : MAT.verge, odd ? 1.08 : 1, fg));
+    ctx.fillStyle = css(wc(pal, env.bridge ? MAT.river : env.reeds ? MAT.reed : MAT.verge, odd ? 1.08 : 1, fg));
     ctx.fillRect(0, b.y - 0.5, W, a.y - b.y + 1.5);
+    const oppR = env.opposite ? oppX1 : env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF;   // right hand edge of all the tarmac
+    if (env.creeks) {
+      // tidal creeks winding through the marsh, and the estuary mud behind the sea wall
+      ctx.fillStyle = css(wc(pal, MAT.mud, odd ? 1.04 : 0.96, fg)); quadX(ctx, a, b, -4000, -ROAD_HALF - 17);
+      const ck = Math.floor(k / 7);
+      if (hash(ck, 91) < 0.45) { const w0 = 3 + hash(ck, 92) * 10; ctx.fillStyle = css(wc(pal, MAT.lake, 1, fg)); quadX(ctx, a, b, oppR + 10 + w0, oppR + 16 + w0 * 2.2); }
+      if (hash(ck, 93) < 0.3) { ctx.fillStyle = css(wc(pal, MAT.lake, 1, fg)); quadX(ctx, a, b, -ROAD_HALF - 15, -ROAD_HALF - 10); }
+    }
+    if (env.lake && hash(Math.floor(k / 20), 95) < 0.55) {
+      // the lake at Lakeside, behind the other carriageway, with lights on the water
+      ctx.fillStyle = css(wc(pal, MAT.lake, odd ? 1.05 : 0.97, fg)); quadX(ctx, a, b, oppR + 12, 4000);
+      if (pal.lit > 0.5 && hash(k, 96) < 0.3) { const y = (a.y + b.y) / 2; ctx.fillStyle = css(mix([255, 210, 140], pal.fog, fg), 0.45); ctx.fillRect(X(a, oppR + 20 + hash(k, 97) * 80), y, Math.max(2, 1.2 * a.s), 1); }
+    }
+    if (env.roof === true) {
+      // the service road in front of the houses
+      ctx.fillStyle = css(wc(pal, MAT.road, odd ? 1.03 : 0.97, fg)); quadX(ctx, a, b, -ROAD_HALF - 12.5, -ROAD_HALF - 7.5); quadX(ctx, a, b, oppR + 7.5, oppR + 12.5);
+    }
     if (env.sea) {
       // beach below the promenade, then the estuary out to the horizon
       ctx.fillStyle = css(wc(pal, MAT.sea, odd ? 1.06 : 0.96, fg)); quadX(ctx, a, b, -4000, -ROAD_HALF - 14);
@@ -2309,13 +2393,14 @@ function drawRoad(pal, dist, evDist) {
       const y = (a.y + b.y) / 2, xg = hash(k, 62) < 0.5 ? X(a, -ROAD_HALF - 8 - hash(k, 63) * 60) : X(a, ROAD_HALF + 20 + hash(k, 63) * 60);
       ctx.fillStyle = css(mix([255, 200, 120], pal.fog, fg), 0.5); ctx.fillRect(xg, y, Math.max(2, 0.8 * a.s), 1);
     }
-    const paveR = env.opposite ? oppX1 : ROAD_HALF + 0.25;
+    const paveR = env.opposite ? oppX1 : oppR + 0.25;
     ctx.fillStyle = css(wc(pal, MAT.pave, odd ? 1.05 : 0.97, fg));
     quadX(ctx, a, b, -ROAD_HALF - 3.6, -ROAD_HALF - 0.25); quadX(ctx, a, b, paveR, paveR + 3.4);
     ctx.fillStyle = css(wc(pal, MAT.kerb, odd ? 1.2 : 1, fg));
-    quadX(ctx, a, b, -ROAD_HALF - 0.25, -ROAD_HALF); if (!env.opposite) quadX(ctx, a, b, ROAD_HALF, ROAD_HALF + 0.25);
+    quadX(ctx, a, b, -ROAD_HALF - 0.25, -ROAD_HALF); if (!env.opposite && !env.sideLane) quadX(ctx, a, b, ROAD_HALF, ROAD_HALF + 0.25);
     ctx.fillStyle = css(wc(pal, MAT.road, odd ? 1.04 : 0.98, fg));
-    quadX(ctx, a, b, -ROAD_HALF, ROAD_HALF);
+    quadX(ctx, a, b, -ROAD_HALF, env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF);
+    if (env.twoWay) { ctx.fillStyle = css(wc(pal, MAT.bay, odd ? 1.04 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF, -LANE_W / 2 - 0.05); }   // parking bays
     if (env.busLane) { ctx.fillStyle = css(wc(pal, MAT.bus, odd ? 1.04 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF, -LANE_W / 2 - 0.1); }
     if (env.opposite) {
       ctx.fillStyle = css(wc(pal, MAT.median, 1, fg)); quadX(ctx, a, b, ROAD_HALF, oppX0);
@@ -2326,8 +2411,16 @@ function drawRoad(pal, dist, evDist) {
     const lineC = css(mix([232, 232, 222].map(v => v * Math.max(0.62, pal.light + 0.25)), pal.fog, fg * 1.05));
     ctx.fillStyle = lineC;
     if (env.busLane) { quadX(ctx, a, b, -LANE_W / 2 - 0.22, -LANE_W / 2 - 0.02); }
-    quadX(ctx, a, b, -ROAD_HALF + 0.3, -ROAD_HALF + 0.45); quadX(ctx, a, b, ROAD_HALF - 0.45, ROAD_HALF - 0.3);
     const m3 = ((k % 3) + 3) % 3;
+    if (env.twoWay) {
+      // a solid line along the parking bays with a tick between each bay, and the long dashed centre line
+      quadX(ctx, a, b, -LANE_W / 2 - 0.12, -LANE_W / 2 - 0.02);
+      quadX(ctx, a, b, ROAD_HALF - 0.45, ROAD_HALF - 0.3);
+      if (m3 !== 2) quadX(ctx, a, b, LANE_W / 2 - 0.08, LANE_W / 2 + 0.08);
+      if (((k % 2) + 2) % 2 === 0 && z0 < 200) { const t0 = G(z0), t1 = G(Math.min(z1, z0 + 0.14)); quadX(ctx, t0, t1, -ROAD_HALF + 0.2, -LANE_W / 2 - 0.1); }
+    } else {
+    quadX(ctx, a, b, -ROAD_HALF + 0.3, -ROAD_HALF + 0.45); quadX(ctx, a, b, (env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF) - 0.45, (env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF) - 0.3);
+    if (env.sideLane && m3 === 0) quadX(ctx, a, b, LANE_W * 1.5 - 0.07, LANE_W * 1.5 + 0.07);
     if (m3 === 0) {
       if (!env.busLane) quadX(ctx, a, b, -LANE_W / 2 - 0.07, -LANE_W / 2 + 0.07);
       quadX(ctx, a, b, LANE_W / 2 - 0.07, LANE_W / 2 + 0.07);
@@ -2341,9 +2434,10 @@ function drawRoad(pal, dist, evDist) {
         if (z0 < 70) { ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, c, px, y, r * 4, 0.3 * (1 - z0 / 70)); ctx.globalCompositeOperation = 'source-over'; }
       }
     }
+    }
     // steel barriers on the open road stages
     if (env.barrier && z0 < 260) {
-      const bars = env.opposite ? [-(ROAD_HALF + 0.9), ROAD_HALF + 1.2] : [-(ROAD_HALF + 0.9), ROAD_HALF + 0.9];
+      const bars = env.opposite ? [-(ROAD_HALF + 0.9), ROAD_HALF + 1.2] : [-(ROAD_HALF + 0.9), oppR + 0.9];
       for (const xb of bars) {
         ctx.fillStyle = css(wc(pal, MAT.barrier, 1, fg)); vquad(ctx, xb, 0.45, 0.8, z0, z1);
         if (!odd) { const q0 = P(xb, 0, z0), q1 = P(xb, 0.8, z0); ctx.fillStyle = css(wc(pal, [70, 74, 78], 1, fg)); ctx.fillRect(q0.x - 0.06 * q0.s, q1.y, Math.max(1, 0.12 * q0.s), q0.y - q1.y); }
@@ -2356,8 +2450,16 @@ function drawRoad(pal, dist, evDist) {
       ctx.fillStyle = css(wc(pal, [210, 214, 218], 1, fg)); vquad(ctx, xr, 1.0, 1.1, z0, z1); vquad(ctx, xr, 0.55, 0.6, z0, z1);
       if (!odd) { const q0 = P(xr, 0, z0), q1 = P(xr, 1.1, z0); ctx.fillRect(q0.x - 0.04 * q0.s, q1.y, Math.max(1, 0.08 * q0.s), q0.y - q1.y); }
     }
-    if (env.bridge && z0 < 260) for (const xb of [-ROAD_HALF - 3.6, oppX1 + 3.4]) { ctx.fillStyle = css(wc(pal, MAT.concrete, 0.8, fg)); vquad(ctx, xb, 0, 1.25, z0, z1); }
-    if (env.hedge && z0 < 240) for (const xb of [-ROAD_HALF - 6.5, oppX1 + 6]) { ctx.fillStyle = css(wc(pal, MAT.hedge, odd ? 1.05 : 0.95, fg)); vquad(ctx, xb, 0, 1.6 + hash(k, xb > 0 ? 71 : 72) * 0.5, z0, z1); }
+    if (env.bridge && z0 < 260) for (const xb of [-ROAD_HALF - 3.6, oppR + 2.6]) { ctx.fillStyle = css(wc(pal, MAT.concrete, 0.8, fg)); vquad(ctx, xb, 0, 1.25, z0, z1); }
+    if (env.seawall && z0 < 300) { ctx.fillStyle = css(wc(pal, MAT.concrete, 0.85 + hash(k, 94) * 0.08, fg)); vquad(ctx, -ROAD_HALF - 17, 0, 2.8, z0, z1); }
+    if (env.cliffs && z0 < 420 && hash(Math.floor(k / 14), 82) < 0.75) {
+      // the chalk quarry faces Lakeside was built in
+      const xc = -ROAD_HALF - 56 - hash(Math.floor(k / 14), 83) * 8, hc = 30 + hash(Math.floor(k / 5), 84) * 8;
+      ctx.fillStyle = css(wc(pal, MAT.chalk, 0.9 + hash(k, 85) * 0.12, fg)); vquad(ctx, xc, 0, hc, z0, z1);
+      ctx.fillStyle = css(wc(pal, MAT.chalk, 0.72, fg)); vquad(ctx, xc + 0.02, hc * 0.35, hc * 0.35 + 0.8, z0, z1); vquad(ctx, xc + 0.02, hc * 0.7, hc * 0.7 + 0.6, z0, z1);
+      ctx.fillStyle = css(wc(pal, MAT.hedge, 0.8, fg)); vquad(ctx, xc + 0.03, hc - 1.2, hc + 0.8, z0, z1);
+    }
+    if (env.hedge && z0 < 240) for (const xb of [-ROAD_HALF - 6.5, oppR + 6]) { ctx.fillStyle = css(wc(pal, MAT.hedge, odd ? 1.05 : 0.95, fg)); vquad(ctx, xb, 0, 1.6 + hash(k, xb > 0 ? 71 : 72) * 0.5, z0, z1); }
   }
   // zebra crossings
   if (env.zebra) {
@@ -2437,12 +2539,33 @@ function drawBuildings(pal, dist, rival) {
         ctx.fillStyle = css(wc(pal, baseC, 1.3, fg));
         ctx.fillRect(Math.min(face[0].x, c0.x), face[1].y, Math.abs(c0.x - face[0].x), Math.max(1, 0.25 * face[0].s));
       }
+      if (env.roof && (env.roof === true || hash(bi, sd + 43) < env.roof)) {
+        // hipped tile roof sloping back from the front wall
+        const r0 = P(xs, hgt, z0), r1 = P(xs, hgt, z1), r2 = P(xs + sd * 4.6, hgt + 3.1, Math.max(z0 + 0.5, z1 - 3.2)), r3 = P(xs + sd * 4.6, hgt + 3.1, Math.min(z1 - 0.5, z0 + (clipped ? 0 : 3.2)));
+        ctx.fillStyle = css(wc(pal, hash(bi, sd + 41) < 0.6 ? [112, 66, 54] : [84, 86, 92], 0.95, fg));
+        ctx.beginPath(); ctx.moveTo(r0.x, r0.y); ctx.lineTo(r1.x, r1.y); ctx.lineTo(r2.x, r2.y); ctx.lineTo(r3.x, r3.y); ctx.closePath(); ctx.fill();
+        if (!clipped && hash(bi, sd + 42) < 0.7) { const c0 = P(xs + sd * 2.5, hgt + 1.6, z0 + 3.4), c1 = P(xs + sd * 2.5, hgt + 4, z0 + 3.4); ctx.fillStyle = css(wc(pal, MAT.brick2, 0.9, fg)); ctx.fillRect(c0.x - 0.3 * c0.s, c1.y, 0.6 * c0.s, c0.y - c1.y); }   // chimney
+      }
       if (z0 > 240) continue;
       const winLit = pal.win;
       const winCol = (hv) => night || pal.time === 'dusk' ? css(mix(WIN_COL[Math.floor(hv * 40) % 4], pal.fog, fg * 0.8), 0.9)
         : css(wc(pal, [60, 72, 84], 1, fg));
       // windows
       if (env.win === 'none') { /* big sheds with no windows */ }
+      else if (env.win === 'house') {
+        // a pair of 1930s semis: two windows up, a bay and a front door down, each side
+        const zA = bi * BL - camW + 0.6 + (env.win !== 'sash' ? 0.9 : 0), zB = zA + BL - 1.2 - 1.8, len = zB - zA;
+        const pane = (f0, f1, y0, y1, hv) => {
+          const za = zA + len * f0, zb2 = zA + len * f1; if (za < z0 || zb2 > z1) return;
+          const lit = hv < pal.win * 0.9;
+          ctx.fillStyle = lit && (night || pal.time === 'dusk') ? css(mix(WIN_COL[Math.floor(hv * 40) % 4], pal.fog, fg * 0.8), 0.85) : css(wc(pal, [58, 68, 80], 1, fg));
+          vquad(ctx, xs + sd * 0.01, y0, y1, za, zb2);
+        };
+        for (const [f0, f1] of [[0.06, 0.2], [0.3, 0.44], [0.56, 0.7], [0.8, 0.94]]) pane(f0, f1, 3.9, 5.2, hash(bi * 13 + Math.round(f0 * 100), sd));
+        for (const [f0, f1] of [[0.05, 0.24], [0.76, 0.95]]) pane(f0, f1, 0.9, 2.4, hash(bi * 17 + Math.round(f0 * 100), sd + 3));
+        ctx.fillStyle = css(wc(pal, [70, 44, 36], 1, fg));
+        for (const [f0, f1] of [[0.4, 0.46], [0.54, 0.6]]) { const za = zA + len * f0, zb2 = zA + len * f1; if (za >= z0 && zb2 <= z1) vquad(ctx, xs + sd * 0.01, 0, 2.1, za, zb2); }
+      }
       else if (env.win === 'tower') {
         for (let fl = 1, y = 4.5; y < hgt - 2 && fl < 45; fl++, y += 3.6) {
           for (let sgi = 0; sgi < 3; sgi++) {
@@ -2477,7 +2600,7 @@ function drawBuildings(pal, dist, rival) {
       }
       // shop fronts with signs
       if (env.shops && hash(bi, sd + 21) < env.shops) {
-        const names = env.names === 'seaside' ? SEASIDE_NAMES : SHOP_NAMES;
+        const names = env.names === 'seaside' ? SEASIDE_NAMES : env.names === 'essex' ? ESSEX_NAMES : SHOP_NAMES;
         const nm = SHOP_SPECIAL[rival] && hash(bi, sd + 25) < 0.22 ? SHOP_SPECIAL[rival] : names[Math.floor(hash(bi, sd + 23) * names.length)];
         const za = Math.max(z0, bi * BL - camW + 1.2), zb2 = Math.min(z1, bi * BL - camW + BL - 1.2);
         if (zb2 > za) {
@@ -2565,7 +2688,7 @@ function lampSprites(list, pal, dist) {
     for (let k = k0; k <= k1; k++) {
       const z = k * SP + off - camW;
       if (z < 1.5 || z > Z_FAR) continue;
-      const xb = sd > 0 && env.opposite ? ROAD_HALF + 1.2 : sd * (ROAD_HALF + 1.3);
+      const xb = sd > 0 && env.opposite ? ROAD_HALF + 1.2 : sd > 0 && env.sideLane ? ROAD_HALF + LANE_W + 1.3 : sd * (ROAD_HALF + 1.3);
       list.push({ z, draw: () => {
         const fg = fogK(z);
         const b = P(xb, 0, z), t = P(xb, 8, z), arm = P(xb - sd * 1.6, 8.1, z);
@@ -2608,6 +2731,7 @@ function treeSprites(list, pal, dist) {
       if (z < 1.5 || z > Z_FAR) continue;
       let xt = sd * (9.5 + hash(k, sd + 52) * 4.5);
       if (sd > 0 && env.opposite) xt += 11;
+      if (env.roof === true) xt = sd * (8.2 + hash(k, sd + 52) * 1.5) + (sd > 0 ? 13.2 : 0);   // street trees on the verge before the service road
       const ht = 6 + hash(k, sd + 53) * 5 + (env.trees > 1 ? 2 : 0);
       list.push({ z, draw: () => {
         const fg = fogK(z), b = P(xt, 0, z), t = P(xt, ht, z);
@@ -2618,6 +2742,122 @@ function treeSprites(list, pal, dist) {
         ctx.beginPath(); ctx.arc(b.x, t.y + r * 1.1, r, 0, 7); ctx.arc(b.x - r * 0.6, t.y + r * 1.8, r * 0.85, 0, 7); ctx.arc(b.x + r * 0.6, t.y + r * 1.8, r * 0.85, 0, 7); ctx.fill();
       } });
     }
+  }
+}
+/* dense woodland on both sides (Chelmsford bypass) */
+function woodSprites(list, pal, dist) {
+  const env = ENV[pal.env]; if (!env || !env.woods) return;
+  const camW = dist - Z_PLAYER, SP = 7;
+  for (const sd of [-1, 1]) for (let row = 0; row < 2; row++) {
+    const k0 = Math.floor(camW / SP), k1 = Math.floor((camW + (row ? 220 : Z_FAR)) / SP);
+    for (let k = k0; k <= k1; k++) {
+      const h0 = hash(k * 3 + row, sd + 60);
+      if (h0 < 0.18) continue;
+      const z = k * SP - camW + hash(k, sd + row + 61) * 5;
+      if (z < 1.5 || z > Z_FAR) continue;
+      const xt = sd * (17 + row * 8 + hash(k, sd + row + 62) * 6) + (sd > 0 ? 11 : 0), ht = 9 + hash(k, sd + row + 63) * 7;
+      list.push({ z, draw: () => {
+        const fg = fogK(z), b = P(xt, 0, z), t = P(xt, ht, z), r = ht * 0.24 * b.s;
+        ctx.fillStyle = css(wc(pal, [60, 48, 38], 1, fg)); ctx.fillRect(b.x - 0.18 * b.s, t.y + (b.y - t.y) * 0.5, 0.36 * b.s, (b.y - t.y) * 0.5);
+        ctx.fillStyle = css(wc(pal, shade([52, 74, 44], 0.7 + h0 * 0.3), 1, fg));
+        ctx.beginPath(); ctx.ellipse(b.x, t.y + r * 1.4, r * 0.9, r * 1.5, 0, 0, 7); ctx.arc(b.x - r * 0.5, t.y + r * 2.2, r * 0.8, 0, 7); ctx.arc(b.x + r * 0.5, t.y + r * 2.1, r * 0.8, 0, 7); ctx.fill();
+      } });
+    }
+  }
+}
+/* reed clumps along the marsh verges */
+function reedSprites(list, pal, dist) {
+  const env = ENV[pal.env]; if (!env || !env.reeds) return;
+  const camW = dist - Z_PLAYER, SP = 3;
+  for (const sd of [-1, 1]) {
+    const k0 = Math.floor(camW / SP), k1 = Math.floor((camW + 150) / SP);
+    for (let k = k0; k <= k1; k++) {
+      if (hash(k, sd + 70) < 0.35) continue;
+      const z = k * SP - camW + hash(k, sd + 71) * 2;
+      if (z < 2 || z > Z_FAR) continue;
+      const xr = sd * (8 + hash(k, sd + 72) * 6) + (sd > 0 ? 13.2 : 0), hr = 1.2 + hash(k, sd + 73) * 1.1;
+      list.push({ z, draw: () => {
+        const fg = fogK(z), b = P(xr, 0, z), t = P(xr, hr, z), w = Math.max(1, 0.05 * b.s);
+        ctx.strokeStyle = css(wc(pal, [150, 136, 80], 1, fg)); ctx.lineWidth = w; ctx.beginPath();
+        for (let i = -3; i <= 3; i++) { ctx.moveTo(b.x + i * 0.12 * b.s, b.y); ctx.lineTo(b.x + i * 0.22 * b.s, t.y + Math.abs(i) * 0.1 * b.s); }
+        ctx.stroke();
+      } });
+    }
+  }
+}
+/* bridges over the A12 through Romford */
+function flyoverSprites(list, pal, dist) {
+  const env = ENV[pal.env]; if (!env || !env.flyover) return;
+  const camW = dist - Z_PLAYER, SP = env.flyover, DEPTH = 12;
+  const k0 = Math.floor((camW - DEPTH - 400) / SP), k1 = Math.floor((camW + Z_FAR - 400) / SP);
+  for (let k = k0; k <= k1; k++) {
+    const zf = 400 + k * SP - camW;
+    if (zf + DEPTH < 2 || zf > Z_FAR) continue;
+    list.push({ z: clamp(zf, 2, Z_FAR), draw: () => {
+      const fg = fogK(clamp(zf, 0, Z_FAR)), xl = -ROAD_HALF - 16, xr = ROAD_HALF + 13.2 + 16, y0 = 5.4, y1 = 7.3;
+      const za = Math.max(2, zf), zb = zf + DEPTH;
+      // the underside you drive beneath, then the front face and its parapet
+      const u0 = P(xl, y0, za), u1 = P(xr, y0, za), u2 = P(xr, y0, zb), u3 = P(xl, y0, zb);
+      ctx.fillStyle = css(wc(pal, [60, 62, 64], 1, fg)); ctx.beginPath(); ctx.moveTo(u0.x, u0.y); ctx.lineTo(u1.x, u1.y); ctx.lineTo(u2.x, u2.y); ctx.lineTo(u3.x, u3.y); ctx.closePath(); ctx.fill();
+      if (zf >= 2) {
+        const f0 = P(xl, y0, zf), f1 = P(xr, y1 + 1.1, zf);
+        ctx.fillStyle = css(wc(pal, MAT.concrete, 1.05, fg)); ctx.fillRect(f0.x, f1.y, f1.x - f0.x, f0.y - f1.y);
+        ctx.fillStyle = css(wc(pal, MAT.concrete, 0.8, fg)); const p0 = P(xl, y1, zf); ctx.fillRect(f0.x, p0.y, f1.x - f0.x, Math.max(1, 0.12 * f0.s));
+        for (const xp of [-ROAD_HALF - 2.2, ROAD_HALF + 1.2, ROAD_HALF + 13.2 + 2.2]) { const b = P(xp, 0, zf + 3), t = P(xp, y0, zf + 3); ctx.fillStyle = css(wc(pal, MAT.concrete, 0.92, fg)); ctx.fillRect(b.x - 0.5 * b.s, t.y, 1.0 * b.s, b.y - t.y); }
+        if (pal.lit > 0.3) { ctx.globalCompositeOperation = 'lighter'; for (let i = 0; i < 6; i++) { const q = P(-ROAD_HALF + i * 3.6, y0 - 0.1, zf + 1); drawGlow(ctx, [255, 200, 130], q.x, q.y, clamp(0.8 * q.s, 2, 40), 0.4 * (1 - fg)); } ctx.globalCompositeOperation = 'source-over'; }
+      }
+    } });
+  }
+}
+/* pylons marching alongside the A127 with the lines slung between them */
+function pylonSprites(list, pal, dist) {
+  const env = ENV[pal.env]; if (!env || !env.pylons) return;
+  const camW = dist - Z_PLAYER, SP = env.pylons, xp = -ROAD_HALF - 42, HT = 46;
+  const k0 = Math.floor((camW - SP) / SP), k1 = Math.floor((camW + Z_FAR) / SP);
+  for (let k = k0; k <= k1; k++) {
+    const zp = k * SP - camW;
+    if (zp + SP < 2 || zp > Z_FAR) continue;
+    list.push({ z: clamp(zp, 2, Z_FAR - 1), draw: () => {
+      const fg = fogK(clamp(zp, 0, Z_FAR));
+      ctx.strokeStyle = css(wc(pal, [120, 124, 128], 1.1, fg));
+      const arms = [[HT - 4, 7], [HT - 12, 8.5], [HT - 20, 7]];
+      // the lines to the next pylon, sagging in the middle
+      ctx.lineWidth = 1;
+      for (const [ya, wa] of arms) for (const sx of [-1, 1]) {
+        ctx.beginPath(); let first = true;
+        for (let i = 0; i <= 12; i++) {
+          const t = i / 12, z = zp + SP * t; if (z < 2 || z > Z_FAR) continue;
+          const q = P(xp + sx * wa, ya - Math.sin(Math.PI * t) * 6, z); if (first) { ctx.moveTo(q.x, q.y); first = false; } else ctx.lineTo(q.x, q.y);
+        }
+        ctx.stroke();
+      }
+      if (zp < 2) return;
+      const b0 = P(xp - 4, 0, zp), b1 = P(xp + 4, 0, zp), t0 = P(xp - 1, HT, zp), t1 = P(xp + 1, HT, zp);
+      ctx.lineWidth = Math.max(1, 0.12 * b0.s);
+      ctx.beginPath(); ctx.moveTo(b0.x, b0.y); ctx.lineTo(t0.x, t0.y); ctx.lineTo(t1.x, t1.y); ctx.lineTo(b1.x, b1.y);
+      for (let i = 1; i < 7; i++) { const y = HT * i / 7, w = 4 - 3 * i / 7, l = P(xp - w, y, zp), r = P(xp + w, y, zp), l2 = P(xp - (4 - 3 * (i - 1) / 7), HT * (i - 1) / 7, zp); ctx.moveTo(l.x, l.y); ctx.lineTo(r.x, r.y); ctx.moveTo(l2.x, l2.y); ctx.lineTo(r.x, r.y); }
+      for (const [ya, wa] of arms) { const l = P(xp - wa, ya, zp), r = P(xp + wa, ya, zp); ctx.moveTo(l.x, l.y); ctx.lineTo(r.x, r.y); }
+      ctx.stroke();
+      if (pal.lit > 0.5) { const q = P(xp, HT + 1, zp); ctx.fillStyle = '#ff3030'; ctx.fillRect(q.x - 1, q.y - 1, 2, 2); }
+    } });
+  }
+}
+/* oil and gas storage on Canvey: fat white tanks right by the road, walkway lights and a flare */
+function tankSprites(list, pal, dist) {
+  const env = ENV[pal.env]; if (!env || !env.tanks) return;
+  const camW = dist - Z_PLAYER, SP = env.tanks;
+  const k0 = Math.floor((camW - 80) / SP), k1 = Math.floor((camW + Z_FAR) / SP);
+  for (let k = k0; k <= k1; k++) for (let i = 0; i < 4; i++) {
+    if (hash(k * 5 + i, 101) < 0.2) continue;
+    const zt = k * SP - camW + i * 26 + hash(k, 102 + i) * 8, xt = ROAD_HALF + 13.2 + 26 + hash(k * 3 + i, 103) * 24 + (i % 2) * 18, rt = 9 + hash(k + i, 104) * 5, ht = 11 + hash(k + i, 105) * 6;
+    if (zt < 4 || zt > Z_FAR) continue;
+    list.push({ z: zt, draw: () => {
+      const fg = fogK(zt), b0 = P(xt - rt, 0, zt), b1 = P(xt + rt, 0, zt), t0 = P(xt - rt, ht, zt);
+      ctx.fillStyle = css(wc(pal, [196, 198, 196], 0.95, fg)); ctx.fillRect(b0.x, t0.y, b1.x - b0.x, b0.y - t0.y);
+      ctx.fillStyle = css(wc(pal, [150, 152, 150], 1, fg)); ctx.beginPath(); ctx.ellipse((b0.x + b1.x) / 2, t0.y, (b1.x - b0.x) / 2, Math.max(1, (b1.x - b0.x) * 0.08), 0, 0, 7); ctx.fill();
+      ctx.strokeStyle = css(wc(pal, [120, 122, 120], 1, fg)); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(b0.x, (b0.y + t0.y) / 2); ctx.lineTo(b1.x, (b0.y + t0.y) / 2); ctx.stroke();
+      if (pal.lit > 0.5) { ctx.globalCompositeOperation = 'lighter'; for (let j = 0; j < 5; j++) { const q = P(xt - rt + j * rt / 2, ht * 0.55, zt); drawGlow(ctx, [255, 220, 150], q.x, q.y, clamp(0.6 * q.s, 2, 24), 0.6 * (1 - fg)); } ctx.globalCompositeOperation = 'source-over'; }
+    } });
   }
 }
 /* the QE2 bridge: a tower each side of the deck with cables fanning down to the edges */
@@ -2633,7 +2873,7 @@ function bridgeSprites(list, pal, dist) {
       const col = css(wc(pal, [170, 176, 182], 1, fogK(clamp(zp, 0, Z_FAR))));
       // cables first so the towers sit over them
       ctx.strokeStyle = css(wc(pal, [200, 205, 210], 1, fogK(clamp(zp, 0, Z_FAR))), 0.85);
-      for (const xt of [-ROAD_HALF - 4.2, ROAD_HALF + 13.2 + 4]) {
+      for (const xt of [-ROAD_HALF - 4.2, ROAD_HALF + LANE_W + 3.4]) {
         for (let i = 0; i < 9; i++) for (const dir of [-1, 1]) {
           let y1 = H_T - 6 - i * 3, z1 = zp, y2 = 1.3, z2 = zp + dir * (16 + i * 13);
           const zmin = 2;
@@ -2646,13 +2886,13 @@ function bridgeSprites(list, pal, dist) {
         }
       }
       if (zp < 2 || zp > Z_FAR) return;
-      for (const xt of [-ROAD_HALF - 4.2, ROAD_HALF + 13.2 + 4]) {
+      for (const xt of [-ROAD_HALF - 4.2, ROAD_HALF + LANE_W + 3.4]) {
         const b0 = P(xt - 1.3, 0, zp), b1 = P(xt + 1.3, 0, zp), t0 = P(xt - 0.9, H_T, zp), t1 = P(xt + 0.9, H_T, zp);
         ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(b0.x, b0.y); ctx.lineTo(b1.x, b1.y); ctx.lineTo(t1.x, t1.y); ctx.lineTo(t0.x, t0.y); ctx.closePath(); ctx.fill();
         if (pal.lit > 0.3) { ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, [255, 40, 40], (t0.x + t1.x) / 2, t0.y, clamp(1.2 * t0.s, 3, 40), 0.9); ctx.globalCompositeOperation = 'source-over'; }
       }
       // the cross beam between the towers, high over the road
-      const l = P(-ROAD_HALF - 4.2, H_T - 4, zp), r = P(ROAD_HALF + 17.2, H_T - 1.5, zp);
+      const l = P(-ROAD_HALF - 4.2, H_T - 4, zp), r = P(ROAD_HALF + LANE_W + 3.4, H_T - 1.5, zp);
       ctx.fillStyle = col; ctx.fillRect(l.x, r.y, r.x - l.x, l.y - r.y);
     } });
   }
@@ -2686,11 +2926,20 @@ function signSprites(list, pal, dist, ev) {
     const s = ev.signs[k % ev.signs.length];
     list.push({ z, draw: () => {
       const fg = fogK(z), x0 = -(ROAD_HALF + 4.4), x1 = -(ROAD_HALF + 1.2), yb = 1.9, yt = s[0] === 'borough' ? 3.1 : 3.9;
-      const a = P(x0, yt, z), b = P(x1, yb, z), bw = b.x - a.x, bh = b.y - a.y;
+      const a = P(x0, yt + (s[0] === 'dart' ? 0.5 : 0), z), b = P(x1, yb, z), bw = b.x - a.x, bh = b.y - a.y;
       const post = css(wc(pal, [110, 116, 122], 1, fg));
       for (const xp of [x0 + 0.4, x1 - 0.4]) { const p0 = P(xp, 0, z), p1 = P(xp, yb, z); ctx.fillStyle = post; ctx.fillRect(p0.x - 0.05 * p0.s, p1.y, Math.max(1, 0.1 * p0.s), p0.y - p1.y); }
       const lift = pal.lit > 0.5 ? 1.8 : 1;   // retro-reflective in the headlights
-      if (s[0] === 'green') {
+      if (s[0] === 'dart') {
+        // the Dart Charge reminder: white on blue
+        ctx.fillStyle = css(mix(wc(pal, [24, 66, 150], lift, 0), pal.fog, fg)); ctx.fillRect(a.x, a.y, bw, bh);
+        if (bw > 40) {
+          const white = css(mix([245, 245, 245].map(v => v * Math.min(1, pal.light * lift + 0.35)), pal.fog, fg));
+          ctx.fillStyle = white; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.font = `700 ${Math.round(bh * 0.26)}px ${FONT_PLATE}`; ctx.fillText(s[1].toUpperCase(), a.x + bw / 2, a.y + bh * 0.32);
+          ctx.font = `${Math.round(bh * 0.14)}px ${FONT_PLATE}`; ctx.fillText(s[2] || '', a.x + bw / 2, a.y + bh * 0.68);
+        }
+      } else if (s[0] === 'green') {
         ctx.fillStyle = css(mix(wc(pal, [0, 112, 60], lift, 0), pal.fog, fg)); ctx.fillRect(a.x, a.y, bw, bh);
         ctx.strokeStyle = css(mix([235, 235, 235].map(v => v * Math.min(1, pal.light * lift + 0.3)), pal.fog, fg)); ctx.lineWidth = Math.max(1, bw * 0.02); ctx.strokeRect(a.x + bw * 0.03, a.y + bh * 0.05, bw * 0.94, bh * 0.9);
         if (bw > 40) {
@@ -2755,14 +3004,23 @@ function gantrySprite(list, pal, dist, worldZ, label, col) {
 
 /* oncoming traffic on the other carriageway (A-roads only, for looks) */
 const oncoming = [];
+const ESSEX_ENVS = new Set(['fields', 'suburb', 'retail', 'arterial', 'marsh', 'bypass', 'highst', 'seafront', 'bridge']);
 function updateOncoming(pal, v, dt, active) {
   const env = ENV[pal.env];
+  if (env && env.sideLane && active) {
+    // the bridge's fourth lane: slower traffic heading the same way
+    for (const c of oncoming) c.z -= (v - c.v) * dt;
+    for (let i = oncoming.length - 1; i >= 0; i--) if (oncoming[i].z < -12 || oncoming[i].z > Z_FAR + 20) oncoming.splice(i, 1);
+    if (oncoming.length < 4 && v > 20 && Math.random() < dt * 0.9) { const ty = pickType(null, true); oncoming.push({ side: true, z: Z_FAR - 5, lane: 0, v: rand(18, 28), type: ty.id, color: ty.id === 'van' ? '#e9ebec' : TRAFFIC_COLORS[randInt(TRAFFIC_COLORS.length)] }); }
+    return;
+  }
+  if (oncoming.some(c => c.side)) oncoming.length = 0;
   if (!env || !env.opposite || !active) { oncoming.length = 0; return; }
   for (const c of oncoming) c.z -= (v + c.v) * dt;
   // c.z is the far end of an oncoming car; drop it once its front has passed the camera
   for (let i = oncoming.length - 1; i >= 0; i--) if (oncoming[i].z < 7) oncoming.splice(i, 1);
   if (oncoming.length < 5 && Math.random() < dt * 1.4) {
-    const lane = randInt(3), ty = pickType();
+    const lane = randInt(3), ty = pickType(null, ESSEX_ENVS.has(pal.env));
     if (!oncoming.some(c => c.lane === lane && c.z > Z_FAR - 40))
       oncoming.push({ z: Z_FAR - 5, lane, v: rand(14, 24), type: ty.id, color: ty.id === 'cab' ? '#141517' : ty.id === 'van' ? '#e9ebec' : TRAFFIC_COLORS[randInt(TRAFFIC_COLORS.length)] });
   }
@@ -2849,6 +3107,7 @@ function renderScene(R, dt) {
   const list = [];
   lampSprites(list, pal, p.dist);
   treeSprites(list, pal, p.dist);
+  woodSprites(list, pal, p.dist); reedSprites(list, pal, p.dist); flyoverSprites(list, pal, p.dist); pylonSprites(list, pal, p.dist); tankSprites(list, pal, p.dist);
   bridgeSprites(list, pal, p.dist);
   beaconSprites(list, pal, p.dist, R.demo ? 1e9 : ev.dist, sceneT);
   if (!R.demo) {
@@ -2859,6 +3118,10 @@ function renderScene(R, dt) {
   const camW = p.dist - Z_PLAYER;
   const lampK = z => { const w = ((camW + z) % 19 + 19) % 19; return 0.5 + 0.5 * Math.cos(w / 19 * Math.PI * 2); };
   for (const c of oncoming) {
+    if (c.side) {
+      if (c.z > 1.3 && c.z < Z_FAR) list.push({ z: c.z, draw: () => { const mesh = getMesh(c.type, {}); drawCar(ctx, mesh, { x: ROAD_HALF + LANE_W / 2, z: c.z, yaw: 0, fog: fogK(c.z), env, lamp: lampK(c.z), look: { paint: c.color, finish: 'gloss', tint: 1, rims: 'steel', rimColor: '#8a8f94' } }); } });
+      continue;
+    }
     list.push({ z: c.z, draw: () => {
       const mesh = getMesh(c.type, {});
       drawCar(ctx, mesh, { x: ROAD_HALF + 2.4 + 1.8 + c.lane * 3.6, z: c.z - mesh.L, yaw: Math.PI, fog: fogK(c.z), env, look: { paint: c.color, finish: 'gloss', tint: 1, rims: 'steel', rimColor: '#8a8f94' } });
@@ -2867,16 +3130,19 @@ function renderScene(R, dt) {
     } });
   }
   for (const w of R.waves) for (const c of w.cars) {
-    const z = Z_PLAYER + w.z + c.off;
+    const z = Z_PLAYER + carRel(R, w, c);
     if (z < 1.3 || z > Z_FAR || (c.hit && c.hitT > 0.75)) continue;
+    const onc = R.twoWay && c.lane === 2, parked = R.twoWay && c.lane === 0;
     list.push({ z, draw: () => {
       const a = clamp((Z_FAR - z) / 45, 0, 1) * (c.hit ? 1 - c.hitT / 0.75 : 1);
       ctx.globalAlpha = a;
       const mesh = getMesh(c.type, {});
-      drawCar(ctx, mesh, { x: laneToX(c.lane) + (c.hit ? c.spin * c.hitT * 1.2 : 0), z, yaw: c.hit ? c.spin * c.hitT * 2.2 : 0, fog: fogK(z), env, lamp: lampK(z),
-        brake: c.brake > 0 && !c.hit, route: c.route,
+      drawCar(ctx, mesh, { x: laneToX(c.lane) + (c.hit ? c.spin * c.hitT * 1.2 : 0) + (parked ? -0.25 : 0), z, yaw: (onc ? Math.PI : 0) + (c.hit ? c.spin * c.hitT * 2.2 : 0), fog: fogK(z), env, lamp: lampK(z),
+        brake: c.brake > 0 && !c.hit && !parked && !onc, route: c.route,
         look: { paint: c.color, finish: c.type === 'bus' ? 'gloss' : hash(c.lane * 7 + w.id, 3) > 0.5 ? 'metallic' : 'gloss', tint: c.type === 'cab' ? 2 : 1, rims: 'five', rimColor: '#9aa0a6' } });
       ctx.globalAlpha = 1;
+      // oncoming headlights, so you can see them coming down the high street
+      if (onc && pal.lit > 0.3 && z > 3 && !c.hit) { const hp = P(laneToX(2), 0.7, z), r = clamp(1.3 * hp.s, 3, Math.max(W, H) * 0.07), al = 0.95 * clamp((z - 3) / 10, 0, 1) * a; ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, [255, 245, 220], hp.x - 0.6 * hp.s, hp.y, r, al); drawGlow(ctx, [255, 245, 220], hp.x + 0.6 * hp.s, hp.y, r, al); ctx.globalCompositeOperation = 'source-over'; }
     } });
   }
   if (!R.demo) for (const w of R.waves) if (w.gate) {
@@ -6353,7 +6619,7 @@ window.StreetKings = {
   get intro() { return intro; }, skipIntro: endIntro,
   step(sec, bot) { const h = 1 / 120; let n = Math.round(sec / h); while (n-- > 0 && R && mode !== 'menu') { if (bot) bot(R, input); updateRace(R, h, input); processEvents(); } },
   Online, core: { rematchPrize, specialUnlocked, makeWave, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
-    migrateSave, buyLook, lookCost, lookOf, checkPlate, dailyFor, dailyDate, dailyPrize, ghostEncode, ghostDecode, ghostAt, EVENTS, ESSEX, essexOpen, nextEssexIndex, slipReady, slipCarFor, carClass, totalStars, starCount, CARS, UPGRADES, CHARACTERS, BODY, Z_PLAYER, P_LEN, SPAWN_D, NITRO_MULT },
+    migrateSave, buyLook, lookCost, lookOf, checkPlate, dailyFor, dailyDate, dailyPrize, ghostEncode, ghostDecode, ghostAt, carRel, EVENTS, ESSEX, essexOpen, nextEssexIndex, slipReady, slipCarFor, carClass, totalStars, starCount, CARS, UPGRADES, CHARACTERS, BODY, Z_PLAYER, P_LEN, SPAWN_D, NITRO_MULT },
 };
 
 })();
