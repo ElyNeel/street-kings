@@ -6449,7 +6449,7 @@ let toastTimer = 0;
 const MUSIC_KEY = 'streetkings.music';
 /* each part of the game can have its own track. loop: [start, end] in seconds is the part that repeats.
    Filled in when the tracks arrive, e.g. london: { src: 'music/london.mp3', loop: [12.5, 98.2] } */
-const MUSIC = window.__musicTest || {"title":{"name":"It Ain't Adding Up","loop":[1.0,96.049501],"vol":0.35,"src":"music/ne-it-aint-adding-up.72f04209.mp3"},"london":{"name":"1919","loop":[1.0,57.47059],"vol":0.35,"src":"music/ne-1919.5d166132.mp3"},"essex":{"name":"1926","loop":[1.0,97.0],"vol":0.35,"src":"music/ne-1926.d89adf94.mp3"},"mu":{"name":"Sega (island)","loop":[1.0,60.076916],"start":1.0,"vol":0.35,"src":"music/sega-mauritius.691069e6.mp3"}};
+const MUSIC = window.__musicTest || {"title":{"name":"It Ain't Adding Up","loop":[1.0,96.049501],"vol":0.18,"src":"music/ne-it-aint-adding-up.72f04209.mp3"},"london":{"name":"1919","loop":[1.0,57.47059],"vol":0.18,"src":"music/ne-1919.5d166132.mp3"},"essex":{"name":"1926","loop":[1.0,97.0],"vol":0.18,"src":"music/ne-1926.d89adf94.mp3"},"mu":{"name":"Sega (island)","loop":[1.0,60.076916],"start":1.0,"vol":0.18,"src":"music/sega-mauritius.691069e6.mp3"}};
 // the single-file copy of the game has no music folder beside it, so it borrows the files from the website
 const MUSIC_HOME = 'https://elyneel.github.io/street-kings/';
 const Music = {
@@ -6473,7 +6473,7 @@ const Music = {
       const g = c.createGain(), src = c.createBufferSource(), now = c.currentTime;
       src.buffer = buf; src.loop = true;
       if (t.loop) { src.loopStart = t.loop[0]; src.loopEnd = Math.min(t.loop[1], buf.duration); }
-      g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(t.vol || 0.3, now + 1.5);
+      g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(t.vol || 0.15, now + 1.5);
       src.connect(g); g.connect(c.destination); src.start(now, t.start || 0);
       this.cur = { t, src, g };
     });
