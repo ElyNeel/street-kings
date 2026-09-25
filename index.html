@@ -5456,14 +5456,17 @@ let toastTimer = 0;
 const MUSIC_KEY = 'streetkings.music';
 /* each part of the game can have its own track. loop: [start, end] in seconds is the part that repeats.
    Filled in when the tracks arrive, e.g. london: { src: 'music/london.mp3', loop: [12.5, 98.2] } */
-const MUSIC = window.__musicTest || {};
+const MUSIC = window.__musicTest || {"title":{"name":"It Ain't Adding Up","loop":[1.0,96.049501],"vol":0.7,"src":"music/ne-it-aint-adding-up.72f04209.mp3"},"london":{"name":"1919","loop":[1.0,57.47059],"vol":0.7,"src":"music/ne-1919.5d166132.mp3"},"essex":{"name":"1926","loop":[1.0,97.0],"vol":0.7,"src":"music/ne-1926.d89adf94.mp3"}};
+// the single-file copy of the game has no music folder beside it, so it borrows the files from the website
+const MUSIC_HOME = 'https://elyneel.github.io/street-kings/';
 const Music = {
   on: true, gain: null, cur: null, want: null, bufs: {}, loading: {},
   area() { if (!S) return 'title'; return S.careerDone && essexOpen(S) && hubTab !== 'london' ? 'essex' : 'london'; },
   track(area) { return MUSIC[area] || MUSIC.london || MUSIC.title || null; },
   load(t) {
     if (this.bufs[t.src]) return Promise.resolve(this.bufs[t.src]);
-    if (!this.loading[t.src]) this.loading[t.src] = fetch(t.src).then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+    const get = url => fetch(url).then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); });
+    if (!this.loading[t.src]) this.loading[t.src] = (location.protocol === 'file:' && !/^https?:/.test(t.src) ? get(MUSIC_HOME + t.src) : get(t.src).catch(e => { if (/^https?:/.test(t.src) || location.hostname === 'elyneel.github.io') throw e; return get(MUSIC_HOME + t.src); }))
       .then(a => new Promise((ok, no) => Sound.ctx.decodeAudioData(a, ok, no))).then(b => (this.bufs[t.src] = b)).catch(() => { delete this.loading[t.src]; return null; });
     return this.loading[t.src];
   },
