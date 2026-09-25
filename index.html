@@ -488,6 +488,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 .rung .pz .stars { margin-top: 2px; }
 .unlocks canvas.map + canvas.map { margin-top: 10px; }
 .offer.slip .offer-foot { flex-direction: column; align-items: stretch; }
+.test-note { margin: 4px 0 0; color: #ff8cc0; }
 </style>
 </head>
 <body>
@@ -498,6 +499,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
     <div class="title-wrap">
       <h1 class="logo"><span>Street</span><span>Kings</span></h1>
       <p class="kicker byline">A game by Neel Ely</p>
+      <p class="tip test-note" id="test-note" hidden>Test garage. This is separate from your real career, and nothing here posts to the leaderboards. New career here resets the test garage.</p>
       <p class="tag">Twelve rivals, two sides of London and one crown. Weave through the traffic, build your car and take the city.</p>
       <div class="menu">
         <button class="btn primary big" id="btn-continue" data-act="continue" hidden><span>Continue career</span></button>
@@ -4316,7 +4318,9 @@ const SB_URL = 'https://wdtrktzxszfaftotrdyw.supabase.co';
 const SB_KEY = 'sb_publishable_Llb7ESB5jkatL60gq7vNpw_WXucSND0';   // publishable key: meant to be public, the database rules do the protecting
 const GOOGLE_CLIENT_ID = '976658848882-hsh1cgvct6gpfjkh0lu0bt1nttk2nqgq.apps.googleusercontent.com';
 const SESSION_KEY = 'streetkings.session', PENDING_KEY = 'streetkings.pending', BACKUP_KEY = 'streetkings.save.backup';
-const ONLINE_OK = /(^|\.)elyneel\.github\.io$/.test(location.hostname) || window.__online === true;
+// ?test=essex opens a separate test garage: its own save, no sign in, nothing posted to the leaderboards
+const TEST_MODE = /[?&]test=essex\b/.test(location.search);
+const ONLINE_OK = !TEST_MODE && (/(^|\.)elyneel\.github\.io$/.test(location.hostname) || window.__online === true);
 
 const Online = {
   session: null, uid: null, name: null, ready: false, saveTimer: 0, records: {}, recordsAt: 0, mine: {},
@@ -4483,7 +4487,7 @@ const Online = {
   },
 
   /* ---- cloud save: whichever career has gone further wins, the other is kept as a backup on this device ---- */
-  progress(s) { if (!s) return -1; return (s.careerDone ? 100000 : 0) + (s.completed || []).filter(Boolean).length * 1000 + (s.rep || 0) * 10 + ((s.stats && s.stats.races) || 0); },
+  progress(s) { if (!s) return -1; return (s.careerDone ? 100000 : 0) + ((s.completed || []).filter(Boolean).length + ((s.essex && s.essex.completed) || []).filter(Boolean).length) * 1000 + (s.rep || 0) * 10 + ((s.stats && s.stats.races) || 0); },
   async syncSave() {
     const rows = await this.fetch('/rest/v1/saves?select=data,updated_at&user_id=eq.' + this.uid);
     const cloud = rows && rows[0] ? migrateSave(rows[0].data) : null;
@@ -4579,7 +4583,7 @@ const Online = {
    STREET KINGS : UI, INPUT, AUDIO, SAVE, MAIN LOOP
    ===================================================================== */
 const $ = id => document.getElementById(id);
-const SAVE_KEY = 'streetkings.save.v2', OLD_SAVE_KEY = 'streetkings.save.v1', SOUND_KEY = 'streetkings.sound';
+const SAVE_KEY = TEST_MODE ? 'streetkings.test.v2' : 'streetkings.save.v2', OLD_SAVE_KEY = 'streetkings.save.v1', SOUND_KEY = 'streetkings.sound';
 let S = null;            // career
 let R = null;            // current race
 let mode = 'menu';       // menu | race | results
@@ -4597,7 +4601,7 @@ function load() {
   try {
     const t = localStorage.getItem(SAVE_KEY);
     if (t) { const s = migrateSave(JSON.parse(t)); if (s) return s; }
-    const o = localStorage.getItem(OLD_SAVE_KEY);
+    const o = TEST_MODE ? null : localStorage.getItem(OLD_SAVE_KEY);
     if (o) { const s = migrateSave(JSON.parse(o)); if (s) { S = s; save(); return s; } }
   } catch (e) { /* ignore */ }
   return null;
@@ -5178,6 +5182,18 @@ function ride3Card() {
     <div class="actions"><button class="btn primary" data-act="special" data-arg="ride3" ${own.damage >= 100 ? 'disabled' : ''}><span>${done ? 'Rematch' : 'Accept the invitation'}</span></button></div>
   </div>`;
 }
+/* the test garage: London done, Ishaaq beaten, a maxed GT-R and some cash, so Essex can be tried straight away */
+function testCareer() {
+  const T = newCareer('civic');
+  T.completed = T.completed.map(() => true); T.careerDone = true; T.kingRevealed = true; T.eventIndex = EVENTS.length;
+  for (const id of SPECIAL_ORDER) { T.specials[id] = true; T.found[id] = true; T.announced[id] = true; }
+  T.rep = EVENTS.reduce((a, e) => a + e.rep, 0) + SPECIALS.ride3.rep; T.money = 60000;
+  T.stats = { races: 40, wins: 30, streetWins: 14, street: 16 };
+  T.owned.gtr = { up: { ecu: 3, exhaust: 3, turbo: 3, nitrous: 3, tyres: 3 }, damage: 0, spent: 20850, look: Object.assign(stockLook('gtr'), { spoiler: 'gt', kit: 1, stance: 2 }) };
+  T.current = 'gtr'; T.street = streetOffers(T);
+  return T;
+}
+
 /* ---------- Essex ---------- */
 let hubTab = null, pendingSlip = null;
 const STAR_NAMES = ['Win', 'No crashes', 'Every gate'];
@@ -5985,7 +6001,8 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'sound': Sound.setOn(!Sound.on); break;
     case 'continue': if (S) goHub(); break;
     case 'new': if (S) { $('confirm-new').hidden = false; } else goSelect(); break;
-    case 'newyes': Online.flushSave(); S = null; try { localStorage.removeItem(SAVE_KEY); localStorage.removeItem(OLD_SAVE_KEY); } catch (err) {} goSelect(); break;
+    case 'newyes': if (TEST_MODE) { S = testCareer(); hubTab = null; save(false); goHub(); break; }
+      Online.flushSave(); S = null; try { localStorage.removeItem(SAVE_KEY); localStorage.removeItem(OLD_SAVE_KEY); } catch (err) {} goSelect(); break;
     case 'newno': $('confirm-new').hidden = true; break;
     case 'help': showScreen('scr-help'); break;
     case 'title': goTitle(); break;
@@ -6092,6 +6109,8 @@ addEventListener('resize', () => {
 });
 resize();
 S = load();
+if (TEST_MODE && !S) { S = testCareer(); save(false); }
+if (TEST_MODE) $('test-note').hidden = false;
 try { Sound.on = localStorage.getItem(SOUND_KEY) !== '0'; } catch (e) {}
 $('b-sound').textContent = Sound.on ? 'Sound on' : 'Sound off';
 goTitle();
