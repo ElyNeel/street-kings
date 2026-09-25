@@ -473,8 +473,6 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 .star-row em { font-style: normal; color: var(--go); }
 .star-n { color: var(--plate); }
 @media (max-width: 560px) { .stat-stars { display: none; } }
-.slips { background: var(--panel); border: 1px solid var(--line); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-.slips .h3 { margin: 0; }
 .offer.slip { border-top-color: #ff5fa2; }
 .offer.slip .chip.diff { color: #ff8cc0; border-color: #ff5fa2; }
 .offer.slip canvas.slipcar { width: 100%; height: 96px; display: block; background: linear-gradient(180deg, #0d1519, #121c21); }
@@ -514,6 +512,90 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 @media (prefers-reduced-motion: reduce) { .chip.police { animation: none; } }
 .payout .big.bad { color: var(--signal); }
 .payout:has(.big.bad) { border-color: rgba(255, 90, 74, 0.45); background: rgba(255, 90, 74, 0.06); }
+
+/* ---------- getting around: the menu bar and where you race ---------- */
+.menuhead { display: flex; align-items: stretch; justify-content: space-between; gap: 10px 16px; flex-wrap: wrap; }
+.gnav { display: flex; gap: 2px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.gn { position: relative; display: flex; align-items: center; gap: 8px; background: none; border: 0; border-bottom: 3px solid transparent; color: var(--muted); padding: 8px 12px 7px; font-family: var(--fd); font-size: 19px; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; white-space: nowrap; }
+.gn svg { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.gn:hover { color: var(--ink); }
+.gn.on { color: var(--ink); border-bottom-color: var(--sodium); }
+.gn.on svg { color: var(--sodium); }
+.gn:focus-visible, .place:focus-visible, .subtab:focus-visible { outline: 2px solid var(--plate); outline-offset: -2px; }
+.gn .dot, .subtab .dot { position: absolute; top: 6px; right: 4px; width: 8px; height: 8px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 2px var(--ground); }
+.places { display: flex; border: 1px solid var(--line-2); align-self: center; }
+.place { flex: 1; background: rgba(10, 15, 18, 0.7); border: 0; border-left: 1px solid var(--line-2); padding: 6px 14px; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; cursor: pointer; color: var(--muted); text-align: left; }
+.place:first-child { border-left: 0; }
+.place b { font-family: var(--fd); font-weight: 400; font-size: 19px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink); }
+.place small { font-family: var(--fm); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+.place:hover b { color: var(--sodium); }
+.place.on { background: var(--sodium); color: #2a1a05; cursor: default; }
+.place.on b, .place.on:hover b { color: #111; }
+.subtabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.subtab { position: relative; background: var(--panel-2); border: 1px solid var(--line-2); color: var(--muted); padding: 7px 14px; font-family: var(--fd); font-size: 18px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; }
+.subtab small { font-family: var(--fm); font-size: 11px; margin-left: 4px; color: var(--muted); }
+.subtab.on { border-color: var(--sodium); color: var(--ink); background: rgba(242, 163, 58, 0.12); }
+.subtab .dot { top: -4px; right: -4px; }
+.tip.away { border-left: 3px solid var(--nitro); background: rgba(74, 168, 255, 0.08); padding: 10px 12px; color: var(--ink); }
+.tip.away b { color: var(--nitro); }
+.street .invite { margin-bottom: 4px; }
+
+/* on a phone the menu bar sits at the bottom of the screen, where thumbs are */
+@media (max-width: 820px) {
+  .gnav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 8; gap: 0; flex-wrap: nowrap; border: 0; border-top: 1px solid var(--line-2);
+    background: rgba(8, 12, 15, 0.97); padding: 0 max(4px, env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) max(4px, env(safe-area-inset-left, 0px)); }
+  .gn { flex: 1 1 0; min-width: 0; flex-direction: column; justify-content: center; gap: 3px; padding: 8px 0 7px; border-bottom: 0; border-top: 3px solid transparent;
+    font-family: var(--fm); font-size: 10px; letter-spacing: 0.04em; }
+  .gn svg { width: 23px; height: 23px; }
+  .gn.on { border-top-color: var(--sodium); color: var(--sodium); }
+  .gn .dot { top: 6px; right: calc(50% - 20px); }
+  .places { width: 100%; }
+  .place { align-items: center; text-align: center; padding: 6px 4px; }
+  .place b { font-size: 17px; }
+  body.nav-on .screen { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); }
+  body.nav-on #toast { bottom: calc(env(safe-area-inset-bottom, 0px) + 78px); }
+}
+@media (max-width: 360px) { .gn { font-size: 9px; letter-spacing: 0; } .place small { font-size: 9px; letter-spacing: 0.02em; } }
+/* two cards across on a phone, so the street page is not one long column */
+@media (max-width: 560px) {
+  .street { padding: 12px; }
+  .offers { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .offers .offer { padding: 10px; }
+  .offers .offer.daily { grid-column: 1 / -1; }
+  .offers .offer h4 { font-size: 18px; overflow-wrap: anywhere; }
+  .offers .offer .prize { font-size: 21px; }
+  .offers .offer-foot { flex-wrap: wrap; gap: 6px; }
+  .offers .offer-foot .btn.small { flex: 1; }
+  .offers .offer .chip { font-size: 10px; padding: 3px 6px; }
+  .offers .co-head .portrait.sm { width: 36px; height: 36px; }
+  .subtabs { flex-wrap: nowrap; gap: 5px; }
+  .subtab { flex: 1 1 auto; font-size: 14px; letter-spacing: 0.02em; padding: 7px 4px; white-space: nowrap; }
+  .subtab small { margin-left: 1px; font-size: 10px; }
+  .street .h3 { font-size: 22px; }
+}
+/* the top bar on a phone: back, name and the sound buttons on one row, money and rep under them */
+@media (max-width: 560px) {
+  .bar { gap: 8px 16px; padding-bottom: 10px; }
+  .brand { font-size: 21px; }
+  .bar .back-btn { margin-right: auto; }
+  .bar .bar-btn:not(.back-btn) { order: 1; padding: 7px 8px; font-size: 10px; letter-spacing: 0.08em; }
+  .bar::after { content: ""; order: 2; flex-basis: 100%; height: 0; }
+  .bar .stat { order: 3; }
+  .stat b { font-size: 18px; }
+}
+/* small phones: the name is on the title screen, so the bar keeps its room for the buttons and your money */
+@media (max-width: 440px) { .bar .brand { display: none; } }
+/* cars in the garage and dealership swipe sideways on a phone, one card at a time */
+.swipe-hint { display: none; }
+@media (max-width: 560px) {
+  .swipe-hint { display: block; }
+  #scr-garage .car-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; margin-inline: -16px; padding: 0 16px 6px; scroll-padding-inline: 16px; scrollbar-width: none; overscroll-behavior-x: contain; }
+  #scr-garage .car-grid::-webkit-scrollbar { display: none; }
+  #scr-garage .car-card { flex: 0 0 86%; scroll-snap-align: start; }
+}
+.subtabs { overflow-x: auto; scrollbar-width: none; }
+@media (max-width: 380px) { .subtab small { display: none; } }
+@media (max-width: 340px) { .subtab { font-size: 12px; } .place b { font-size: 15px; } }
 </style>
 </head>
 <body>
@@ -549,6 +631,10 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
       <h2 class="h2">The rules of the road</h2>
       <div class="help">
         <section>
+          <h3>Getting around</h3>
+          <p>The menu bar has five buttons: Race for your next story race, Street for quick races and people who want a race, Garage, Dealership and Map. On a phone it sits at the bottom of the screen. Once Essex opens, London, Essex and Mauritius sit at the top: tap one to go there. Island cars stay on the island, so flying there or back swaps the car you race.</p>
+        </section>
+        <section>
           <h3>Controls</h3>
           <ul>
             <li><kbd>←</kbd> or <kbd>A</kbd> move one lane left</li>
@@ -576,11 +662,11 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         </section>
         <section>
           <h3>Familiar faces</h3>
-          <p>Keep racing on the streets and word gets around. Some people will want a race with you. They show up on the street race board when they are ready.</p>
+          <p>Keep racing on the streets and word gets around. Some people will want a race with you. They show up on the Street page, under Challengers, when they are ready. A red dot on Street means someone new is waiting.</p>
         </section>
         <section>
           <h3>Street races</h3>
-          <p>Stuck or short of cash? Street races on the career hub can be run again and again. They pay every win, and the harder ones pay more.</p>
+          <p>Stuck or short of cash? Street races on the Street page can be run again and again. They pay every win, and the harder ones pay more.</p>
         </section>
         <section>
           <h3>Garage</h3>
@@ -1719,11 +1805,12 @@ function createRace(S, spec) {
   if (ev.twoWay) { traffic.tClear *= 1.2; traffic.bus *= 0.5; }       // on a two way road the oncoming cars come at you fast, so leave a bit more room
   else if (ev.lanes === 2) { traffic.tClear *= 1.1; traffic.extra *= 1.15; }   // two lanes: fewer places to go, so a little more room
   else if (ev.open || (spec.kind === 'street' && spec.offer.ch === 'essex')) { traffic.two *= 0.8; traffic.extra *= 1.5; }   // Essex: wider, emptier roads
+  const pl = (ev.lanes || 3) === 2 ? 0 : 1;   // where you line up: the middle lane of three, the left lane of two (the rival takes the right)
   return {
     ev, carId: ev.loaner || S.current, st, traffic, look: ev.loaner ? stockLook(ev.loaner) : lookOf(S, S.current), up: Object.assign({}, own.up), styleBonus: ev.loaner ? 0 : styleBonus(st.style),
     rec: { next: 0, d: [], x: [] }, ghosts: [], twoWay: !!ev.twoWay, nl: ev.lanes || 3,
     state: 'countdown', countdown: 3.2, t: 0, doneT: 0, wrecked: false,
-    p: { dist: 0, v: 0, lane: 1, x: 1, vx: 0, latV: 0, nitro: st.nitroCap, boosting: false, nitroLock: false,   // lane 1: the middle lane, or the outside lane of two
+    p: { dist: 0, v: 0, lane: pl, x: pl, vx: 0, latV: 0, nitro: st.nitroCap, boosting: false, nitroLock: false,
          damage: own.damage, startDamage: own.damage, collisions: 0, topV: 0, finishTime: null },
     o: { dist: 0, v: 0, lane: Math.min(2, (ev.lanes || 3) - 1), x: Math.min(2, (ev.lanes || 3) - 1), vx: 0, nitro: 100, boosting: false, vmax: oppV, accel: accelFor(ev.oppBhp) * (ev.accelK || 1),
          incT: ev.inc[0] + rr() * (ev.inc[1] - ev.inc[0]), finished: false, finishTime: null },
@@ -1784,7 +1871,7 @@ function trafficCar(R, r, ri, lane, bus) {
 function makeWave2(R) {
   const T = R.traffic, r = R.rw || Math.random, ri = n => Math.floor(r() * n), rf = (a, b) => a + r() * (b - a);
   let lanes, bus = false, slalom = false;
-  if (R.waveCount === 0) { lanes = [1]; R.lastOpen = 0; }
+  if (R.waveCount === 0) { const pl = R.p ? R.p.lane : 0; lanes = [pl]; R.lastOpen = 1 - pl; }   // the first car sits in your lane, so you have to move
   else if (r() < T.two * 0.55) {
     const first = r() < 0.5 ? 0 : 1;
     lanes = [first, 1 - first]; slalom = true; R.lastOpen = first;
@@ -7488,7 +7575,7 @@ const MUSIC = window.__musicTest || {"title":{"name":"It Ain't Adding Up","loop"
 const MUSIC_HOME = 'https://elyneel.github.io/street-kings/';
 const Music = {
   on: true, gain: null, cur: null, want: null, bufs: {}, loading: {},
-  area() { if (!S) return 'title'; if (islandCar(S.current)) return 'mu'; return S.careerDone && essexOpen(S) && hubTab !== 'london' ? 'essex' : 'london'; },
+  area() { return S ? placeNow() : 'title'; },
   track(area) { return MUSIC[area] || (area === 'mu' ? null : MUSIC.london || MUSIC.title) || null; },
   /* a short sting when you cross the line; the menu music waits for it to finish */
   sting(kind) {
@@ -7542,6 +7629,7 @@ function toast(msg, bad) {
 }
 function showScreen(id) {
   for (const s of document.querySelectorAll('.screen')) s.hidden = s.id !== id;
+  document.body.classList.toggle('nav-on', NAV_SCREENS.includes(id));
   if (mode === 'race') Music.stop(); else if (id) Music.play(Music.area());
   const scr = id && $(id);
   $('topbtns').classList.toggle('in-bar', !!(scr && scr.querySelector('.bar')));
@@ -7643,14 +7731,33 @@ function goSelect() {
 }
 
 /* ---------- career hub ---------- */
-function streetBoard() {
+/* the Street page: quick races for cash, the people who want a race with you, and pink slips in Essex.
+   Each has its own tab so the page never turns into one long scroll. */
+function streetPage() {
   if (!S.street || S.street.length !== 4) S.street = streetOffers(S);
-  const own = S.owned[S.current];
+  const place = placeNow(), own = S.owned[S.current], who = challengers(), fresh = freshChallenger();
+  const slipN = place === 'essex' ? ESSEX.filter(e => slipReady(S, e.rival)).length : 0;
+  const tabs = [['races', 'Races', 5]].concat(who.length ? [['people', 'Challengers', who.length]] : [], slipN ? [['slips', 'Pink slips', slipN]] : []);
+  if (!tabs.some(t => t[0] === streetTab)) streetTab = 'races';
+  let body;
+  if (streetTab === 'people') {
+    body = `<p class="tip">People who have heard about you. Beat them once for their big prize, then race them again for cash whenever you like.</p>
+      ${who.includes('ride3') ? ride3Card() : ''}
+      <div class="offers">${friendCards()}</div>`;
+    // they have been seen now, so the dot on Street goes
+    S.announced = Object.assign(S.announced || {}, ...who.map(id => ({ ['ch:' + id]: true }))); save();
+  } else if (streetTab === 'slips') body = slipCards(own);
+  else body = streetBoard();
   return `<section class="street">
-    <div class="street-head"><div><p class="kicker">Street races · repeatable</p><h3 class="h3">Quick cash on the side</h3></div>
-      <button class="link" data-act="reroll">New races</button></div>
-    <p class="tip">Win as many as you like. They pay cash every time, but no reputation. Harder races pay more. In a Checkpoint Run there is no rival: go through every gate or you are out. Keep racing out here and a few familiar faces might turn up.${S.street.some(o => o.ch === 'essex') ? ' Race the same part of Essex too often and the police come looking: stay ahead of them or pay a fine.' : ''}</p>
-    <div class="offers">${dailyCard()}${islandCar(S.current) ? '' : friendCards()}${S.street.map(o => {
+    <div class="street-head"><div><p class="kicker">Street · ${PLACE_NAMES[place]}</p><h3 class="h3">Quick cash on the side</h3></div></div>
+    ${tabs.length > 1 ? `<div class="subtabs" role="tablist">${tabs.map(([id, name, n]) => `<button class="subtab${id === streetTab ? ' on' : ''}" type="button" role="tab" aria-selected="${id === streetTab}" data-act="stab" data-arg="${id}">${name} <small>${n}</small>${id === 'people' && fresh ? '<i class="dot" aria-label="Someone new"></i>' : ''}</button>`).join('')}</div>` : ''}
+    ${body}
+  </section>`;
+}
+function streetBoard() {
+  const own = S.owned[S.current];
+  return `<p class="tip">Win as many as you like. They pay cash every time, but no reputation, and harder races pay more. A Checkpoint Run has no rival: go through every gate or you are out.${challengers().length ? '' : ' Keep racing out here and a few familiar faces might turn up.'}${S.street.some(o => o.ch === 'essex') ? ' Race the same part of Essex too often and the police come looking.' : ''}</p>
+    <div class="offers">${dailyCard()}${S.street.map(o => {
       const a = areaList(o.ch)[o.area] || EVENTS[0], cpRun = o.mode === 'cp', heat = o.ch === 'essex' ? heatOf(S, o.area) : 0;
       return `<div class="offer ${cpRun ? 'cp' : o.label.toLowerCase()}">
         <div class="offer-top"><span class="chip diff">${o.label}</span><span class="chip">${TIME_NAMES[o.time]}</span>${heat >= HEAT_POLICE ? '<span class="chip police">Police about</span>' : heat >= 1 ? '<span class="chip watch">Getting noticed</span>' : ''}</div>
@@ -7661,7 +7768,7 @@ function streetBoard() {
           <button class="btn small ${o.label === 'Easy' ? '' : 'primary'}" data-act="street" data-arg="${o.id}" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button></div>
       </div>`;
     }).join('')}</div>
-  </section>`;
+    <div class="actions"><button class="btn ghost small" data-act="reroll"><span>New races</span></button></div>`;
 }
 /* friends: they only turn up on the street race board once you have done a few street races.
    The first win pays their big prize; after that they are quick cash like any street race. */
@@ -7829,9 +7936,46 @@ function starsHtml(bits, big) {
   const label = STAR_NAMES.map((n, i) => (bits & (1 << i) ? '★ ' : '☆ ') + n).join(', ');
   return `<span class="stars${big ? ' big' : ''}" title="${label}" aria-label="${starCount(bits)} of 3 stars. ${label}">${[0, 1, 2].map(i => `<i class="${bits & (1 << i) ? 'on' : ''}">★</i>`).join('')}</span>`;
 }
-function hubTabs(tab) {
-  return `<div class="tabs hub-tabs" role="tablist">${(muOpen(S) ? [['mu', 'Mauritius'], ['essex', 'Essex'], ['london', 'London']] : [['essex', 'Essex'], ['london', 'London']]).map(([t, n]) =>
-    `<button class="tab" role="tab" aria-selected="${tab === t}" data-act="hubtab" data-arg="${t}">${n}</button>`).join('')}</div>`;
+/* ---------- getting around: the menu bar (Race, Street, Garage, Dealership, Map) and where you race ---------- */
+let hubPage = 'race', streetTab = 'races', hubShown = '';
+const NAV_SCREENS = ['scr-hub', 'scr-garage', 'scr-ladder'];
+/* where you are racing right now: island cars mean Mauritius, otherwise Essex once it is open, unless you picked London */
+function placeNow() { return !S ? 'london' : islandCar(S.current) ? 'mu' : S.careerDone && essexOpen(S) && hubTab !== 'london' ? 'essex' : 'london'; }
+const PLACE_NAMES = { london: 'London', essex: 'Essex', mu: 'Mauritius' };
+const NAV_ICONS = {
+  race: '<path d="M5 21V4"/><path d="M5 4h13l-3 4.5 3 4.5H5"/>',
+  street: '<path d="M8 3 4 21M16 3l4 18"/><path d="M12 4v3M12 11v3M12 18v3"/>',
+  garage: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/>',
+  cars: '<path d="M3 17v-4l2.5-5h9l4 5H21v4"/><path d="M3 13h18"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/>',
+  map: '<path d="M2 6v15l7-3 6 3 7-3V3l-7 3-6-3z"/><path d="M9 3v15M15 6v15"/>',
+};
+/* the people who want a race with you: friends from the street, and the Ride3 invitation once you have the crown */
+const challengers = () => islandCar(S.current) ? [] : FRIENDS.filter(id => specialUnlocked(S, id)).concat(S.careerDone ? ['ride3'] : []);
+/* someone new wants a race: a dot on Street until you have looked at them */
+const freshChallenger = () => challengers().some(id => !(S.found && S.found[id]) && !(S.announced && S.announced['ch:' + id]));
+function navBar(active) {
+  const dmg = (S.owned[S.current] || {}).damage >= 50;
+  const items = [['race', 'Race', 'hub', 'race'], ['street', 'Street', 'hub', 'street'], ['garage', 'Garage', 'garage', ''], ['cars', 'Dealership', 'tab', 'cars'], ['map', 'Map', 'ladder', '']];
+  return `<nav class="gnav" aria-label="Menu">${items.map(([id, label, act, arg]) => {
+    const dot = (id === 'street' && freshChallenger()) || (id === 'garage' && dmg);
+    return `<button class="gn${id === active ? ' on' : ''}" type="button" data-act="${act}"${arg ? ` data-arg="${arg}"` : ''}${id === active ? ' aria-current="page"' : ''}>
+      <svg viewBox="0 0 24 24" aria-hidden="true">${NAV_ICONS[id]}</svg><span>${label}</span>${dot ? `<i class="dot" aria-label="${id === 'garage' ? 'Your car is damaged' : 'Someone new wants a race'}"></i>` : ''}</button>`;
+  }).join('')}</nav>`;
+}
+/* London, Essex and Mauritius: tap one to go there. Island cars stay on the island, so flying swaps the car you race. */
+function placeBar() {
+  if (!essexOpen(S)) return '';
+  const now = placeNow(), prog = (list, i, done) => i >= list.length ? done : `Race ${i + 1} of ${list.length}`;
+  const places = [['london', prog(EVENTS, S.careerDone ? EVENTS.length : nextEventIndex(S), 'Crown won ✓')], ['essex', prog(ESSEX, nextEssexIndex(S), 'All won ✓')]];
+  if (muOpen(S)) places.push(['mu', prog(MU, nextMuIndex(S), 'All won ✓')]);
+  return `<div class="places" role="tablist" aria-label="Where you race">${places.map(([id, sub]) =>
+    `<button class="place${id === now ? ' on' : ''}" type="button" role="tab" aria-selected="${id === now}" data-act="hubtab" data-arg="${id}"><b>${PLACE_NAMES[id]}</b><small>${sub}</small></button>`).join('')}</div>`;
+}
+const menuHead = active => `<div class="menuhead">${navBar(active)}${placeBar()}</div>`;
+/* on the island, point the way home: the London and Essex cars and dealership are back there */
+function awayNote() {
+  if (!islandCar(S.current)) return '';
+  return `<p class="tip away">You are on the island, so this is the island garage and showroom. Your London and Essex cars and the dealership back home are waiting in London: tap <b>London</b> or <b>Essex</b> at the top to fly back.</p>`;
 }
 function powerTip(st, oppBhp) {
   const ratio = st.bhp / oppBhp;
@@ -7841,7 +7985,7 @@ function powerTip(st, oppBhp) {
     : 'A lot faster on paper. Upgrade, buy a better car or win some street races for cash first.';
 }
 function damageWarn(own) {
-  if (own.damage >= 100) return `<p class="tip bad">Your car is wrecked. Repair it in the garage before you can race.</p>`;
+  if (own.damage >= 100) return `<p class="tip bad">Your car is wrecked. Repair it in the garage before you can race.</p><div class="actions"><button class="btn small primary" data-act="garage" data-arg="upgrades"><span>Repair it</span></button></div>`;
   if (own.damage >= 50) return `<p class="tip warn">Your car is ${own.damage}% damaged. A few more hits and it is wrecked. Repair costs ${money(repairCost(S))}.</p>`;
   return '';
 }
@@ -7851,9 +7995,7 @@ function slipCards(own) {
   const ready = ESSEX.filter(e => slipReady(S, e.rival));
   if (!ready.length) return '';
   const cur = carById(S.current), n = Object.keys(S.owned).length;
-  return `<section class="slips">
-    <p class="kicker">Pink slips</p><h3 class="h3">Race for their car</h3>
-    <p class="tip">Beaten rivals will put their car on the line, but only if you put up the car you race. Win and their car is yours, built the way they raced it. Lose and they drive off in yours.</p>
+  return `<p class="tip">Race for their car. Beaten rivals will put their car on the line, but only if you put up the car you race. Win and their car is yours, built the way they raced it. Lose and they drive off in yours.</p>
     <div class="offers">${ready.map(e => {
       const car = slipCarFor(e.rival), ch = CHARACTERS[e.rival], bhp = statsFor(car.id, slipUps(car)).bhp;
       let act;
@@ -7871,8 +8013,7 @@ function slipCards(own) {
         <p class="offer-opp">You put up: <b>${esc(cur.name)}</b></p>
         <div class="offer-foot">${act}</div>
       </div>`;
-    }).join('')}</div>
-  </section>`;
+    }).join('')}</div>`;
 }
 function essexMain(own, st) {
   const i = nextEssexIndex(S), done = (S.essex && S.essex.completed) || [];
@@ -7887,7 +8028,7 @@ function essexMain(own, st) {
         <div><dt>Essex stars</dt><dd>${stars} <small>of ${ESSEX.length * 3}</small></dd></div><div><dt>Wins</dt><dd>${S.stats.wins}</dd></div>
         <div><dt>Money</dt><dd>${money(S.money)}</dd></div><div><dt>Reputation</dt><dd>${S.rep}</dd></div>
       </dl>
-      <p class="tip">Exhibition races: run any Essex event again for fun and stars. No prize money, but pink slips and street races still pay.</p>
+      <p class="tip">Race any Essex event again for fun and the stars you missed. No prize money, but pink slips and street races still pay.</p>
       <div class="invite teaser mu-teaser"><p class="kicker">Next · Mauritius</p><h3 class="invite-title">Island rules</h3>
         <p class="story">Your cousin has been sending videos from the island for months. Eight races from Grand Baie to Le Morne, and you start again in his Picanto.</p>
         <div class="actions"><button class="btn primary" data-act="hubtab" data-arg="mu"><span>Go to Mauritius</span></button></div></div>`;
@@ -7896,8 +8037,6 @@ function essexMain(own, st) {
     body = `<p class="kicker">Essex · Event ${i + 1} of ${ESSEX.length} · ${esc(ev.area)}</p>
       <h2 class="flyer-title">${ev.title}</h2>
       ${rivalCard(ev.rival, CHARACTERS[ev.rival].pre)}
-      ${rivalCarStrip(ev.oppLook, CHARACTERS[ev.rival].car)}
-      <p class="story">${esc(ev.intro)}</p>
       <dl class="facts">
         <div><dt>Their car</dt><dd>${ev.oppBhp} <small>bhp</small></dd></div>
         <div><dt>Prize</dt><dd>${money(ev.reward)}${st.style ? ` <small>+${Math.round(styleBonus(st.style) * 100)}% style</small>` : ''}</dd></div>
@@ -7908,17 +8047,16 @@ function essexMain(own, st) {
       ${damageWarn(own)}
       <div class="actions">
         <button class="btn primary big" data-act="essex" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button>
-        <button class="btn" data-act="garage"><span>Garage</span></button>
-        <button class="btn" data-act="ladder"><span>Career ladder</span></button>
       </div>
-      <p class="tip">Your ${st.bhp} bhp against ${ev.oppBhp} bhp. ${powerTip(st, ev.oppBhp)}</p>`;
+      <p class="tip">Your ${st.bhp} bhp against ${ev.oppBhp} bhp. ${powerTip(st, ev.oppBhp)}</p>
+      ${rivalCarStrip(ev.oppLook, CHARACTERS[ev.rival].car)}
+      <p class="story">${esc(ev.intro)}</p>`;
   }
   return `<div class="hub-main"><article class="flyer essex">
-      ${hubTabs('essex')}
       ${S.news ? `<p class="news">“${esc(S.news)}”</p>` : ''}
       ${body}
-      ${exh ? `<p class="kicker">Exhibition races · stars ${stars} of ${ESSEX.length * 3}</p><div class="actions">${exh}</div>` : ''}
-    </article>${slipCards(own)}</div>`;
+      ${exh ? `<p class="kicker">Race again · ★ ${stars} of ${ESSEX.length * 3}</p><div class="actions">${exh}</div>` : ''}
+    </article></div>`;
 }
 /* ---------- Mauritius ---------- */
 function muImportCard(own) {
@@ -7957,14 +8095,12 @@ function muMain(own, st) {
         <div><dt>Island stars</dt><dd>${stars} <small>of ${MU.length * 3}</small></dd></div><div><dt>Wins</dt><dd>${S.stats.wins}</dd></div>
         <div><dt>Money</dt><dd>${money(S.money)}</dd></div><div><dt>Reputation</dt><dd>${S.rep}</dd></div>
       </dl>
-      <p class="tip">Exhibition races: run any island race again for fun and stars. No prize money, but island street races still pay.</p>`;
+      <p class="tip">Race any island event again for fun and the stars you missed. No prize money, but island street races still pay.</p>`;
   } else {
     const ev = MU[i], boss = ev.rival === 'boss', need = boss && S.current !== 'gtrx';
     body = `<p class="kicker">Mauritius · Race ${i + 1} of ${MU.length} · ${esc(ev.area)}</p>
       <h2 class="flyer-title">${ev.title}</h2>
       ${rivalCard(ev.rival, CHARACTERS[ev.rival].pre)}
-      ${rivalCarStrip(ev.oppLook, CHARACTERS[ev.rival].car)}
-      <p class="story">${esc(ev.intro)}</p>
       <dl class="facts">
         <div><dt>Their car</dt><dd>${ev.oppBhp} <small>bhp</small></dd></div>
         <div><dt>Prize</dt><dd>${money(ev.reward)}${st.style ? ` <small>+${Math.round(styleBonus(st.style) * 100)}% style</small>` : ''}</dd></div>
@@ -7974,18 +8110,17 @@ function muMain(own, st) {
       ${recordLine('mu:' + ev.rival, 'tip rec')}
       ${damageWarn(own)}
       ${boss ? muImportCard(own) : ''}
-      <p class="tip hint">${need ? 'Nothing on the island can live with Boss. Collect your GT-R, then race him in it.' : muTip(ev, st)}</p>
       <div class="actions">
         <button class="btn primary big" data-act="mu" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button>
-        <button class="btn" data-act="garage"><span>Garage</span></button>
-        <button class="btn" data-act="ladder"><span>Career ladder</span></button>
-      </div>`;
+      </div>
+      <p class="tip hint">${need ? 'Nothing on the island can live with Boss. Collect your GT-R, then race him in it.' : muTip(ev, st)}</p>
+      ${rivalCarStrip(ev.oppLook, CHARACTERS[ev.rival].car)}
+      <p class="story">${esc(ev.intro)}</p>`;
   }
   return `<div class="hub-main"><article class="flyer mu">
-      ${hubTabs('mu')}
       ${S.news ? `<p class="news">“${esc(S.news)}”</p>` : ''}
       ${body}
-      ${exh ? `<p class="kicker">Exhibition races · stars ${stars} of ${MU.length * 3}</p><div class="actions">${exh}</div>` : ''}
+      ${exh ? `<p class="kicker">Race again · ★ ${stars} of ${MU.length * 3}</p><div class="actions">${exh}</div>` : ''}
     </article></div>`;
 }
 /* shown on the London side until Essex opens */
@@ -7995,16 +8130,20 @@ function essexTeaser() {
     <p class="kicker">Next · Essex</p>
     <h3 class="invite-title">Over the border</h3>
     <p class="story">Essex has heard there is a new Street King. Wider roads, faster cars and a Duke who has never lost on the QE2 Bridge.</p>
-    <p class="tip">${beat ? 'The border is open.' : near ? 'First, beat Ishaaq in the Tunnel. He is waiting on the street race board.' : 'First, Ishaaq wants a word. Win a few more street races and he will call you out.'}</p>
+    <p class="tip">${beat ? 'The border is open.' : near ? 'First, beat Ishaaq in the Tunnel. He is waiting on the Street page, under Challengers.' : 'First, Ishaaq wants a word. Win a few more street races and he will call you out.'}</p>
   </div>`;
 }
-function goHub() {
+/* the career hub: page is 'race' (your next story race) or 'street' (street races, challengers, pink slips) */
+function goHub(page, sub) {
+  if (page) { hubPage = page; pendingSlip = null; }
+  if (sub) streetTab = sub;
   mode = 'menu'; R = null; paused = false; intro = null; setDemo();
   $('controls').hidden = true; $('b-pause').hidden = true; document.body.classList.remove('racing');
   // the first time the island opens, say so and take you there
   if (muOpen(S) && !(S.announced || {}).mu) {
     S.announced = Object.assign(S.announced || {}, { mu: true, flown: true }); openIsland(S); hubTab = 'mu'; goIsland(S, true);
     S.news = 'Your cousin has left his Picanto at the airport for you. Welcome to Mauritius.'; S.street = streetOffers(S); save();
+    hubPage = 'race';
     setTimeout(() => Cine.play('fly', () => toast('Mauritius is open. Island cars only: you start again in a Picanto.')), 30);
   }
   if (hubTab === null && islandCar(S.current)) hubTab = 'mu';
@@ -8016,14 +8155,13 @@ function goHub() {
   // the first time Essex opens, say so and show it
   if (exOpen && !(S.announced || {}).essex) {
     S.announced = Object.assign(S.announced || {}, { essex: true }); hubTab = 'essex';
-    S.news = 'Essex has heard about the new Street King. The border is open.'; S.street = streetOffers(S); save();
+    S.news = 'Essex has heard about the new Street King. The border is open.'; S.street = streetOffers(S); save(); hubPage = 'race';
     setTimeout(() => toast('Essex is open. Eight new races, new cars and pink slips.'), 500);
   }
   if (hubTab === 'mu' && muOpen(S)) main = muMain(own, st);
   else if (exOpen && hubTab !== 'london') main = essexMain(own, st);
   else if (S.careerDone) {
     main = `<article class="flyer">
-      ${exOpen ? hubTabs('london') : ''}
       <p class="kicker">Career complete</p>
       <h2 class="flyer-title">Street King</h2>
       ${rivalCard('king', CHARACTERS.king.youWin, false, 'Ray Walsh, the first Street King')}
@@ -8033,10 +8171,9 @@ function goHub() {
       </dl>
       ${newRivalCard()}
       ${exOpen ? '' : essexTeaser()}
-      ${ride3Card()}
-      <p class="tip">Exhibition races: run any career event again just for fun. There is no prize money for these, but street races still pay.</p>
+      <p class="kicker">Race again · ★ ${EVENTS.reduce((a, e) => a + starCount((S.stars || {})['career:' + e.rival]), 0)} of ${EVENTS.length * 3}</p>
+      <p class="tip">Race any London event again for fun and the stars you missed. No prize money, but street races still pay.</p>
       <div class="actions">${EVENTS.map((e, i) => S.completed[i] ? `<button class="btn small" data-act="exhibition" data-arg="${i}"><span>${e.title}</span></button>` : '').join('')}</div>
-      <div class="actions"><button class="btn" data-act="garage"><span>Garage</span></button><button class="btn" data-act="ladder"><span>Career ladder</span></button></div>
     </article>`;
   } else {
     const i = nextEventIndex(S), ev = EVENTS[i], isKing = ev.rival === 'king';
@@ -8046,8 +8183,6 @@ function goHub() {
       <p class="kicker">Event ${i + 1} of ${EVENTS.length} · ${ev.chapter} · ${ev.area}</p>
       <h2 class="flyer-title">${ev.title}</h2>
       ${rivalCard(ev.rival, isKing ? '' : CHARACTERS[ev.rival].pre, isKing)}
-      ${rivalCarStrip(ev.oppLook, isKing ? 'Black Nissan GT-R' : CHARACTERS[ev.rival].car)}
-      <p class="story">${esc(ev.intro)}</p>
       <dl class="facts">
         <div><dt>Their ${ev.bike ? 'bike' : 'car'}</dt><dd>${ev.bike ? esc(ev.oppLabel) : ev.oppBhp + ' <small>bhp</small>'}</dd></div>
         <div><dt>Prize</dt><dd>${money(ev.reward)}${st.style ? ` <small>+${Math.round(styleBonus(st.style) * 100)}% style</small>` : ''}</dd></div>
@@ -8058,14 +8193,13 @@ function goHub() {
       ${warn}
       <div class="actions">
         <button class="btn primary big" data-act="race" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button>
-        <button class="btn" data-act="garage"><span>Garage</span></button>
-        <button class="btn" data-act="ladder"><span>Career ladder</span></button>
       </div>
       <p class="tip">${ev.bike ? `A superbike weighs a fraction of your car, so it will pull away off the line. You need a fast car, clean driving and every drop of nitro to reel it in.` : `Your ${st.bhp} bhp against ${ev.oppBhp} bhp. ${tip}`}</p>
+      ${rivalCarStrip(ev.oppLook, isKing ? 'Black Nissan GT-R' : CHARACTERS[ev.rival].car)}
+      <p class="story">${esc(ev.intro)}</p>
     </article>`;
   }
-  $('hub-body').innerHTML = `${topBar('Menu')}
-    <div class="hub-grid">
+  const racePage = `<div class="hub-grid">
       ${main}
       <aside class="car-panel">
         <p class="kicker">Your race car</p>
@@ -8076,16 +8210,21 @@ function goHub() {
         <div class="chips">${UPGRADES.map(u => { const n = Number(own.up[u.id]) || 0; return `<span class="chip ${n ? 'on' : ''}">${u.name}${n ? ' S' + n : ''}</span>`; }).join('')}</div>
       </aside>
     </div>
-    ${streetBoard()}
     <button class="link" data-act="title">Main menu</button>`;
+  const scr = $('scr-hub'), same = !scr.hidden && hubShown === hubPage + streetTab, top = scr.scrollTop;
+  $('hub-body').innerHTML = `${topBar('Menu')}
+    ${menuHead(hubPage)}
+    ${hubPage === 'street' ? streetPage() : racePage}`;
+  hubShown = hubPage + streetTab;
   showScreen('scr-hub');
+  scr.scrollTop = same ? top : 0;
   paintCanvases();
   // someone new has heard about you
   const fresh = FRIENDS.filter(id => specialUnlocked(S, id) && !(S.announced || {})[id]);
   if (fresh.length) {
     S.announced = Object.assign(S.announced || {}, ...fresh.map(id => ({ [id]: true }))); save();
     const names = fresh.map(id => CHARACTERS[SPECIALS[id].rival].name), who = names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] + ' have' : names[0] + ' has';
-    setTimeout(() => toast(`${who} heard about you. Check the street races.`), 600);
+    setTimeout(() => toast(`${who} heard about you. Tap Street to race them.`), 600);
   }
   if (Online.on) Online.loadRecords().then(changed => { if (changed) refreshRecords(); });
 }
@@ -8101,16 +8240,18 @@ function goGarage(tab, keepScroll) {
   else if (garageTab === 'body') body = bodyTab(own, car);
   else if (garageTab === 'mine') body = collectionTab();
   else body = dealerTab();
+  const island = islandCar(S.current);
   $('garage-body').innerHTML = `${topBar()}
-    <p class="kicker">Garage · ${car.name}</p>
+    ${menuHead(garageTab === 'cars' ? 'cars' : 'garage')}
+    ${garageTab === 'cars' ? `<p class="kicker">${island ? 'Island showroom · Mauritius' : S.careerDone ? 'Dealership · London and Essex' : 'Dealership · London'}</p>`
+    : `<p class="kicker">Garage · ${car.name}</p>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" aria-selected="${garageTab === 'upgrades'}" data-act="tab" data-arg="upgrades">Upgrades</button>
       <button class="tab" role="tab" aria-selected="${garageTab === 'body'}" data-act="tab" data-arg="body">Body Shop</button>
       <button class="tab" role="tab" aria-selected="${garageTab === 'mine'}" data-act="tab" data-arg="mine">My cars</button>
-      <button class="tab" role="tab" aria-selected="${garageTab === 'cars'}" data-act="tab" data-arg="cars">Dealership</button>
-    </div>
-    ${body}
-    <div class="actions"><button class="btn primary" data-act="hub"><span>Back to career hub</span></button></div>`;
+    </div>`}
+    ${garageTab === 'cars' || garageTab === 'mine' ? awayNote() : ''}
+    ${body}`;
   showScreen('scr-garage');
   scr.scrollTop = top;
   paintCanvases();
@@ -8234,7 +8375,8 @@ function dealerTab() {
   // on the island the showroom only has island cars; back home it never shows them
   const island = islandCar(S.current);
   const list = CARS.filter(c => !c.slip && (island ? c.chapter === 'mu' : c.chapter !== 'mu' && (!c.chapter || S.careerDone)));
-  return `<div class="car-grid">${list.map(c => {
+  return `${list.length > 1 ? `<p class="tip swipe-hint">${list.length} cars. Swipe across to see them all.</p>` : ''}
+  <div class="car-grid">${list.map(c => {
     const owned = S.owned[c.id], cur = S.current === c.id, unlocked = carUnlocked(S, c);
     const st2 = statsFor(c.id, owned ? owned.up : {}), mx = maxStats(c.id);
     let act;
@@ -8260,7 +8402,7 @@ function dealerTab() {
 /* every car you own, with its class. Cars won in pink slips show who you took them from. */
 function collectionTab() {
   const island = islandCar(S.current), ids = CARS.filter(c => S.owned[c.id] && islandCar(c.id) === island).map(c => c.id);
-  return `<p class="tip">Your garage. Classes go by how much power a car makes right now: D, C, B, A, then S at 800 bhp and up.</p>
+  return `<p class="tip">Your garage. Classes go by how much power a car makes right now: D, C, B, A, then S at 800 bhp and up.${ids.length > 1 ? `<span class="swipe-hint">You have ${ids.length} cars here. Swipe across to see them all.</span>` : ''}</p>
   <div class="car-grid">${ids.map(id => {
     const c = carById(id), own = S.owned[id], st2 = statsFor(id, own.up, lookOf(S, id));
     return `<div class="car-card ${S.current === id ? 'current' : ''}">
@@ -8275,8 +8417,10 @@ function collectionTab() {
 }
 
 /* ---------- career ladder ---------- */
+/* the career ladder for where you are: London, Essex or Mauritius, with the next place shown locked as a teaser */
 function goLadder() {
   mode = 'menu'; setDemo();
+  const place = placeNow();
   const next = nextEventIndex(S);
   let chapter = '';
   const rungs = EVENTS.map((ev, i) => {
@@ -8292,7 +8436,7 @@ function goLadder() {
   }).join('<div class="down" aria-hidden="true">↓</div>');
   // Essex: shows once the crown is won, locked until Ishaaq is beaten
   let essexRungs = '';
-  if (S.careerDone) {
+  if (S.careerDone && (place === 'essex' || (place === 'london' && !essexOpen(S)))) {
     const open = essexOpen(S), nx = nextEssexIndex(S), done = (S.essex && S.essex.completed) || [];
     essexRungs = `<p class="chapter">Essex${open ? '' : ' · beat Ishaaq to open it'}</p>` + ESSEX.map((ev, i) => {
       const st = done[i] ? 'done' : open && i === nx ? 'current' : 'locked', ic = st === 'done' ? '✓' : st === 'current' ? '→' : '🔒';
@@ -8305,7 +8449,7 @@ function goLadder() {
     }).join('<div class="down" aria-hidden="true">↓</div>');
   }
   let muRungs = '';
-  if (essexOpen(S)) {
+  if (place === 'mu' || (place === 'essex' && !muOpen(S))) {
     const open = muOpen(S), nx = nextMuIndex(S), done = (S.mu && S.mu.completed) || [];
     muRungs = `<p class="chapter">Mauritius${open ? '' : ' · beat the Duke to open it'}</p>` + MU.map((ev, i) => {
       const st = done[i] ? 'done' : open && i === nx ? 'current' : 'locked', ic = st === 'done' ? '✓' : st === 'current' ? '→' : '🔒';
@@ -8316,7 +8460,7 @@ function goLadder() {
         <div class="pz">${money(ev.reward)}<br>+${ev.rep} rep${done[i] ? '<br>' + starsHtml((S.stars || {})['mu:' + ev.rival]) : ''}</div></div>`;
     }).join('<div class="down" aria-hidden="true">↓</div>');
   }
-  const bonus = S.careerDone ? `<p class="chapter">Invitation</p>` + ['ride3'].map(id => {
+  const bonus = S.careerDone && place === 'london' ? `<p class="chapter">Invitation</p>` + ['ride3'].map(id => {
     const sp = SPECIALS[id], done = S.specials && S.specials[id], ch = CHARACTERS[sp.rival];
     return `<div class="rung ${done ? 'done' : 'open'} special"><div class="ic">${done ? '✓' : '→'}</div>
       <canvas class="portrait sm" data-portrait="${sp.rival}" data-hidden="0" width="44" height="44"></canvas>
@@ -8327,21 +8471,21 @@ function goLadder() {
   const unl = onIsland ? CARS.filter(c => c.chapter === 'mu').map(c => `<div class="${carUnlocked(S, c) ? 'ok' : ''}"><span>${c.name}</span><b>${c.muUnlock ? c.muUnlock + ' WIN' + (c.muUnlock > 1 ? 'S' : '') : 'START'} ${carUnlocked(S, c) ? '✓' : '🔒'}</b></div>`).join('')
     : CARS.filter(c => !c.slip && c.chapter !== 'mu' && (!c.chapter || S.careerDone)).map(c => `<div class="${carUnlocked(S, c) ? 'ok' : ''}"><span>${c.name}</span><b>${c.rep ? 'REP ' + c.rep : 'START'} ${carUnlocked(S, c) ? '✓' : '🔒'}</b></div>`).join('');
   $('ladder-body').innerHTML = `${topBar()}
-    <p class="kicker">Career ladder${totalStars(S) ? ` · ★ ${totalStars(S)} stars` : ''}</p>
-    <h2 class="h2">${muOpen(S) ? 'From Canning Town to Le Morne' : essexOpen(S) ? 'From Canning Town to the QE2 Bridge' : 'From Canning Town to the crown'}</h2>
+    ${menuHead('map')}
+    <p class="kicker">Career ladder · ${PLACE_NAMES[place]}${totalStars(S) ? ` · ★ ${totalStars(S)} stars` : ''}</p>
+    <h2 class="h2">${place === 'mu' ? 'From Grand Baie to Le Morne' : place === 'essex' ? 'From Romford to the QE2 Bridge' : 'From Canning Town to the crown'}</h2>
     <p class="tip">Stars: one for the win, one for a race with no crashes, one for hitting every gate. They stay with the route, so you can go back for them.</p>
     <div class="ladder-grid">
-      <div class="ladder">${rungs}${bonus}${essexRungs}${muRungs}</div>
+      <div class="ladder">${place === 'london' ? rungs + bonus : ''}${essexRungs}${muRungs}</div>
       <div class="unlocks">
-        <canvas class="map" data-map="1" width="400" height="400" aria-label="Map of the career across East and North London"></canvas>
-        ${essexOpen(S) ? `<canvas class="map" data-map="essex" width="400" height="400" aria-label="Map of the Essex races"></canvas>` : ''}
-        ${muOpen(S) ? `<canvas class="map" data-map="mu" width="400" height="400" aria-label="Map of the Mauritius races"></canvas>` : ''}
+        ${place === 'london' ? `<canvas class="map" data-map="1" width="400" height="400" aria-label="Map of the career across East and North London"></canvas>` : ''}
+        ${place === 'essex' ? `<canvas class="map" data-map="essex" width="400" height="400" aria-label="Map of the Essex races"></canvas>` : ''}
+        ${place === 'mu' ? `<canvas class="map" data-map="mu" width="400" height="400" aria-label="Map of the Mauritius races"></canvas>` : ''}
         <p class="kicker">${onIsland ? `Island showroom · you have ${muWins(S)} island win${muWins(S) === 1 ? '' : 's'}` : `Dealership unlocks · you have Rep ${S.rep}`}</p>
         ${unl}
         <p class="tip">Reputation only comes from career wins, and each career event pays out once. Street races can be replayed for cash.</p>
       </div>
-    </div>
-    <div class="actions"><button class="btn primary" data-act="hub"><span>Back to career hub</span></button></div>`;
+    </div>`;
   showScreen('scr-ladder');
   paintCanvases();
 }
@@ -8408,10 +8552,10 @@ function showResults() {
   if (ev.kind === 'daily') btns = `<button class="btn primary big" data-act="retry"><span>Go again</span></button><button class="btn" data-act="hub"><span>Career hub</span></button>${Online.on ? `<button class="btn" data-act="board" data-arg="${ev.route}"><span>Today's leaderboard</span></button>` : ''}`;
   else if (ev.kind === 'slip') btns = `<button class="btn primary big" data-act="hub"><span>Continue to career hub</span></button>${res.won ? `<button class="btn" data-act="tab" data-arg="mine"><span>See it in your garage</span></button>` : ''}`;
   else if (ev.kind === 'special' && !res.won) btns = `<button class="btn primary big" data-act="retry" ${own.damage >= 100 ? 'disabled' : ''}><span>Go again</span></button>
-    <button class="btn" data-act="garage"><span>Garage</span></button><button class="btn" data-act="hub"><span>Career hub</span></button>`;
+    <button class="btn" data-act="garage" data-arg="upgrades"><span>Garage</span></button><button class="btn" data-act="hub"><span>Career hub</span></button>`;
   else if (res.won || ev.kind === 'street') btns = `<button class="btn primary big" data-act="hub"><span>${sum.careerDone ? 'Claim your crown' : 'Continue to career hub'}</span></button>`;
   else btns = `<button class="btn primary big" data-act="retry" ${own.damage >= 100 ? 'disabled' : ''}><span>Retry event</span></button>
-    ${own.damage >= 50 ? `<button class="btn" data-act="garage"><span>Garage</span></button>` : ''}
+    ${own.damage >= 50 ? `<button class="btn" data-act="garage" data-arg="upgrades"><span>Garage</span></button>` : ''}
     <button class="btn" data-act="hub"><span>Career hub</span></button>`;
   $('results-body').innerHTML = `<div class="topback">${backBtn('Hub')}</div>
     <p class="kicker">${ev.kind === 'daily' ? 'Daily challenge · ' + esc(ev.area) + ' · ' + esc(carById(ev.loaner).name) : ev.kind === 'street' ? 'Street race · ' + ev.label + ' · ' + esc(ev.area) : ev.kind === 'slip' ? 'Pink slip · ' + ev.title : (ev.kind === 'special' && !ev.brand ? 'Street race · ' : ev.kind === 'essex' ? 'Essex · ' : ev.kind === 'mu' ? 'Mauritius · ' : '') + ev.title + (ev.exhibition || ev.rematch ? (ev.kind === 'special' ? ' · Rematch' : ' · Exhibition') : '')}</p>
@@ -8455,11 +8599,12 @@ function startRace(spec) {
     if (!muOpen(S) || !MU[spec.index]) return;
     const done = S.mu && S.mu.completed[spec.index];
     if (spec.exhibition ? !done : done || spec.index !== nextMuIndex(S)) return;
-    if (!islandCar(S.current)) { toast('Island races need an island car. Switch to the Mauritius tab.', true); return; }
+    if (!islandCar(S.current)) { toast('Island races need an island car. Tap Mauritius at the top.', true); return; }
     if (MU[spec.index].rival === 'boss' && !spec.exhibition && !S.owned.gtrx) { toast('Nothing on the island can beat Boss. Collect your GT-R first.', true); return; }
   }
-  if ((spec.kind === 'essex' || spec.kind === 'career' || spec.kind === 'special' || spec.kind === 'slip') && islandCar(S.current)) { toast('Your island car stays on the island. Switch to London or Essex.', true); return; }
+  if ((spec.kind === 'essex' || spec.kind === 'career' || spec.kind === 'special' || spec.kind === 'slip') && islandCar(S.current)) { toast('Your island car stays on the island. Tap London or Essex at the top.', true); return; }
   if (spec.kind === 'slip' && (!slipReady(S, spec.id) || Object.keys(S.owned).length < 2 || S.current === slipCarFor(spec.id).id)) return;
+  hubPage = spec.kind === 'career' || spec.kind === 'essex' || spec.kind === 'mu' ? 'race' : 'street';
   R = createRace(S, spec);
   loadGhosts(R);
   Music.preloadStings();
@@ -9088,7 +9233,7 @@ document.getElementById('ui').addEventListener('click', e => {
   switch (act) {
     case 'sound': Sound.setOn(!Sound.on); break;
     case 'music': Music.setOn(!Music.on); break;
-    case 'continue': if (S) goHub(); break;
+    case 'continue': if (S) goHub('race'); break;
     case 'new': if (S) { $('confirm-new').hidden = false; } else goSelect(); break;
     case 'newyes': if (TEST_MODE) { S = TEST_ISLAND ? testIsland() : testCareer(); hubTab = null; save(false); goHub(); break; }
       Online.flushSave(); S = null; try { localStorage.removeItem(SAVE_KEY); localStorage.removeItem(OLD_SAVE_KEY); } catch (err) {} goSelect(); break;
@@ -9110,11 +9255,19 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'mu': startRace({ kind: 'mu', index: nextMuIndex(S) }); break;
     case 'muex': startRace({ kind: 'mu', index: +arg, exhibition: true }); break;
     case 'hubtab': {
-      const fly = arg === 'mu' && muOpen(S) && !islandCar(S.current);
-      hubTab = arg; pendingSlip = null; goIsland(S, arg === 'mu'); S.street = streetOffers(S); save(); goHub(); Music.play(Music.area());
+      // going somewhere else: island cars stay on the island, so flying swaps the car you race. You stay on the same page.
+      const fly = arg === 'mu' && muOpen(S) && !islandCar(S.current), home = arg !== 'mu' && islandCar(S.current);
+      if (arg === placeNow() && !fly && !home) break;
+      hubTab = arg; pendingSlip = null; pendingSell = null; draft = null; plateMsg = ''; goIsland(S, arg === 'mu');
+      if (fly || home) S.street = streetOffers(S);
+      save();
+      if (!$('scr-garage').hidden) goGarage(null); else if (!$('scr-ladder').hidden) goLadder(); else goHub();
+      Music.play(Music.area());
       if (fly) { Cine.play('fly', null, { short: !!(S.announced && S.announced.flown) }); S.announced = Object.assign(S.announced || {}, { flown: true }); save(); }
+      else if (home) toast(`Back home. Your ${carById(S.current).name} is ready.`);
       break;
     }
+    case 'stab': streetTab = arg; pendingSlip = null; goHub('street'); break;
     case 'slip': pendingSlip = arg; goHub(); break;
     case 'slipno': pendingSlip = null; goHub(); break;
     case 'slipyes': pendingSlip = null; startRace({ kind: 'slip', id: arg }); break;
@@ -9122,7 +9275,7 @@ document.getElementById('ui').addEventListener('click', e => {
       else if (R && R.ev.kind === 'mu') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.mu && S.mu.completed[i]) goHub(); else startRace({ kind: 'mu', index: i, exhibition: ex }); }
       else if (R && R.ev.kind === 'essex') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.essex && S.essex.completed[i]) goHub(); else startRace({ kind: 'essex', index: i, exhibition: ex }); }
       else if (R && R.ev.kind === 'special') startRace({ kind: 'special', id: R.ev.id }); else if (R && R.ev.kind === 'career') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.careerDone) goHub(); else startRace({ kind: 'career', index: i, exhibition: ex }); } else goHub(); break;
-    case 'hub': goHub(); break;
+    case 'hub': if (arg && arg === hubPage && !$('scr-hub').hidden && $('scr-hub').scrollTop > 0) { $('scr-hub').scrollTo({ top: 0, behavior: 'smooth' }); break; } goHub(arg); break;
     case 'signin': e.preventDefault(); Online.signIn(); break;
     case 'signout': Online.signOut(); break;
     case 'rename': showNameScreen(); break;
@@ -9132,7 +9285,7 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'delacc': { const c = $('confirm-del'); if (c) c.hidden = false; break; }
     case 'delno': { const c = $('confirm-del'); if (c) c.hidden = true; break; }
     case 'delyes': Online.deleteAccount().then(() => { toast('Your account is deleted. Your career on this device is still here.'); goTitle(); }).catch(() => toast('Could not delete the account. Check your connection and try again.', true)); break;
-    case 'garage': pendingSell = null; draft = null; plateMsg = ''; goGarage('upgrades'); break;
+    case 'garage': pendingSell = null; draft = null; plateMsg = ''; goGarage(arg || (garageTab === 'cars' ? 'upgrades' : garageTab)); break;
     case 'ladder': goLadder(); break;
     case 'tab': pendingSell = null; goGarage(arg); break;
     case 'buyup': r = buyUpgrade(S, arg); save(); toast(r.msg, !r.ok); goGarage(null, true); break;
