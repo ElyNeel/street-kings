@@ -1,0 +1,16 @@
+# Wakes the Street Kings database once a day, so the free Supabase project never pauses from quiet weeks.
+# It only reads one leaderboard row with the public key that is already inside the game.
+name: Keep leaderboards awake
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read one leaderboard row
+        run: |
+          code=$(curl -sS -o /dev/null -w "%{http_code}" "https://wdtrktzxszfaftotrdyw.supabase.co/rest/v1/leaderboard?select=route&limit=1" -H "apikey: sb_publishable_Llb7ESB5jkatL60gq7vNpw_WXucSND0")
+          echo "Supabase answered $code"
+          test "$code" = "200"
