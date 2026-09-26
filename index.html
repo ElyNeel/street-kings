@@ -782,13 +782,13 @@ const laneToX = l => (l - 1) * LANE_W;   // lane 0 = left, 1 = middle, 2 = right
 function fmt(n) { return Math.round(n).toLocaleString('en-GB'); }
 
 /* ---------- cars ----------
-   pot = tuning potential: how much of the Stage 2 and 3 gains the car can use. s1 = share of the Stage 1 power gains.
+   pot = tuning potential: how much of the Stage 2 and 3 gains the car can use. s1 = share of the Stage 1 power gains, n1 = of the Stage 1 nitrous.
    The Civic and the E46 run out of room early on purpose: North London needs a car with more potential. */
 const CARS = [
-  { id: 'civic', name: 'Honda Civic EP3', price: 0, bhp: 200, handling: 7.0, rep: 0, pot: 0.1, s1: 0.55, model: 'civic',
+  { id: 'civic', name: 'Honda Civic EP3', price: 0, bhp: 200, handling: 7.0, rep: 0, pot: 0.1, s1: 0.55, n1: 0.6, model: 'civic',
     blurb: 'Light, balanced and forgiving. The classic first build.',
     look: { paint: '#c9252c', finish: 'gloss', rims: 'five', rimColor: '#c3c8cc', tint: 1, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ff3355', smoked: false, plate: 'EP03 VTC' } },
-  { id: 'bmw', name: 'BMW 330Ci E46', price: 2500, bhp: 240, handling: 6.5, rep: 0, pot: 0.15, s1: 0.65, model: 'bmw',
+  { id: 'bmw', name: 'BMW 330Ci E46', price: 2500, bhp: 240, handling: 6.5, rep: 0, pot: 0.15, s1: 0.65, n1: 0.6, model: 'bmw',
     blurb: 'Two door coupe with a smooth straight six. More grunt, a touch lazier on turn in.',
     look: { paint: '#9fb2c6', finish: 'metallic', rims: 'split', rimColor: '#c3c8cc', tint: 1, spoiler: 'none', kit: 0, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: '#4aa8ff', smoked: false, plate: 'E46 SXI' } },
   { id: 'wrx', name: 'Subaru WRX STI', price: 4500, bhp: 310, handling: 8.0, rep: 3, pot: 0.8, model: 'wrx',
@@ -862,7 +862,7 @@ const UPGRADES = [
 function stageGain(car, u, stage) {
   const s = u.stages[stage - 1], k = stage === 1 ? (car.s1 || 1) : car.pot;
   // bigger nitrous bottles only fit cars with the potential for them
-  return { bhp: s.bhp ? Math.round(s.bhp * k) : 0, handling: s.handling || 0, nitro: s.nitro ? Math.round(s.nitro * (stage === 1 ? 1 : Math.max(0.4, car.pot))) : 0, price: s.price };
+  return { bhp: s.bhp ? Math.round(s.bhp * k) : 0, handling: s.handling || 0, nitro: s.nitro ? Math.round(s.nitro * (stage === 1 ? car.n1 || 1 : Math.max(0.4, car.pot))) : 0, price: s.price };
 }
 /* look (optional): the car's Body Shop setup. Aero and suspension change top speed, nitro speed and grip
    compared with how the car left the factory. */
@@ -1319,43 +1319,43 @@ const EVENTS = [
     signs: [['green', 'A12', 'Stratford', 'Hackney Wick'], ['borough', 'London Borough of Hackney'], ['green', 'A12', 'Blackwall Tunnel', 'Canary Wharf'], ['green', 'A11', 'Bow', 'Stratford']],
     intro: 'Past midnight on the A12, with the Olympic Park lit up beside you. Kemi Adebayo takes the cleanest lines in East London. Beat her at her own game.',
     win: 'The A12 regulars are watching you now.', oppLook: { model: 'golf', paint: '#2456a8', rims: 'five', rimColor: '#1c1e21' },
-    diff: { skill: 0.975, inc: [11, 15] } },
+    diff: { skill: 1.02, inc: [11, 15] } },
   { title: 'INDUSTRIAL HEAT', chapter: 'East London', rival: 'kasia', oppBhp: 380, reward: 2500, rep: 3, dist: 5400,
     area: 'Lea Bridge', road: 'Lea Bridge Road', time: 'night', env: 'arches', sky: ['gasholder', 'cranes', 'shard'], map: [-0.044, 51.566],
     signs: [['green', 'A104', 'Lea Bridge', 'Leyton'], ['borough', 'London Borough of Waltham Forest'], ['green', 'A104', 'Clapton', 'Hackney'], ['green', 'A106', 'Leyton', 'Stratford']],
     intro: 'Railway arches, sodium lights and Kasia Nowak\'s Evo. She built half the engines in East London. This is where the serious money starts.',
     win: 'Kasia wants a look under your bonnet. People are starting to fear the name.', oppLook: { model: 'evo', paint: '#e4e4e0', rims: 'split', rimColor: '#c9a23a', spoiler: 'big' },
-    diff: { skill: 0.97, inc: [12, 16] } },
+    diff: { skill: 1.066, inc: [12, 16] } },
   { title: 'THE ISLAND', chapter: 'East London', rival: 'mo', oppBhp: 430, reward: 3000, rep: 3, dist: 5700,
     area: 'Isle of Dogs', road: 'Westferry Road', time: 'night', env: 'towers', sky: ['canary', 'shard', 'cranes'], map: [-0.022, 51.500],
     signs: [['green', 'A1206', 'Canary Wharf', 'Isle of Dogs'], ['borough', 'London Borough of Tower Hamlets'], ['green', 'A1206', 'Limehouse', 'Blackwall'], ['green', 'A13', 'Canning Town', 'Barking']],
     intro: 'Mo Tran knows every camera and every empty road on the Isle of Dogs. Beat him under the Canary Wharf towers and East London is yours.',
     win: 'East London is yours. Word has reached North London.', oppLook: { model: 'rs3', paint: '#8f969b', rims: 'mesh', rimColor: '#1c1e21', tint: 3 },
-    diff: { skill: 0.97, inc: [13, 17] } },
+    diff: { skill: 1.051, inc: [13, 17] } },
   { title: 'GREEN LANES', chapter: 'North London', rival: 'emre', oppBhp: 500, reward: 3300, rep: 3, dist: 5900,
     area: 'Harringay', road: 'Green Lanes', time: 'night', env: 'terrace', sky: ['allypally', 'bttower', 'cranes'], map: [-0.098, 51.578],
     signs: [['green', 'A105', 'Wood Green', 'Palmers Green'], ['borough', 'London Borough of Haringey'], ['green', 'A503', 'Finsbury Park', 'Seven Sisters'], ['green', 'A105', 'Harringay', 'Newington Green']],
     intro: 'North London now. Emre Yildiz races after closing time at his family\'s grill. Green Lanes after midnight, neon signs and a Mercedes that sounds like thunder.',
     win: 'Green Lanes knows your name. Next stop, Tottenham.', oppLook: { model: 'c63', paint: '#7a1420', rims: 'five', rimColor: '#2a2d31', tint: 2 },
-    diff: { skill: 0.975, inc: [14, 18] } },
+    diff: { skill: 1.049, inc: [14, 18] } },
   { title: 'THE RIVAL', chapter: 'North London', rival: 'marcus', oppBhp: 560, reward: 3800, rep: 4, dist: 6200,
     area: 'Tottenham', road: 'Seven Sisters Road', time: 'night', env: 'terrace', sky: ['stadium', 'bttower', 'shard'], map: [-0.072, 51.586],
     signs: [['green', 'A503', 'Seven Sisters', 'Tottenham'], ['borough', 'London Borough of Haringey'], ['green', 'A10', 'Tottenham', 'Edmonton'], ['green', 'A503', 'Finsbury Park', 'Holloway']],
     intro: 'Marcus Campbell has run North London in his M3 for three years. He has heard about you, and he does not like it.',
     win: 'Marcus threw his keys on the bonnet and walked off. North London is wide open.', oppLook: { model: 'm3', paint: '#e3c21c', rims: 'split', rimColor: '#1c1e21', spoiler: 'lip', stance: 1 },
-    diff: { skill: 0.975, inc: [15, 19] } },
+    diff: { skill: 1.042, inc: [15, 19] } },
   { title: 'NORTH CIRCULAR', chapter: 'North London', rival: 'asha', oppBhp: 640, reward: 4400, rep: 4, dist: 6500,
     area: 'Walthamstow', road: 'A406 North Circular', time: 'late', env: 'aroad', sky: ['cranes', 'bttower', 'canary'], map: [-0.022, 51.595],
     signs: [['green', 'A406', 'North Circular', 'Walthamstow'], ['borough', 'London Borough of Waltham Forest'], ['green', 'A406', 'Edmonton', 'Palmers Green'], ['green', 'A112', 'Chingford', 'Leyton']],
     intro: 'Asha Warsame has never missed an apex, on the test route or on the North Circular at 1am. Mirror, signal, overtake.',
     win: 'Only two names left above yours.', oppLook: { model: 'p911', paint: '#1e4d2b', rims: 'five', rimColor: '#c3c8cc' },
-    diff: { skill: 0.98, inc: [16, 20] } },
+    diff: { skill: 1.036, inc: [16, 20] } },
   { title: 'PALACE HILL', chapter: 'North London', rival: 'nikos', oppBhp: 750, reward: 5200, rep: 5, dist: 6800,
     area: 'Alexandra Palace', road: 'Alexandra Palace Way', time: 'night', env: 'park', sky: ['shard', 'canary', 'bttower', 'gherkin', 'cranes'], map: [-0.130, 51.594],
     signs: [['green', 'A406', 'North Circular', 'Bounds Green'], ['borough', 'London Borough of Haringey'], ['green', 'A504', 'Muswell Hill', 'Crouch End'], ['green', 'A105', 'Wood Green', 'Palmers Green']],
     intro: 'Up to Alexandra Palace, with the whole of London lit up below you. Nikos Georgiou says the loser buys the city breakfast.',
     win: 'Only one name is left above yours. The King has been told.', oppLook: { model: 'r8', paint: '#b9c2cb', rims: 'split', rimColor: '#2a2d31', tint: 2 },
-    diff: { skill: 0.98, inc: [18, 22] } },
+    diff: { skill: 1.0, inc: [18, 22] } },
   { title: 'FINAL RUN', chapter: 'The Final', rival: 'king', oppBhp: 850, reward: 7000, rep: 6, dist: 7200,
     area: 'North Circular to Blackwall', road: 'A406, A12, Blackwall Tunnel approach', time: 'late', dawn: true, env: 'aroad', sky: ['canary', 'orbit', 'shard', 'cranes'], map: [-0.012, 51.528],
     signs: [['green', 'A406', 'North Circular', 'Woodford'], ['green', 'A12', 'Stratford', 'Blackwall Tunnel'], ['borough', 'London Borough of Tower Hamlets'], ['green', 'A102', 'Blackwall Tunnel', 'Greenwich']],
@@ -7886,8 +7886,8 @@ function starterPlan() {
   const next = CARS.filter(c => !c.slip && !c.chapter && c.rep > 0).sort((a, b) => a.rep - b.rep)[0];
   let wins = 0, rep = 0, prize = 0;
   while (wins < EVENTS.length && rep < next.rep) { rep += EVENTS[wins].rep; prize += EVENTS[wins].reward; wins++; }
-  // how far a fully built car gets: about where the rivals have 45% more power (checked with a clean driving bot)
-  const reach = bhp => EVENTS.filter(e => !e.bike && e.oppBhp <= bhp * 1.45).length;
+  // how far a fully built car gets: about where the rivals have 25% more power (checked with a clean driving bot)
+  const reach = bhp => EVENTS.filter(e => !e.bike && e.oppBhp <= bhp * 1.25).length;
   const cars = CARS.filter(c => !c.slip && !c.chapter && !c.rep).map(c => {
     const keep = start - c.price, trade = Math.floor(c.price * 0.5), later = keep + prize, spare = later + trade - next.price;
     return { c, keep, trade, later, spare, now: statsFor(c.id, {}).bhp, max: maxStats(c.id).bhp, races: reach(maxStats(c.id).bhp) };
