@@ -612,6 +612,27 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 .later small { grid-column: 1 / -1; font-family: var(--fm); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 #scr-select .car-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 #scr-select .later { align-self: start; }
+/* ---------- drag night ---------- */
+#controls.drag { grid-template-columns: 1fr 1.6fr; }
+#controls.drag #c-left { display: none; }
+#controls.drag #c-right { border-color: rgba(95, 211, 138, 0.7); color: #c8f5d8; background: rgba(20, 70, 40, 0.45); }
+.offer.drag { border-top-color: #f2c418; }
+.offer.drag .chip.diff { color: #ffe27a; border-color: #f2c418; }
+.offer.drag.beaten { border-top-color: var(--go); }
+.offer.drag.beaten .chip.diff { color: var(--go); border-color: var(--go); }
+.offer.drag.locked { opacity: 0.6; }
+.offer.drag canvas.slipcar { width: 100%; height: 90px; display: block; background: linear-gradient(180deg, #0d1519, #121c21); }
+.offer.drag .bets { display: flex; gap: 6px; flex-wrap: wrap; }
+.offer.drag .offer-foot { flex-wrap: wrap; }
+.timeslip { background: #f4f1e8; color: #1a1a1a; font-family: var(--fm); padding: 12px 14px; max-width: 460px; display: grid; gap: 4px; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45); transform: rotate(-0.6deg); }
+.timeslip > div { display: grid; grid-template-columns: minmax(0, 1.3fr) 1fr 1fr; gap: 8px; font-size: 13px; align-items: baseline; border-bottom: 1px dashed rgba(0, 0, 0, 0.18); padding-bottom: 3px; }
+.timeslip > div:last-child { border-bottom: 0; }
+.timeslip span { color: #555; text-transform: uppercase; font-size: 11px; letter-spacing: 0.06em; }
+.timeslip b { font-weight: 700; text-align: right; }
+.timeslip b.up { color: #1d7a3e; }
+.timeslip .ts-head b { text-transform: uppercase; font-size: 11px; letter-spacing: 0.08em; color: #555; }
+.offer.friend.locked { opacity: 0.62; border-top-color: var(--line-2); box-shadow: none; }
+.ladder .tip.how { margin: -2px 0 8px; color: var(--ink); border-left: 3px solid var(--sodium); padding-left: 10px; }
 </style>
 </head>
 <body>
@@ -691,6 +712,10 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         <section>
           <h3>Checkpoints</h3>
           <p>Gold gates light up one lane now and then. Drive through them for cash and a splash of nitro, and hit them in a row to multiply the cash up to four times. A Checkpoint Run has no rival: go through every gate to win, miss one and you are out.</p>
+        </section>
+        <section>
+          <h3>Drag night</h3>
+          <p>On the island, the Street page has drag night on the old airport road: a straight quarter mile, side by side. Tap SHIFT (or press Up) the moment the light goes green, then each time the needle reaches the green. Too early off the line is a red light and you lose. One shot of nitro. Beat each racer for their prize, then race them again for money.</p>
         </section>
         <section>
           <h3>Stars</h3>
@@ -1223,6 +1248,37 @@ const CHARACTERS = {
     youWin: 'Ten years and nobody. The island is yours now. Look after it.',
     youLose: 'Go home, London.',
     face: { skin: '#9a6a48', hair: 'slick', hairCol: '#2a2a2c', facial: 'stubble', facialCol: '#555', shades: 'wrap', mouth: 'smirk', top: '#101012', chain: '#e2b650', bg: '#1d6b4a' } },
+  // Mauritius drag nights on the old airport road
+  tijean: { name: 'Jean-Marc "Ti Jean" Lebon', from: 'Rose-Hill', car: 'Suzuki Swift Sport (tuned)',
+    bio: 'Seventeen coats of wax and a cold air intake. Says his Swift has launch control. It does not.',
+    pre: 'No traffic to hide behind out here, London. Just the lights.',
+    youWin: 'Lucky launch. Anousha will not be so kind.',
+    youLose: 'Watch the lights, not me.',
+    face: { skin: '#c99a72', hair: 'curly', hairCol: '#1b1714', mouth: 'grin', top: '#f2c418', bg: '#2a6fb0' } },
+  anousha: { name: 'Anousha Beeharry', from: 'Quatre Bornes', car: 'VW Polo GTI',
+    bio: 'Runs the timing slips at drag night and knows every reaction time on the island by heart. Hers are the best.',
+    pre: 'I have seen your reaction times. Do better.',
+    youWin: 'Point two. Not bad. Dev is next, and he never misses a shift.',
+    youLose: 'Point four off the line. You were beaten before second gear.',
+    face: { skin: '#b07a52', hair: 'long', hairCol: '#140f0c', mouth: 'smirk', top: '#15171b', chain: '#e2b650', bg: '#b3163a' } },
+  dev: { name: 'Devesh "Dev" Mungur', from: 'Curepipe', car: 'Honda Civic Type R',
+    bio: 'Mechanic by day. Has changed more Civic gearboxes than anyone on the island, and can feel every shift point.',
+    pre: 'Short shift and I will hear it from here.',
+    youWin: 'Clean shifts. You earned that. La Mama will want a word.',
+    youLose: 'You left it on the limiter. I could hear it.',
+    face: { skin: '#8d5a3b', hair: 'crop', hairCol: '#18130f', facial: 'shortbeard', facialCol: '#1d1712', mouth: 'grin', top: '#c9252c', bg: '#3a3f46' } },
+  chankin: { name: 'Sabrina "La Mama" Chan Kin', from: 'Chinatown, Port Louis', car: 'Subaru Impreza WRX STI (big turbo)',
+    bio: 'Ran drag night before anyone else was old enough to drive. Her STI has had four engines and every one of them was faster.',
+    pre: 'Save your nitro, darling. You will need it.',
+    youWin: 'Well well. The Baron has been asking about you.',
+    youLose: 'Come back when your car can keep up with your mouth.',
+    face: { skin: '#e3bf97', hair: 'bun', hairCol: '#0e0d0c', shades: 'round', mouth: 'smirk', top: '#1f4fb5', bg: '#6b1d5b' } },
+  baron: { name: 'Le Baron', from: 'Flic en Flac', car: 'Nissan GT-R (drag build)', real: 'Olivier Duval',
+    bio: 'Nobody knows what he does for money. Everybody knows his GT-R has never lost on the airport road.',
+    pre: 'Nine seconds. Can you do nine seconds?',
+    youWin: 'The road is yours. For now.',
+    youLose: 'Nine seconds. I told you.',
+    face: { skin: '#d9b08a', hair: 'slick', hairCol: '#9a9a96', facial: 'goatee', facialCol: '#8d8d88', mouth: 'smirk', top: '#101012', chain: '#c9ccd0', bg: '#141414' } },
   // Adam, owner of Ride3
   ride3: { name: 'Adam', from: 'Ride3', car: 'Kawasaki Ninja H2R',
     bio: 'Owner of Ride3 and first out on every ride. His H2R is supercharged, over 300 horsepower and barely 200 kilos. Nobody on four wheels has beaten him yet.',
@@ -1507,6 +1563,165 @@ function goIsland(S, on) {
   }
 }
 
+/* ---------- Mauritius drag nights ----------
+   The old airport road at Plaine Magnien: a straight quarter mile, side by side, no traffic. Launch on the green light,
+   shift with the needle in the green, one shot of nitro. Beat each racer once for their prize, then race them again for a bet. */
+const DRAG_DIST = 402;
+const DRAG_STRIP = { area: 'Plaine Magnien', road: 'The old airport road', env: 'airport', time: 'night', sky: ['lionmtn', 'tower'],
+  signs: [['borough', 'Plaine Magnien'], ['green', 'A10', 'Mahébourg', 'Airport'], ['borough', 'District of Grand Port'], ['green', 'A10', 'Plaine Magnien', 'Blue Bay']] };
+const DRAG = [
+  { id: 'tijean', bhp: 150, handling: 7.4, prize: 600, skill: 0.55, look: { model: 'hatch', paint: '#f2c418', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', stance: 1, plate: '2020 JM 17' } },
+  { id: 'anousha', bhp: 230, handling: 7.6, prize: 1200, skill: 0.66, look: { model: 'hatch', paint: '#c9252c', finish: 'metallic', rims: 'split', rimColor: '#c3c8cc', tint: 3, spoiler: 'duck', stance: 2, plate: '1507 AB 21' } },
+  { id: 'dev', bhp: 340, handling: 8.0, prize: 2500, skill: 0.74, look: { model: 'civic', paint: '#eeeeea', finish: 'gloss', rims: 'mesh', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, plate: '777 FK 18' } },
+  { id: 'chankin', bhp: 520, handling: 8.4, prize: 5000, skill: 0.82, look: { model: 'wrx', paint: '#1f4fb5', finish: 'pearl', rims: 'split', rimColor: '#c9a23a', tint: 3, spoiler: 'big', kit: 1, stance: 2, plate: '8 MAMA 08' } },
+  { id: 'baron', bhp: 820, handling: 9.0, prize: 10000, skill: 0.9, look: { model: 'gtr', paint: '#101012', finish: 'matte', rims: 'fan', rimColor: '#c9a23a', tint: 4, spoiler: 'gt', kit: 1, stance: 2, plate: '1 BARON' } },
+];
+const dragById = id => DRAG.find(d => d.id === id);
+const dragBeaten = (S, id) => !!(S && S.drag && S.drag.beaten && S.drag.beaten[id]);
+/* the next racer opens once you have beaten the one before */
+const dragUnlocked = (S, i) => muOpen(S) && (i === 0 || dragBeaten(S, DRAG[i - 1].id));
+/* bets on a rematch: a fifth, half or all of their prize */
+const dragStakes = d => [0.2, 0.5, 1].map(k => Math.max(100, Math.round(d.prize * k / 50) * 50));
+/* about what a car runs down the strip with clean shifts and nitro from third: for the cards and the results */
+function dragEstimate(bhp, handling) {
+  const sp = dragSpec(bhp, handling, vmaxFor(bhp), 100), c = dragCar(sp); c.launched = true;
+  let t = 0; const dt = 1 / 120;
+  while (c.dist + P_LEN < DRAG_DIST && t < 60) { if (c.shiftT <= 0 && c.gear < sp.n - 1 && c.rpm >= 0.94) dragShift(c, sp); if (!c.nitroUsed && c.gear >= 2) { c.nitroUsed = true; c.nitroOn = true; } dragStep(c, sp, dt); t += dt; }
+  return t;
+}
+/* why a bet is not on: no money, or your car is so much faster they will not put money on it */
+function dragBetBlock(S, d, stake) {
+  const nm = CHARACTERS[d.id].name, who = /"(.*)"/.test(nm) ? nm.match(/"(.*)"/)[1] : nm.split(' ')[0];
+  if (!stake || stake <= 0) return 'Pick a bet first.';
+  if (stake > S.money) return `You do not have ${'£' + fmt(stake)} to put down.`;
+  if (curStats(S).bhp > d.bhp * 1.25) return `${who} will not bet against a car that much faster. Bring something nearer ${d.bhp} bhp.`;
+  return '';
+}
+/* the car in a drag race: power, grip, air resistance and a gearbox, all from the same stats as everything else.
+   Top gear runs out at the car's top speed; the air resistance is set so that is where the power runs out too */
+function dragSpec(bhp, handling, vmax, nitroCap) {
+  const P = bhp * 745.7 * 0.85, m = 1350, n = bhp >= 450 ? 6 : 5, vg = [];
+  for (let i = 0; i < n; i++) vg.push(vmax * 1.02 * Math.pow((i + 1) / n, 0.65));
+  // grip off the line: better handling, and the wider tyres and four wheel drive big power needs
+  return { P, m, n, vg, trac: 9.81 * clamp(0.6 + 0.03 * handling + bhp / 3500, 0.8, 1.35), k: P / (m * Math.pow(vmax, 3)), nitroT: 2.2 * (nitroCap || 100) / 100 };
+}
+/* power across the rev range: weak low down, full from 90% up to the limiter */
+const dragPow = r => { const t = clamp((r - 0.3) / 0.6, 0, 1); return 0.4 + 0.6 * t * t * (3 - 2 * t); };
+const SHIFT_T = { perfect: 0.07, good: 0.2, early: 0.3, late: 0.25 };
+function dragCar(sp) { return { v: 0, dist: 0, gear: 0, rpm: 0.2, shiftT: 0, lim: 0, launched: false, react: null, nitroLeft: sp.nitroT, nitroOn: false, nitroUsed: false, shifts: [], finished: false, finishTime: null }; }
+/* one step for one car */
+function dragStep(c, sp, dt) {
+  let a = -sp.k * c.v * c.v;
+  const vg = sp.vg[c.gear], r = c.v / vg;
+  if (c.launched) {
+    if (c.shiftT > 0) c.shiftT -= dt;                                   // clutch in: no drive
+    else if (r >= 1) c.lim += dt;                                        // on the limiter: nothing more until you shift
+    else a += Math.min(sp.trac * (c.nitroOn ? 1.08 : 1), sp.P * dragPow(r) * (c.nitroOn ? 1.5 : 1) / (sp.m * Math.max(c.v, 1.5)));
+    if (c.nitroOn) { c.nitroLeft -= dt; if (c.nitroLeft <= 0) { c.nitroOn = false; c.nitroLeft = 0; } }
+  }
+  c.v = Math.max(0, c.v + a * dt); c.dist += c.v * dt;
+  // the revs: off the line the clutch slips, so they sit up in the power until the car catches up
+  const rr = c.v / sp.vg[c.gear];
+  c.rpm = !c.launched ? c.rpm : c.gear === 0 ? Math.max(rr, 0.62 * (1 - rr)) : rr;
+  c.rpm = Math.min(1.02, c.rpm + (r >= 1 && c.shiftT <= 0 ? 0.02 * Math.sin(c.lim * 90) : 0));
+}
+/* an upshift: how good it was depends on where the needle was */
+function dragShift(c, sp) {
+  if (c.gear >= sp.n - 1 || c.shiftT > 0) return null;
+  const q = c.lim > 0.12 ? 'late' : c.rpm >= 0.9 ? 'perfect' : c.rpm >= 0.8 ? 'good' : 'early';
+  c.shiftT = SHIFT_T[q]; c.gear++; c.lim = 0; c.shifts.push(q);
+  return q;
+}
+function createDrag(S, spec) {
+  const d = dragById(spec.id), ch = CHARACTERS[d.id], st = curStats(S), own = S.owned[S.current];
+  const beaten = dragBeaten(S, d.id), stake = beaten ? Math.min(Math.max(0, S.money), spec.stake || dragStakes(d)[0]) : 0;
+  const nick = /"(.*)"/.test(ch.name) ? ch.name.match(/"(.*)"/)[1] : ch.name.split(' ')[0];
+  const ev = Object.assign({}, DRAG_STRIP, { kind: 'drag', drag: true, id: d.id, title: 'DRAG NIGHT', chapter: 'Mauritius', rival: d.id, oppName: ch.name, oppTag: nick, oppCar: ch.car, oppBhp: d.bhp,
+    oppLook: d.look, dist: DRAG_DIST, lanes: 2, curvy: 0, reward: beaten ? 0 : d.prize, stake, rematch: beaten, rep: 0, skill: 1, inc: [99, 99], d: 0, route: null });
+  const psp = dragSpec(st.bhp, st.handling, st.vmax, st.nitroCap), osp = dragSpec(d.bhp, d.handling, vmaxFor(d.bhp), 100 + d.skill * 60);
+  psp.P *= hurtK(own.damage).accel;   // a badly damaged car has less to give here too
+  const rr = Math.random, p = Object.assign(dragCar(psp), { lane: 0, x: 0, vx: 0, latV: 0, nitro: st.nitroCap, boosting: false, damage: own.damage, startDamage: own.damage, collisions: 0, topV: 0 });
+  const o = Object.assign(dragCar(osp), { lane: 1, x: 1, vx: 0, nitro: 100, boosting: false, vmax: osp.vg[osp.n - 1], accel: 0, incT: 99 });
+  // how the rival drives tonight: reaction off the line and where they shift, better the higher up the ladder
+  o.reactAt = 0.13 + (1 - d.skill) * 0.45 + rr() * 0.12;
+  o.shiftAt = () => { const x = rr(); return x < d.skill * 0.8 ? 0.9 + rr() * 0.08 : x < 0.92 ? 0.8 + rr() * 0.1 : 1.0; };
+  o.nextShift = o.shiftAt();
+  return { ev, carId: S.current, st, psp, osp, traffic: { tClear: 1, vLo: 0 }, look: lookOf(S, S.current), up: Object.assign({}, own.up), styleBonus: styleBonus(st.style),
+    rec: null, ghosts: [], twoWay: false, nl: 2, state: 'countdown', countdown: 9, t: 0, doneT: 0, wrecked: false, p, o, rw: rr, rr, waves: [], lastOpen: 0, waveCount: 0, noMoreSpawns: true, gapMin: 1,
+    // the lights: pre-stage, stage, then three ambers half a second apart and green. A short random wait before the ambers so they cannot be learnt
+    tree: { t: 0, stage: 0.9, amber: 1.7 + rr() * 0.9, lit: 0, green: 0, red: false }, press: 0, lastShift: null,
+    result: null, settled: false, resultsShown: false, events: [], cp: { base: 0, hit: 0, missed: 0, streak: 0, best: 0, cash: 0 }, cop: null };
+}
+/* the tap: launch on green, then each tap is an upshift */
+function dragPress(R) { if (R && R.ev.drag) R.press++; }
+function dragNitro(R) {
+  const p = R.p;
+  if (!p.launched || p.nitroUsed || R.state !== 'racing') return;
+  p.nitroUsed = true; p.nitroOn = true; p.boosting = true; R.events.push({ type: 'dragNitro' });
+}
+function updateDrag(R, dt, input) {
+  const p = R.p, o = R.o, T = R.tree;
+  if (input && input.nitro) dragNitro(R);
+  if (R.state === 'countdown') {
+    T.t += dt;
+    const lit = T.t >= T.amber + 1.5 ? 5 : T.t >= T.amber + 1.0 ? 4 : T.t >= T.amber + 0.5 ? 3 : T.t >= T.amber ? 2 : T.t >= T.stage ? 1 : 0;
+    if (lit > T.lit) { T.lit = lit; R.events.push({ type: 'dragLight', n: lit }); }
+    while (R.press > 0) { R.press--; if (T.lit >= 1) { T.red = true; break; } }   // any tap once staged, before green, is a red light
+    if (T.red) {
+      R.state = 'finishing'; R.result = { how: 'foul', won: false, time: 0, gap: 0 };
+      R.events.push({ type: 'finish', how: 'foul', won: false }); return;
+    }
+    if (T.lit >= 5) { R.state = 'racing'; T.green = true; R.t = 0; R.events.push({ type: 'go' }); }
+    return;
+  }
+  const racing = R.state === 'racing';
+  if (racing) R.t += dt; else R.doneT += dt;
+  while (R.press > 0 && racing) {
+    R.press--;
+    if (!p.launched) { p.launched = true; p.react = R.t; R.events.push({ type: 'dragLaunch', react: p.react }); }
+    else { const q = dragShift(p, R.psp); if (q) { R.lastShift = { q, t: 0 }; R.events.push({ type: 'dragShift', q }); } }
+  }
+  R.press = 0;
+  if (R.lastShift) R.lastShift.t += dt;
+  // the rival: goes on their reaction, shifts where they like, nitro from third gear
+  if (!o.launched && R.t >= o.reactAt) { o.launched = true; o.react = R.t; }
+  if (o.launched && o.shiftT <= 0 && o.gear < R.osp.n - 1 && (o.rpm >= o.nextShift || (o.nextShift >= 1 && o.lim > 0.1 + Math.random() * 0.15))) { dragShift(o, R.osp); o.nextShift = o.shiftAt(); }
+  if (o.launched && !o.nitroUsed && o.gear >= 2 && o.shiftT <= 0) { o.nitroUsed = true; o.nitroOn = true; }
+  dragStep(p, R.psp, dt); dragStep(o, R.osp, dt);
+  p.boosting = p.nitroOn; o.boosting = o.nitroOn;
+  if (p.v > p.topV) p.topV = p.v;
+  // past the line: the time when the front of the car crossed it
+  for (const c of [p, o]) if (!c.finished && c.dist + P_LEN >= DRAG_DIST) { c.finished = true; c.finishTime = R.t - (c.dist + P_LEN - DRAG_DIST) / Math.max(1, c.v); c.trap = c.v; }
+  if (racing && p.finished) {
+    R.state = 'finishing';
+    // the rival has not crossed yet: where they would have, at the speed they are doing
+    const oT = o.finished ? o.finishTime : R.t + (DRAG_DIST - o.dist - P_LEN) / Math.max(5, o.v);
+    const won = p.finishTime < oT;
+    R.result = { how: 'finish', won, time: p.finishTime, gap: Math.abs(oT - p.finishTime), et: p.finishTime - p.react, react: p.react, trap: p.trap * MPH,
+      oppTime: oT, oppEt: oT - (o.react || 0), oppReact: o.react || 0, shifts: p.shifts.slice() };
+    R.events.push({ type: 'finish', how: 'finish', won });
+  } else if (racing && R.t > 40) {
+    R.state = 'finishing'; R.result = { how: 'quit', won: false, time: R.t, gap: 0 }; R.events.push({ type: 'finish', how: 'quit', won: false });
+  }
+  if (!racing) { for (const c of [p, o]) { c.nitroOn = false; c.launched = false; c.v = Math.max(0, c.v - 9 * dt); } }
+  if (R.state === 'finishing' && R.doneT > 2.2 && !R.resultsShown) { R.resultsShown = true; R.events.push({ type: 'results' }); }
+}
+/* the drag result: the prize the first time you beat someone, the bet after that */
+function settleDrag(S, R, out) {
+  const ev = R.ev, res = R.result;
+  S.drag = S.drag || { beaten: {}, best: {} };
+  if (res.how === 'finish') {
+    const ms = Math.round(res.et * 1000), prev = S.drag.best[R.carId];
+    if (!prev || ms < prev) { out.dragBest = !!prev; S.drag.best[R.carId] = ms; }
+  }
+  out.stake = ev.stake || 0;
+  if (res.won) {
+    S.stats.wins++;
+    if (!ev.rematch) { S.drag.beaten[ev.id] = true; S.money += payout(R, ev.reward, out); const i = DRAG.findIndex(d => d.id === ev.id); if (DRAG[i + 1]) out.dragNext = CHARACTERS[DRAG[i + 1].id].name; }
+    else if (out.stake) { S.money += out.stake; out.betWon = out.stake; }
+  } else if (ev.rematch && out.stake) { const lost = Math.min(S.money, out.stake); S.money -= lost; out.betLost = lost; }
+}
+
 /* ---------- daily challenge: one route, one car and one lot of traffic for everyone, new every day (UK date) ---------- */
 const DAILY_CARS = [['civic', 3], ['bmw', 3], ['wrx', 2], ['supra', 2], ['gtr', 1], ['gtr', 3], ['golfr', 2], ['a45', 2], ['gt3', 2], ['rs6', 2], ['m4', 3], ['mcl720', 1], ['huracan', 2]];
 function dailyDate(d) {
@@ -1664,6 +1879,7 @@ function migrateSave(old) {
     if (old.daily && typeof old.daily.date === 'string') S.daily = { date: old.daily.date, paid: !!old.daily.paid, best: +old.daily.best || 0, runs: +old.daily.runs || 0 };
     if (old.essex && Array.isArray(old.essex.completed)) S.essex = { completed: ESSEX.map((e, i) => !!old.essex.completed[i]), done: !!old.essex.done };
     if (old.mu && Array.isArray(old.mu.completed)) S.mu = { completed: MU.map((e, i) => !!old.mu.completed[i]), done: !!old.mu.done, cur: carById(old.mu.cur) ? old.mu.cur : 'picanto', home: carById(old.mu.home) ? old.mu.home : null };
+    if (old.drag && typeof old.drag === 'object') S.drag = { beaten: Object.assign({}, old.drag.beaten || {}), best: Object.assign({}, old.drag.best || {}) };
     S.street = Array.isArray(old.street) && old.street.length === 4 && old.street.every(o => areaList(o.ch)[o.area]) ? old.street : [];
 
   } else {
@@ -1778,6 +1994,7 @@ function trafficFor(d) {
 
 /* spec: { kind: 'career', index, exhibition } or { kind: 'street', offer } */
 function createRace(S, spec) {
+  if (spec.kind === 'drag') return createDrag(S, spec);
   let st = curStats(S), own = S.owned[S.current];
   let ev;
   if (spec.kind === 'daily') {
@@ -2112,6 +2329,7 @@ function endRace(R, how) {
 
 /* one simulation step. input = { nitro: bool } */
 function updateRace(R, dt, input) {
+  if (R.ev.drag) return updateDrag(R, dt, input);
   const p = R.p, st = R.st;
   if (R.state === 'countdown') {
     const before = Math.ceil(R.countdown);
@@ -2184,7 +2402,8 @@ function settleRace(S, R) {
     S.stars[ev.route] = before | bits;
     out.stars = bits; out.newStars = starCount(S.stars[ev.route]) - starCount(before);
   }
-  if (ev.kind === 'daily') {
+  if (ev.kind === 'drag') settleDrag(S, R, out);
+  else if (ev.kind === 'daily') {
     if (!S.daily || S.daily.date !== ev.date) S.daily = { date: ev.date, paid: false, best: 0, runs: 0 };
     S.daily.runs = (S.daily.runs || 0) + 1;
     if (R.result.how === 'finish') {
@@ -4104,7 +4323,7 @@ function drawRival(R, z, pal, env) {
   drawCar(gctx, mesh, { x: xm, z, yaw: clamp(o.vx * 0.012, -0.1, 0.1), roll: bike ? clamp(-o.vx * 0.06, -0.35, 0.35) : 0, fog: fogK(z), env, brake: o.finished, nitro: bike && o.boosting ? 0.6 : 0, flame: o.pop ? Math.min(1, o.pop / 0.12) : 0, plateText: lk.plate,
     look: Object.assign({ finish: 'metallic', tint: 2, rims: 'five', rimColor: '#c3c8cc' }, lk) });
   const near = Math.abs(o.x - R.p.x) < 0.7 && Math.abs(z - Z_PLAYER) < 6;
-  ctx.globalAlpha = (near ? 0.25 : 0.62) * clamp((Z_FAR - z) / 45, 0, 1);
+  ctx.globalAlpha = R.ev.drag ? 1 : (near ? 0.25 : 0.62) * clamp((Z_FAR - z) / 45, 0, 1);
   ctx.drawImage(ghostCvs, bx * DPR, by * DPR, bw * DPR, bh * DPR, bx, by, bw, bh);
   ctx.globalAlpha = 1;
   if (bw > 26 && R.ev.brand && logoImg.complete && logoImg.naturalWidth) {
@@ -4113,7 +4332,7 @@ function drawRival(R, z, pal, env) {
     ctx.globalAlpha = 0.92; ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.fillRect(cx - lw / 2 - 5, y0 - 1, lw + 10, lh + 8);
     ctx.drawImage(logoImg, cx - lw / 2, y0 + 3, lw, lh); ctx.globalAlpha = 1;
   } else if (bw > 26) {
-    const tag = R.ev.brand || (R.ev.rival === 'king' ? 'THE KING' : (R.ev.oppName || 'RIVAL').split(' ')[0].toUpperCase()), fs = clamp(bw * (bike ? 0.2 : 0.12), 10, 15);
+    const tag = R.ev.brand || (R.ev.oppTag ? R.ev.oppTag.toUpperCase() : null) || (R.ev.rival === 'king' ? 'THE KING' : (R.ev.oppName || 'RIVAL').split(' ')[0].toUpperCase()), fs = clamp(bw * (bike ? 0.2 : 0.12), 10, 15);
     ctx.font = `${fs}px ${FONT_D}`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
     const tw = ctx.measureText(tag).width + 10, cx = (x0 + x1) / 2, ty = y0 + fs + 4;
     ctx.fillStyle = 'rgba(255,59,59,0.85)'; ctx.fillRect(cx - tw / 2, ty - fs - 4, tw, fs + 4);
@@ -4248,7 +4467,7 @@ function renderIntro(R, t, len) {
   let ty = land ? H * 0.2 : H * 0.6;
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
   ctx.font = `700 ${Math.round(12 * u + 3)}px ${FONT_M}`; ctx.fillStyle = '#f2a33a';
-  const kick = ev.kind === 'street' ? 'STREET RACE · ' + (ev.label || '').toUpperCase() : ev.kind === 'special' && ev.brand ? 'INVITATION' : ev.kind === 'special' ? 'STREET RACE · CHALLENGE' : ev.kind === 'slip' ? 'PINK SLIP · ' + ev.title : (ev.kind === 'essex' ? 'ESSEX ' : 'EVENT ') + ((ev.index || 0) + 1) + ' · ' + ev.title;
+  const kick = ev.kind === 'drag' ? 'DRAG NIGHT · ' + (ev.rematch ? 'BET £' + fmt(ev.stake) : 'QUARTER MILE') : ev.kind === 'street' ? 'STREET RACE · ' + (ev.label || '').toUpperCase() : ev.kind === 'special' && ev.brand ? 'INVITATION' : ev.kind === 'special' ? 'STREET RACE · CHALLENGE' : ev.kind === 'slip' ? 'PINK SLIP · ' + ev.title : (ev.kind === 'essex' ? 'ESSEX ' : 'EVENT ') + ((ev.index || 0) + 1) + ' · ' + ev.title;
   ctx.fillText(kick, tx, ty);
   // portrait
   const ps = Math.round(clamp(84 * u, 58, 110));
@@ -4286,7 +4505,130 @@ function renderIntro(R, t, len) {
 
 /* ---------- HUD ---------- */
 function fmtTime(t) { const m = Math.floor(t / 60), s = t - m * 60; return m + ':' + (s < 10 ? '0' : '') + s.toFixed(2); }
+/* the floating text and the big centre banner (countdown, GO, results), on top of any HUD */
+function drawHudFx(F, u, top) {
+  // floating crash text
+  for (const pp of popups) {
+    ctx.globalAlpha = 1 - pp.t / pp.life; ctx.textAlign = 'center';
+    ctx.font = `${F(26, 15)}px ${FONT_D}`; ctx.fillStyle = pp.color; ctx.fillText(pp.text, pp.x, pp.y);
+  }
+  ctx.globalAlpha = 1;
+  // big centre banner (countdown, GO, results)
+  if (banner) {
+    const k = banner.t < 0.12 ? banner.t / 0.12 : banner.t > banner.dur - 0.25 ? (banner.dur - banner.t) / 0.25 : 1;
+    const sc = 1 + (1 - Math.min(1, banner.t / 0.12)) * 0.4;
+    ctx.save(); ctx.globalAlpha = clamp(k, 0, 1);
+    ctx.translate(W / 2, Math.max(H * 0.3, top)); ctx.scale(sc, sc); ctx.transform(1, 0, -0.14, 1, 0, 0);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const fs = Math.round(Math.min(W * 0.16, Math.max(52, 110 * u)) * banner.size);
+    ctx.font = `${fs}px ${FONT_D}`;
+    ctx.lineWidth = Math.max(3, fs * 0.06); ctx.strokeStyle = 'rgba(0,0,0,0.75)'; ctx.strokeText(banner.text, 0, 0);
+    ctx.fillStyle = banner.color; ctx.fillText(banner.text, 0, 0);
+    if (banner.sub) {
+      ctx.font = `700 ${F(16, 11)}px ${FONT_M}`; ctx.fillStyle = '#e9e4d8';
+      let lines = [banner.sub];
+      if (ctx.measureText(banner.sub).width > W - 24) lines = banner.sub.split(/\s{2,}/);
+      lines.forEach((ln, i) => { const y = fs * 0.62 + i * F(20, 14); ctx.strokeText(ln, 0, y); ctx.fillText(ln, 0, y); });
+    }
+    ctx.restore();
+  }
+}
+/* ---------- drag night HUD: the lights, the rev counter with its green shift zone, and the two cars down the strip ---------- */
+function drawDragHUD(R, ctrlH) {
+  const p = R.p, o = R.o, T = R.tree, sp = R.psp;
+  const u = clamp(Math.min(W / 1100, H / 680), 0.5, 1.2);
+  const F = (n, min) => Math.max(min, Math.round(n * u));
+  const pad = Math.round(clamp(16 * u + 4, 10, 24));
+  ctx.textBaseline = 'alphabetic';
+  const shadeG = ctx.createLinearGradient(0, 0, 0, 130 * Math.max(u, 0.8));
+  shadeG.addColorStop(0, 'rgba(4,6,8,0.6)'); shadeG.addColorStop(1, 'rgba(4,6,8,0)');
+  ctx.fillStyle = shadeG; ctx.fillRect(0, 0, W, 130 * Math.max(u, 0.8));
+  // top left: who, and the two cars down the quarter mile
+  const who = (R.ev.oppTag || '').toUpperCase();
+  ctx.textAlign = 'left'; ctx.font = `${F(26, 17)}px ${FONT_D}`; ctx.fillStyle = '#f2a33a';
+  ctx.fillText('DRAG NIGHT', pad, pad + F(22, 15));
+  const bw = clamp(W * 0.3, 120, 300), by0 = pad + F(34, 24), bh = F(8, 6);
+  for (const [i, c, lab, col] of [[0, p, 'YOU', '#f2a33a'], [1, o, who, '#e9e4d8']]) {
+    const y = by0 + i * (bh + F(16, 12));
+    ctx.fillStyle = 'rgba(8,12,14,0.7)'; ctx.fillRect(pad - 2, y - 2, bw + 4, bh + 4);
+    ctx.fillStyle = col; ctx.fillRect(pad, y, bw * clamp((c.dist + P_LEN) / DRAG_DIST, 0, 1), bh);
+    ctx.font = `700 ${F(11, 9)}px ${FONT_M}`; ctx.fillStyle = col; ctx.fillText(lab, pad + bw + 8, y + bh);
+  }
+  // top right: the clock from green, and your reaction time
+  ctx.textAlign = 'right'; ctx.font = `${F(34, 20)}px ${FONT_D}`; ctx.fillStyle = '#e9e4d8';
+  const topR = pad + F(64, 44);
+  ctx.fillText(R.state === 'countdown' ? '0.000' : (R.result && R.result.time ? R.result.time : R.t).toFixed(3), W - pad, topR);
+  if (p.react !== null && p.react !== undefined) { ctx.font = `700 ${F(12, 10)}px ${FONT_M}`; ctx.fillStyle = p.react < 0.2 ? '#5fd38a' : p.react < 0.35 ? '#e9e4d8' : '#ffb03a'; ctx.fillText('R/T ' + p.react.toFixed(3), W - pad, topR + F(18, 14)); }
+  // the lights: two columns, yours on the left
+  const showTree = R.state === 'countdown' || R.t < 1.4 || T.red;
+  if (showTree) {
+    const lr = F(13, 8), gap = lr * 2.6, cx = W / 2, top = pad + F(10, 6), a = R.state === 'countdown' || T.red ? 1 : clamp((1.4 - R.t) / 0.4, 0, 1);
+    const rows = [['pre', 0.55], ['stage', 0.55], ['amber', 1], ['amber', 1], ['amber', 1], ['green', 1], ['red', 1]];
+    const h = rows.reduce((q, r) => q + gap * (r[1] < 1 ? 0.62 : 1), 0) + lr;
+    ctx.globalAlpha = a;
+    ctx.fillStyle = 'rgba(10,12,14,0.85)'; ctx.fillRect(cx - gap * 1.25, top, gap * 2.5, h + lr * 0.6);
+    ctx.fillStyle = '#1b1e22'; ctx.fillRect(cx - lr * 0.2, top + h + lr * 0.6, lr * 0.4, lr * 3);
+    let y = top + lr * 1.1;
+    rows.forEach(([kind, sz], ri) => {
+      for (const side of [-1, 1]) {
+        const x = cx + side * gap * 0.6, r = lr * sz, you = side < 0;
+        let on = false, col = [255, 255, 255];
+        if (kind === 'pre') on = T.lit >= 1 || R.state !== 'countdown';
+        else if (kind === 'stage') on = T.lit >= 1;
+        else if (kind === 'amber') { on = R.state === 'countdown' && !T.red && T.lit >= ri; col = [255, 176, 40]; }
+        else if (kind === 'green') { on = T.green && !T.red && !(you && false); col = [60, 230, 110]; }
+        else if (kind === 'red') { on = you && T.red; col = [255, 40, 40]; }
+        if (kind === 'pre' || kind === 'stage') col = [255, 236, 170];
+        ctx.fillStyle = on ? css(col) : css(col.map(v => v * 0.14));
+        ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+        if (on) { ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, col, x, y, r * 3.2, 0.7 * a); ctx.globalCompositeOperation = 'source-over'; }
+      }
+      y += gap * (sz < 1 ? 0.62 : 1);
+    });
+    ctx.globalAlpha = 1;
+    if (!p.launched && !T.red) {
+      ctx.textAlign = 'center'; ctx.font = `700 ${F(14, 11)}px ${FONT_M}`; ctx.fillStyle = T.green ? '#5fd38a' : '#e9e4d8';
+      ctx.fillText(T.green ? 'GO! TAP SHIFT' : 'TAP SHIFT ON GREEN', cx, top + h + lr * 5.2);
+    }
+  }
+  // the rev counter
+  const baseY = H - ctrlH - F(14, 8), r = clamp(104 * u, 58, 124), gx = W - pad - r * 1.08, gy = baseY - r * 0.72;
+  const A0 = Math.PI * 0.82, A1 = Math.PI * 2.18, ang = v => A0 + (A1 - A0) * clamp(v / 1.05, 0, 1);
+  ctx.fillStyle = 'rgba(8,12,14,0.72)'; ctx.beginPath(); ctx.arc(gx, gy, r * 1.08, 0, 7); ctx.fill();
+  ctx.lineCap = 'butt';
+  ctx.lineWidth = r * 0.11;
+  ctx.strokeStyle = 'rgba(233,228,216,0.18)'; ctx.beginPath(); ctx.arc(gx, gy, r * 0.9, A0, A1); ctx.stroke();
+  ctx.strokeStyle = '#3fcf6e'; ctx.beginPath(); ctx.arc(gx, gy, r * 0.9, ang(0.9), ang(1.0)); ctx.stroke();
+  ctx.strokeStyle = '#ff3b3b'; ctx.beginPath(); ctx.arc(gx, gy, r * 0.9, ang(1.0), A1); ctx.stroke();
+  ctx.strokeStyle = 'rgba(233,228,216,0.55)'; ctx.lineWidth = Math.max(1, r * 0.018);
+  for (let i = 0; i <= 10; i++) { const t = ang(i / 10 * 1.0), r0 = r * 0.74, r1 = r * (i % 2 ? 0.8 : 0.84); ctx.beginPath(); ctx.moveTo(gx + Math.cos(t) * r0, gy + Math.sin(t) * r0); ctx.lineTo(gx + Math.cos(t) * r1, gy + Math.sin(t) * r1); ctx.stroke(); }
+  const rpm = R.state === 'countdown' ? 0.42 + 0.08 * Math.sin(R.tree.t * 7) : p.rpm, na = ang(rpm);
+  const inGreen = p.launched && rpm >= 0.9 && p.gear < sp.n - 1 && p.shiftT <= 0 && R.state === 'racing';
+  ctx.strokeStyle = inGreen ? '#5fd38a' : rpm >= 1 ? '#ff5a4a' : '#f2a33a'; ctx.lineWidth = Math.max(2, r * 0.035); ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx + Math.cos(na) * r * 0.86, gy + Math.sin(na) * r * 0.86); ctx.stroke();
+  ctx.fillStyle = '#e9e4d8'; ctx.beginPath(); ctx.arc(gx, gy, r * 0.06, 0, 7); ctx.fill();
+  ctx.textAlign = 'center';
+  ctx.font = `${Math.round(r * 0.46)}px ${FONT_D}`; ctx.fillStyle = inGreen ? '#5fd38a' : '#e9e4d8';
+  ctx.fillText(p.launched || R.state !== 'countdown' ? String(p.gear + 1) : 'N', gx, gy + r * 0.52);
+  ctx.font = `700 ${Math.round(r * 0.13)}px ${FONT_M}`; ctx.fillStyle = 'rgba(233,228,216,0.75)';
+  ctx.fillText(Math.round(p.v * MPH) + ' MPH', gx, gy + r * 0.78);
+  // shift now, and how the last one went
+  const fy = H * 0.34, fx = W / 2;
+  if (inGreen && Math.sin(performance.now() / 70) > -0.2) { ctx.font = `${F(64, 36)}px ${FONT_D}`; ctx.fillStyle = '#5fd38a'; ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 4; ctx.strokeText('SHIFT', fx, fy); ctx.fillText('SHIFT', fx, fy); }
+  else if (R.lastShift && R.lastShift.t < 0.9) {
+    const q = R.lastShift.q, col = { perfect: '#5fd38a', good: '#f2c418', early: '#ff8a3a', late: '#ff5a4a' }[q];
+    ctx.globalAlpha = clamp(1.4 - R.lastShift.t * 1.4, 0, 1); ctx.font = `${F(44, 26)}px ${FONT_D}`; ctx.fillStyle = col; ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 4;
+    ctx.strokeText(q.toUpperCase() + ' SHIFT', fx, fy); ctx.fillText(q.toUpperCase() + ' SHIFT', fx, fy); ctx.globalAlpha = 1;
+  } else if (p.launched && p.gear >= sp.n - 1 && R.state === 'racing') { ctx.font = `${F(18, 13)}px ${FONT_D}`; ctx.fillStyle = 'rgba(233,228,216,0.7)'; ctx.fillText('TOP GEAR', gx, gy - r * 1.14); }
+  // nitro: one shot
+  const nx = gx - r * 1.2, ny = gy + r * 0.62;
+  ctx.textAlign = 'right'; ctx.font = `${F(16, 12)}px ${FONT_D}`;
+  if (p.nitroOn) { ctx.fillStyle = '#8cc8ff'; ctx.fillText('NITRO', nx, ny); ctx.fillStyle = 'rgba(8,12,14,0.7)'; ctx.fillRect(nx - F(70, 50), ny + 6, F(70, 50), 6); ctx.fillStyle = '#4aa8ff'; ctx.fillRect(nx - F(70, 50), ny + 6, F(70, 50) * p.nitroLeft / sp.nitroT, 6); }
+  else { ctx.fillStyle = p.nitroUsed ? 'rgba(233,228,216,0.35)' : '#8cc8ff'; ctx.fillText(p.nitroUsed ? 'NITRO USED' : 'NITRO READY', nx, ny); }
+  drawHudFx(F, u, 0);
+}
 function drawHUD(R, ctrlH) {
+  if (R.ev.drag) { drawDragHUD(R, ctrlH); return; }
   const p = R.p, o = R.o, D = R.ev.dist;
   const u = clamp(Math.min(W / 1100, H / 680), 0.5, 1.2);
   const F = (n, min) => Math.max(min, Math.round(n * u));
@@ -4426,31 +4768,7 @@ function drawHUD(R, ctrlH) {
   ctx.font = `${labB}px ${FONT_D}`; ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(233,228,216,0.8)';
   ctx.fillText('DAMAGE ' + Math.round(p.damage) + '%' + (p.damage >= HURT_FROM && !R.wrecked ? ' · SLOWER' : ''), dx, dy - 6);
 
-  // floating crash text
-  for (const pp of popups) {
-    ctx.globalAlpha = 1 - pp.t / pp.life; ctx.textAlign = 'center';
-    ctx.font = `${F(26, 15)}px ${FONT_D}`; ctx.fillStyle = pp.color; ctx.fillText(pp.text, pp.x, pp.y);
-  }
-  ctx.globalAlpha = 1;
-  // big centre banner (countdown, GO, results)
-  if (banner) {
-    const k = banner.t < 0.12 ? banner.t / 0.12 : banner.t > banner.dur - 0.25 ? (banner.dur - banner.t) / 0.25 : 1;
-    const sc = 1 + (1 - Math.min(1, banner.t / 0.12)) * 0.4;
-    ctx.save(); ctx.globalAlpha = clamp(k, 0, 1);
-    ctx.translate(W / 2, Math.max(H * 0.3, narrow ? by + panelH + 40 : 0)); ctx.scale(sc, sc); ctx.transform(1, 0, -0.14, 1, 0, 0);
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    const fs = Math.round(Math.min(W * 0.16, Math.max(52, 110 * u)) * banner.size);
-    ctx.font = `${fs}px ${FONT_D}`;
-    ctx.lineWidth = Math.max(3, fs * 0.06); ctx.strokeStyle = 'rgba(0,0,0,0.75)'; ctx.strokeText(banner.text, 0, 0);
-    ctx.fillStyle = banner.color; ctx.fillText(banner.text, 0, 0);
-    if (banner.sub) {
-      ctx.font = `700 ${F(16, 11)}px ${FONT_M}`; ctx.fillStyle = '#e9e4d8';
-      let lines = [banner.sub];
-      if (ctx.measureText(banner.sub).width > W - 24) lines = banner.sub.split(/\s{2,}/);
-      lines.forEach((ln, i) => { const y = fs * 0.62 + i * F(20, 14); ctx.strokeText(ln, 0, y); ctx.fillText(ln, 0, y); });
-    }
-    ctx.restore();
-  }
+  drawHudFx(F, u, narrow ? by + panelH + 40 : 0);
 }
 
 
@@ -7551,6 +7869,7 @@ const Sound = {
     this.idleT = 0;
     if (race !== this.race || !this.voices) this.build(race);
     const Vs = this.voices, p = race.p, o = race.o, dt = clamp(realDt || 1 / 60, 1 / 240, 0.05);
+    if (race.ev.drag && !intro) { this.dragDrive(race, Vs, dt, t); return; }
     const vtop = race.st.vmax * race.st.nitroMult;
     // the player
     const me = Vs.me, meP = me.prof;
@@ -7625,6 +7944,31 @@ const Sound = {
     // the police siren, louder as they close in
     const cop = race.cop;
     if (!intro) this.siren(cop && cop.on && !cop.gone && (race.state === 'racing' || cop.caught) ? Math.max(0, p.dist - cop.dist) : null, race.t);
+  },
+  /* drag night: the revs come straight from the gearbox, with the limiter, the shifts and holding revs on the line */
+  dragDrive(race, Vs, dt, t) {
+    const T = race.tree;
+    for (const [V, c, gain, pan] of [[Vs.me, race.p, 0.35, 0], [Vs.opp, race.o, 0.5, 0.35]]) {
+      if (!V) continue;
+      const P = V.prof, span = P.red - P.idle;
+      let rpm, thr;
+      if (!c.launched && race.state !== 'finishing') {
+        const blip = Math.pow(Math.max(0, Math.sin(T.t * (gain > 0.4 ? 2.3 : 3.1) + (gain > 0.4 ? 1.7 : 0))), 4);
+        rpm = P.idle + span * (T.lit >= 1 ? 0.5 + 0.12 * blip : 0.22 + 0.4 * blip); thr = 0.4 + 0.5 * blip;
+      } else if (race.state === 'finishing') { rpm = P.idle + span * Math.max(0.2, c.rpm * 0.6); thr = 0.05; }
+      else {
+        rpm = P.idle + span * clamp(c.rpm, 0, 1.02); thr = c.shiftT > 0 ? 0.08 : 1;
+        if (c.rpm >= 1 && c.shiftT <= 0) { V.limT = (V.limT || 0) + dt; if (Math.sin(V.limT * 90) > 0) { rpm *= 0.965; thr = 0.2; } }
+      }
+      if (V.dg !== c.gear) { if (V.dg !== undefined && c.gear > V.dg) this.shifted(V, pan, gain); V.dg = c.gear; }
+      this.drive(V, Math.min(P.red, rpm), thr, gain, pan, dt);
+    }
+    const p = race.p;
+    if (p.nitroOn && !Vs.boosting) this.nitroHit();
+    Vs.boosting = p.nitroOn;
+    this.hiss.gain.setTargetAtTime(p.nitroOn ? 0.07 : 0, t, 0.05);
+    this.wind.gain.setTargetAtTime(0.1 * Math.pow(clamp(p.v / 90, 0, 1), 2), t, 0.2);
+    this.siren(null);
   },
   tone(freq, dur, vol, type) {
     if (!this.ctx) return;
@@ -7944,21 +8288,34 @@ function goSelect() {
 function streetPage() {
   if (!S.street || S.street.length !== 4) S.street = streetOffers(S);
   const place = placeNow(), own = S.owned[S.current], who = challengers(), fresh = freshChallenger();
+  const soon = place === 'mu' ? [] : FRIENDS.filter(id => !specialUnlocked(S, id) && !(S.specials && S.specials[id]));
   const slipN = place === 'essex' ? ESSEX.filter(e => slipReady(S, e.rival)).length : 0;
-  const tabs = [['races', 'Races', 5]].concat(who.length ? [['people', 'Challengers', who.length]] : [], slipN ? [['slips', 'Pink slips', slipN]] : []);
+  const dragN = place === 'mu' ? DRAG.filter((d, i) => dragUnlocked(S, i)).length : 0;
+  const tabs = [['races', 'Races', 5]].concat(who.length || soon.length ? [['people', 'Challengers', who.length]] : [], slipN ? [['slips', 'Pink slips', slipN]] : [], dragN ? [['drag', 'Drag night', dragN]] : []);
   if (!tabs.some(t => t[0] === streetTab)) streetTab = 'races';
   let body;
   if (streetTab === 'people') {
-    body = `<p class="tip">People who have heard about you. Beat them once for their big prize, then race them again for cash whenever you like.</p>
+    body = `<p class="tip">People who have heard about you. Beat them once for their big prize, then race them again for cash whenever you like. More of them call you out as you do street races: any street race counts, won or lost, and so do races against challengers.</p>
       ${who.includes('ride3') ? ride3Card() : ''}
-      <div class="offers">${friendCards()}</div>`;
+      <div class="offers">${friendCards()}${soon.map(id => {
+        const sp = SPECIALS[id], ch = CHARACTERS[sp.rival], u = sp.unlock || {}, n = (S.stats && S.stats.street) || 0, need = [];
+        if (n < (u.street || 0)) need.push(`${u.street} street races (you have done ${n})`);
+        if (S.rep < (u.rep || 0)) need.push(`Rep ${u.rep} (you have ${S.rep})`);
+        return `<div class="offer friend locked"><div class="offer-top"><span class="chip diff">Coming up</span></div>
+          <div class="co-head"><canvas class="portrait sm" data-portrait="${sp.rival}" data-hidden="1" width="44" height="44"></canvas><div><h4>${esc(ch.name)}</h4><p class="offer-opp">${esc(ch.car)}</p></div></div>
+          <p class="offer-opp">🔒 Calls you out after ${need.join(' and ')}</p></div>`;
+      }).join('')}</div>`;
     // they have been seen now, so the dot on Street goes
     S.announced = Object.assign(S.announced || {}, ...who.map(id => ({ ['ch:' + id]: true }))); save();
   } else if (streetTab === 'slips') body = slipCards(own);
+  else if (streetTab === 'drag') {
+    body = dragCards();
+    S.announced = Object.assign(S.announced || {}, ...DRAG.filter((d, i) => dragUnlocked(S, i)).map(d => ({ ['drag:' + d.id]: true }))); save();
+  }
   else body = streetBoard();
   return `<section class="street">
     <div class="street-head"><div><p class="kicker">Street · ${PLACE_NAMES[place]}</p><h3 class="h3">Quick cash on the side</h3></div></div>
-    ${tabs.length > 1 ? `<div class="subtabs" role="tablist">${tabs.map(([id, name, n]) => `<button class="subtab${id === streetTab ? ' on' : ''}" type="button" role="tab" aria-selected="${id === streetTab}" data-act="stab" data-arg="${id}">${name} <small>${n}</small>${id === 'people' && fresh ? '<i class="dot" aria-label="Someone new"></i>' : ''}</button>`).join('')}</div>` : ''}
+    ${tabs.length > 1 ? `<div class="subtabs" role="tablist">${tabs.map(([id, name, n]) => `<button class="subtab${id === streetTab ? ' on' : ''}" type="button" role="tab" aria-selected="${id === streetTab}" data-act="stab" data-arg="${id}">${name} <small>${n}</small>${(id === 'people' && fresh) || (id === 'drag' && freshDrag()) ? '<i class="dot" aria-label="Someone new"></i>' : ''}</button>`).join('')}</div>` : ''}
     ${body}
   </section>`;
 }
@@ -7977,6 +8334,34 @@ function streetBoard() {
       </div>`;
     }).join('')}</div>
     <div class="actions"><button class="btn ghost small" data-act="reroll"><span>New races</span></button></div>`;
+}
+/* drag night: the racers, one after another, then rematches for money */
+function dragCards() {
+  const own = S.owned[S.current], car = carById(S.current), st = curStats(S), best = ((S.drag && S.drag.best) || {})[S.current];
+  const est = dragEstimate(st.bhp, st.handling);
+  return `<p class="tip">The old airport road at Plaine Magnien: a straight quarter mile, side by side, no traffic. Tap <b>SHIFT</b> the moment the light goes green (before it and it is a red light, you lose). Then tap it each time the needle reaches the green. One shot of nitro, so save it for third gear. Beat each racer once for their prize, then race them again for money.</p>
+    <p class="tip rec">Your ${esc(car.name)}: ${st.bhp} bhp, about <b>${est.toFixed(1)} s</b> with clean shifts${best ? ` · your best <b>${(best / 1000).toFixed(3)} s</b>` : ''}</p>
+    <div class="offers">${DRAG.map((d, i) => {
+      const ch = CHARACTERS[d.id], open = dragUnlocked(S, i), beaten = dragBeaten(S, d.id), et = d._et || (d._et = dragEstimate(d.bhp, d.handling));
+      if (!open) return `<div class="offer drag locked">
+        <div class="offer-top"><span class="chip diff">Drag night</span><span class="chip">${d.bhp} bhp</span></div>
+        <div class="co-head"><canvas class="portrait sm" data-portrait="${d.id}" data-hidden="1" width="44" height="44"></canvas><div><h4>Racer ${i + 1}</h4><p class="offer-opp">${esc(ch.car)}</p></div></div>
+        <p class="offer-opp">🔒 Beat ${esc(CHARACTERS[DRAG[i - 1].id].name)} first</p></div>`;
+      let act;
+      if (!beaten) act = `<span class="prize">${money(d.prize)}</span><button class="btn small primary" data-act="drag" data-arg="${d.id}" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button>`;
+      else {
+        const block = dragBetBlock(S, d, 1);
+        act = block && !/Pick|put down/.test(block) ? `<span class="lock">${esc(block)}</span>`
+          : `<div class="bets">${dragStakes(d).map(k => `<button class="btn small ${k <= S.money ? '' : 'ghost'}" data-act="dragbet" data-arg="${d.id}|${k}" ${k <= S.money && own.damage < 100 ? '' : 'disabled'}><span>Bet ${money(k)}</span></button>`).join('')}</div>`;
+      }
+      return `<div class="offer drag ${beaten ? 'beaten' : ''}">
+        <div class="offer-top"><span class="chip diff">${beaten ? 'Beaten ✓' : 'Drag night'}</span><span class="chip">Runs about ${et.toFixed(1)} s</span></div>
+        <div class="co-head"><canvas class="portrait sm" data-portrait="${d.id}" data-hidden="0" width="44" height="44"></canvas><div><h4>${esc(ch.name)}</h4><p class="offer-opp">${esc(ch.car)} · <b>${d.bhp} bhp</b></p></div></div>
+        <canvas class="slipcar" data-model="${d.look.model}" data-rlook="${esc(JSON.stringify(Object.assign({ tint: 2 }, d.look)))}" width="300" height="110" aria-label="${esc(ch.car)}"></canvas>
+        <p class="offer-opp"><i>“${esc(beaten ? 'Again? Put your money where your mouth is.' : ch.pre)}”</i></p>
+        <div class="offer-foot">${act}</div>
+      </div>`;
+    }).join('')}</div>`;
 }
 /* friends: they only turn up on the street race board once you have done a few street races.
    The first win pays their big prize; after that they are quick cash like any street race. */
@@ -8161,11 +8546,13 @@ const NAV_ICONS = {
 const challengers = () => islandCar(S.current) ? [] : FRIENDS.filter(id => specialUnlocked(S, id)).concat(S.careerDone ? ['ride3'] : []);
 /* someone new wants a race: a dot on Street until you have looked at them */
 const freshChallenger = () => challengers().some(id => !(S.found && S.found[id]) && !(S.announced && S.announced['ch:' + id]));
+/* a new racer at drag night that you have not looked at yet */
+const freshDrag = () => islandCar(S.current) && DRAG.some((d, i) => dragUnlocked(S, i) && !(S.announced && S.announced['drag:' + d.id]));
 function navBar(active) {
   const dmg = (S.owned[S.current] || {}).damage >= 50;
   const items = [['race', 'Race', 'hub', 'race'], ['street', 'Street', 'hub', 'street'], ['garage', 'Garage', 'garage', ''], ['cars', 'Dealership', 'tab', 'cars'], ['map', 'Map', 'ladder', '']];
   return `<nav class="gnav" aria-label="Menu">${items.map(([id, label, act, arg]) => {
-    const dot = (id === 'street' && freshChallenger()) || (id === 'garage' && dmg);
+    const dot = (id === 'street' && (freshChallenger() || freshDrag())) || (id === 'garage' && dmg);
     return `<button class="gn${id === active ? ' on' : ''}" type="button" data-act="${act}"${arg ? ` data-arg="${arg}"` : ''}${id === active ? ' aria-current="page"' : ''}>
       <svg viewBox="0 0 24 24" aria-hidden="true">${NAV_ICONS[id]}</svg><span>${label}</span>${dot ? `<i class="dot" aria-label="${id === 'garage' ? 'Your car is damaged' : 'Someone new wants a race'}"></i>` : ''}</button>`;
   }).join('')}</nav>`;
@@ -8332,6 +8719,16 @@ function muMain(own, st) {
       ${exh ? `<p class="kicker">Race again · ★ ${stars} of ${MU.length * 3}</p><div class="actions">${exh}</div>` : ''}
     </article></div>`;
 }
+/* the way to Essex: Ishaaq calls you out after enough street races and reputation */
+function ishaaqHow() {
+  const u = SPECIALS.ishaaq.unlock || {}, n = (S.stats && S.stats.street) || 0;
+  if (S.specials && S.specials.ishaaq) return 'The border is open.';
+  if (specialUnlocked(S, 'ishaaq')) return 'Ishaaq is waiting for you on the Street page, under Challengers. Beat him in the Tunnel and Essex opens.';
+  const need = [];
+  if (n < (u.street || 0)) need.push(`${u.street - n} more street race${u.street - n === 1 ? '' : 's'} (you have done ${n} of ${u.street})`);
+  if (S.rep < (u.rep || 0)) need.push(`Rep ${u.rep} (you have ${S.rep})`);
+  return `Ishaaq calls you out after ${need.join(' and ')}. Street races are on the Street page: any race counts, won or lost. Then beat him in the Tunnel and Essex opens.`;
+}
 /* shown on the London side until Essex opens */
 function essexTeaser() {
   const beat = S.specials && S.specials.ishaaq, near = specialUnlocked(S, 'ishaaq');
@@ -8339,7 +8736,7 @@ function essexTeaser() {
     <p class="kicker">Next · Essex</p>
     <h3 class="invite-title">Over the border</h3>
     <p class="story">Essex has heard there is a new Street King. Wider roads, faster cars and a Duke who has never lost on the QE2 Bridge.</p>
-    <p class="tip">${beat ? 'The border is open.' : near ? 'First, beat Ishaaq in the Tunnel. He is waiting on the Street page, under Challengers.' : 'First, Ishaaq wants a word. Win a few more street races and he will call you out.'}</p>
+    <p class="tip">${esc(ishaaqHow())}</p>
   </div>`;
 }
 /* the career hub: page is 'race' (your next story race) or 'street' (street races, challengers, pink slips) */
@@ -8647,7 +9044,7 @@ function goLadder() {
   let essexRungs = '';
   if (S.careerDone && (place === 'essex' || (place === 'london' && !essexOpen(S)))) {
     const open = essexOpen(S), nx = nextEssexIndex(S), done = (S.essex && S.essex.completed) || [];
-    essexRungs = `<p class="chapter">Essex${open ? '' : ' · beat Ishaaq to open it'}</p>` + ESSEX.map((ev, i) => {
+    essexRungs = `<p class="chapter">Essex${open ? '' : ' · beat Ishaaq to open it'}</p>${open ? '' : `<p class="tip how">${esc(ishaaqHow())}</p>`}` + ESSEX.map((ev, i) => {
       const st = done[i] ? 'done' : open && i === nx ? 'current' : 'locked', ic = st === 'done' ? '✓' : st === 'current' ? '→' : '🔒';
       const slip = slipCarFor(ev.rival), won = slip && S.owned[slip.id];
       return `<div class="rung ${st}"><div class="ic">${ic}</div>
@@ -8700,9 +9097,48 @@ function goLadder() {
 }
 
 /* ---------- results ---------- */
+/* drag night results: the time slip */
+function showDragResults() {
+  const res = R.result, sum = R.summary || settleRace(S, R), ev = R.ev, d = dragById(ev.id), ch = CHARACTERS[ev.id];
+  const foul = res.how === 'foul', own = S.owned[R.carId] || { damage: 0 };
+  const q = res.shifts || [], nq = k => q.filter(x => x === k).length;
+  const head = foul ? 'Red light' : res.won ? 'You win' : 'You lost';
+  let pay = '';
+  if (sum.reward) pay = `<div class="payout"><span class="big">+${money(sum.reward)}</span><span class="bal">Balance ${money(S.money)}</span></div>${sum.styleCash ? `<p class="paysplit">Prize ${money(sum.prize)} · Style bonus ${money(sum.styleCash)}</p>` : ''}`;
+  else if (sum.betWon) pay = `<div class="payout"><span class="big">+${money(sum.betWon)}</span><span class="bal">Bet won · Balance ${money(S.money)}</span></div>`;
+  else if (sum.betLost) pay = `<div class="payout"><span class="big bad">-${money(sum.betLost)}</span><span class="bal">Bet lost · Balance ${money(S.money)}</span></div>`;
+  const slip = foul ? '' : `<div class="timeslip">
+      <div class="ts-head"><span></span><b>You</b><b>${esc(ev.oppTag)}</b></div>
+      <div><span>Reaction</span><b class="${res.react < res.oppReact ? 'up' : ''}">${res.react.toFixed(3)}</b><b>${res.oppReact.toFixed(3)}</b></div>
+      <div><span>Quarter mile</span><b class="${res.et < res.oppEt ? 'up' : ''}">${res.et.toFixed(3)} s</b><b>${res.oppEt.toFixed(3)} s</b></div>
+      <div><span>Finish</span><b class="${res.won ? 'up' : ''}">${res.time.toFixed(3)}</b><b>${res.oppTime.toFixed(3)}</b></div>
+      <div><span>Speed at the line</span><b>${Math.round(res.trap)} mph</b><b></b></div>
+      <div><span>Shifts</span><b>${nq('perfect')} perfect${nq('good') ? ', ' + nq('good') + ' good' : ''}${nq('early') ? ', ' + nq('early') + ' early' : ''}${nq('late') ? ', ' + nq('late') + ' late' : ''}</b><b></b></div>
+    </div>`;
+  const tip = foul ? 'Wait for green. The ambers come half a second apart, then green: tap on green, not on the last amber.'
+    : res.won ? (sum.dragNext ? `${sum.dragNext} is waiting at the end of the strip.` : ev.rematch ? 'Easy money. Go again or cash out.' : 'Nobody left on the airport road who can beat you. Race them again for money.')
+    : res.react > 0.4 ? 'Slow off the line: tap SHIFT the moment it goes green.' : nq('early') + nq('late') > 1 ? 'Shift with the needle in the green: early shifts bog the car down, late ones sit on the limiter.' : !q.length ? '' : res.gap > 1.2 ? `Their car is quicker than yours down here. More power: engine upgrades, or a faster island car.` : 'Close. A cleaner launch or one better shift and it is yours.';
+  const again = !ev.rematch || (ev.stake && !dragBetBlock(S, d, ev.stake));
+  const btns = `${again && !(res.won && !ev.rematch) ? `<button class="btn primary big" data-act="retry" ${own.damage >= 100 ? 'disabled' : ''}><span>${ev.rematch ? 'Again for ' + money(ev.stake) : 'Go again'}</span></button>` : ''}
+    <button class="btn ${res.won && !ev.rematch ? 'primary big' : ''}" data-act="hub" data-arg="street"><span>Drag night</span></button>`;
+  $('results-body').innerHTML = `<div class="topback">${backBtn('Hub')}</div>
+    <p class="kicker">Drag night · ${esc(ev.area)}${ev.rematch ? ' · Bet ' + money(ev.stake) : ''}</p>
+    <h2 class="result-head ${res.won ? 'win' : 'lose'}">${head}</h2>
+    ${foul ? '<p class="story">You went before the green. On the airport road that is a loss, whatever happens next.</p>' : ''}
+    ${slip}
+    ${pay}
+    ${sum.dragBest ? `<div class="unlock-note"><small>New best in this car</small>${res.et.toFixed(3)} s</div>` : ''}
+    ${sum.dragNext ? `<div class="unlock-note special"><small>New racer at drag night</small>${esc(sum.dragNext)}</div>` : ''}
+    ${rivalCard(ev.id, res.won ? ch.youWin : ch.youLose)}
+    ${tip ? `<p class="tip">${esc(tip)}</p>` : ''}
+    <div class="actions">${btns}</div>`;
+  showScreen('scr-results');
+  paintCanvases();
+}
 function showResults() {
   mode = 'results';
   $('controls').hidden = true; $('b-pause').hidden = true; document.body.classList.remove('racing');
+  if (R && R.ev.drag) { showDragResults(); return; }
   // a car lost in a pink slip is no longer in the garage, so fall back to what the race knows about it
   const res = R.result, sum = R.summary || settleRace(S, R), ev = R.ev;
   const own = (!ev.loaner && S.owned[R.carId]) || { damage: Math.round(R.p.damage), up: R.up || {} };
@@ -8811,9 +9247,16 @@ function startRace(spec) {
     if (!islandCar(S.current)) { toast('Island races need an island car. Tap Mauritius at the top.', true); return; }
     if (MU[spec.index].rival === 'boss' && !spec.exhibition && !S.owned.gtrx) { toast('Nothing on the island can beat Boss. Collect your GT-R first.', true); return; }
   }
+  if (spec.kind === 'drag') {
+    const i = DRAG.findIndex(d => d.id === spec.id);
+    if (i < 0 || !dragUnlocked(S, i)) return;
+    if (!islandCar(S.current)) { toast('Drag night is on the island. Tap Mauritius at the top.', true); return; }
+    if (dragBeaten(S, spec.id)) { const why = dragBetBlock(S, DRAG[i], spec.stake); if (why) { toast(why, true); return; } }
+  }
   if ((spec.kind === 'essex' || spec.kind === 'career' || spec.kind === 'special' || spec.kind === 'slip') && islandCar(S.current)) { toast('Your island car stays on the island. Tap London or Essex at the top.', true); return; }
   if (spec.kind === 'slip' && (!slipReady(S, spec.id) || Object.keys(S.owned).length < 2 || S.current === slipCarFor(spec.id).id)) return;
   hubPage = spec.kind === 'career' || spec.kind === 'essex' || spec.kind === 'mu' ? 'race' : 'street';
+  if (spec.kind === 'drag') streetTab = 'drag';
   R = createRace(S, spec);
   loadGhosts(R);
   Music.preloadStings();
@@ -8822,12 +9265,17 @@ function startRace(spec) {
   parts.length = 0; popups.length = 0; banner = null; flashT = 0; V.shake = 0; V.boost = 0; V.camX = 0;
   showScreen(null);
   // show off the rival's motor first (not in a Checkpoint Run, where there is no rival)
-  intro = R.ev.cp || R.ev.solo || window.__noIntro ? null : { t: 0, len: R.ev.kind === 'street' ? 3.4 : 4.8 };
+  intro = R.ev.cp || R.ev.solo || window.__noIntro ? null : { t: 0, len: R.ev.kind === 'street' ? 3.4 : R.ev.drag ? 4 : 4.8 };
+  // drag night: two buttons, NITRO and SHIFT
+  $('controls').classList.toggle('drag', !!R.ev.drag);
+  $('c-right').innerHTML = R.ev.drag ? 'SHIFT ▲<small>TAP ON GREEN, THEN IN THE GREEN</small>' : 'RIGHT ▶<small>D / →</small>';
   $('controls').hidden = !!intro; $('b-pause').hidden = !!intro; document.body.classList.add('racing');
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   Sound.init();
 }
 function steer(d) {
+  // drag night: every tap is the launch, then an upshift (a tap before green is a red light)
+  if (R && R.ev.drag) { if (mode === 'race' && !paused && !intro && R.state !== 'finishing') dragPress(R); return; }
   if (!R || mode !== 'race' || paused || R.state !== 'racing') return;
   const nl = clamp(R.p.lane + d, 0, (R.nl || 3) - 1);
   if (nl !== R.p.lane) { R.p.lane = nl; Sound.whoosh(0.05, d * 0.3); }
@@ -8855,7 +9303,12 @@ function processEvents() {
           : ev.cp ? 'HIT EVERY CHECKPOINT' : e.n === 2 && S.stats.races < 4 ? 'GOLD GATES PAY CASH   HIT THEM IN A ROW FOR MORE' : 'VS  ' + ev.oppName.toUpperCase();
         showBanner(String(e.n), sub, 0.95, '#e9e4d8'); Sound.tone(440, 0.14, 0.14); break;
       }
-      case 'go': showBanner('GO!', R && R.p.damage >= HURT_FROM ? 'Your car is damaged: slower and heavier to steer' : '', R && R.p.damage >= HURT_FROM ? 1.8 : 0.9, '#5fd38a'); Sound.tone(880, 0.35, 0.16); break;
+      case 'dragLight': if (e.n >= 2) Sound.tone(e.n === 5 ? 880 : 520, e.n === 5 ? 0.3 : 0.1, 0.12); break;
+      case 'dragLaunch': popup('R/T ' + e.react.toFixed(3) + (e.react < 0.2 ? '  GREAT LAUNCH' : e.react < 0.35 ? '' : '  SLOW OFF THE LINE'), W / 2, H * 0.3, e.react < 0.2 ? '#5fd38a' : e.react < 0.35 ? '#e9e4d8' : '#ffb03a'); break;
+      case 'dragShift': Sound.tone(e.q === 'perfect' ? 1175 : e.q === 'good' ? 880 : 330, 0.07, 0.07); break;
+      case 'dragNitro': break;
+      case 'go': if (R.ev.drag) { Sound.tone(880, 0.35, 0.16); break; }
+        showBanner('GO!', R && R.p.damage >= HURT_FROM ? 'Your car is damaged: slower and heavier to steer' : '', R && R.p.damage >= HURT_FROM ? 1.8 : 0.9, '#5fd38a'); Sound.tone(880, 0.35, 0.16); break;
       case 'hurt': showBanner(e.level > 1 ? 'BADLY DAMAGED' : 'CAR DAMAGED', e.level > 1 ? 'Losing power. A few more hits and it is wrecked' : 'Over 60%: slower and heavier to steer', 2.2, '#ff8a3a', 0.5); break;
       case 'hit': {
         V.shake = 0.5; flashT = 0.35; flashCol = [255, 40, 40];
@@ -8882,7 +9335,13 @@ function processEvents() {
         settleRace(S, R); save();
         input.nitro = false; $('c-nitro').classList.remove('down');
         const cash = R.summary ? (R.summary.reward || 0) + (R.summary.cpCash || 0) : 0;
-        if (e.how === 'wrecked') { showBanner('WRECKED', '100% damage', 2.4, '#ff3b3b'); Sound.crash(); }
+        if (e.how === 'foul') { showBanner('RED LIGHT', 'Too early. You jumped the start', 2.4, '#ff3b3b'); Sound.tone(220, 0.6, 0.14); }
+        else if (R.ev.drag && e.how === 'finish') {
+          const r = R.result;
+          if (e.won) { showBanner('YOU WIN', r.et.toFixed(3) + ' s  ·  ' + Math.round(r.trap) + ' mph', 2.4, '#f2a33a'); if (Music.on && MUSIC.win) Music.sting('win'); else Sound.tone(990, 0.4, 0.12); }
+          else { showBanner('YOU LOST', r.et.toFixed(3) + ' s  ·  ' + r.gap.toFixed(2) + ' s behind', 2.4, '#ff3b3b'); if (Music.on && MUSIC.lose) Music.sting('lose'); else Sound.tone(300, 0.5, 0.12); }
+        }
+        else if (e.how === 'wrecked') { showBanner('WRECKED', '100% damage', 2.4, '#ff3b3b'); Sound.crash(); }
         else if (e.how === 'busted') { showBanner('BUSTED', 'Pulled over by Essex Police', 2.4, '#5a8cff'); if (Music.on && MUSIC.lose) Music.sting('lose'); }
         else if (e.how === 'missed') { showBanner('OUT', 'Missed a checkpoint', 2.4, '#ff3b3b'); Sound.tone(300, 0.5, 0.12); }
         else if (R.ev.solo) { showBanner('FINISHED', fmtTime(R.result.time), 2.4, '#5ac8ff'); Sound.tone(660, 0.2, 0.12); }
@@ -8918,12 +9377,13 @@ addEventListener('keydown', e => {
   }
   if (intro) { e.preventDefault(); if (!e.repeat) endIntro(); return; }   // any key skips the showcase
   const k = e.code;
+  if (R && R.ev.drag && ['ArrowUp', 'KeyW', 'ArrowRight', 'KeyD', 'ArrowLeft', 'KeyA', 'Enter', 'ShiftLeft', 'ShiftRight'].includes(k)) { e.preventDefault(); if (!e.repeat) steer(1); return; }
   if (k === 'ArrowLeft' || k === 'KeyA') { e.preventDefault(); if (!e.repeat) steer(-1); }
   else if (k === 'ArrowRight' || k === 'KeyD') { e.preventDefault(); if (!e.repeat) steer(1); }
-  else if (k === 'Space' || k === 'ArrowUp' || k === 'KeyW') { e.preventDefault(); if (!paused) input.nitro = true; }
+  else if (k === 'Space' || k === 'ArrowUp' || k === 'KeyW' || k === 'KeyN') { e.preventDefault(); if (!paused) input.nitro = true; }
   else if (k === 'Escape' || k === 'KeyP') { e.preventDefault(); setPause(!paused); }
 });
-addEventListener('keyup', e => { if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') { input.nitro = false; if (mode === 'race') e.preventDefault(); } });
+addEventListener('keyup', e => { if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'KeyN') { input.nitro = false; if (mode === 'race') e.preventDefault(); } });
 addEventListener('blur', () => { input.nitro = false; });
 document.addEventListener('visibilitychange', () => { if (document.hidden && mode === 'race' && !paused && R && R.state !== 'finishing') setPause(true); });
 
@@ -8937,7 +9397,10 @@ const Cine = {
     if (!this.cv) {
       const cv = this.cv = document.createElement('canvas'); cv.id = 'cine'; cv.hidden = true; document.body.appendChild(cv);
       const tip = this.tip = document.createElement('div'); tip.id = 'cine-skip'; tip.hidden = true; tip.textContent = 'Tap to skip'; document.body.appendChild(tip);
-      cv.addEventListener('pointerdown', e => { e.preventDefault(); if (this.t > 0.35) this.skip(); });
+      // a tap skips it. On a phone the same tap would then land on whatever is underneath once the scene is gone
+      // (the Map button sits right under "Tap to skip"), so the click that follows is swallowed
+      cv.addEventListener('pointerdown', e => { e.preventDefault(); if (this.t > 0.35) { this.eatUntil = performance.now() + 700; this.skip(); } });
+      document.addEventListener('click', e => { if (performance.now() < (this.eatUntil || 0)) { e.preventDefault(); e.stopPropagation(); } }, true);
       addEventListener('keydown', e => { if (this.on && !e.repeat && this.t > 0.35) { e.preventDefault(); e.stopPropagation(); this.skip(); } }, true);
     }
     this.kind = kind; this.done = done; this.opts = opts || {}; this.t = 0; this.last = performance.now(); this.on = true;
@@ -9459,6 +9922,8 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'special': if (SPECIALS[arg] && specialUnlocked(S, arg)) { S.found = S.found || {}; S.found[arg] = true; startRace({ kind: 'special', id: arg }); } break;
     case 'essex': startRace({ kind: 'essex', index: nextEssexIndex(S) }); break;
     case 'daily': startRace({ kind: 'daily' }); break;
+    case 'drag': startRace({ kind: 'drag', id: arg }); break;
+    case 'dragbet': { const [id, k] = (arg || '').split('|'); startRace({ kind: 'drag', id, stake: +k }); break; }
     case 'ghosts': setGhosts(!ghostsOn); break;
     case 'ghostrace': { const [route, uid, name] = (arg || '').split('|'), spec = routeSpec(route); if (spec) { pickedGhost = { route, uid, name }; startRace(spec); } break; }
     case 'essexex': startRace({ kind: 'essex', index: +arg, exhibition: true }); break;
@@ -9481,7 +9946,8 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'slip': pendingSlip = arg; goHub(); break;
     case 'slipno': pendingSlip = null; goHub(); break;
     case 'slipyes': pendingSlip = null; startRace({ kind: 'slip', id: arg }); break;
-    case 'retry': if (R && R.ev.kind === 'daily') startRace({ kind: 'daily' });
+    case 'retry': if (R && R.ev.kind === 'drag') startRace({ kind: 'drag', id: R.ev.id, stake: R.ev.stake || undefined });
+      else if (R && R.ev.kind === 'daily') startRace({ kind: 'daily' });
       else if (R && R.ev.kind === 'mu') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.mu && S.mu.completed[i]) goHub(); else startRace({ kind: 'mu', index: i, exhibition: ex }); }
       else if (R && R.ev.kind === 'essex') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.essex && S.essex.completed[i]) goHub(); else startRace({ kind: 'essex', index: i, exhibition: ex }); }
       else if (R && R.ev.kind === 'special') startRace({ kind: 'special', id: R.ev.id }); else if (R && R.ev.kind === 'career') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.careerDone) goHub(); else startRace({ kind: 'career', index: i, exhibition: ex }); } else goHub(); break;
@@ -9597,7 +10063,7 @@ window.StreetKings = {
   steer, startRace, goHub, goGarage, goLadder, setDemo, save, preview: renderCarPreview, portrait: drawPortrait, Sound, engineProfile, ENGINE_OF, GEARS, Cine, goBack,
   get intro() { return intro; }, skipIntro: endIntro,
   step(sec, bot) { const h = 1 / 120; let n = Math.round(sec / h); while (n-- > 0 && R && mode !== 'menu') { if (bot) bot(R, input); updateRace(R, h, input); processEvents(); } },
-  testCareer, testIsland, Online, core: { rematchPrize, specialUnlocked, makeWave, heatOf, HEAT_POLICE, updateCop, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
+  testCareer, testIsland, Online, core: { DRAG, DRAG_DIST, dragPress, dragUnlocked, dragBeaten, dragStakes, dragEstimate, dragBetBlock, rematchPrize, specialUnlocked, makeWave, heatOf, HEAT_POLICE, updateCop, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
     migrateSave, buyLook, lookCost, lookOf, checkPlate, dailyFor, dailyDate, dailyPrize, ghostEncode, ghostDecode, ghostAt, carRel, EVENTS, ESSEX, MU, muOpen, muWins, nextMuIndex, islandCar, goIsland, openIsland, areaList, essexOpen, nextEssexIndex, slipReady, slipCarFor, carClass, totalStars, starCount, CARS, UPGRADES, CHARACTERS, BODY, Z_PLAYER, P_LEN, SPAWN_D, NITRO_MULT },
 };
 
