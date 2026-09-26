@@ -9835,6 +9835,9 @@ $('b-music').addEventListener('click', () => { Music.setOn(!Music.on); });
   });
   addEventListener('pointermove', e => { if (!drag) return; drag.c._drag = drag.base + (e.clientX - drag.x) * 0.012; });
   addEventListener('pointerup', () => { if (drag) { drag = null; spin.hold = 2.5; } });
+  // on a phone, a finger that lands on the car and then scrolls the page is cancelled, not lifted:
+  // that was a scroll, not a turn, so put the car back and keep it spinning
+  addEventListener('pointercancel', () => { if (drag) { drag.c._drag = drag.base; drag = null; spin.hold = 0; } });
 }
 
 /* while the plate is being typed, the turntable swings round to show the back of the car */
