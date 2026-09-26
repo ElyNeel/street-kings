@@ -596,6 +596,22 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 .subtabs { overflow-x: auto; scrollbar-width: none; }
 @media (max-width: 380px) { .subtab small { display: none; } }
 @media (max-width: 340px) { .subtab { font-size: 12px; } .place b { font-size: 15px; } }
+/* ---------- first car choice: what is coming, and what each car leaves you with ---------- */
+.ahead { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--sodium); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.ahead ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: 14px; line-height: 1.45; }
+.ahead b { color: var(--ink); }
+.plan { margin: 0; display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.plan > div { background: var(--panel-2); padding: 7px 10px; display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.plan dt { font-family: var(--fm); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.plan dd { margin: 0; font-size: 13px; color: var(--ink); line-height: 1.4; }
+.plan > div:first-child dd { font-family: var(--fd); font-size: 22px; color: var(--go); letter-spacing: 0.02em; }
+.later { background: var(--panel); border: 1px solid var(--line); padding: 12px 16px; display: flex; flex-direction: column; gap: 6px; }
+.later > div { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 2px 16px; align-items: baseline; padding: 6px 0; border-top: 1px solid var(--line); }
+.later span { font-family: var(--fd); font-size: 19px; letter-spacing: 0.02em; text-transform: uppercase; }
+.later b { font-family: var(--fm); font-size: 13px; text-align: right; }
+.later small { grid-column: 1 / -1; font-family: var(--fm); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+#scr-select .car-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+#scr-select .later { align-self: start; }
 </style>
 </head>
 <body>
@@ -7707,24 +7723,59 @@ function goTitle() {
 }
 
 /* ---------- starter car choice ---------- */
+/* what a new player needs to pick well: what is coming, and what each car leaves them with */
+function starterPlan() {
+  const start = blankState().money, ev0 = EVENTS[0], ch0 = CHARACTERS[ev0.rival];
+  const next = CARS.filter(c => !c.slip && !c.chapter && c.rep > 0).sort((a, b) => a.rep - b.rep)[0];
+  let wins = 0, rep = 0, prize = 0;
+  while (wins < EVENTS.length && rep < next.rep) { rep += EVENTS[wins].rep; prize += EVENTS[wins].reward; wins++; }
+  // how far a fully built car gets: about where the rivals have 45% more power (checked with a clean driving bot)
+  const reach = bhp => EVENTS.filter(e => !e.bike && e.oppBhp <= bhp * 1.45).length;
+  const cars = CARS.filter(c => !c.slip && !c.chapter && !c.rep).map(c => {
+    const keep = start - c.price, trade = Math.floor(c.price * 0.5), later = keep + prize, spare = later + trade - next.price;
+    return { c, keep, trade, later, spare, now: statsFor(c.id, {}).bhp, max: maxStats(c.id).bhp, races: reach(maxStats(c.id).bhp) };
+  });
+  return { start, ev0, ch0, next, wins, prize, cars };
+}
 function goSelect() {
   mode = 'menu';
+  const P = starterPlan(), W = P.wins === 1 ? '1 win' : P.wins + ' wins';
+  const most = P.cars.reduce((a, b) => b.spare > a.spare ? b : a), quick = P.cars.reduce((a, b) => b.now > a.now ? b : a);
+  const winsFor = rep => { let n = 0, r = 0; while (n < EVENTS.length && r < rep) r += EVENTS[n++].rep; return n; };
   $('select-body').innerHTML = `
-    <div class="bar">${backBtn()}<div class="brand">STREET <em>KINGS</em></div><div class="stat"><small>Money</small><b class="money">£5,000</b></div><button class="bar-btn" type="button" data-act="music">${Music.on ? 'Music on' : 'Music off'}</button><button class="bar-btn" type="button" data-act="sound">${Sound.on ? 'Sound on' : 'Sound off'}</button></div>
+    <div class="bar">${backBtn()}<div class="brand">STREET <em>KINGS</em></div><div class="stat"><small>Money</small><b class="money">${money(P.start)}</b></div><button class="bar-btn" type="button" data-act="music">${Music.on ? 'Music on' : 'Music off'}</button><button class="bar-btn" type="button" data-act="sound">${Sound.on ? 'Sound on' : 'Sound off'}</button></div>
     <p class="kicker">New career · East London</p>
     <h2 class="h2">Choose your first car</h2>
-    <p class="lede">You start with <b>£5,000</b>. The Civic is free and the BMW costs <b>£2,500</b>. Whatever you do not spend is yours for upgrades. Faster cars unlock as your reputation grows.</p>
-    <div class="car-grid">${CARS.filter(c => !c.slip && !c.chapter).map(c => {
-      const st = statsFor(c.id, {}), locked = c.rep > 0;
+    <p class="lede">You start with <b>${money(P.start)}</b>. Whatever you do not spend on a car is yours for upgrades, and later for a better car.</p>
+    <div class="ahead">
+      <p class="kicker">What is coming</p>
+      <ol>
+        <li><b>Race 1:</b> ${esc(P.ch0.name)} in a ${esc(P.ch0.car)}, ${P.ev0.oppBhp} bhp, for ${money(P.ev0.reward)}. Either car can beat him as it comes.</li>
+        <li><b>Your first ${W}</b> pay at least ${money(P.prize)} and take you to Rep ${P.next.rep}. That opens the ${esc(P.next.name)} (${statsFor(P.next.id, {}).bhp} bhp, ${money(P.next.price)}), a big step up.</li>
+        <li><b>Neither starter lasts the whole career.</b> Upgrades stay on the car they are fitted to. Selling or trading a car in gets you back half of what you paid for it and its upgrades.</li>
+      </ol>
+    </div>
+    <div class="car-grid">${P.cars.map(x => x.c).map(c => {
+      const st = statsFor(c.id, {}), locked = false, pl = P.cars.find(x => x.c.id === c.id);
+      const tag = !pl ? '' : pl === most ? 'Most money later' : pl === quick ? `${pl.now - Math.min(...P.cars.map(x => x.now))} bhp more from day one` : '';
       return `<div class="car-card ${locked ? 'locked' : ''}">
         <canvas data-car="${c.id}" data-locked="${locked ? 1 : 0}" width="300" height="150"></canvas>
         <div class="car-name"><h3>${c.name}</h3><span class="plate">${c.look.plate}</span></div>
+        ${tag ? `<p class="cls-line"><span class="chip on">${tag}</span></p>` : ''}
         <p>${c.blurb}</p>
         ${specRows(st)}
-        <div class="actions">${locked ? `<span class="lock">🔒 Unlocks at Rep ${c.rep} · ${money(c.price)}</span>`
+        ${pl ? `<dl class="plan">
+          <div><dt>Money left</dt><dd>${money(pl.keep)}</dd></div>
+          <div><dt>Fully built</dt><dd>${pl.max} bhp, good for about the first ${pl.races} races</dd></div>
+          <div><dt>Trade in</dt><dd>${money(pl.trade)} plus half of what you spend on it</dd></div>
+          <div><dt>After ${W}</dt><dd>At least ${money(pl.later)}${pl.trade ? `, plus ${money(pl.trade)} trading it in` : ''}. That buys the ${esc(P.next.name.split(' ').slice(0, 2).join(' '))} with ${money(pl.spare)} left to tune it.</dd></div>
+        </dl>` : ''}
+        <div class="actions">${locked ? `<span class="lock">🔒 Unlocks at Rep ${c.rep}, about ${winsFor(c.rep)} wins in · ${money(c.price)}</span>`
           : `<button class="btn primary small" data-act="pick" data-arg="${c.id}"><span>${c.price ? 'Buy ' + money(c.price) : 'Take it (free)'}</span></button>`}</div>
       </div>`;
-    }).join('')}</div>
+    }).join('')}
+    <div class="later"><p class="kicker">Later in the dealership</p>
+      ${CARS.filter(c => !c.slip && !c.chapter && c.rep > 0).map(c => `<div><span>${esc(c.name)}</span><b>${statsFor(c.id, {}).bhp} bhp</b><b>${money(c.price)}</b><small>Rep ${c.rep}, about ${winsFor(c.rep)} wins in</small></div>`).join('')}</div></div>
     <button class="link" data-act="title">Back to title</button>`;
   showScreen('scr-select');
   paintCanvases();
