@@ -666,7 +666,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         </section>
         <section>
           <h3>Crashes</h3>
-          <p>A crash slows you down and adds 8 to 10% damage. One crash will not end your race, but at 100% the car is wrecked and you lose. Damage stays on the car until you repair it.</p>
+          <p>A crash slows you down and adds 8 to 10% damage, and you can see it on the car: scrapes, dents, broken lights, a cracked window and then smoke. Over 60% the car is slower and heavier to steer. At 100% it is wrecked and you lose. Damage stays on the car until you repair it.</p>
         </section>
         <section>
           <h3>Nitro</h3>
@@ -763,6 +763,11 @@ const NITRO_REFILL = 24;       // seconds to refill an empty tank (only while no
 const HIT_SLOW = 0.58;         // speed kept after a crash
 const HIT_MIN_V = 26;          // never slowed below this (always faster than traffic)
 const REPAIR_PER_PCT = 6;      // pounds per 1% damage
+const HURT_FROM = 60;          // from this much damage the car drives worse
+/* how badly damage hurts the driving: 0 below 60%, then 0.35 at 60% up to 1 at 100% */
+const hurtOf = dmg => dmg < HURT_FROM ? 0 : 0.35 + 0.65 * Math.min(1, (dmg - HURT_FROM) / (100 - HURT_FROM));
+/* what that does: less top speed (4% at 60%, 12% near the end), weaker pull, slower lane changes (20% to 55% slower) */
+const hurtK = dmg => { const h = hurtOf(dmg); return { h, vmax: 1 - 0.12 * h, accel: 1 - 0.25 * h, lane: 1 + 0.55 * h }; };
 const MPH = 2.237;
 
 const rand = (a, b) => a + Math.random() * (b - a);
@@ -2077,8 +2082,11 @@ function crash(R, w, c, d) {
   const p = R.p;
   const dmg = 8 + Math.random() * 2;
   p.v = Math.max(Math.min(p.v, HIT_MIN_V), p.v * HIT_SLOW);
+  const d0 = p.damage;
   p.damage = Math.min(100, p.damage + dmg);
   p.collisions++;
+  if (p.damage < 100 && d0 < HURT_FROM && p.damage >= HURT_FROM) R.events.push({ type: 'hurt', level: 1 });
+  else if (p.damage < 100 && d0 < 80 && p.damage >= 80) R.events.push({ type: 'hurt', level: 2 });
   c.hit = true; c.hitT = 0; c.push = c.type === 'bus' || c.type === 'bus1' ? 6 : 16; c.spin = Math.random() < 0.5 ? -1 : 1;
   R.events.push({ type: 'hit', dmg, lane: c.lane });
   if (p.damage >= 100) { p.damage = 100; R.wrecked = true; endRace(R, 'wrecked'); }
@@ -2116,7 +2124,8 @@ function updateRace(R, dt, input) {
   if (racing) R.t += dt; else R.doneT += dt;
   if (racing && R.rec) while (R.t >= R.rec.next && R.rec.d.length < 12000) { R.rec.d.push(Math.round(p.dist * 10)); R.rec.x.push(Math.round(p.x * 100)); R.rec.next += 1 / GHOST_HZ; }
 
-  laneSpring(p, dt, st.laneTime, (R.nl || 3) - 1);
+  const hk = hurtK(p.damage);   // a badly damaged car is slower and heavier to steer
+  laneSpring(p, dt, st.laneTime * hk.lane, (R.nl || 3) - 1);
   p.latV = p.vx;
 
   // nitro: once the tank runs dry it has to recharge to 25% before it fires again
@@ -2133,7 +2142,7 @@ function updateRace(R, dt, input) {
   // speed: the car always accelerates by itself
   if (R.wrecked) p.v = Math.max(0, p.v - 24 * dt);
   else if (!racing) p.v = Math.max(16, p.v - 10 * dt);
-  else p.v = stepSpeed(p.v, dt, st.vmax, st.accel, p.boosting, st.nitroMult);
+  else p.v = stepSpeed(p.v, dt, st.vmax * hk.vmax, st.accel * hk.accel, p.boosting, st.nitroMult);
   p.dist += p.v * dt;
   if (racing && p.v > p.topV) p.topV = p.v;
 
@@ -2395,7 +2404,7 @@ function drawFx() {
       ctx.strokeStyle = p.c; ctx.globalAlpha = k; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * 0.03, p.y - p.vy * 0.03); ctx.stroke();
     } else {
-      ctx.globalAlpha = k * 0.35; ctx.fillStyle = '#8a8f94';
+      ctx.globalAlpha = k * (p.a || 0.35); ctx.fillStyle = p.c || '#8a8f94';
       ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill();
     }
   }
@@ -4044,6 +4053,23 @@ function nearLamps(pal, dist, cx, cz) {
   }
   return out.sort((a, b) => b.i - a.i).slice(0, 3);
 }
+/* a number from 0 to 10 for a car, so its dents and scrapes are always in the same places */
+const dSeed = id => { let h = 7; for (const ch of String(id || '')) h = (h * 31 + ch.charCodeAt(0)) % 1009; return (h % 100) / 10; };
+/* smoke off the bonnet once the damage starts to hurt: grey over 60%, thick and black over 80%, and sparks off a dragging bumper */
+function damageSmoke(R, mesh, xm, z) {
+  const dm = R.p.damage;
+  if (dm < HURT_FROM || R.wrecked) return;
+  const tt = R.t + (R.doneT || 0), last = R._smk === undefined ? tt : R._smk; R._smk = tt;
+  R._smkAcc = (R._smkAcc || 0) + Math.max(0, tt - last) * (dm >= 80 ? 30 : 16);
+  const sc = V.f / 700, q = P(xm, mesh.H * 0.9, z + mesh.L * 0.8);
+  let n = 0;
+  while (R._smkAcc >= 1 && n++ < 6) {
+    R._smkAcc--;
+    parts.push({ kind: 'd', x: q.x + rand(-mesh.W * 0.25, mesh.W * 0.25) * q.s, y: q.y, vx: rand(-45, 45) * sc, vy: rand(-20, 45) * sc, t: 0, life: rand(0.55, 1.0),
+      r: rand(4, 8) * sc, c: dm >= 80 ? ['#1e2022', '#2c2f31'][randInt(2)] : ['#80858a', '#9a9ea2'][randInt(2)], a: dm >= 80 ? 0.55 : 0.34 });
+  }
+  if (dm >= 80 && Math.random() < 0.06) { const b = P(xm + rand(-0.4, 0.4), 0.05, z); sparks(b.x, b.y, 3, sc); }
+}
 function drawPlayer(R, pal, env, lampK) {
   const p = R.p, xm = laneToX(p.x), z = Z_PLAYER;
   const { mesh, look } = playerMeshLook(R);
@@ -4055,11 +4081,14 @@ function drawPlayer(R, pal, env, lampK) {
     drawGlowRect(ctx, hex2rgb(look.glow), u0.x, u1.y, u1.x, u0.y + (u0.y - u1.y) * 0.3, pal.sunny ? 0.25 : 0.55);
     ctx.globalCompositeOperation = 'source-over';
   }
-  drawCar(ctx, mesh, { x: xm, z, yaw: clamp(p.vx * 0.012, -0.1, 0.1), roll: clamp(-p.vx * 0.006, -0.05, 0.05), fog: 0, env, look, lamp: lampK, player: true,
-    nitro: V.boost, brake: R.state === 'finishing' || R.wrecked, plateText: look.plate });
+  // a badly damaged car shakes on the road
+  const hk = hurtOf(p.damage), tt = R.t + (R.doneT || 0), wob = hk * (Math.sin(tt * 23) * 0.6 + Math.sin(tt * 37) * 0.4);
+  drawCar(ctx, mesh, { x: xm, z, yaw: clamp(p.vx * 0.012, -0.1, 0.1) + wob * 0.006, roll: clamp(-p.vx * 0.006, -0.05, 0.05) + wob * 0.01, fog: 0, env, look, lamp: lampK, player: true,
+    nitro: V.boost, brake: R.state === 'finishing' || R.wrecked, plateText: look.plate, damage: p.damage / 100, dseed: dSeed(R.carId) });
   const b = P(xm, 1.2, z);
   lastPlayerRect = { x0: b.x - mesh.W / 2 * b.s, x1: b.x + mesh.W / 2 * b.s, y0: b.y };
   if (R.wrecked && Math.random() < 0.5) smoke(b.x, b.y, 1, V.f / 700);
+  damageSmoke(R, mesh, xm, z);
 }
 function drawRival(R, z, pal, env) {
   const o = R.o, lk = R.ev.oppLook, xm = laneToX(o.x);
@@ -4171,7 +4200,20 @@ function renderCarPreview(canvas, carId, look, up, opts) {
     const a = P(-mesh.W / 2 - 0.7, 0, zc - mesh.L / 2 - 0.4), b = P(mesh.W / 2 + 0.7, 0, zc + mesh.L / 2 + 0.4);
     g.globalCompositeOperation = 'lighter'; drawGlowRect(g, hex2rgb(look.glow), Math.min(a.x, b.x) - 20, b.y, Math.max(a.x, b.x) + 20, a.y + 10, 0.45); g.globalCompositeOperation = 'source-over';
   }
-  drawCar(g, mesh, { x: 0, z: zRear, yaw, fog: 0, env: opts.env || STUDIO, look, plateText: look.plate, hi: true, smooth: true, flame: opts.flame || 0, nitro: opts.nitro || 0, roll: opts.roll || 0, reflect: opts.reflect === undefined ? true : opts.reflect });
+  const dm = clamp((opts.damage || 0) / 100, 0, 1);
+  drawCar(g, mesh, { x: 0, z: zRear, yaw, fog: 0, env: opts.env || STUDIO, look, plateText: look.plate, hi: true, smooth: true, flame: opts.flame || 0, nitro: opts.nitro || 0, roll: opts.roll || 0, reflect: opts.reflect === undefined ? true : opts.reflect,
+    damage: dm, dseed: dSeed(opts.seed || carId) });
+  // in the garage too: a wisp of smoke off the bonnet once the damage hurts
+  if (dm * 100 >= HURT_FROM) {
+    const hl = mesh.L / 2, fz = mesh.L * 0.78 - hl, cy = Math.cos(yaw), sy = Math.sin(yaw);
+    const q = P(fz * sy, mesh.H * 0.95, zRear + hl + fz * cy), dark = dm >= 0.8;
+    for (let i = 0; i < 7; i++) {
+      const k = i / 6, r = q.s * (0.25 + k * 0.55), x = q.x + Math.sin(i * 1.7) * q.s * 0.25 * k, y = q.y - k * q.s * 1.1;
+      const gr = g.createRadialGradient(x, y, 0, x, y, r);
+      gr.addColorStop(0, dark ? `rgba(28,30,32,${0.5 - k * 0.35})` : `rgba(160,165,170,${0.38 - k * 0.28})`); gr.addColorStop(1, 'rgba(120,125,130,0)');
+      g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+    }
+  }
   if (opts.locked) { g.fillStyle = 'rgba(8,12,14,0.62)'; g.fillRect(0, 0, cw, ch); }
   Object.assign(V, saved); W = savedW;
 }
@@ -4382,7 +4424,7 @@ function drawHUD(R, ctrlH) {
   ctx.fillStyle = dmg < 0.5 ? '#5fd38a' : dmg < 0.8 ? '#f2a33a' : '#ff3b3b';
   ctx.fillRect(dx, dy, dw * dmg, barT);
   ctx.font = `${labB}px ${FONT_D}`; ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(233,228,216,0.8)';
-  ctx.fillText('DAMAGE ' + Math.round(p.damage) + '%', dx, dy - 6);
+  ctx.fillText('DAMAGE ' + Math.round(p.damage) + '%' + (p.damage >= HURT_FROM && !R.wrecked ? ' · SLOWER' : ''), dx, dy - 6);
 
   // floating crash text
   for (const pp of popups) {
@@ -5555,9 +5597,28 @@ const VIEW0 = vnorm([0, 0.35, -1]);
 /* ---------- drawing a mesh ---------- */
 const NEAR_Z = 0.6;
 /* pose: { x, z (rear bumper depth), yaw, roll, fog, env, look, lod, brake, nitro, glowScale, plateText, route } */
+/* damage you can see, for the canvas drawing (the WebGL one does it per pixel in glcar.js) */
+const PAINTED = { paint: 1, wing: 1, flare: 1, stripe: 1 };
+const dHash = (c, sd) => { const x = Math.sin(c[0] * 12.9898 + c[1] * 78.233 + c[2] * 37.719 + sd * 4.1) * 43758.5453; return x - Math.floor(x); };
+/* a rear light on one side goes at 35%, a headlight on the other at 60% */
+function brokenLight(mat, c, dmg) {
+  if (dmg < 0.35) return false;
+  if ((mat === 'light' || mat === 'lightcore' || mat === 'lightlens') && c[0] < 0) return true;
+  return dmg >= 0.6 && (mat === 'head' || mat === 'drl' || mat === 'lens') && c[0] > 0;
+}
+/* how scuffed a panel is: panels at the corners and low down the sides, more of them the worse it gets */
+function scuffOf(f, mesh, dmg, sd) {
+  if (dmg < 0.08 || !PAINTED[f.mat]) return 0;
+  const c = f.c || centroid(f.pts), zn = c[2] / mesh.L;
+  const ends = Math.max(1 - smoothstep(0, 0.3, zn), smoothstep(0.72, 1, zn)), sides = smoothstep(0.55, 1, Math.abs(c[0]) / (mesh.W / 2)) * (1 - smoothstep(0.35, 1.2, c[1]));
+  const area = Math.min(1, ends + sides * 0.7);
+  return area > 0.3 && dHash(c, sd) < dmg * 0.5 ? 0.6 * area : 0;
+}
+const SCUFF = [92, 92, 95];
 function drawCar(g, mesh, pose) {
   let env = pose.env;
   const look = pose.look, L = mesh.L, hl = L / 2;
+  const dmg = mesh.bike || mesh.bus ? 0 : clamp(pose.damage || 0, 0, 1), dsd = pose.dseed || 0;
   const cy = Math.cos(pose.yaw || 0), sy = Math.sin(pose.yaw || 0), roll = pose.roll || 0;
   const tx = p => { let x = p[0] + roll * (p[1] - 0.3), y = p[1], z = p[2] - hl; return [pose.x + x * cy + z * sy, y, pose.z + hl - x * sy + z * cy]; };
   const tn = n => [n[0] * cy + n[2] * sy, n[1], -n[0] * sy + n[2] * cy];
@@ -5628,7 +5689,7 @@ function drawCar(g, mesh, pose) {
         if (lb.route && pose.route) plateText(g, pp, pose.route, null, '#ffb020');
       }
       for (const ls of GM.lightSpots || []) {
-        if (!facing(ls.n, ls.c)) continue;
+        if (!facing(ls.n, ls.c) || brokenLight('light', ls.c, dmg)) continue;
         const w = tx(ls.c); if (w[2] < ZN + 0.5) continue;
         const q = P(w[0], w[1], w[2]); glows.push([q.x, q.y, ls.s * q.s * 1.3]);
       }
@@ -5683,20 +5744,23 @@ function drawCar(g, mesh, pose) {
         const c0 = vrgb(sd, i, j, f.mat), c1 = vrgb(sd, i + 1, j, f.mat), c2 = vrgb(sd, i + 1, j + 1, f.mat), c3 = vrgb(sd, i, j + 1, f.mat);
         const lo2 = sd > 0 ? [pp[0], pp[1]] : [pp[3], pp[2]], hi2 = sd > 0 ? [pp[3], pp[2]] : [pp[0], pp[1]];
         const x0 = (lo2[0].x + lo2[1].x) / 2, y0 = (lo2[0].y + lo2[1].y) / 2, x1 = (hi2[0].x + hi2[1].x) / 2, y1 = (hi2[0].y + hi2[1].y) / 2;
-        const ca = [(c0[0] + c1[0]) / 2, (c0[1] + c1[1]) / 2, (c0[2] + c1[2]) / 2], cb = [(c3[0] + c2[0]) / 2, (c3[1] + c2[1]) / 2, (c3[2] + c2[2]) / 2];
+        let ca = [(c0[0] + c1[0]) / 2, (c0[1] + c1[1]) / 2, (c0[2] + c1[2]) / 2], cb = [(c3[0] + c2[0]) / 2, (c3[1] + c2[1]) / 2, (c3[2] + c2[2]) / 2];
+        const sc = dmg ? scuffOf(f, M, dmg, dsd) : 0;
+        if (sc) { ca = mix(ca, SCUFF, sc); cb = mix(cb, SCUFF, sc); }
         if (Math.abs(x1 - x0) + Math.abs(y1 - y0) > 1.5) { const gr = g.createLinearGradient(x0, y0, x1, y1); gr.addColorStop(0, css(ca)); gr.addColorStop(1, css(cb)); col = gr; }
         else col = css([(ca[0] + cb[0]) / 2, (ca[1] + cb[1]) / 2, (ca[2] + cb[2]) / 2]);
         fill(pp, col, true);
         if (f.kids) for (const k of f.kids) {
           const kp = proj(k.pts); if (!kp) continue;
           if (!v) v = vOf(f);
-          fill(kp, matColor(k.mat, n, look, env, fg, 0, v, f));
+          fill(kp, dmg && brokenLight(k.mat, centroid(k.pts), dmg) ? 'rgb(24,8,8)' : matColor(k.mat, n, look, env, fg, 0, v, f));
         }
         continue;
       }
     }
     if (still && f._ck === lookKey) col = f._cv;
     else { v = vOf(f); col = matColor(f.mat, n, look, env, fg, lampK, v, f); if (still) { f._ck = lookKey; f._cv = col; } }
+    if (dmg) { const sc = scuffOf(f, M, dmg, dsd); if (sc) { if (!v) v = vOf(f); col = css(mix(matRGB(f.mat, n, look, env, fg, lampK, v, f), SCUFF, sc)); } }
     fill(proj(f.pts), col, !small);
     if (!f.kids) continue;
     for (const k of f.kids) {
@@ -5704,9 +5768,10 @@ function drawCar(g, mesh, pose) {
       const pp = proj(k.pts);
       if (!pp) continue;
       if (!v) v = vOf(f);
-      fill(pp, matColor(k.mat, n, look, env, k.mat === 'light' ? fg * 0.5 : fg, k.mat === 'light' && pose.brake ? 2 : 0, v, f));
+      const broke = dmg && brokenLight(k.mat, centroid(k.pts), dmg);
+      fill(pp, broke ? 'rgb(24,8,8)' : matColor(k.mat, n, look, env, k.mat === 'light' ? fg * 0.5 : fg, k.mat === 'light' && pose.brake ? 2 : 0, v, f));
       if (pp.clipped) continue;
-      if (k.mat === 'light') { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const q of pp) { x0 = Math.min(x0, q.x); x1 = Math.max(x1, q.x); y0 = Math.min(y0, q.y); y1 = Math.max(y1, q.y); } glows.push([(x0 + x1) / 2, (y0 + y1) / 2, Math.sqrt((x1 - x0) * (y1 - y0)) * 1.2]); }
+      if (k.mat === 'light' && !broke) { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const q of pp) { x0 = Math.min(x0, q.x); x1 = Math.max(x1, q.x); y0 = Math.min(y0, q.y); y1 = Math.max(y1, q.y); } glows.push([(x0 + x1) / 2, (y0 + y1) / 2, Math.sqrt((x1 - x0) * (y1 - y0)) * 1.2]); }
       if (k.plate && pose.plateText && !small) plateText(g, pp, pose.plateText);
       if (k.label && !small) plateText(g, pp, k.label, null, '#e4e4de');
       if (k.route && pose.route && !small) plateText(g, pp, pose.route, null, '#ffb020');
@@ -6283,20 +6348,46 @@ const MAT_ID = {
   bus: 28, taxi: 29, rim: 30, disc: 31, caliper: 32, rider: 33, helmet: 34, lens: 35, drl: 36, blind: 37, ad: 38, bezel: 39, lightlens: 40, polLight: 41, rimlip: 42,
 };
 const NMAT = 43;
+/* smooth noise for the damage: dents, scuffs and where the cracks go */
+const GL_NOISE = `
+float hash3(vec3 p) { p = fract(p * 0.3183099 + vec3(0.71, 0.113, 0.419)); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
+float vnoise(vec3 x) {
+  vec3 i = floor(x), f = fract(x); f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(mix(hash3(i), hash3(i + vec3(1.0, 0.0, 0.0)), f.x), mix(hash3(i + vec3(0.0, 1.0, 0.0)), hash3(i + vec3(1.0, 1.0, 0.0)), f.x), f.y),
+             mix(mix(hash3(i + vec3(0.0, 0.0, 1.0)), hash3(i + vec3(1.0, 0.0, 1.0)), f.x), mix(hash3(i + vec3(0.0, 1.0, 1.0)), hash3(i + vec3(1.0, 1.0, 1.0)), f.x), f.y), f.z);
+}`;
 const GL_VS = `
 attribute vec3 aPos; attribute vec3 aNrm; attribute float aMat;
 uniform vec4 uXf; uniform vec3 uXf2; uniform vec4 uCam; uniform vec4 uScr; uniform vec4 uCurve; uniform vec4 uElev;
 uniform vec3 uMatCol[${NMAT}]; uniform vec4 uMatPar[${NMAT}];
 varying vec3 vW; varying vec3 vN; varying vec3 vBase; varying vec4 vPar; varying float vY;
+#ifdef DAMAGE
+uniform vec4 uDmgV;   // damage 0..1, a seed for where the dents are, the car's length and width
+varying vec3 vO; varying float vM; varying vec3 vNo;
+${GL_NOISE}
+#endif
 void main() {
-  vec3 p = aPos; p.x += uXf2.y * (p.y - 0.3);
+  vec3 p = aPos;
+  int m = int(aMat + 0.5);
+#ifdef DAMAGE
+  vO = aPos; vM = aMat; vNo = aNrm;
+  // dents: the body pushed in towards the middle of the car where it has been hit, mostly at the corners.
+  // Worked out from the position alone, so panels that meet move together and no gaps open up. Wheels and people stay put.
+  if (uDmgV.x > 0.05 && m != 6 && m != 30 && m != 31 && m != 32 && m != 42 && (m < 24 || m > 27) && m != 33 && m != 34) {
+    float zn = p.z / uDmgV.z;
+    float ends = max(1.0 - smoothstep(0.0, 0.3, zn), smoothstep(0.72, 1.0, zn)), sides = smoothstep(0.55, 1.0, abs(p.x) / (uDmgV.w * 0.5)) * (1.0 - smoothstep(0.3, 1.3, p.y));
+    float nz = vnoise(p * 2.4 + uDmgV.y);
+    float amt = uDmgV.x * (0.07 * ends + 0.035 * sides) * smoothstep(0.35, 0.85, nz);
+    p += normalize(vec3(-p.x, 0.0, uDmgV.z * 0.5 - p.z) + vec3(0.0, 0.0, 0.0001)) * amt;
+  }
+#endif
+  p.x += uXf2.y * (p.y - 0.3);
   float ms = uXf2.z > 0.5 ? -1.0 : 1.0;   // the reflection in a showroom floor: the car upside down under the ground
   p.y *= ms;
   float zl = p.z - uXf2.x;
   vec3 w = vec3(uXf.x + p.x * uXf.z + zl * uXf.w, p.y, uXf.y + uXf2.x - p.x * uXf.w + zl * uXf.z);
   vN = vec3(aNrm.x * uXf.z + aNrm.z * uXf.w, aNrm.y * ms, -aNrm.x * uXf.w + aNrm.z * uXf.z);
   vW = w; vY = aPos.y;
-  int m = int(aMat + 0.5);
   vBase = uMatCol[m]; vPar = uMatPar[m];
   float Z = w.z + uCam.z;
   float d = max(0.0, min(w.z, uCurve.z) - uCurve.y);
@@ -6316,6 +6407,20 @@ uniform vec3 uCamPos; uniform vec3 uKey; uniform vec3 uKeyCol; uniform vec4 uLig
 uniform vec3 uHor; uniform vec3 uZen; uniform vec3 uGround; uniform vec3 uHline; uniform vec4 uEnvF; uniform vec3 uFog; uniform vec3 uTint;
 uniform vec4 uPL[3]; uniform vec3 uPLC[3];
 varying vec3 vW; varying vec3 vN; varying vec3 vBase; varying vec4 vPar; varying float vY;
+#ifdef DAMAGE
+uniform vec4 uDmg; uniform vec2 uRot;   // damage (as in the vertex shader) and the car's turn, for the dented normals
+varying vec3 vO; varying float vM; varying vec3 vNo;
+${GL_NOISE}
+/* cracks: the edges between random cells, thin bright lines */
+float cracks(vec3 x) {
+  vec3 i = floor(x), f = fract(x); float d1 = 8.0, d2 = 8.0;
+  for (int a = -1; a <= 1; a++) for (int b = -1; b <= 1; b++) for (int c = -1; c <= 1; c++) {
+    vec3 o = vec3(float(a), float(b), float(c)), r = o + vec3(hash3(i + o), hash3(i + o + 7.1), hash3(i + o + 13.7)) - f;
+    float d = dot(r, r); if (d < d1) { d2 = d1; d1 = d; } else if (d < d2) d2 = d;
+  }
+  return 1.0 - smoothstep(0.02, 0.1, sqrt(d2) - sqrt(d1));
+}
+#endif
 vec3 envR(vec3 r) {
   if (uEnvF.x > 0.5) {
     if (r.y > 0.0) {
@@ -6340,26 +6445,66 @@ void main() {
   float nv = dot(n, v);
   if (nv < 0.0) { n = -n; nv = -nv; }
   float kind = vPar.x;
+  vec3 base = vBase; vec4 par = vPar;
+#ifdef DAMAGE
+  float crack = 0.0;
+  // ---- damage you can see (a second version of this shader, only used for damaged cars) ----
+  {
+    int m = int(vM + 0.5);
+    float dm = uDmg.x, zn = vO.z / uDmg.z;
+    float ends = max(1.0 - smoothstep(0.0, 0.32, zn), smoothstep(0.7, 1.0, zn));
+    float sides = smoothstep(0.5, 1.0, abs(vO.x) / (uDmg.w * 0.5)) * (1.0 - smoothstep(0.35, 1.2, vO.y));
+    float area = clamp(ends + sides * 0.7, 0.0, 1.0);
+    if (kind < 0.5 && m != 34) {
+      // dents: a wobbly surface where the panel was pushed in, so the reflections bend
+      vec3 q = vO * 2.4 + uDmg.y; float e = 0.07, n0 = vnoise(q);
+      vec3 gr = vec3(vnoise(q + vec3(e, 0.0, 0.0)) - n0, vnoise(q + vec3(0.0, e, 0.0)) - n0, vnoise(q + vec3(0.0, 0.0, e)) - n0) / e;
+      float dent = area * smoothstep(0.05, 0.4, dm) * smoothstep(0.3, 0.7, n0);
+      vec3 gw = vec3(gr.x * uRot.x + gr.z * uRot.y, gr.y, -gr.x * uRot.y + gr.z * uRot.x);
+      n = normalize(n - gw * dent * 0.55);
+      // scuffs down to the primer, and long scratches along the sides
+      float sc = vnoise(vO * vec3(3.2, 5.0, 1.8) + uDmg.y * 1.7 + 11.0);
+      float scuff = area * smoothstep(1.04 - 0.52 * dm, 1.16 - 0.52 * dm, sc);
+      float st = vnoise(vec3(vO.x * 3.0, vO.y * 55.0, vO.z * 0.9) + uDmg.y * 3.1);
+      float scratch = area * smoothstep(0.86 - 0.2 * dm, 0.9 - 0.2 * dm, st) * smoothstep(0.05, 0.22, dm) * smoothstep(0.5, 0.8, abs(vNo.x));   // along the sides only
+      base = mix(base * (1.0 - 0.18 * dm), vec3(0.24, 0.24, 0.25), scuff * 0.9);
+      base = mix(base, vec3(0.76, 0.76, 0.74), scratch * 0.7);
+      par.z = mix(par.z, 6.0, max(scuff, scratch)); par.w *= 1.0 - 0.85 * max(scuff, scratch * 0.6);
+    }
+    // a cracked window: a web of cracks that spreads as it gets worse
+    if (m == 2 && dm > 0.4) {
+      float spread = smoothstep(0.45, 1.0, dm), mask = smoothstep(1.0 - spread * 0.8, 1.15 - spread * 0.8, vnoise(vO * 1.4 + uDmg.y + 3.0));
+      crack = cracks(vO * 4.8 + uDmg.y) * mask * 0.7;
+    }
+    // broken lights: a rear light on one side first, then a headlight on the other
+    bool rearL = (m == 7 || m == 8 || m == 40) && vO.x < 0.0 && dm >= 0.35;
+    bool frontL = (m == 9 || m == 36 || m == 35) && vO.x > 0.0 && dm >= 0.6;
+    if (rearL || frontL) { base = rearL ? vec3(0.09, 0.02, 0.02) : vec3(0.1, 0.1, 0.11); par = vec4(1.0, 0.06, 60.0, 0.6); kind = 1.0; crack = max(crack, cracks(vO * 14.0 + uDmg.y) * 0.9); }
+  }
+#endif
   vec3 col;
-  if (kind > 3.5 && kind < 4.5) col = vBase;
+  if (kind > 3.5 && kind < 4.5) col = base;
   else {
-    float ndv = max(0.02, nv), f0 = vPar.y, gls = vPar.z, refl = vPar.w;
+    float ndv = max(0.02, nv), f0 = par.y, gls = par.z, refl = par.w;
     float fr = f0 + (1.0 - f0) * pow(1.0 - ndv, 5.0);
     float ndl = max(0.0, dot(n, uKey));
     float ao = kind < 0.5 ? 0.6 + 0.4 * smoothstep(0.05, 0.5, vY) : 1.0;
-    vec3 dif = vBase * (uLight.x * (0.78 + 0.22 * n.y) + uLight.y * ndl) * ao * uKeyCol * (1.0 + uLight.w * 0.25);
+    vec3 dif = base * (uLight.x * (0.78 + 0.22 * n.y) + uLight.y * ndl) * ao * uKeyCol * (1.0 + uLight.w * 0.25);
     vec3 e = envR(reflect(-v, n));
     vec3 spec = pow(max(0.0, dot(n, normalize(uKey + v))), gls) * uLight.y * uLight.z * 1.3 * ao * uKeyCol;
     for (int i = 0; i < 3; i++) {
       vec3 L = uPL[i].xyz; float li = uPL[i].w;
       if (li > 0.0) spec += (pow(max(0.0, dot(n, normalize(L + v))), gls * 0.8) + max(0.0, dot(n, L)) * 0.06) * li * uPLC[i];
     }
-    if (kind < 0.5) col = dif * (1.0 - fr * 0.5) + e * fr * refl * mix(vec3(1.0), vBase, uPaint.x) * (0.55 + 0.45 * ao) + spec;
-    else if (kind < 1.5) { float rk = 0.1 + 0.75 * fr; col = vBase * (0.42 + 0.35 * uLight.x) * (1.0 - rk) + min(e, vec3(1.6)) * rk * 0.62 + spec * 0.9; }
-    else if (kind < 2.5) col = min(e, vec3(2.5)) * mix(vec3(1.0), vBase, 0.6) * (0.35 + 0.45 * fr) * refl + vBase * 0.6 * (uLight.x + uLight.y * ndl) + spec;
+    if (kind < 0.5) col = dif * (1.0 - fr * 0.5) + e * fr * refl * mix(vec3(1.0), base, uPaint.x) * (0.55 + 0.45 * ao) + spec;
+    else if (kind < 1.5) { float rk = 0.1 + 0.75 * fr; col = base * (0.42 + 0.35 * uLight.x) * (1.0 - rk) + min(e, vec3(1.6)) * rk * 0.62 + spec * 0.9; }
+    else if (kind < 2.5) col = min(e, vec3(2.5)) * mix(vec3(1.0), base, 0.6) * (0.35 + 0.45 * fr) * refl + base * 0.6 * (uLight.x + uLight.y * ndl) + spec;
     else if (kind < 3.5) col = dif + e * fr * refl + spec * 0.25;
     else col = dif;
   }
+#ifdef DAMAGE
+  col = mix(col, vec3(0.78, 0.8, 0.82) * (0.45 + 0.55 * uLight.x + 0.3 * uLight.y), crack * 0.75);
+#endif
   col = mix(col, uFog, uEnvF.z) * uTint;
   gl_FragColor = vec4(min(col, vec3(1.0)), 1.0);
 }`;
@@ -6383,13 +6528,20 @@ const CarGL = {
   setup() {
     const gl = this.gl;
     const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
-    try {
-      const p = gl.createProgram(); gl.attachShader(p, sh(gl.VERTEX_SHADER, GL_VS)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, GL_FS)); gl.linkProgram(p);
+    // two versions of the shader: the plain one for every car, and one with the dents, scuffs and cracks that only damaged cars use
+    const make = dmg => {
+      const pre = dmg ? '#define DAMAGE\n' : '', p = gl.createProgram();
+      gl.attachShader(p, sh(gl.VERTEX_SHADER, pre + GL_VS)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, pre + GL_FS)); gl.linkProgram(p);
       if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
-      this.prog = p; gl.useProgram(p);
-      const L = this.loc = {};
+      const L = {};
       for (const a of ['aPos', 'aNrm', 'aMat']) L[a] = gl.getAttribLocation(p, a);
-      for (const u of ['uXf', 'uXf2', 'uCam', 'uScr', 'uCurve', 'uElev', 'uMatCol', 'uMatPar', 'uCamPos', 'uKey', 'uKeyCol', 'uLight', 'uPaint', 'uHor', 'uZen', 'uGround', 'uHline', 'uEnvF', 'uFog', 'uTint', 'uPL', 'uPLC']) L[u] = gl.getUniformLocation(p, u);
+      for (const u of ['uXf', 'uXf2', 'uCam', 'uScr', 'uCurve', 'uElev', 'uMatCol', 'uMatPar', 'uCamPos', 'uKey', 'uKeyCol', 'uLight', 'uPaint', 'uHor', 'uZen', 'uGround', 'uHline', 'uEnvF', 'uFog', 'uTint', 'uPL', 'uPLC', 'uDmgV', 'uDmg', 'uRot']) L[u] = gl.getUniformLocation(p, u);
+      return { p, L };
+    };
+    try {
+      this.plain = make(false); this.prog = this.plain.p; this.loc = this.plain.L;
+      try { this.hurt = make(true); } catch (e) { console.warn('car renderer: no damage shader', e); this.hurt = null; }
+      gl.useProgram(this.prog);
       gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL); gl.disable(gl.CULL_FACE);
       this.gen++; this.ok = true;
     } catch (e) { console.warn('car renderer', e); this.ok = false; }
@@ -6408,7 +6560,9 @@ const CarGL = {
   /* draw one car into the 2D context g. Returns false if it could not (the caller then draws it the old way) */
   draw(g, mesh, pose, tx, cam) {
     if (!this.ok || this.off) return false;
-    const gl = this.gl, L = this.loc, env = pose.env, look = pose.look || {};
+    const dmg = mesh.bike || mesh.bus ? 0 : clamp(pose.damage || 0, 0, 1), dseed = (pose.dseed || 0) % 97;
+    const PG = dmg > 0.02 && this.hurt ? this.hurt : this.plain;
+    const gl = this.gl, L = PG.L, env = pose.env, look = pose.look || {};
     const t0 = performance.now();
     // where it lands on screen
     const tW = g.canvas.width, dpr = tW / W, cssH = g.canvas.height / dpr;
@@ -6430,7 +6584,7 @@ const CarGL = {
     gl.viewport(-sx, c.height + sy - tH, tW, tH);
     gl.enable(gl.SCISSOR_TEST); gl.scissor(0, c.height - shh, sw, shh);
     gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.useProgram(this.prog);
+    gl.useProgram(PG.p);
     // the car's place and the camera
     const cy = Math.cos(pose.yaw || 0), sy2 = Math.sin(pose.yaw || 0);
     gl.uniform4f(L.uXf, pose.x, pose.z, cy, sy2);
@@ -6457,6 +6611,9 @@ const CarGL = {
     gl.uniform4fv(L.uPL, pl); gl.uniform3fv(L.uPLC, plc);
     const fin = FIN[look.finish || 'gloss'] || FIN.gloss;
     gl.uniform4f(L.uPaint, fin.tintRefl || 0, 0, 0, 0);
+    // damage you can see: dents, scuffs, a cracked window, broken lights. Buses, bikes and traffic never carry any.
+    gl.uniform4f(L.uDmgV, dmg, dseed, mesh.L, mesh.W); gl.uniform4f(L.uDmg, dmg, dseed, mesh.L, mesh.W);
+    gl.uniform2f(L.uRot, cy, sy2);
     const mt = glMaterials(look, env, pose);
     gl.uniform3fv(L.uMatCol, mt.col); gl.uniform4fv(L.uMatPar, mt.par);
     // draw: body, then the details a hair in front of it, then tyres and rims
@@ -7671,7 +7828,7 @@ function paintCar(c) {
   }
   const id = c.dataset.car, own = !c.dataset.stock && S && S.owned[id];
   const look = c.dataset.draft === '1' && draft ? draft : own ? lookOf(S, id) : stockLook(id);
-  renderCarPreview(c, id, look, own ? own.up : {}, { yaw: c.dataset.spin ? spin.yaw + (c._drag || 0) : -2.45, locked: c.dataset.locked === '1', focus: c.dataset.draft ? spin.zoom : 0 });
+  renderCarPreview(c, id, look, own ? own.up : {}, { yaw: c.dataset.spin ? spin.yaw + (c._drag || 0) : -2.45, locked: c.dataset.locked === '1', focus: c.dataset.draft ? spin.zoom : 0, damage: own ? own.damage : 0, seed: id });
 }
 function backBtn(label) { return `<button class="bar-btn back-btn" type="button" data-act="back">&larr; ${label || 'Back'}</button>`; }
 function topBar(back) {
@@ -8037,7 +8194,8 @@ function powerTip(st, oppBhp) {
 }
 function damageWarn(own) {
   if (own.damage >= 100) return `<p class="tip bad">Your car is wrecked. Repair it in the garage before you can race.</p><div class="actions"><button class="btn small primary" data-act="garage" data-arg="upgrades"><span>Repair it</span></button></div>`;
-  if (own.damage >= 50) return `<p class="tip warn">Your car is ${own.damage}% damaged. A few more hits and it is wrecked. Repair costs ${money(repairCost(S))}.</p>`;
+  if (own.damage >= HURT_FROM) return `<p class="tip warn">Your car is ${own.damage}% damaged, so it is slower and heavier to steer until you fix it. A few more hits and it is wrecked. Repair costs ${money(repairCost(S))}.</p><div class="actions"><button class="btn small" data-act="garage" data-arg="upgrades"><span>Repair it</span></button></div>`;
+  if (own.damage >= 50) return `<p class="tip warn">Your car is ${own.damage}% damaged. Over ${HURT_FROM}% it starts to lose speed and steering, and at 100% it is wrecked. Repair costs ${money(repairCost(S))}.</p>`;
   return '';
 }
 const slipUps = car => { const up = {}; for (const u of UPGRADES) up[u.id] = car.slipUp || 2; return up; };
@@ -8329,7 +8487,7 @@ function upgradesTab(own, car, st) {
   }).join('');
   const mx = maxStats(car.id);
   const repairRow = `<div class="item">
-      <div><h4>Repair</h4><p>${own.damage > 0 ? `${own.damage}% damage. £${REPAIR_PER_PCT} per 1%.` : 'No damage. The car is spotless.'}</p>
+      <div><h4>Repair</h4><p>${own.damage > 0 ? `${own.damage}% damage. £${REPAIR_PER_PCT} per 1%.${own.damage >= HURT_FROM ? ' Over ' + HURT_FROM + '% the car is slower and heavier to steer.' : ''}` : 'No damage. The car is spotless.'}</p>
         ${own.damage > 0 && S.money < rc ? `<p class="fx">You can afford ${Math.floor(S.money / REPAIR_PER_PCT)}% right now.</p>` : ''}</div>
       <div class="side">${own.damage > 0 ? `<span class="price">${money(rc)}</span><button class="btn small primary" data-act="repair" ${S.money >= REPAIR_PER_PCT ? '' : 'disabled'}><span>${S.money >= rc ? 'Repair' : 'Repair what I can'}</span></button>` : '<span class="fitted">✓ 0%</span>'}
         ${canBodge(S) ? `<button class="btn small" data-act="bodge"><span>Free patch up to 50%</span></button>` : ''}</div>
@@ -8697,7 +8855,8 @@ function processEvents() {
           : ev.cp ? 'HIT EVERY CHECKPOINT' : e.n === 2 && S.stats.races < 4 ? 'GOLD GATES PAY CASH   HIT THEM IN A ROW FOR MORE' : 'VS  ' + ev.oppName.toUpperCase();
         showBanner(String(e.n), sub, 0.95, '#e9e4d8'); Sound.tone(440, 0.14, 0.14); break;
       }
-      case 'go': showBanner('GO!', '', 0.9, '#5fd38a'); Sound.tone(880, 0.35, 0.16); break;
+      case 'go': showBanner('GO!', R && R.p.damage >= HURT_FROM ? 'Your car is damaged: slower and heavier to steer' : '', R && R.p.damage >= HURT_FROM ? 1.8 : 0.9, '#5fd38a'); Sound.tone(880, 0.35, 0.16); break;
+      case 'hurt': showBanner(e.level > 1 ? 'BADLY DAMAGED' : 'CAR DAMAGED', e.level > 1 ? 'Losing power. A few more hits and it is wrecked' : 'Over 60%: slower and heavier to steer', 2.2, '#ff8a3a', 0.5); break;
       case 'hit': {
         V.shake = 0.5; flashT = 0.35; flashCol = [255, 40, 40];
         const pr = lastPlayerRect || { x0: W / 2 - 50, x1: W / 2 + 50, y0: H * 0.7 };
