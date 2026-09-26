@@ -633,6 +633,13 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 .timeslip .ts-head b { text-transform: uppercase; font-size: 11px; letter-spacing: 0.08em; color: #555; }
 .offer.friend.locked { opacity: 0.62; border-top-color: var(--line-2); box-shadow: none; }
 .ladder .tip.how { margin: -2px 0 8px; color: var(--ink); border-left: 3px solid var(--sodium); padding-left: 10px; }
+/* what's next after a chapter: one card per step, each with its button */
+.next-steps { display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--sodium); background: rgba(242, 163, 58, 0.07); padding: 12px; }
+.next-steps > .kicker { color: var(--sodium); }
+.next-steps .step { background: var(--panel-2); border: 1px solid var(--line); padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.next-steps .step h4 { margin: 0; font-family: var(--fd); font-weight: 400; font-size: 22px; letter-spacing: 0.02em; text-transform: uppercase; }
+.next-steps .step p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.45; }
+.next-steps .step .kicker { font-size: 11px; }
 </style>
 </head>
 <body>
@@ -723,7 +730,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         </section>
         <section>
           <h3>Essex and pink slips</h3>
-          <p>Take the crown and beat Ishaaq, and the border opens. Essex has eight rivals, faster cars and pink slips: once you have beaten someone, they will race you for their car if you put yours up. Win and it is yours. Lose and they keep the car you raced.</p>
+          <p>Take the crown and beat Ishaaq, and the border opens. Ishaaq calls you out once you have beaten Tush. Essex has eight rivals, faster cars and pink slips: once you have beaten someone, they will race you for their car if you put yours up. Win and it is yours. Lose and they keep the car you raced.</p>
         </section>
       </div>
       <button class="btn" data-act="title"><span>Back</span></button>
@@ -1254,30 +1261,50 @@ const CHARACTERS = {
     pre: 'No traffic to hide behind out here, London. Just the lights.',
     youWin: 'Lucky launch. Anousha will not be so kind.',
     youLose: 'Watch the lights, not me.',
+    bet: 'Double or nothing? My cousin fitted a new intake. Totally different car now.',
+    refuse: 'In that? No chance, bro. I race cars, not aeroplanes.',
+    paidUp: 'Take it. Just do not tell my mum.',
+    tookIt: 'Easy money. Told you the intake works!',
     face: { skin: '#c99a72', hair: 'curly', hairCol: '#1b1714', mouth: 'grin', top: '#f2c418', bg: '#2a6fb0' } },
   anousha: { name: 'Anousha Beeharry', from: 'Quatre Bornes', car: 'VW Polo GTI',
     bio: 'Runs the timing slips at drag night and knows every reaction time on the island by heart. Hers are the best.',
     pre: 'I have seen your reaction times. Do better.',
     youWin: 'Point two. Not bad. Dev is next, and he never misses a shift.',
     youLose: 'Point four off the line. You were beaten before second gear.',
+    bet: 'Your last reaction was point three. I will take your money until it is point one.',
+    refuse: 'I only bet on races I have numbers for. Your car is not on my sheet.',
+    paidUp: 'Fine. I am writing that time down.',
+    tookIt: 'Point four off the line again. Thank you for the donation.',
     face: { skin: '#b07a52', hair: 'long', hairCol: '#140f0c', mouth: 'smirk', top: '#15171b', chain: '#e2b650', bg: '#b3163a' } },
   dev: { name: 'Devesh "Dev" Mungur', from: 'Curepipe', car: 'Honda Civic Type R',
     bio: 'Mechanic by day. Has changed more Civic gearboxes than anyone on the island, and can feel every shift point.',
     pre: 'Short shift and I will hear it from here.',
     youWin: 'Clean shifts. You earned that. La Mama will want a word.',
     youLose: 'You left it on the limiter. I could hear it.',
+    bet: 'Bring money. And a spare clutch, the way you shift.',
+    refuse: 'That thing has way more power than mine. I fix cars for a living, I am not stupid.',
+    paidUp: 'Clean shifts. You can have my money, not my gearbox.',
+    tookIt: 'Heard you hit the limiter from the other lane. Cash, please.',
     face: { skin: '#8d5a3b', hair: 'crop', hairCol: '#18130f', facial: 'shortbeard', facialCol: '#1d1712', mouth: 'grin', top: '#c9252c', bg: '#3a3f46' } },
   chankin: { name: 'Sabrina "La Mama" Chan Kin', from: 'Chinatown, Port Louis', car: 'Subaru Impreza WRX STI (big turbo)',
     bio: 'Ran drag night before anyone else was old enough to drive. Her STI has had four engines and every one of them was faster.',
     pre: 'Save your nitro, darling. You will need it.',
     youWin: 'Well well. The Baron has been asking about you.',
     youLose: 'Come back when your car can keep up with your mouth.',
+    bet: "Back for more, darling? There is always room on Mama's table.",
+    refuse: 'Take that monster to someone younger, darling. Mama is not a charity.',
+    paidUp: 'Take it before I change my mind.',
+    tookIt: "Mama's STI thanks you for the new turbo.",
     face: { skin: '#e3bf97', hair: 'bun', hairCol: '#0e0d0c', shades: 'round', mouth: 'smirk', top: '#1f4fb5', bg: '#6b1d5b' } },
   baron: { name: 'Le Baron', from: 'Flic en Flac', car: 'Nissan GT-R (drag build)', real: 'Olivier Duval',
     bio: 'Nobody knows what he does for money. Everybody knows his GT-R has never lost on the airport road.',
     pre: 'Nine seconds. Can you do nine seconds?',
     youWin: 'The road is yours. For now.',
     youLose: 'Nine seconds. I told you.',
+    bet: 'Money means nothing to me. Losing, however, would.',
+    refuse: 'I race for the pleasure of it. There is no pleasure in racing a rocket.',
+    paidUp: 'Keep the change.',
+    tookIt: 'Nine seconds. As always.',
     face: { skin: '#d9b08a', hair: 'slick', hairCol: '#9a9a96', facial: 'goatee', facialCol: '#8d8d88', mouth: 'smirk', top: '#101012', chain: '#c9ccd0', bg: '#141414' } },
   // Adam, owner of Ride3
   ride3: { name: 'Adam', from: 'Ride3', car: 'Kawasaki Ninja H2R',
@@ -1318,7 +1345,7 @@ const SPECIALS = {
     win: 'The V8 has gone quiet. Ilford is yours.',
     oppLook: { model: 'm3', paint: '#5f656c', finish: 'metallic', rims: 'five', rimColor: '#2a2d31', tint: 2, stance: 1, spoiler: 'lip' },
     diff: { skill: 0.975, inc: [12, 16] } },
-  ishaaq: { title: 'THE TUNNEL', chapter: 'Call-out', rival: 'ishaaq', oppBhp: 640, reward: 5500, rep: 0, dist: 6400, unlock: { street: 8, rep: 25 }, friend: true, bike: true, accelK: 1.5, oppLabel: 'YAMAHA R1',
+  ishaaq: { title: 'THE TUNNEL', chapter: 'Call-out', rival: 'ishaaq', oppBhp: 640, reward: 5500, rep: 0, dist: 6400, unlock: { after: 'tush' }, friend: true, bike: true, accelK: 1.5, oppLabel: 'YAMAHA R1',
     area: 'Blackwall Tunnel', road: 'A12 and the A102 tunnel approach', time: 'late', env: 'aroad', sky: ['canary', 'orbit', 'cranes', 'shard'], map: [-0.004, 51.506],
     signs: [['green', 'A102', 'Blackwall Tunnel', 'Greenwich'], ['borough', 'London Borough of Tower Hamlets'], ['green', 'A12', 'Stratford', 'Hackney Wick'], ['green', 'A13', 'Canning Town', 'Limehouse']],
     intro: 'Ishaaq runs the Blackwall Tunnel approach on his R1 Razorback, and nothing on four wheels has got past him yet. He will race anyone brave enough to ask.',
@@ -1337,7 +1364,8 @@ const SPECIALS = {
 
 const SPECIAL_ORDER = ['salman', 'kiyyah', 'azhar', 'tush', 'ishaaq', 'ride3'];
 /* friends turn up on the street race board once you have done a few street races and built some reputation */
-const specialUnlocked = (S, id) => { const u = SPECIALS[id].unlock || {}; return u.crown ? !!S.careerDone : S.rep >= (u.rep || 0) && ((S.stats && S.stats.street) || 0) >= (u.street || 0); };
+/* who is ready to race: the crown for Adam, beating Tush for Ishaaq, street races and reputation for the rest */
+const specialUnlocked = (S, id) => { const u = SPECIALS[id].unlock || {}; return u.crown ? !!S.careerDone : u.after ? !!(S.specials && S.specials[u.after]) : S.rep >= (u.rep || 0) && ((S.stats && S.stats.street) || 0) >= (u.street || 0); };
 const FRIENDS = SPECIAL_ORDER.filter(id => SPECIALS[id].friend);
 /* after the first win a friend's race pays like a good street race, every time */
 function rematchPrize(S) { const rep = S.rep * 33 / REP_TOTAL; return Math.round((220 + rep * 22) * 1.8 / 10) * 10; }
@@ -1574,7 +1602,7 @@ const DRAG = [
   { id: 'anousha', bhp: 230, handling: 7.6, prize: 1200, skill: 0.66, look: { model: 'hatch', paint: '#c9252c', finish: 'metallic', rims: 'split', rimColor: '#c3c8cc', tint: 3, spoiler: 'duck', stance: 2, plate: '1507 AB 21' } },
   { id: 'dev', bhp: 340, handling: 8.0, prize: 2500, skill: 0.74, look: { model: 'civic', paint: '#eeeeea', finish: 'gloss', rims: 'mesh', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, plate: '777 FK 18' } },
   { id: 'chankin', bhp: 520, handling: 8.4, prize: 5000, skill: 0.82, look: { model: 'wrx', paint: '#1f4fb5', finish: 'pearl', rims: 'split', rimColor: '#c9a23a', tint: 3, spoiler: 'big', kit: 1, stance: 2, plate: '8 MAMA 08' } },
-  { id: 'baron', bhp: 820, handling: 9.0, prize: 10000, skill: 0.9, look: { model: 'gtr', paint: '#101012', finish: 'matte', rims: 'fan', rimColor: '#c9a23a', tint: 4, spoiler: 'gt', kit: 1, stance: 2, plate: '1 BARON' } },
+  { id: 'baron', bhp: 820, handling: 9.0, prize: 10000, skill: 0.9, look: { model: 'gtr', paint: '#101012', finish: 'matte', rims: 'fan', rimColor: '#c9a23a', tint: 3, spoiler: 'gt', kit: 1, stance: 2, plate: '1 BARON' } },
 ];
 const dragById = id => DRAG.find(d => d.id === id);
 const dragBeaten = (S, id) => !!(S && S.drag && S.drag.beaten && S.drag.beaten[id]);
@@ -1594,7 +1622,7 @@ function dragBetBlock(S, d, stake) {
   const nm = CHARACTERS[d.id].name, who = /"(.*)"/.test(nm) ? nm.match(/"(.*)"/)[1] : nm.split(' ')[0];
   if (!stake || stake <= 0) return 'Pick a bet first.';
   if (stake > S.money) return `You do not have ${'£' + fmt(stake)} to put down.`;
-  if (curStats(S).bhp > d.bhp * 1.25) return `${who} will not bet against a car that much faster. Bring something nearer ${d.bhp} bhp.`;
+  if (curStats(S).bhp > d.bhp * 1.25) return `“${CHARACTERS[d.id].refuse}” ${who} will not bet against a car this much faster. Bring something nearer ${d.bhp} bhp.`;
   return '';
 }
 /* the car in a drag race: power, grip, air resistance and a gearbox, all from the same stats as everything else.
@@ -1637,7 +1665,7 @@ function createDrag(S, spec) {
   const beaten = dragBeaten(S, d.id), stake = beaten ? Math.min(Math.max(0, S.money), spec.stake || dragStakes(d)[0]) : 0;
   const nick = /"(.*)"/.test(ch.name) ? ch.name.match(/"(.*)"/)[1] : ch.name.split(' ')[0];
   const ev = Object.assign({}, DRAG_STRIP, { kind: 'drag', drag: true, id: d.id, title: 'DRAG NIGHT', chapter: 'Mauritius', rival: d.id, oppName: ch.name, oppTag: nick, oppCar: ch.car, oppBhp: d.bhp,
-    oppLook: d.look, dist: DRAG_DIST, lanes: 2, curvy: 0, reward: beaten ? 0 : d.prize, stake, rematch: beaten, rep: 0, skill: 1, inc: [99, 99], d: 0, route: null });
+    oppLook: d.look, dist: DRAG_DIST, lanes: 2, curvy: 0, reward: beaten ? 0 : d.prize, stake, rematch: beaten, preLine: beaten ? ch.bet : ch.pre, rep: 0, skill: 1, inc: [99, 99], d: 0, route: null });
   const psp = dragSpec(st.bhp, st.handling, st.vmax, st.nitroCap), osp = dragSpec(d.bhp, d.handling, vmaxFor(d.bhp), 100 + d.skill * 60);
   psp.P *= hurtK(own.damage).accel;   // a badly damaged car has less to give here too
   const rr = Math.random, p = Object.assign(dragCar(psp), { lane: 0, x: 0, vx: 0, latV: 0, nitro: st.nitroCap, boosting: false, damage: own.damage, startDamage: own.damage, collisions: 0, topV: 0 });
@@ -2385,7 +2413,7 @@ function payout(R, base, out) {
 function settleRace(S, R) {
   if (R.settled || !R.result) return R.summary || null;
   R.settled = true;
-  const essexBefore = essexOpen(S), muBefore = muOpen(S);
+  const essexBefore = essexOpen(S), muBefore = muOpen(S), friendsBefore = FRIENDS.filter(id => specialUnlocked(S, id));
   const ev = R.ev, own = ev.loaner ? null : S.owned[R.carId];
   if (own) own.damage = Math.round(Math.min(100, R.p.damage));
   const out = { kind: ev.kind, won: R.result.won, how: R.result.how, reward: 0, rep: 0, newCars: [], nextEvent: null, chapter: null,
@@ -2500,7 +2528,7 @@ function settleRace(S, R) {
       out.newCars = CARS.filter(c => !c.slip && c.rep > repBefore && c.rep <= S.rep).map(c => c.name);
       S.news = ev.win;
       const nx = nextEventIndex(S);
-      if (nx >= EVENTS.length) { S.careerDone = true; S.kingRevealed = true; out.careerDone = !wasDone; }
+      if (nx >= EVENTS.length) { S.careerDone = true; S.kingRevealed = true; out.careerDone = !wasDone; if (!wasDone) S.news = 'The crown is yours. Adam from Ride3 wants a race, and Essex has heard about the new Street King.'; }
       else {
         S.eventIndex = nx; out.nextEvent = EVENTS[nx].title;
         if (EVENTS[nx].chapter !== ev.chapter) out.chapter = EVENTS[nx].chapter;
@@ -2509,6 +2537,8 @@ function settleRace(S, R) {
     }
   }
   if (!essexBefore && essexOpen(S)) out.essexOpened = true;
+  // someone new wants a race after this one (more street races done, or Tush beaten for Ishaaq)
+  out.newFriends = FRIENDS.filter(id => specialUnlocked(S, id) && !friendsBefore.includes(id)).map(id => CHARACTERS[SPECIALS[id].rival].name);
   if (!muBefore && muOpen(S)) out.muOpened = true;
   R.summary = out;
   return out;
@@ -4488,10 +4518,11 @@ function renderIntro(R, t, len) {
   ctx.fillText(carName, nx, (ch ? ty : ty + 10) + nf * 0.9 + 22 * u + 6);
   if (spec) { ctx.fillStyle = '#f2a33a'; ctx.fillText(spec, nx, (ch ? ty : ty + 10) + nf * 0.9 + 44 * u + 10); }
   ty += (ch ? ps : nf + 50 * u) + 24 * u;
-  if (ch && ch.pre && ch.pre !== '...' && t > 0.8) {
+  const preLine = (ev.preLine || (ch && ch.pre)) || '';
+  if (ch && preLine && preLine !== '...' && t > 0.8) {
     ctx.globalAlpha = a * ease((t - 0.8) / 0.4);
     ctx.font = `italic ${Math.round(16 * u + 3)}px ${FONT_B}`; ctx.fillStyle = '#e9e4d8';
-    const words = ('“' + ch.pre + '”').split(' '), lines = []; let line = '';
+    const words = ('“' + preLine + '”').split(' '), lines = []; let line = '';
     const lw = land ? W * 0.4 : W - pad * 2;
     for (const w of words) { const tt = line ? line + ' ' + w : w; if (ctx.measureText(tt).width > lw) { lines.push(line); line = w; } else line = tt; }
     lines.push(line);
@@ -5865,7 +5896,7 @@ function matRGB(mat, n, look, env, fogK2, extra, v, face) {
     }
     case 'glass': {
       // dark tinted glass that mostly shows what it reflects
-      const t = TINTS[look.tint || 0], gk = 0.42 + 0.35 * env.amb;
+      const t = TINTS[clamp(Math.round(look.tint || 0), 0, TINTS.length - 1)], gk = 0.42 + 0.35 * env.amb;
       const ndv = Math.max(0.02, n[0] * v[0] + n[1] * v[1] + n[2] * v[2]), fr = 0.06 + 0.94 * Math.pow(1 - ndv, 5);
       const d2 = 2 * ndv, e = envRefl(env, d2 * n[0] - v[0], d2 * n[1] - v[1], d2 * n[2] - v[2]), rk = 0.12 + 0.8 * fr;
       c = [t[0] * gk * (1 - rk) + e[0] * rk, t[1] * gk * (1 - rk) + e[1] * rk, t[2] * gk * (1 - rk) + e[2] * rk * 1.04];
@@ -6994,7 +7025,7 @@ function glMaterials(look, env, pose) {
   set('flare', lum > 180 ? shade(paint, 0.8) : shade(paint, 1.18).map(v => Math.max(v, 40)), 0, F.f0, F.gloss, F.refl);
   set('bus', paint, 0, 0.06, 50, 0.9);
   set('taxi', env.lit ? [255, 190, 70] : [255, 183, 46], env.lit ? 4 : 0, 0.06, 50, 1);
-  set('glass', TINTS[look.tint || 0], 1, 0.06, 90, 1);
+  set('glass', TINTS[clamp(Math.round(look.tint || 0), 0, TINTS.length - 1)], 1, 0.06, 90, 1);
   set('lens', [138, 146, 158], 2, 0.45, 80, 0.75);
   set('lightlens', [150, 20, 22], 1, 0.06, 90, 1);
   set('bezel', [40, 42, 46], 2, 0.4, 40, 0.8);
@@ -8295,15 +8326,13 @@ function streetPage() {
   if (!tabs.some(t => t[0] === streetTab)) streetTab = 'races';
   let body;
   if (streetTab === 'people') {
-    body = `<p class="tip">People who have heard about you. Beat them once for their big prize, then race them again for cash whenever you like. More of them call you out as you do street races: any street race counts, won or lost, and so do races against challengers.</p>
+    body = `<p class="tip">People who have heard about you. Beat them once for their big prize, then race them again for cash whenever you like. More of them call you out as you do street races (any street race counts, won or lost), and Ishaaq calls you out once you beat Tush.</p>
       ${who.includes('ride3') ? ride3Card() : ''}
       <div class="offers">${friendCards()}${soon.map(id => {
-        const sp = SPECIALS[id], ch = CHARACTERS[sp.rival], u = sp.unlock || {}, n = (S.stats && S.stats.street) || 0, need = [];
-        if (n < (u.street || 0)) need.push(`${u.street} street races (you have done ${n})`);
-        if (S.rep < (u.rep || 0)) need.push(`Rep ${u.rep} (you have ${S.rep})`);
+        const sp = SPECIALS[id], ch = CHARACTERS[sp.rival];
         return `<div class="offer friend locked"><div class="offer-top"><span class="chip diff">Coming up</span></div>
           <div class="co-head"><canvas class="portrait sm" data-portrait="${sp.rival}" data-hidden="1" width="44" height="44"></canvas><div><h4>${esc(ch.name)}</h4><p class="offer-opp">${esc(ch.car)}</p></div></div>
-          <p class="offer-opp">🔒 Calls you out after ${need.join(' and ')}</p></div>`;
+          <p class="offer-opp">🔒 Calls you out ${esc(unlockNeed(id))}</p></div>`;
       }).join('')}</div>`;
     // they have been seen now, so the dot on Street goes
     S.announced = Object.assign(S.announced || {}, ...who.map(id => ({ ['ch:' + id]: true }))); save();
@@ -8358,7 +8387,7 @@ function dragCards() {
         <div class="offer-top"><span class="chip diff">${beaten ? 'Beaten ✓' : 'Drag night'}</span><span class="chip">Runs about ${et.toFixed(1)} s</span></div>
         <div class="co-head"><canvas class="portrait sm" data-portrait="${d.id}" data-hidden="0" width="44" height="44"></canvas><div><h4>${esc(ch.name)}</h4><p class="offer-opp">${esc(ch.car)} · <b>${d.bhp} bhp</b></p></div></div>
         <canvas class="slipcar" data-model="${d.look.model}" data-rlook="${esc(JSON.stringify(Object.assign({ tint: 2 }, d.look)))}" width="300" height="110" aria-label="${esc(ch.car)}"></canvas>
-        <p class="offer-opp"><i>“${esc(beaten ? 'Again? Put your money where your mouth is.' : ch.pre)}”</i></p>
+        <p class="offer-opp"><i>“${esc(beaten ? ch.bet : ch.pre)}”</i></p>
         <div class="offer-foot">${act}</div>
       </div>`;
     }).join('')}</div>`;
@@ -8691,7 +8720,10 @@ function muMain(own, st) {
         <div><dt>Island stars</dt><dd>${stars} <small>of ${MU.length * 3}</small></dd></div><div><dt>Wins</dt><dd>${S.stats.wins}</dd></div>
         <div><dt>Money</dt><dd>${money(S.money)}</dd></div><div><dt>Reputation</dt><dd>${S.rep}</dd></div>
       </dl>
-      <p class="tip">Race any island event again for fun and the stars you missed. No prize money, but island street races still pay.</p>`;
+      <p class="tip">Race any island event again for fun and the stars you missed. No prize money, but island street races still pay.</p>
+      ${DRAG.some(d => !dragBeaten(S, d.id)) ? `<div class="next-steps"><p class="kicker">What's next</p><div class="step"><p class="kicker">Drag night</p><h4>The airport road at Plaine Magnien</h4>
+        <p>${DRAG.filter(d => !dragBeaten(S, d.id)).length} drag racers still to beat, Le Baron last. A straight quarter mile: launch on green and shift in the green.</p>
+        <div class="actions"><button class="btn primary" data-act="stab" data-arg="drag"><span>Drag night</span></button></div></div></div>` : ''}`;
   } else {
     const ev = MU[i], boss = ev.rival === 'boss', need = boss && S.current !== 'gtrx';
     body = `<p class="kicker">Mauritius · Race ${i + 1} of ${MU.length} · ${esc(ev.area)}</p>
@@ -8719,15 +8751,39 @@ function muMain(own, st) {
       ${exh ? `<p class="kicker">Race again · ★ ${stars} of ${MU.length * 3}</p><div class="actions">${exh}</div>` : ''}
     </article></div>`;
 }
-/* the way to Essex: Ishaaq calls you out after enough street races and reputation */
-function ishaaqHow() {
-  const u = SPECIALS.ishaaq.unlock || {}, n = (S.stats && S.stats.street) || 0;
-  if (S.specials && S.specials.ishaaq) return 'The border is open.';
-  if (specialUnlocked(S, 'ishaaq')) return 'Ishaaq is waiting for you on the Street page, under Challengers. Beat him in the Tunnel and Essex opens.';
-  const need = [];
+/* what it takes for a challenger to turn up, in plain words */
+function unlockNeed(id) {
+  const u = SPECIALS[id].unlock || {}, n = (S.stats && S.stats.street) || 0, need = [];
+  if (u.after) return `once you beat ${CHARACTERS[SPECIALS[u.after].rival].name}`;
   if (n < (u.street || 0)) need.push(`${u.street - n} more street race${u.street - n === 1 ? '' : 's'} (you have done ${n} of ${u.street})`);
   if (S.rep < (u.rep || 0)) need.push(`Rep ${u.rep} (you have ${S.rep})`);
-  return `Ishaaq calls you out after ${need.join(' and ')}. Street races are on the Street page: any race counts, won or lost. Then beat him in the Tunnel and Essex opens.`;
+  return 'after ' + need.join(' and ');
+}
+/* the way to Essex: beat Tush, then Ishaaq calls you out. Beat him in the Tunnel and the border opens */
+function ishaaqHow() {
+  if (S.specials && S.specials.ishaaq) return 'The border is open.';
+  if (specialUnlocked(S, 'ishaaq')) return 'Ishaaq is waiting for you on the Street page, under Challengers. Beat him in the Tunnel and Essex opens.';
+  const tush = CHARACTERS[SPECIALS.tush.rival].name;
+  const t = specialUnlocked(S, 'tush') ? `${tush} is waiting on the Street page, under Challengers.` : `${tush} turns up ${unlockNeed('tush')}: any street race counts, won or lost.`;
+  return `Ishaaq calls you out once you beat ${tush}. ${t} Then beat Ishaaq in the Tunnel and Essex opens.`;
+}
+/* what to do after the crown: Adam's invitation, and the way to Essex. Each with a button that goes straight there */
+function londonNext() {
+  const steps = [], r3 = S.specials && S.specials.ride3, ish = specialUnlocked(S, 'ishaaq'), ex = essexOpen(S);
+  if (!r3) steps.push(`<div class="step"><p class="kicker">Invitation</p><h4>Race Adam from Ride3</h4>
+    <p>He runs Ride3 and races a supercharged Kawasaki H2R. Nobody on four wheels has beaten him. ${money(SPECIALS.ride3.reward)} and +${SPECIALS.ride3.rep} rep if you do.</p>
+    <div class="actions"><button class="btn primary" data-act="special" data-arg="ride3"><span>Race Adam</span></button></div></div>`);
+  if (!ex) {
+    const tushUp = specialUnlocked(S, 'tush'), tushName = CHARACTERS[SPECIALS.tush.rival].name.split(' ')[0];
+    steps.push(`<div class="step"><p class="kicker">Next · Essex</p><h4>${ish ? 'Beat Ishaaq to open Essex' : `Beat ${esc(tushName)}, then Ishaaq`}</h4>
+    <p>${esc(ishaaqHow())}</p>
+    <div class="actions">${ish ? `<button class="btn primary" data-act="special" data-arg="ishaaq"><span>Race Ishaaq</span></button>`
+      : tushUp ? `<button class="btn primary" data-act="special" data-arg="tush"><span>Race ${esc(tushName)}</span></button>`
+      : `<button class="btn primary" data-act="hub" data-arg="street"><span>Street races</span></button>`}</div></div>`);
+  }
+  else if (!(S.essex && S.essex.done)) steps.push(`<div class="step"><p class="kicker">Next · Essex</p><h4>Essex is open</h4><p>Eight rivals from Romford to the QE2 Bridge, faster cars and pink slips.</p>
+    <div class="actions"><button class="btn primary" data-act="hubtab" data-arg="essex"><span>Go to Essex</span></button></div></div>`);
+  return steps.length ? `<div class="next-steps"><p class="kicker">What's next</p>${steps.join('')}</div>` : '';
 }
 /* shown on the London side until Essex opens */
 function essexTeaser() {
@@ -8768,15 +8824,16 @@ function goHub(page, sub) {
   else if (exOpen && hubTab !== 'london') main = essexMain(own, st);
   else if (S.careerDone) {
     main = `<article class="flyer">
+      ${S.news ? `<p class="news">“${esc(S.news)}”</p>` : ''}
       <p class="kicker">Career complete</p>
       <h2 class="flyer-title">Street King</h2>
+      ${newRivalCard()}
+      ${londonNext()}
       ${rivalCard('king', CHARACTERS.king.youWin, false, 'Ray Walsh, the first Street King')}
       <dl class="facts">
         <div><dt>Wins</dt><dd>${S.stats.wins}</dd></div><div><dt>Races</dt><dd>${S.stats.races}</dd></div>
         <div><dt>Money</dt><dd>${money(S.money)}</dd></div><div><dt>Reputation</dt><dd>${S.rep}</dd></div>
       </dl>
-      ${newRivalCard()}
-      ${exOpen ? '' : essexTeaser()}
       <p class="kicker">Race again · ★ ${EVENTS.reduce((a, e) => a + starCount((S.stars || {})['career:' + e.rival]), 0)} of ${EVENTS.length * 3}</p>
       <p class="tip">Race any London event again for fun and the stars you missed. No prize money, but street races still pay.</p>
       <div class="actions">${EVENTS.map((e, i) => S.completed[i] ? `<button class="btn small" data-act="exhibition" data-arg="${i}"><span>${e.title}</span></button>` : '').join('')}</div>
@@ -9129,7 +9186,7 @@ function showDragResults() {
     ${pay}
     ${sum.dragBest ? `<div class="unlock-note"><small>New best in this car</small>${res.et.toFixed(3)} s</div>` : ''}
     ${sum.dragNext ? `<div class="unlock-note special"><small>New racer at drag night</small>${esc(sum.dragNext)}</div>` : ''}
-    ${rivalCard(ev.id, res.won ? ch.youWin : ch.youLose)}
+    ${rivalCard(ev.id, ev.rematch ? (res.won ? ch.paidUp : ch.tookIt) : res.won ? ch.youWin : ch.youLose)}
     ${tip ? `<p class="tip">${esc(tip)}</p>` : ''}
     <div class="actions">${btns}</div>`;
   showScreen('scr-results');
@@ -9172,10 +9229,12 @@ function showResults() {
   if (sum.slipWon) notes += `<div class="unlock-note special"><small>New car in your garage</small>${esc(sum.slipWon)}</div>`;
   if (sum.slipLost) notes += `<div class="unlock-note bad"><small>Car lost</small>${esc(sum.slipLost)}</div>`;
   if (sum.essexOpened) notes += `<div class="unlock-note special"><small>New area unlocked</small>Essex</div>`;
+  for (const n of sum.newFriends || []) notes += `<div class="unlock-note special"><small>New challenger · Street, Challengers</small>${esc(n)} wants a race</div>`;
   if (sum.muOpened) notes += `<div class="unlock-note special"><small>New area unlocked</small>Mauritius</div>`;
   if (sum.imported) notes += `<div class="unlock-note special"><small>Delivered to Port Louis</small>Your GT-R, rebuilt for Boss</div>`;
   let who = '';
-  if (sum.careerDone) notes += `<div class="unlock-note special"><small>Invitation unlocked</small>${SPECIALS.ride3.title}</div>`;
+  if (sum.careerDone) notes += `<div class="unlock-note special"><small>Invitation unlocked</small>Adam from Ride3 wants a race</div>
+    <div class="unlock-note"><small>Next area · Essex</small>${esc(ishaaqHow())}</div>`;
   if (sum.careerDone) {
     who = `<div class="reveal"><p class="kicker">The King is revealed</p>${rivalCard('king', CHARACTERS.king.youWin, false, 'Ray Walsh')}
       <p class="story">The GT-R door opens as the sun comes up over Canary Wharf. It is Ray Walsh, Danny's uncle from the MOT garage in Canning Town.</p></div>`;
