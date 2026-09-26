@@ -616,6 +616,10 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 #controls.drag { grid-template-columns: 1fr 1.6fr; }
 #controls.drag #c-left { display: none; }
 #controls.drag #c-right { border-color: rgba(95, 211, 138, 0.7); color: #c8f5d8; background: rgba(20, 70, 40, 0.45); }
+#controls.drag #c-right.wait { border-color: rgba(233, 228, 216, 0.25); color: rgba(233, 228, 216, 0.6); background: rgba(14, 16, 18, 0.55); }
+#controls.drag #c-right.go { border-color: #8ff0b0; color: #fff; background: rgba(40, 170, 85, 0.8); animation: gopulse 0.45s ease-in-out infinite alternate; }
+#controls.drag #c-right.go small { color: #e6ffee; }
+@keyframes gopulse { to { background: rgba(70, 225, 120, 0.95); box-shadow: 0 0 22px rgba(95, 211, 138, 0.7); } }
 .offer.drag { border-top-color: #f2c418; }
 .offer.drag .chip.diff { color: #ffe27a; border-color: #f2c418; }
 .offer.drag.beaten { border-top-color: var(--go); }
@@ -722,7 +726,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         </section>
         <section>
           <h3>Drag night</h3>
-          <p>On the island, the Street page has drag night on the old airport road: a straight quarter mile, side by side. Tap SHIFT (or press Up) the moment the light goes green, then each time the needle reaches the green. Too early off the line is a red light and you lose. One shot of nitro. Beat each racer for their prize, then race them again for money.</p>
+          <p>On the island, the Street page has drag night on the old airport road: a straight quarter mile, side by side. The big button says WAIT while the ambers count down. When the light goes green it turns into GO: tap it (or press Up) straight away. After that it says SHIFT: tap it each time the needle reaches the green. Too early off the line is a red light and you lose. One shot of nitro. Beat each racer for their prize, then race them again for money.</p>
         </section>
         <section>
           <h3>Stars</h3>
@@ -4619,7 +4623,7 @@ function drawDragHUD(R, ctrlH) {
     ctx.globalAlpha = 1;
     if (!p.launched && !T.red) {
       ctx.textAlign = 'center'; ctx.font = `700 ${F(14, 11)}px ${FONT_M}`; ctx.fillStyle = T.green ? '#5fd38a' : '#e9e4d8';
-      ctx.fillText(T.green ? 'GO! TAP SHIFT' : 'TAP SHIFT ON GREEN', cx, top + h + lr * 5.2);
+      ctx.fillText(T.green ? 'TAP GO NOW' : 'WAIT FOR GREEN, THEN TAP GO', cx, top + h + lr * 5.2);
     }
   }
   // the rev counter
@@ -4645,7 +4649,13 @@ function drawDragHUD(R, ctrlH) {
   ctx.fillText(Math.round(p.v * MPH) + ' MPH', gx, gy + r * 0.78);
   // shift now, and how the last one went
   const fy = H * 0.34, fx = W / 2;
-  if (inGreen && Math.sin(performance.now() / 70) > -0.2) { ctx.font = `${F(64, 36)}px ${FONT_D}`; ctx.fillStyle = '#5fd38a'; ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 4; ctx.strokeText('SHIFT', fx, fy); ctx.fillText('SHIFT', fx, fy); }
+  if (!p.launched && R.state === 'racing' && !T.red) {
+    // green and still sitting there: a big GO, the same word as the button
+    const s = 1 + 0.06 * Math.sin(performance.now() / 60);
+    ctx.save(); ctx.translate(fx, fy); ctx.scale(s, s);
+    ctx.font = `${F(84, 46)}px ${FONT_D}`; ctx.fillStyle = '#5fd38a'; ctx.strokeStyle = 'rgba(0,0,0,0.75)'; ctx.lineWidth = 5;
+    ctx.strokeText('GO', 0, 0); ctx.fillText('GO', 0, 0); ctx.restore();
+  } else if (inGreen && Math.sin(performance.now() / 70) > -0.2) { ctx.font = `${F(64, 36)}px ${FONT_D}`; ctx.fillStyle = '#5fd38a'; ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 4; ctx.strokeText('SHIFT', fx, fy); ctx.fillText('SHIFT', fx, fy); }
   else if (R.lastShift && R.lastShift.t < 0.9) {
     const q = R.lastShift.q, col = { perfect: '#5fd38a', good: '#f2c418', early: '#ff8a3a', late: '#ff5a4a' }[q];
     ctx.globalAlpha = clamp(1.4 - R.lastShift.t * 1.4, 0, 1); ctx.font = `${F(44, 26)}px ${FONT_D}`; ctx.fillStyle = col; ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 4;
@@ -9174,7 +9184,7 @@ function showDragResults() {
     </div>`;
   const tip = foul ? 'Wait for green. The ambers come half a second apart, then green: tap on green, not on the last amber.'
     : res.won ? (sum.dragNext ? `${sum.dragNext} is waiting at the end of the strip.` : ev.rematch ? 'Easy money. Go again or cash out.' : 'Nobody left on the airport road who can beat you. Race them again for money.')
-    : res.react > 0.4 ? 'Slow off the line: tap SHIFT the moment it goes green.' : nq('early') + nq('late') > 1 ? 'Shift with the needle in the green: early shifts bog the car down, late ones sit on the limiter.' : !q.length ? '' : res.gap > 1.2 ? `Their car is quicker than yours down here. More power: engine upgrades, or a faster island car.` : 'Close. A cleaner launch or one better shift and it is yours.';
+    : res.react > 0.4 ? 'Slow off the line: tap GO the moment the light turns green.' : nq('early') + nq('late') > 1 ? 'Shift with the needle in the green: early shifts bog the car down, late ones sit on the limiter.' : !q.length ? '' : res.gap > 1.2 ? `Their car is quicker than yours down here. More power: engine upgrades, or a faster island car.` : 'Close. A cleaner launch or one better shift and it is yours.';
   const again = !ev.rematch || (ev.stake && !dragBetBlock(S, d, ev.stake));
   const btns = `${again && !(res.won && !ev.rematch) ? `<button class="btn primary big" data-act="retry" ${own.damage >= 100 ? 'disabled' : ''}><span>${ev.rematch ? 'Again for ' + money(ev.stake) : 'Go again'}</span></button>` : ''}
     <button class="btn ${res.won && !ev.rematch ? 'primary big' : ''}" data-act="hub" data-arg="street"><span>Drag night</span></button>`;
@@ -9327,10 +9337,27 @@ function startRace(spec) {
   intro = R.ev.cp || R.ev.solo || window.__noIntro ? null : { t: 0, len: R.ev.kind === 'street' ? 3.4 : R.ev.drag ? 4 : 4.8 };
   // drag night: two buttons, NITRO and SHIFT
   $('controls').classList.toggle('drag', !!R.ev.drag);
-  $('c-right').innerHTML = R.ev.drag ? 'SHIFT ▲<small>TAP ON GREEN, THEN IN THE GREEN</small>' : 'RIGHT ▶<small>D / →</small>';
+  dragBtnState = ''; $('c-right').classList.remove('wait', 'go', 'shift');
+  if (R.ev.drag) dragBtn(); else { $('c-right').innerHTML = 'RIGHT ▶<small>D / →</small>'; $('c-right').setAttribute('aria-label', 'Move one lane right'); }
   $('controls').hidden = !!intro; $('b-pause').hidden = !!intro; document.body.classList.add('racing');
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
   Sound.init();
+}
+/* drag night: the big button says what a tap does right now. WAIT while the ambers count down, GO on green, then SHIFT */
+let dragBtnState = '';
+const DRAG_BTN = {
+  wait: ['WAIT<small>TAP GO WHEN THE LIGHT TURNS GREEN</small>', 'Wait for the green light'],
+  go: ['GO ▲<small>TAP NOW</small>', 'Go'],
+  shift: ['SHIFT ▲<small>TAP WHEN THE NEEDLE HITS GREEN</small>', 'Shift up'],
+};
+function dragBtn() {
+  if (!R || !R.ev.drag) return;
+  const st = R.state === 'countdown' || R.tree.red ? 'wait' : R.state === 'racing' && !R.p.launched ? 'go' : 'shift';
+  if (st === dragBtnState) return;
+  dragBtnState = st;
+  const b = $('c-right');
+  b.classList.remove('wait', 'go', 'shift'); b.classList.add(st);
+  b.innerHTML = DRAG_BTN[st][0]; b.setAttribute('aria-label', DRAG_BTN[st][1]);
 }
 function steer(d) {
   // drag night: every tap is the launch, then an upshift (a tap before green is a red light)
@@ -10071,7 +10098,7 @@ function frame(ts) {
     if (R && (mode === 'race' || mode === 'results') && !paused) {
       let t = dt;
       while (t > 1e-6) { const h = Math.min(t, 1 / 120); updateRace(R, h, input); t -= h; }
-      processEvents();
+      processEvents(); dragBtn();
     } else if (!R && demo) demo.p.dist += demo.p.v * dt;
     // a cut scene covers the whole screen: nothing behind it needs drawing
     if (Cine.on && mode === 'menu') { requestAnimationFrame(frame); return; }
@@ -10121,7 +10148,7 @@ window.StreetKings = {
   get S() { return S; }, Music, engineProfile, loadGhosts, localGhost, routeSpec, setGhosts, goBoard, get R() { return R; }, get mode() { return mode; }, get paused() { return paused; }, input,
   steer, startRace, goHub, goGarage, goLadder, setDemo, save, preview: renderCarPreview, portrait: drawPortrait, Sound, engineProfile, ENGINE_OF, GEARS, Cine, goBack,
   get intro() { return intro; }, skipIntro: endIntro,
-  step(sec, bot) { const h = 1 / 120; let n = Math.round(sec / h); while (n-- > 0 && R && mode !== 'menu') { if (bot) bot(R, input); updateRace(R, h, input); processEvents(); } },
+  step(sec, bot) { const h = 1 / 120; let n = Math.round(sec / h); while (n-- > 0 && R && mode !== 'menu') { if (bot) bot(R, input); updateRace(R, h, input); processEvents(); dragBtn(); } },
   testCareer, testIsland, Online, core: { DRAG, DRAG_DIST, dragPress, dragUnlocked, dragBeaten, dragStakes, dragEstimate, dragBetBlock, rematchPrize, specialUnlocked, makeWave, heatOf, HEAT_POLICE, updateCop, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
     migrateSave, buyLook, lookCost, lookOf, checkPlate, dailyFor, dailyDate, dailyPrize, ghostEncode, ghostDecode, ghostAt, carRel, EVENTS, ESSEX, MU, muOpen, muWins, nextMuIndex, islandCar, goIsland, openIsland, areaList, essexOpen, nextEssexIndex, slipReady, slipCarFor, carClass, totalStars, starCount, CARS, UPGRADES, CHARACTERS, BODY, Z_PLAYER, P_LEN, SPAWN_D, NITRO_MULT },
 };
