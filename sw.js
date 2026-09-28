@@ -1,9 +1,9 @@
 // Street Kings offline support. Online it always fetches the latest version; offline it plays from the saved copy.
-const CACHE = 'street-kings-14e2589127';
+const CACHE = 'street-kings-70ed95581a';
 const FILES = ["./", "./index.html", "./privacy.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png", "./apple-touch-icon.png"];
 // music files never change (the hash is in the name), so they are kept in their own cache and served from it
 const MUSIC_CACHE = 'street-kings-music';
-const MUSIC_FILES = ["music/ne-1919.5d166132.mp3", "music/ne-1926.d89adf94.mp3", "music/ne-atl.4363b31e.mp3", "music/ne-it-aint-adding-up.72f04209.mp3", "music/ne-tokyo.d0b28902.mp3", "music/sega-mauritius.691069e6.mp3", "music/sting-lose.da7d864c.mp3", "music/sting-win.c89be5d9.mp3"];
+const MUSIC_FILES = ["music/ne-1919.5d166132.mp3", "music/ne-1926.d89adf94.mp3", "music/ne-atlanta.87412f16.mp3", "music/ne-it-aint-adding-up.72f04209.mp3", "music/sega-island2.e6dae5c7.mp3", "music/sega-mauritius.691069e6.mp3", "music/sting-lose.da7d864c.mp3", "music/sting-win.c89be5d9.mp3"];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE && k !== MUSIC_CACHE).map(k => caches.delete(k))))
   .then(() => caches.open(MUSIC_CACHE)).then(c => c.keys().then(rs => Promise.all(rs.filter(r => !MUSIC_FILES.some(f => r.url.endsWith('/' + f))).map(r => c.delete(r)))))

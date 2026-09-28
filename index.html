@@ -10753,13 +10753,18 @@ let toastTimer = 0;
 const MUSIC_KEY = 'streetkings.music';
 /* each part of the game can have its own track. loop: [start, end] in seconds is the part that repeats.
    Filled in when the tracks arrive, e.g. london: { src: 'music/london.mp3', loop: [12.5, 98.2] } */
-const MUSIC = window.__musicTest || {"title":{"name":"It Ain't Adding Up","loop":[1.0,96.049501],"vol":0.18,"src":"music/ne-it-aint-adding-up.72f04209.mp3"},"london":{"name":"1919","loop":[1.0,57.47059],"vol":0.18,"src":"music/ne-1919.5d166132.mp3"},"essex":{"name":"1926","loop":[1.0,97.0],"vol":0.18,"src":"music/ne-1926.d89adf94.mp3"},"mu":{"name":"Sega (island)","loop":[1.0,60.076916],"start":1.0,"vol":0.18,"src":"music/sega-mauritius.691069e6.mp3"},"atl":{"name":"N.E (Atlanta)","loop":[1.0,60.076735],"vol":0.18,"src":"music/ne-atl.4363b31e.mp3"},"tyo":{"name":"N.E (Tokyo)","loop":[1.0,60.107086],"vol":0.18,"src":"music/ne-tokyo.d0b28902.mp3"},"win":{"name":"Win sting","sting":true,"vol":0.26,"src":"music/sting-win.c89be5d9.mp3"},"lose":{"name":"Lose sting","sting":true,"vol":0.22,"src":"music/sting-lose.da7d864c.mp3"}};
+const MUSIC = window.__musicTest || {"title":{"name":"It Ain't Adding Up","loop":[1.0,96.049501],"vol":0.18,"src":"music/ne-it-aint-adding-up.72f04209.mp3"},"london":{"name":"1919","loop":[1.0,57.47059],"vol":0.18,"src":"music/ne-1919.5d166132.mp3"},"essex":{"name":"1926","loop":[1.0,97.0],"vol":0.18,"src":"music/ne-1926.d89adf94.mp3"},"mu":{"name":"Sega (island)","loop":[1.0,60.076916],"start":1.0,"vol":0.18,"src":"music/sega-mauritius.691069e6.mp3"},"mu2":{"name":"Sega 2 (island)","loop":[1.0,61.0],"vol":0.214,"src":"music/sega-island2.e6dae5c7.mp3"},"atl":{"name":"It Ain't Adding Up (Atlanta)","loop":[1.0,58.029705],"vol":0.18,"src":"music/ne-atlanta.87412f16.mp3"},"win":{"name":"Win sting","sting":true,"vol":0.26,"src":"music/sting-win.c89be5d9.mp3"},"lose":{"name":"Lose sting","sting":true,"vol":0.22,"src":"music/sting-lose.da7d864c.mp3"}};
 // the single-file copy of the game has no music folder beside it, so it borrows the files from the website
 const MUSIC_HOME = 'https://elyneel.github.io/street-kings/';
 const Music = {
   on: true, gain: null, cur: null, want: null, bufs: {}, loading: {},
   area() { return S ? placeNow() : 'title'; },
-  track(area) { return MUSIC[area] || (area === 'mu' || area === 'atl' || area === 'tyo' ? null : MUSIC.london || MUSIC.title) || null; },
+  /* the island has two sega songs: they take turns, a race each. Tokyo has the title song until its own music arrives */
+  track(area) {
+    if (area === 'mu' && MUSIC.mu && MUSIC.mu2 && S && S.stats && S.stats.races % 2) return MUSIC.mu2;
+    if (area === 'tyo' && !MUSIC.tyo) return MUSIC.title || null;
+    return MUSIC[area] || (area === 'mu' || area === 'atl' || area === 'tyo' ? null : MUSIC.london || MUSIC.title) || null;
+  },
   /* a short sting when you cross the line; the menu music waits for it to finish */
   sting(kind) {
     const c = Sound.ctx, t = MUSIC[kind];
