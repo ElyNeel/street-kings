@@ -886,11 +886,11 @@ const CARS = [
   // cars you can only win in a pink slip race. They come the way their owner raced them.
   { id: 'golfr', name: 'VW Golf R', price: 9000, bhp: 320, handling: 8.2, rep: 999, pot: 0.6, model: 'golf', slip: 'tommy', slipUp: 3,
     look: { paint: '#1e4fa8', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#4aa8ff', smoked: false, plate: 'TH19 GTR' } },
-  { id: 'a45', name: 'Mercedes-AMG A45 S', price: 11000, bhp: 415, handling: 8.0, rep: 999, pot: 0.7, model: 'hatch', slip: 'priya', slipUp: 3,
+  { id: 'a45', name: 'Mercedes-AMG A45 S', price: 11000, bhp: 415, handling: 8.0, rep: 999, pot: 0.7, model: 'a45', slip: 'priya', slipUp: 3,
     look: { paint: '#e9e9e6', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'big', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ffd23f', smoked: false, plate: 'PM21 AMG' } },
   { id: 'rs3n', name: 'Audi RS3 (Nardo)', price: 12000, bhp: 400, handling: 7.8, rep: 999, pot: 0.8, model: 'rs3', slip: 'callum', slipUp: 3,
     look: { paint: '#7d8084', finish: 'matte', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 1, stance: 2, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ff3355', smoked: false, plate: 'CR22 RSS' } },
-  { id: 'svr', name: 'Range Rover Sport SVR', price: 16000, bhp: 575, handling: 5.5, rep: 999, pot: 0.6, model: 'suv', slip: 'mick', slipUp: 3,
+  { id: 'svr', name: 'Range Rover Sport SVR', price: 16000, bhp: 575, handling: 5.5, rep: 999, pot: 0.6, model: 'svr', slip: 'mick', slipUp: 3,
     look: { paint: '#141517', finish: 'gloss', rims: 'split', rimColor: '#2a2d31', tint: 3, spoiler: 'none', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#b14bff', smoked: false, plate: 'MF69 SVR' } },
   { id: 'gt3', name: 'Porsche 911 GT3', price: 22000, bhp: 500, handling: 9.3, rep: 999, pot: 0.7, model: 'p911', slip: 'sophie', slipUp: 3,
     look: { paint: '#1f6fd1', finish: 'gloss', rims: 'five', rimColor: '#c9a23a', tint: 1, spoiler: 'big', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#4aa8ff', smoked: false, plate: 'GT33 SLN' } },
@@ -1492,7 +1492,7 @@ const ESSEX = [
     area: 'West Thurrock', road: 'A1306 Arterial Road, Lakeside', time: 'late', env: 'retail', sky: ['lakeside', 'qe2', 'tanks'], map: [0.28, 51.49],
     signs: [['green', 'A1306', 'Lakeside', 'Grays'], ['borough', 'Borough of Thurrock'], ['green', 'A13', 'Southend', 'London'], ['green', 'A282', 'Dartford Crossing', 'M25'], ['green', 'A126', 'Lakeside', 'Chafford Hundred']],
     intro: 'When the shutters come down at Lakeside, the A1306 belongs to Priya Mistry and her A45. Retail parks under the old chalk cliffs, empty car parks and the bridge lit up in the distance. One clean run.',
-    win: 'Lakeside is quiet again. Callum on the Arterial has heard about you.', oppLook: { engine: 'a45', model: 'hatch', paint: '#e9e9e6', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'big', stance: 1, plate: 'PM21 AMG' },
+    win: 'Lakeside is quiet again. Callum on the Arterial has heard about you.', oppLook: { engine: 'a45', model: 'a45', paint: '#e9e9e6', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'big', stance: 1, plate: 'PM21 AMG' },
     diff: { skill: 1.091, inc: [18, 24] } },
   { title: 'THE ARTERIAL', chapter: 'Essex', rival: 'callum', oppBhp: 800, reward: 11500, rep: 4, dist: 7600,
     area: 'Basildon', road: 'A127 Southend Arterial Road', time: 'dusk', env: 'arterial', sky: ['brooke', 'cranes'], map: [0.46, 51.58],
@@ -1504,7 +1504,7 @@ const ESSEX = [
     area: 'Canvey Island', road: 'A130 Canvey Way', time: 'night', env: 'marsh', sky: ['tanks', 'refinery'], map: [0.57, 51.53],
     signs: [['green', 'A130', 'Canvey Island', 'Benfleet'], ['borough', 'Borough of Castle Point'], ['green', 'A130', 'Canvey Island', 'Seafront'], ['green', 'A13', 'Southend', 'Basildon']],
     intro: 'One road on, one road off. Big Mick Farrow owns the scrapyards on Canvey and his SVR weighs as much as a small house. The oil terminals are lit up like a city.',
-    win: 'Mick is still shaking his head. Sophie up in Chelmsford wants to meet you.', oppLook: { engine: 'svr', model: 'suv', paint: '#141517', finish: 'gloss', rims: 'split', rimColor: '#2a2d31', tint: 3, stance: 1, plate: 'MF69 SVR' },
+    win: 'Mick is still shaking his head. Sophie up in Chelmsford wants to meet you.', oppLook: { engine: 'svr', model: 'svr', paint: '#141517', finish: 'gloss', rims: 'split', rimColor: '#2a2d31', tint: 3, stance: 1, plate: 'MF69 SVR' },
     diff: { skill: 1.092, inc: [19, 25] } },
   { title: 'CITY LIGHTS', chapter: 'Essex', rival: 'sophie', oppBhp: 900, reward: 15000, rep: 5, dist: 7800,
     area: 'Chelmsford', road: 'A12 Chelmsford bypass', time: 'day', env: 'bypass', sky: ['spire', 'chelmsford'], map: [0.47, 51.73],
@@ -4940,125 +4940,869 @@ function drawHUD(R, ctrlH) {
 const SPECS = {
   civic: { L: 4.14, W: 1.70, ro: 0.74, wb: 2.57, r: 0.31, sill: 0.2, beltR: 0.96, beltF: 0.84, rear: 'civic', front: 'honda', mount: 'roof',
     keys: [[0, 0.97, 0.12], [0.1, 1.0, 0.16, 'glass', 0.02], [0.44, 1.39, 0.27, 'paint', 0.03], [2.02, 1.41, 0.29, 'glass', 0.03], [3.19, 0.93, 0.15, 'paint', 0.02], [4.04, 0.78, 0.2], [4.14, 0.7, 0.28]],
-    glass: [[0.56, 1.02], [1.1, 3.19]], doors: [[1.08, 2.93]] },
+    glass: [[0.56, 1.02], [1.1, 3.19]], doors: [[1.08, 2.93]], crease: true, winFx: true, plateR: 0.745, plateF: 0.4, endRound: 0.7 },
   bmw: { L: 4.49, W: 1.76, ro: 0.99, wb: 2.725, r: 0.32, sill: 0.2, beltR: 0.92, beltF: 0.86, rear: 'L', front: 'kidney', mount: 'deck',
-    keys: [[0, 0.91, 0.1, 'paint', 0.01], [0.78, 0.95, 0.13, 'glass', 0.03], [1.38, 1.33, 0.28, 'paint', 0.04], [2.28, 1.35, 0.29, 'glass', 0.02], [3.07, 0.95, 0.14, 'paint', 0.02], [4.37, 0.8, 0.2], [4.49, 0.7, 0.28]],
-    glass: [[1.08, 1.6], [1.66, 3.07]], doors: [[1.68, 3.3]] },
+    keys: [[0, 0.96, 0.1, 'paint', 0.01], [0.64, 0.99, 0.13, 'glass', 0.03], [1.4, 1.34, 0.28, 'paint', 0.04], [2.3, 1.36, 0.29, 'glass', 0.02], [3.12, 0.95, 0.14, 'paint', 0.02], [4.36, 0.79, 0.15], [4.49, 0.74, 0.2]],
+    glass: [[1.08, 1.6], [1.66, 3.07]], doors: [[1.68, 3.3]], crease: true, winFx: true, plateR: 0.745, plateF: 0.43, curvR: 0.14, curvF: 0.5, swF: 0.13, swR: 0.09, endRound: 0.5 },
   wrx: { L: 4.42, W: 1.74, ro: 0.965, wb: 2.525, r: 0.32, sill: 0.21, beltR: 0.95, beltF: 0.87, rear: 'round2', front: 'subaru', mount: 'deck', scoop: true,
     keys: [[0, 0.97, 0.1, 'paint', 0.01], [0.52, 1.0, 0.12, 'glass', 0.02], [1.12, 1.4, 0.3, 'paint', 0.03], [2.25, 1.42, 0.31, 'glass', 0.02], [2.98, 0.95, 0.14, 'paint', 0.02], [4.3, 0.82, 0.2], [4.42, 0.72, 0.28]],
-    glass: [[1.0, 1.95], [2.03, 2.98]], black: [[1.95, 2.03]], doors: [[1.25, 1.99], [1.99, 3.08]] },
+    glass: [[1.0, 1.95], [2.03, 2.98]], black: [[1.95, 2.03]], doors: [[1.25, 1.99], [1.99, 3.08]], crease: true, winFx: true, plateR: 0.46, plateF: 0.29, endRound: 0.6, curvR: 0.2 },
   supra: { L: 4.52, W: 1.81, ro: 0.97, wb: 2.55, r: 0.325, sill: 0.18, beltR: 0.86, beltF: 0.78, rear: 'supra', front: 'supra', mount: 'deck',
     keys: [[0, 0.87, 0.1, 'paint', 0.01], [0.42, 0.9, 0.14, 'glass', 0.03], [1.3, 1.24, 0.34, 'paint', 0.03], [2.05, 1.25, 0.35, 'glass', 0.02], [2.8, 0.85, 0.12, 'paint', 0.03], [4.38, 0.68, 0.2], [4.52, 0.6, 0.3]],
-    glass: [[1.15, 1.7], [1.76, 2.8]], doors: [[1.78, 3.1]] },
+    glass: [[1.15, 1.7], [1.76, 2.8]], doors: [[1.78, 3.1]], winFx: true, plateR: 0.47, plateF: 0.33 },
   gtr: { L: 4.71, W: 1.9, ro: 1.0, wb: 2.78, r: 0.355, sill: 0.2, beltR: 0.99, beltF: 0.9, rear: 'quad', front: 'gtr', mount: 'deck',
     keys: [[0, 1.0, 0.12, 'paint', 0.01], [0.4, 1.03, 0.16, 'glass', 0.02], [1.25, 1.34, 0.36, 'paint', 0.03], [2.4, 1.35, 0.37, 'glass', 0.02], [3.2, 0.98, 0.14, 'paint', 0.02], [4.58, 0.83, 0.2], [4.71, 0.74, 0.28]],
-    glass: [[1.3, 3.2]], doors: [[1.62, 3.34]] },
+    glass: [[1.3, 3.2]], doors: [[1.62, 3.34]], crease: true, winFx: true, plateR: 0.6, plateF: 0.42, exY: 0.3, endRound: 0.5, curvR: 0.15, swF: 0.14 },
   golf: { L: 4.22, W: 1.76, ro: 0.76, wb: 2.58, r: 0.32, sill: 0.2, beltR: 0.98, beltF: 0.88, rear: 'rect', front: 'vw', mount: 'roof',
-    keys: [[0, 1.0, 0.12], [0.08, 1.03, 0.16, 'glass', 0.02], [0.4, 1.44, 0.26, 'paint', 0.03], [2.22, 1.46, 0.28, 'glass', 0.02], [3.12, 0.96, 0.14, 'paint', 0.02], [4.1, 0.8, 0.2], [4.22, 0.72, 0.28]],
-    glass: [[0.46, 0.86], [0.93, 1.93], [2.01, 3.12]], black: [[1.93, 2.01]], doors: [[1.08, 1.97], [1.97, 2.94]] },
+    keys: [[0, 1.0, 0.12], [0.1, 1.04, 0.16, 'glass', 0.02], [0.56, 1.39, 0.26, 'paint', 0.035], [2.25, 1.44, 0.28, 'glass', 0.02], [3.12, 0.96, 0.14, 'paint', 0.02], [4.1, 0.8, 0.17], [4.22, 0.745, 0.22]],
+    glass: [[0.46, 0.86], [0.93, 1.93], [2.01, 3.12]], black: [[1.93, 2.01]], doors: [[1.08, 1.97], [1.97, 2.94]], crease: true, winFx: true, curvR: 0.12, plateR: 0.67, plateF: 0.44, exX: [-0.62, -0.5, 0.5, 0.62], exY: 0.27, exR: 0.042 },
   hatch: { L: 4.0, W: 1.72, ro: 0.69, wb: 2.49, r: 0.3, sill: 0.2, beltR: 0.98, beltF: 0.88, rear: 'bar', front: 'plain', mount: 'roof',
-    keys: [[0, 0.98, 0.12], [0.08, 1.01, 0.16, 'glass', 0.02], [0.4, 1.44, 0.26, 'paint', 0.03], [2.05, 1.46, 0.28, 'glass', 0.02], [2.95, 0.95, 0.14, 'paint', 0.02], [3.88, 0.8, 0.2], [4.0, 0.72, 0.28]],
-    glass: [[0.46, 0.9], [0.97, 1.8], [1.88, 2.95]], black: [[1.8, 1.88]], doors: [[1.0, 1.84], [1.84, 2.8]] },
+    keys: [[0, 0.98, 0.12], [0.1, 1.02, 0.16, 'glass', 0.02], [0.5, 1.38, 0.26, 'paint', 0.035], [2.1, 1.43, 0.28, 'glass', 0.02], [2.95, 0.95, 0.14, 'paint', 0.02], [3.88, 0.8, 0.17], [4.0, 0.745, 0.22]],
+    glass: [[0.46, 0.9], [0.97, 1.8], [1.88, 2.95]], black: [[1.8, 1.88]], doors: [[1.0, 1.84], [1.84, 2.8]], crease: true, winFx: true, curvR: 0.12, plateR: 0.74, plateF: 0.43 },
   evo: { L: 4.49, W: 1.77, ro: 0.945, wb: 2.625, r: 0.32, sill: 0.21, beltR: 0.96, beltF: 0.87, rear: 'round2', front: 'evo', mount: 'deck', scoop: true,
     keys: [[0, 0.98, 0.1, 'paint', 0.01], [0.55, 1.01, 0.12, 'glass', 0.02], [1.15, 1.41, 0.3, 'paint', 0.03], [2.3, 1.43, 0.31, 'glass', 0.02], [3.05, 0.96, 0.14, 'paint', 0.02], [4.37, 0.82, 0.2], [4.49, 0.72, 0.28]],
-    glass: [[1.05, 1.99], [2.07, 3.05]], black: [[1.99, 2.07]], doors: [[1.25, 2.03], [2.03, 3.15]] },
+    glass: [[1.05, 1.99], [2.07, 3.05]], black: [[1.99, 2.07]], doors: [[1.25, 2.03], [2.03, 3.15]], crease: true, winFx: true, plateR: 0.46, plateF: 0.34, endRound: 0.6 },
   rs3: { L: 4.48, W: 1.8, ro: 0.95, wb: 2.63, r: 0.33, sill: 0.2, beltR: 0.97, beltF: 0.88, rear: 'rect', front: 'audi', mount: 'deck',
     keys: [[0, 0.97, 0.1, 'paint', 0.01], [0.5, 1.0, 0.12, 'glass', 0.02], [1.2, 1.37, 0.3, 'paint', 0.03], [2.3, 1.39, 0.31, 'glass', 0.02], [3.1, 0.96, 0.14, 'paint', 0.02], [4.36, 0.82, 0.2], [4.48, 0.72, 0.28]],
-    glass: [[1.1, 1.98], [2.06, 3.1]], black: [[1.98, 2.06]], doors: [[1.27, 2.02], [2.02, 3.17]] },
+    glass: [[1.1, 1.98], [2.06, 3.1]], black: [[1.98, 2.06]], doors: [[1.27, 2.02], [2.02, 3.17]], crease: true, winFx: true, plateR: 0.71, plateF: 0.44, exX: [-0.62, 0.62], exY: 0.28, exR: 0.06, endRound: 0.6, curvR: 0.16 },
   c63: { L: 4.73, W: 1.8, ro: 1.02, wb: 2.76, r: 0.34, sill: 0.21, beltR: 0.97, beltF: 0.88, rear: 'rect', front: 'merc', mount: 'deck',
     keys: [[0, 0.98, 0.1, 'paint', 0.01], [0.58, 1.01, 0.12, 'glass', 0.02], [1.25, 1.41, 0.3, 'paint', 0.03], [2.45, 1.43, 0.31, 'glass', 0.02], [3.25, 0.97, 0.14, 'paint', 0.02], [4.6, 0.83, 0.2], [4.73, 0.73, 0.28]],
-    glass: [[1.18, 2.1], [2.18, 3.25]], black: [[2.1, 2.18]], doors: [[1.35, 2.14], [2.14, 3.34]] },
+    glass: [[1.18, 2.1], [2.18, 3.25]], black: [[2.1, 2.18]], doors: [[1.35, 2.14], [2.14, 3.34]], crease: true, winFx: true, plateR: 0.72, plateF: 0.45, exX: [-0.62, -0.51, 0.51, 0.62], exY: 0.27, endRound: 0.6, curvR: 0.16 },
   saloon: { L: 4.6, W: 1.8, ro: 0.98, wb: 2.7, r: 0.31, sill: 0.22, beltR: 0.97, beltF: 0.89, rear: 'rect', front: 'plain', mount: 'deck',
     keys: [[0, 0.98, 0.1, 'paint', 0.01], [0.55, 1.01, 0.12, 'glass', 0.02], [1.2, 1.43, 0.3, 'paint', 0.03], [2.4, 1.45, 0.31, 'glass', 0.02], [3.2, 0.97, 0.14, 'paint', 0.02], [4.47, 0.83, 0.2], [4.6, 0.73, 0.28]],
-    glass: [[1.12, 2.06], [2.14, 3.2]], black: [[2.06, 2.14]], doors: [[1.3, 2.1], [2.1, 3.28]] },
+    glass: [[1.12, 2.06], [2.14, 3.2]], black: [[2.06, 2.14]], doors: [[1.3, 2.1], [2.1, 3.28]], crease: true, winFx: true, plateR: 0.72, plateF: 0.43, curvR: 0.16, endRound: 0.6 },
   m3: { L: 4.62, W: 1.82, ro: 1.06, wb: 2.76, r: 0.34, sill: 0.2, beltR: 0.93, beltF: 0.88, rear: 'L', front: 'kidney', mount: 'deck', dome: true, exhaust4: true,
     keys: [[0, 0.94, 0.1, 'paint', 0.01], [0.72, 0.97, 0.13, 'glass', 0.03], [1.42, 1.37, 0.3, 'paint', 0.04], [2.4, 1.39, 0.31, 'glass', 0.02], [3.2, 0.97, 0.14, 'paint', 0.02], [4.5, 0.82, 0.2], [4.62, 0.72, 0.28]],
-    glass: [[1.12, 1.68], [1.74, 3.2]], doors: [[1.76, 3.4]] },
+    glass: [[1.12, 1.68], [1.74, 3.2]], doors: [[1.76, 3.4]], crease: true, winFx: true, plateR: 0.72, plateF: 0.43, exY: 0.27, endRound: 0.6, curvR: 0.16 },
   p911: { L: 4.43, W: 1.81, ro: 1.1, wb: 2.35, r: 0.34, sill: 0.18, beltR: 0.86, beltF: 0.8, rear: 'bar', front: 'p911', mount: 'deck',
     keys: [[0, 0.9, 0.12, 'paint', 0.03], [0.5, 0.98, 0.16, 'glass', 0.03], [1.5, 1.27, 0.34, 'paint', 0.03], [2.3, 1.29, 0.35, 'glass', 0.02], [3.0, 0.88, 0.12, 'paint', 0.03], [4.3, 0.7, 0.2], [4.43, 0.6, 0.3]],
-    glass: [[1.45, 1.95], [2.0, 3.0]], doors: [[1.98, 3.04]] },
+    glass: [[1.45, 1.95], [2.0, 3.0]], doors: [[1.98, 3.04]], winFx: true, plateR: 0.5, plateF: 0.37, exX: [-0.07, 0.07], exY: 0.3, exR: 0.05 },
   r8: { L: 4.44, W: 1.9, ro: 0.79, wb: 2.65, r: 0.34, sill: 0.18, beltR: 0.9, beltF: 0.8, rear: 'bar', front: 'audi', mount: 'deck', blade: [1.28, 1.6],
     keys: [[0, 0.93, 0.12, 'paint', 0.01], [0.28, 0.95, 0.16, 'glass', 0.01], [0.95, 1.0, 0.22, 'glass', 0.03], [1.38, 1.23, 0.36, 'paint', 0.03], [2.25, 1.25, 0.37, 'glass', 0.02], [3.02, 0.86, 0.12, 'paint', 0.03], [4.31, 0.7, 0.2], [4.44, 0.6, 0.3]],
-    glass: [[1.52, 3.02]], doors: [[1.66, 3.0]] },
+    glass: [[1.52, 3.02]], doors: [[1.66, 3.0]], winFx: true, plateR: 0.6, plateF: 0.4, exX: [-0.6, 0.6], exY: 0.3, exR: 0.06 },
+  // Mercedes-AMG A45 S (W177) and Range Rover Sport SVR (L494): their own bodies, so traffic hatches and SUVs stay plain
+  a45: { L: 4.445, W: 1.85, ro: 0.83, wb: 2.729, r: 0.34, sill: 0.19, beltR: 0.99, beltF: 0.9, rear: 'rect', front: 'plain', mount: 'roof', flares: true, crease: true, winFx: true, curvR: 0.12, plateR: 0.67, plateF: 0.33, exX: [-0.6, -0.49, 0.49, 0.6], exY: 0.27, exR: 0.045,
+    keys: [[0, 0.98, 0.12], [0.15, 1.02, 0.17, 'glass', 0.02], [0.74, 1.33, 0.27, 'paint', 0.05], [2.36, 1.39, 0.29, 'glass', 0.02], [3.3, 0.95, 0.14, 'paint', 0.02], [4.32, 0.78, 0.17], [4.445, 0.73, 0.22]],
+    glass: [[0.62, 1.0], [1.07, 2.0], [2.08, 3.3]], black: [[2.0, 2.08]], doors: [[1.2, 2.04], [2.04, 3.22]] },
+  svr: { L: 4.879, W: 1.983, ro: 1.0, wb: 2.923, r: 0.39, sill: 0.38, beltR: 1.17, beltF: 1.12, rear: 'rect', front: 'plain', mount: 'roof', flares: true, crease: true, winFx: true, plateR: 0.84, plateF: 0.63, exX: [-0.74, -0.62, 0.62, 0.74], exY: 0.47, exR: 0.05, endRound: 0.6,
+    keys: [[0, 1.2, 0.12], [0.12, 1.24, 0.16, 'glass', 0.02], [0.48, 1.72, 0.27, 'paint', 0.03], [2.72, 1.78, 0.28, 'glass', 0.02], [3.55, 1.19, 0.13, 'paint', 0.02], [4.75, 1.05, 0.18], [4.879, 0.96, 0.24]],
+    glass: [[0.55, 1.02], [1.1, 2.2], [2.28, 3.5]], black: [[2.2, 2.28]], doors: [[1.3, 2.24], [2.24, 3.45]] },
   suv: { L: 4.6, W: 1.88, ro: 0.95, wb: 2.67, r: 0.36, sill: 0.34, beltR: 1.14, beltF: 1.05, rear: 'rect', front: 'plain', mount: 'roof',
     keys: [[0, 1.16, 0.12], [0.1, 1.19, 0.16, 'glass', 0.02], [0.42, 1.68, 0.27, 'paint', 0.03], [2.45, 1.72, 0.28, 'glass', 0.02], [3.25, 1.13, 0.14, 'paint', 0.02], [4.45, 1.0, 0.2], [4.6, 0.9, 0.28]],
-    glass: [[0.5, 0.96], [1.03, 2.02], [2.1, 3.25]], black: [[2.02, 2.1]], doors: [[1.2, 2.06], [2.06, 3.18]] },
+    glass: [[0.5, 0.96], [1.03, 2.02], [2.1, 3.25]], black: [[2.02, 2.1]], doors: [[1.2, 2.06], [2.06, 3.18]], crease: true, winFx: true, curvR: 0.1, plateR: 0.76, plateF: 0.5, endRound: 0.6 },
   // the friends' cars
   jazz: { L: 3.995, W: 1.694, ro: 0.685, wb: 2.53, r: 0.3, sill: 0.2, beltR: 0.99, beltF: 0.86, rear: 'civic', front: 'honda', mount: 'roof',
     keys: [[0, 1.0, 0.12], [0.08, 1.04, 0.16, 'glass', 0.02], [0.36, 1.5, 0.27, 'paint', 0.03], [2.05, 1.52, 0.29, 'glass', 0.03], [3.18, 0.95, 0.15, 'paint', 0.02], [3.88, 0.8, 0.2], [3.995, 0.72, 0.28]],
-    glass: [[0.42, 0.86], [0.93, 1.86], [1.94, 3.18]], black: [[1.86, 1.94]], doors: [[1.02, 1.9], [1.9, 2.84]] },
+    glass: [[0.42, 0.86], [0.93, 1.86], [1.94, 3.18]], black: [[1.86, 1.94]], doors: [[1.02, 1.9], [1.9, 2.84]], crease: true, winFx: true, curvR: 0.12, plateR: 0.8, plateF: 0.44 },
   mini: { L: 3.72, W: 1.683, ro: 0.52, wb: 2.467, r: 0.3, sill: 0.2, beltR: 0.97, beltF: 0.9, rear: 'civic', front: 'mini', mount: 'roof', scoop: true, exCentre: true,
     keys: [[0, 0.98, 0.12], [0.06, 1.0, 0.15, 'glass', 0.01], [0.3, 1.37, 0.24, 'paint', 0.02], [2.2, 1.39, 0.25, 'glass', 0.02], [2.92, 0.97, 0.14, 'paint', 0.03], [3.6, 0.83, 0.2], [3.72, 0.74, 0.28]],
-    glass: [[0.36, 0.95], [1.0, 2.92]], doors: [[1.04, 2.6]] },
+    glass: [[0.36, 0.95], [1.0, 2.92]], doors: [[1.04, 2.6]], winFx: true, curvR: 0.1, plateR: 0.728, plateF: 0.34 },
   tts: { L: 4.19, W: 1.83, ro: 0.805, wb: 2.505, r: 0.335, sill: 0.19, beltR: 0.9, beltF: 0.84, rear: 'tt', front: 'audi', mount: 'deck',
     mirrors: 'chrome', fuelcap: 0.52, exhaust4: true, flares: true, grilleChrome: true,
     keys: [[0, 0.9, 0.1, 'paint', 0.02], [0.16, 0.95, 0.13, 'glass', 0.09], [1.22, 1.31, 0.37, 'paint', 0.03], [1.84, 1.33, 0.38, 'glass', 0.02], [2.7, 0.93, 0.13, 'paint', 0.03], [4.06, 0.78, 0.2], [4.19, 0.68, 0.28]],
-    glass: [[1.0, 1.42], [1.48, 2.7]], doors: [[1.5, 2.88]] },
+    glass: [[1.0, 1.42], [1.48, 2.7]], doors: [[1.5, 2.88]], winFx: true, plateR: 0.545, plateF: 0.42 },
   e46s: { L: 4.47, W: 1.74, ro: 0.97, wb: 2.725, r: 0.31, sill: 0.2, beltR: 0.93, beltF: 0.87, rear: 'L', front: 'kidney', mount: 'deck',
     keys: [[0, 0.93, 0.1, 'paint', 0.01], [0.62, 0.97, 0.12, 'glass', 0.02], [1.2, 1.39, 0.29, 'paint', 0.03], [2.3, 1.41, 0.3, 'glass', 0.02], [3.05, 0.95, 0.14, 'paint', 0.02], [4.35, 0.8, 0.2], [4.47, 0.7, 0.28]],
     glass: [[1.1, 2.0], [2.08, 3.05]], black: [[2.0, 2.08]], doors: [[1.3, 2.04], [2.04, 3.28]] },
   // E46 convertible with the roof down: open cabin, windscreen frame, seats and headrests
   e46c: { L: 4.49, W: 1.76, ro: 0.99, wb: 2.725, r: 0.31, sill: 0.2, beltR: 0.92, beltF: 0.87, rear: 'L', front: 'kidney', mount: 'deck', open: true,
     keys: [[0, 0.91, 0.1, 'paint', 0.01], [0.95, 0.94, 0.14, 'dark'], [2.34, 0.93, 0.16, 'dark'], [2.4, 1.24, 0.3, 'glass', 0.02], [3.07, 0.95, 0.14, 'paint', 0.02], [4.37, 0.8, 0.2], [4.49, 0.7, 0.28]],
-    glass: [[2.4, 3.07]], doors: [[1.68, 3.3]] },
+    glass: [[2.4, 3.07]], doors: [[1.68, 3.3]], crease: true, plateR: 0.745, plateF: 0.43, curvR: 0.14, curvF: 0.5, swF: 0.13, swR: 0.09, endRound: 0.5 },
   // 2016 Lexus IS200t: long bonnet, rear wheel drive saloon, spindle grille, small quarter window in the C pillar
   is200t: { L: 4.665, W: 1.81, ro: 0.99, wb: 2.8, r: 0.32, sill: 0.2, beltR: 0.96, beltF: 0.87, rear: 'lexus', front: 'lexus', mount: 'deck', exTwin: true,
     keys: [[0, 0.96, 0.1, 'paint', 0.02], [0.6, 0.99, 0.12, 'glass', 0.03], [1.32, 1.37, 0.3, 'paint', 0.05], [2.42, 1.4, 0.31, 'glass', 0.02], [3.28, 0.95, 0.14, 'paint', 0.03], [4.54, 0.79, 0.2], [4.665, 0.69, 0.28]],
-    glass: [[1.1, 1.36], [1.42, 2.16], [2.24, 3.28]], black: [[1.36, 1.42], [2.16, 2.24]], doors: [[1.38, 2.2], [2.2, 3.38]] },
+    glass: [[1.1, 1.36], [1.42, 2.16], [2.24, 3.28]], black: [[1.36, 1.42], [2.16, 2.24]], doors: [[1.38, 2.2], [2.2, 3.38]], crease: true, winFx: true, plateR: 0.72, plateF: 0.3, endRound: 0.6, curvR: 0.16 },
   // Essex
   // BMW M4 F82: long bonnet with the power dome, two door coupe, L shaped rear lights, quad pipes
   m4f82: { L: 4.671, W: 1.87, ro: 0.95, wb: 2.812, r: 0.35, sill: 0.19, beltR: 0.92, beltF: 0.87, rear: 'L', front: 'kidney', mount: 'deck', dome: true, exhaust4: true, flares: true,
     keys: [[0, 0.92, 0.1, 'paint', 0.01], [0.74, 0.96, 0.13, 'glass', 0.03], [1.46, 1.34, 0.31, 'paint', 0.04], [2.42, 1.36, 0.32, 'glass', 0.02], [3.26, 0.94, 0.14, 'paint', 0.02], [4.55, 0.79, 0.2], [4.671, 0.69, 0.28]],
-    glass: [[1.16, 1.72], [1.78, 3.26]], doors: [[1.8, 3.48]] },
+    glass: [[1.16, 1.72], [1.78, 3.26]], doors: [[1.8, 3.48]], crease: true, winFx: true, plateR: 0.47, plateF: 0.43, exY: 0.27, endRound: 0.6, curvR: 0.16 },
   // Lamborghini Huracan: mid engine wedge, louvred engine cover, Y shaped lights, side intakes behind the doors
   huracan: { L: 4.459, W: 1.933, ro: 0.86, wb: 2.62, r: 0.35, sill: 0.16, beltR: 0.86, beltF: 0.74, rear: 'lambo', front: 'lambo', mount: 'deck', blade: [1.2, 1.62], exCentre: true, exhaust4: true,
     keys: [[0, 0.88, 0.12, 'paint', 0.01], [0.3, 0.9, 0.18, 'dark', 0.01], [1.1, 0.97, 0.24, 'glass', 0.04], [1.6, 1.14, 0.39, 'paint', 0.03], [2.2, 1.16, 0.4, 'glass', 0.02], [3.2, 0.78, 0.12, 'paint', 0.03], [4.33, 0.62, 0.2], [4.459, 0.53, 0.3]],
-    glass: [[1.66, 3.2]], doors: [[1.72, 3.06]] },
+    glass: [[1.66, 3.2]], doors: [[1.72, 3.06]], winFx: true, plateR: 0.46, plateF: 0.27, exY: 0.3 },
   // Audi RS6 Avant (C8): long estate roof, wide blistered arches, black single frame grille, full width rear light bar, big oval pipes
   rs6: { L: 4.995, W: 1.951, ro: 1.02, wb: 2.926, r: 0.36, sill: 0.22, beltR: 1.0, beltF: 0.9, rear: 'bar', front: 'audi', mount: 'roof', exTwin: true, flares: true,
     keys: [[0, 1.0, 0.12], [0.1, 1.04, 0.17, 'glass', 0.02], [0.52, 1.43, 0.27, 'paint', 0.03], [2.74, 1.45, 0.29, 'glass', 0.02], [3.58, 0.98, 0.14, 'paint', 0.02], [4.87, 0.84, 0.2], [4.995, 0.74, 0.28]],
-    glass: [[0.6, 1.22], [1.29, 2.28], [2.36, 3.58]], black: [[1.22, 1.29], [2.28, 2.36]], doors: [[1.42, 2.32], [2.32, 3.52]] },
+    glass: [[0.6, 1.22], [1.29, 2.28], [2.36, 3.58]], black: [[1.22, 1.29], [2.28, 2.36]], doors: [[1.42, 2.32], [2.32, 3.52]], crease: true, winFx: true, curvR: 0.12, plateR: 0.68, plateF: 0.46, exY: 0.29, exR: 0.065, endRound: 0.6 },
   // McLaren 720S: teardrop glass canopy, eye socket headlights, deep door intakes, glass engine cover
   mcl720: { L: 4.543, W: 1.93, ro: 0.92, wb: 2.67, r: 0.35, sill: 0.16, beltR: 0.84, beltF: 0.72, rear: 'mcl', front: 'mcl', mount: 'deck', blade: [1.15, 1.7], exHigh: true,
     keys: [[0, 0.94, 0.14, 'paint', 0.02], [0.32, 0.97, 0.2, 'glass', 0.02], [1.05, 1.03, 0.3, 'glass', 0.05], [1.55, 1.18, 0.41, 'glass', 0.03], [2.3, 1.2, 0.42, 'glass', 0.02], [3.22, 0.8, 0.14, 'paint', 0.03], [4.42, 0.63, 0.2], [4.543, 0.54, 0.3]],
-    glass: [[1.5, 3.22]], doors: [[1.6, 3.1]] },
+    glass: [[1.5, 3.22]], doors: [[1.6, 3.1]], winFx: true, plateR: 0.33, plateF: 0.3 },
   // Mauritius
   // Kia Picanto GT-Line: a tiny five door, tiger nose grille, lights up the rear pillars
   picanto: { L: 3.595, W: 1.595, ro: 0.52, wb: 2.4, r: 0.3, sill: 0.2, beltR: 0.99, beltF: 0.88, rear: 'civic', front: 'kia', mount: 'roof',
     keys: [[0, 0.98, 0.12], [0.08, 1.01, 0.16, 'glass', 0.02], [0.34, 1.45, 0.26, 'paint', 0.03], [1.96, 1.47, 0.28, 'glass', 0.02], [2.74, 0.95, 0.14, 'paint', 0.02], [3.48, 0.8, 0.2], [3.595, 0.72, 0.28]],
-    glass: [[0.4, 0.8], [0.87, 1.7], [1.78, 2.74]], black: [[1.7, 1.78]], doors: [[0.92, 1.74], [1.74, 2.58]] },
+    glass: [[0.4, 0.8], [0.87, 1.7], [1.78, 2.74]], black: [[1.7, 1.78]], doors: [[0.92, 1.74], [1.74, 2.58]], crease: true, winFx: true, curvR: 0.12, plateR: 0.74, plateF: 0.44 },
   // Toyota Starlet Glanza V (EP91): a small round three door hatch with a 1.3 turbo, oval lamps swept into the wings, a big bumper intake
   glanza: { L: 3.79, W: 1.625, ro: 0.66, wb: 2.3, r: 0.29, sill: 0.19, beltR: 0.96, beltF: 0.86, rear: 'starlet', front: 'starlet', mount: 'roof',
     keys: [[0, 0.95, 0.12], [0.1, 0.99, 0.17, 'glass', 0.02], [0.58, 1.36, 0.27, 'paint', 0.04], [1.9, 1.38, 0.29, 'glass', 0.02], [2.74, 0.92, 0.15, 'paint', 0.03], [3.64, 0.76, 0.21], [3.79, 0.66, 0.29]],
-    glass: [[0.64, 1.2], [1.28, 2.74]], black: [[1.2, 1.28]], doors: [[1.24, 2.62]] },
+    glass: [[0.64, 1.2], [1.28, 2.74]], black: [[1.2, 1.28]], doors: [[1.24, 2.62]], winFx: true, curvR: 0.14, plateR: 0.45, plateF: 0.4 },
   // Toyota Hilux double cab: a black roller cover over the bed, a sports bar, the cab standing up behind it
   hilux: { L: 5.325, W: 1.855, ro: 1.3, wb: 3.085, r: 0.39, sill: 0.46, beltR: 1.24, beltF: 1.2, rear: 'truck', front: 'hilux', mount: 'roof', sportsbar: true,
     keys: [[0, 1.3, 0.06, 'dark'], [1.52, 1.3, 0.06, 'glass'], [1.58, 1.78, 0.2, 'paint', 0.02], [3.05, 1.8, 0.22, 'glass', 0.02], [3.62, 1.26, 0.13, 'paint', 0.02], [5.2, 1.14, 0.2], [5.325, 1.02, 0.28]],
-    glass: [[1.66, 2.32], [2.4, 3.05]], black: [[2.32, 2.4]], doors: [[1.64, 2.36], [2.36, 3.22]] },
+    glass: [[1.66, 2.32], [2.4, 3.05]], black: [[2.32, 2.4]], doors: [[1.64, 2.36], [2.36, 3.22]], crease: true, winFx: true, plateR: 0.76, plateF: 0.56, curvR: 0.05, endRound: 0.5 },
   // Ford Ranger Raptor: wider, taller, big arches and a FORD grille
   raptor: { L: 5.381, W: 2.028, ro: 1.2, wb: 3.27, r: 0.42, sill: 0.52, beltR: 1.3, beltF: 1.26, rear: 'truck', front: 'raptor', mount: 'roof', flares: true, sportsbar: true,
     keys: [[0, 1.36, 0.07, 'dark'], [1.46, 1.36, 0.07, 'glass'], [1.52, 1.86, 0.21, 'paint', 0.02], [3.0, 1.9, 0.23, 'glass', 0.02], [3.6, 1.34, 0.13, 'paint', 0.02], [5.24, 1.2, 0.2], [5.381, 1.08, 0.28]],
-    glass: [[1.6, 2.28], [2.36, 3.0]], black: [[2.28, 2.36]], doors: [[1.58, 2.32], [2.32, 3.2]] },
+    glass: [[1.6, 2.28], [2.36, 3.0]], black: [[2.28, 2.36]], doors: [[1.58, 2.32], [2.32, 3.2]], crease: true, winFx: true, plateR: 0.8, plateF: 0.6, curvR: 0.05, endRound: 0.5 },
   // a generic double cab for island traffic
   pickup: { L: 5.3, W: 1.85, ro: 1.28, wb: 3.1, r: 0.37, sill: 0.44, beltR: 1.22, beltF: 1.18, rear: 'truck', front: 'plain', mount: 'roof',
     keys: [[0, 1.26, 0.06, 'paint'], [1.5, 1.26, 0.06, 'glass'], [1.56, 1.76, 0.2, 'paint', 0.02], [3.02, 1.78, 0.22, 'glass', 0.02], [3.6, 1.22, 0.13, 'paint', 0.02], [5.18, 1.1, 0.2], [5.3, 0.98, 0.28]],
-    glass: [[1.64, 2.3], [2.38, 3.02]], black: [[2.3, 2.38]], doors: [[1.62, 2.34], [2.34, 3.2]] },
+    glass: [[1.64, 2.3], [2.38, 3.02]], black: [[2.3, 2.38]], doors: [[1.62, 2.34], [2.34, 3.2]], crease: true, winFx: true, plateR: 0.74, plateF: 0.58, curvR: 0.05, endRound: 0.5 },
   // Alpine A110: small mid engined coupe, curved bonnet, round lamps, X shaped rear lights, one centre exhaust
   a110: { L: 4.18, W: 1.798, ro: 0.8, wb: 2.419, r: 0.33, sill: 0.17, beltR: 0.84, beltF: 0.72, rear: 'alpine', front: 'alpine', mount: 'deck', blade: [1.05, 1.32], exCentre: true,
     keys: [[0, 0.9, 0.12, 'paint', 0.02], [0.28, 0.95, 0.18, 'glass', 0.03], [1.22, 1.23, 0.36, 'paint', 0.03], [2.02, 1.25, 0.37, 'glass', 0.02], [2.78, 0.86, 0.13, 'paint', 0.05], [4.06, 0.66, 0.2], [4.18, 0.56, 0.3]],
-    glass: [[1.28, 2.78]], doors: [[1.38, 2.72]] },
+    glass: [[1.28, 2.78]], doors: [[1.38, 2.72]], winFx: true, plateR: 0.45, plateF: 0.34 },
   // BMW M3 Competition G80: four doors, flared arches, the huge upright kidneys
   m3g80: { L: 4.794, W: 1.903, ro: 1.02, wb: 2.857, r: 0.36, sill: 0.2, beltR: 0.96, beltF: 0.88, rear: 'L', front: 'kidneyXL', mount: 'deck', dome: true, exhaust4: true, flares: true,
     keys: [[0, 0.95, 0.1, 'paint', 0.01], [0.6, 0.99, 0.12, 'glass', 0.03], [1.3, 1.4, 0.3, 'paint', 0.04], [2.5, 1.42, 0.31, 'glass', 0.02], [3.34, 0.96, 0.14, 'paint', 0.02], [4.67, 0.8, 0.2], [4.794, 0.7, 0.28]],
-    glass: [[1.2, 2.14], [2.22, 3.34]], black: [[2.14, 2.22]], doors: [[1.36, 2.18], [2.18, 3.42]] },
+    glass: [[1.2, 2.14], [2.22, 3.34]], black: [[2.14, 2.22]], doors: [[1.36, 2.18], [2.18, 3.42]], crease: true, winFx: true, plateR: 0.47, plateF: 0.21, exY: 0.27, endRound: 0.6, curvR: 0.16 },
   van: { L: 5.4, W: 1.98, ro: 1.0, wb: 3.3, r: 0.34, sill: 0.34, beltR: 1.12, beltF: 1.12, rear: 'van', front: 'plain', mount: 'roof',
     keys: [[0, 2.36, 0.08, 'paint', 0.03], [4.2, 2.4, 0.14, 'glass', 0.02], [4.72, 1.24, 0.15, 'paint', 0.03], [5.28, 1.04, 0.2], [5.4, 0.94, 0.28]],
-    glass: [[4.05, 4.72]], doors: [[3.9, 4.6]] },
+    glass: [[4.05, 4.72]], doors: [[3.9, 4.6]], winFx: true, plateR: 0.54, plateF: 0.52, curvR: 0.015, rakeR: 0.015 },
   cab: { L: 4.57, W: 1.79, ro: 0.8, wb: 2.89, r: 0.33, sill: 0.28, beltR: 1.04, beltF: 0.98, rear: 'bar', front: 'cab', mount: 'roof', taxi: true,
     keys: [[0, 1.04, 0.12], [0.2, 1.08, 0.16, 'glass', 0.02], [0.52, 1.78, 0.26, 'paint', 0.02], [2.9, 1.8, 0.27, 'glass', 0.02], [3.45, 1.1, 0.14, 'paint', 0.03], [4.44, 0.96, 0.2], [4.57, 0.86, 0.28]],
-    glass: [[0.6, 1.4], [1.48, 2.5], [2.58, 3.45]], black: [[1.4, 1.48], [2.5, 2.58]], doors: [[1.4, 2.54], [2.54, 3.28]] },
+    glass: [[0.6, 1.4], [1.48, 2.5], [2.58, 3.45]], black: [[1.4, 1.48], [2.5, 2.58]], doors: [[1.4, 2.54], [2.54, 3.28]], winFx: true, curvR: 0.1, plateR: 0.5, plateF: 0.46 },
 };
 
+/* the usual pieces, so each car below stays short */
+// a headlamp: a dark rim, the clear lens, reflector bowls [x, y, rx, ry?] each with its bright lamp
+function fxLamp(P, shape, bowls, o) {
+  o = o || {};
+  P.front(grow(shape, 0.008), o.rim || 'bezel', { layer: 0, far: true });
+  P.front(shape, o.lens || 'lens', { layer: 1 });
+  for (const b of bowls || []) {
+    const [cx, cy, rx] = b, ry = b[3] || rx;
+    P.front(ell(cx, cy, rx, ry, 18), b[4] || 'chrome', { layer: 2 });
+    P.front(ell(cx, cy, rx * 0.5, ry * 0.5, 12), 'head', { layer: 3, far: true });
+  }
+}
+// a rear lamp: the red lens and the part that lights up
+function fxTail(P, outer, inner, o) { P.rear(outer, (o && o.lens) || 'lightlens', { layer: 0, far: true }); P.rear(inner || grow(outer, -0.012), 'light', { layer: 1, far: true }); }
+// a side window: a black frame and the glass inside it. rear: a z (straight up) or the back edge as [z, t] from the
+// waist (t = 0) to the roof rail (t = 1). frame / glass: false to draw only the other
+function fxWin(P, D, rear, z1, o) {
+  o = o || {};
+  const edge = (it, ib, dz) => typeof rear === 'number' ? rear + dz : rear.map(([z, t]) => { const zz = z + dz, b = D.belt(zz) + ib, r = D.rail(zz) - it; return [zz, b + (r - b) * t]; });
+  if (o.frame !== false) P.side(D.win(edge(0.012, 0.004, 0), z1, 0.012, 0.004), o.frameMat || 'dark', { layer: 0 });
+  if (o.glass !== false) P.side(D.win(edge(0.026, 0.016, o.frame === false ? 0 : 0.022), z1 - (o.gapF || 0), 0.026, 0.016), 'glass', { layer: 1 });
+}
+// four Audi rings, a star, a badge: a chrome disc with a dark middle
+function fxBadge(P, view, cx, cy, r, o) { P[view](ell(cx, cy, r, r * ((o && o.sy) || 1), 16), 'chrome', { layer: (o && o.layer) || 2, one: true }); P[view](ell(cx, cy, r * 0.78, r * 0.78 * ((o && o.sy) || 1), 16), (o && o.inner) || 'bezel', { layer: ((o && o.layer) || 2) + 1, one: true }); }
+function fxRings(P, view, cy, r, o) { for (let i = 0; i < 4; i++) fxBadge(P, view, (i - 1.5) * r * 1.5, cy, r, Object.assign({ inner: 'paint' }, o)); }
+// a honeycomb or diamond mesh inside an opening: cells in staggered rows, only where they fit inside the shape
+function inPoly(pts, x, y) { let c = false; for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) { const a = pts[i], b = pts[j]; if ((a[1] > y) !== (b[1] > y) && x < (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; }
+function fxMesh(P, view, shape, dx, dy, rx, ry, n, layer, mat) {
+  const inner = grow(shape, -Math.max(rx, ry) * 0.9);
+  let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const q of shape) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); }
+  let row = 0; const cells = [];
+  for (let y = y0 + dy * 0.5; y < y1; y += dy, row++) for (let x = Math.max(0, x0) + (row % 2 ? dx * 0.5 : 0) + dx * 0.25; x < x1; x += dx) if (inPoly(inner, x, y)) cells.push(ell(x, y, rx, ry, n || 6));
+  if (cells.length) P[view](cells, mat || 'trim', { layer: layer || 2, multi: true });
+}
+function fxSlats(P, x0, x1, y0, y1, n, mat, layer, vertical) {
+  const bars = [];
+  for (let i = 0; i < n; i++) { const t = (i + 0.5) / n; if (vertical) { const x = x0 + (x1 - x0) * t; bars.push(rct(x - 0.004, y0, x + 0.004, y1)); } else { const y = y0 + (y1 - y0) * t; bars.push(rct(x0, y - 0.004, x1, y + 0.004)); } }
+  P.front(bars, mat, { layer, multi: true });
+}
+
+/* ---------- each car's own face: lamps, grille, intakes and windows, projected onto the body ----------
+   front and rear parts are drawn for the right hand half (x > 0, looking at that end) and mirrored; side parts are (z, y) */
+const FX = {
+  // BMW E46 coupe: twin round lamps under one clear cover, the kidneys, L shaped rear lamps split across the boot lid,
+  // the plate on the boot lid, frameless windows with the Hofmeister kink
+  bmw: (D, P) => {
+    // headlamps
+    const lamp = fil([[0.29, 0.622], [0.315, 0.752], [0.79, 0.742], [0.862, 0.705], [0.858, 0.64], [0.77, 0.598]], [0.02, 0.02, 0.05, 0.03, 0.03, 0.03]);
+    P.front(grow(lamp, 0.008), 'bezel', { layer: 0, far: true });
+    P.front(lamp, 'lens', { layer: 1 });
+    for (const [cx, rr] of [[0.405, 0.062], [0.6, 0.066]]) {
+      P.front(ell(cx, 0.678, rr, rr, 22), 'bezel', { layer: 2 });
+      P.front(ell(cx, 0.678, rr - 0.008, rr - 0.008, 22), 'drl', { layer: 3 });
+      P.front(ell(cx, 0.678, rr - 0.018, rr - 0.018, 20), 'chrome', { layer: 4 });
+      P.front(ell(cx, 0.678, 0.026, 0.026, 14), 'head', { layer: 5, far: true });
+    }
+    P.front(fil([[0.72, 0.61], [0.84, 0.645], [0.845, 0.7], [0.72, 0.71]], 0.015), 'chrome', { layer: 2 });
+    // kidneys: chrome surround, black mesh, upright slats
+    const kid = fil([[0.035, 0.6], [0.228, 0.596], [0.25, 0.7], [0.22, 0.742], [0.045, 0.748], [0.03, 0.72]], [0.02, 0.025, 0.03, 0.03, 0.02, 0.01]);
+    P.front(grow(kid, 0.014), 'chrome', { layer: 0, far: true });
+    P.front(kid, 'hole', { layer: 1, far: true });
+    for (let x = 0.058; x < 0.23; x += 0.024) P.front(rct(x, 0.604, x + 0.007, 0.738), 'chrome', { layer: 2 });
+    // bumper: a dark band with the intake and round fog lamps, and the shut line of the bonnet
+    P.front(fil([[0, 0.23], [0.66, 0.225], [0.8, 0.26], [0.83, 0.33], [0.66, 0.37], [0, 0.37]], 0.03), 'trim', { layer: 0 });
+    P.front(fil([[0, 0.245], [0.36, 0.245], [0.4, 0.34], [0, 0.345]], 0.02), 'hole', { layer: 1 });
+    P.front(ell(0.63, 0.3, 0.055, 0.05, 18), 'bezel', { layer: 1 });
+    P.front(ell(0.63, 0.3, 0.042, 0.038, 18), 'lens', { layer: 2 });
+    // rear lamps: the big outer part on the wing wraps round the corner, the inner part sits on the boot lid
+    const outer = fil([[0.495, 0.735], [0.5, 0.9], [0.8, 0.885], [0.868, 0.83], [0.868, 0.745], [0.8, 0.728]], [0.01, 0.01, 0.05, 0.03, 0.02, 0.02]);
+    const inner = fil([[0.3, 0.79], [0.302, 0.9], [0.483, 0.9], [0.482, 0.765]], [0.015, 0.01, 0.005, 0.005]);
+    for (const sh of [outer, inner]) { P.rear(sh, 'lightlens', { layer: 0, far: true }); }
+    P.rear(fil([[0.51, 0.745], [0.8, 0.738], [0.86, 0.75], [0.86, 0.815], [0.51, 0.815]], 0.01), 'light', { layer: 1, far: true });
+    P.rear(fil([[0.312, 0.8], [0.472, 0.785], [0.472, 0.845], [0.312, 0.85]], 0.01), 'light', { layer: 1, far: true });
+    P.rear(fil([[0.51, 0.83], [0.79, 0.83], [0.84, 0.85], [0.8, 0.875], [0.51, 0.885]], 0.01), 'lens', { layer: 1 });
+    P.rear(fil([[0.315, 0.86], [0.472, 0.858], [0.472, 0.89], [0.315, 0.89]], 0.008), 'lens', { layer: 1 });
+    P.rear(rct(0.53, 0.84, 0.8, 0.852), 'light', { layer: 2 });
+    // boot lid: chrome strip over the plate, shut lines, the bumper's lower black edge
+    P.rear(rct(-0.2, 0.868, 0.2, 0.878), 'chrome', { layer: 0, one: true });
+    P.rear(rct(0.486, 0.72, 0.492, 0.905), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.714, 0.49, 0.72), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.628, 0.8, 0.634), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.72, 0.2], [0.82, 0.26], [0.8, 0.29], [0, 0.29]], 0.02), 'trim', { layer: 0 });
+    if (D.open) return;
+    // windows: a black surround, the door glass and the small rear glass with the kink
+    const kink = [[1.1, D.belt(1.1) + 0.004], [1.15, D.belt(1.15) + 0.09], [1.38, D.rail(1.38) - 0.012]];
+    P.side(D.win(kink, 3.1, 0.012, 0.004), 'dark', { layer: 0 });
+    P.side(D.win(1.715, 3.1, 0.026, 0.016), 'glass', { layer: 1 });
+    P.side(D.win([[1.13, D.belt(1.13) + 0.016], [1.175, D.belt(1.175) + 0.095], [1.39, D.rail(1.39) - 0.026], [1.39, D.rail(1.39) - 0.026]], 1.665, 0.026, 0.016), 'glass', { layer: 1 });
+  },
+  // Honda Civic Type R EP3: big clear swept lamps, a black mesh grille with the red badge, tall rear lamps up the hatch sides
+  civic: (D, P) => {
+    const lamp = fil([[0.245, 0.592], [0.25, 0.684], [0.56, 0.718], [0.78, 0.762], [0.85, 0.72], [0.835, 0.64], [0.62, 0.598]], [0.012, 0.02, 0.05, 0.03, 0.03, 0.04, 0.04]);
+    P.front(grow(lamp, 0.007), 'bezel', { layer: 0, far: true });
+    P.front(lamp, 'lens', { layer: 1 });
+    for (const [cx, cy, rr] of [[0.35, 0.648, 0.045], [0.52, 0.66, 0.052]]) {
+      P.front(ell(cx, cy, rr, rr, 20), 'chrome', { layer: 2 });
+      P.front(ell(cx, cy, rr * 0.5, rr * 0.5, 14), 'head', { layer: 3, far: true });
+    }
+    P.front(fil([[0.64, 0.61], [0.82, 0.645], [0.83, 0.69], [0.66, 0.66]], 0.015), 'lens', { layer: 2 });
+    const gr = fil([[0, 0.6], [0.2, 0.602], [0.232, 0.682], [0, 0.69]], [0, 0.02, 0.02, 0]);
+    P.front(gr, 'hole', { layer: 0, far: true });
+    for (let y = 0.615; y < 0.68; y += 0.018) P.front(rct(0, y, 0.21, y + 0.005), 'trim', { layer: 1 });
+    P.front(fil([[-0.034, 0.624], [0.034, 0.624], [0.034, 0.668], [-0.034, 0.668]], 0.012), 'lightlens', { layer: 2, one: true });
+    P.front(fil([[-0.02, 0.632], [0.02, 0.632], [0.02, 0.66], [-0.02, 0.66]], 0.004), 'chrome', { layer: 3, one: true });
+    P.front(fil([[0, 0.24], [0.43, 0.245], [0.52, 0.37], [0, 0.375]], [0, 0.03, 0.03, 0]), 'hole', { layer: 0 });
+    P.front(fil([[0.57, 0.265], [0.75, 0.29], [0.73, 0.375], [0.59, 0.37]], 0.02), 'trim', { layer: 0 });
+    P.front(ell(0.655, 0.325, 0.034, 0.03, 16), 'lens', { layer: 1 });
+    // tall rear lamps on the hatch pillars, a body colour bar with the badge over the plate
+    const tl = fil([[0.56, 0.715], [0.565, 0.985], [0.64, 1.02], [0.78, 0.9], [0.83, 0.8], [0.83, 0.715]], [0.01, 0.03, 0.04, 0.05, 0.03, 0.02]);
+    P.rear(tl, 'lightlens', { layer: 0, far: true });
+    P.rear(fil([[0.585, 0.73], [0.59, 0.95], [0.65, 0.97], [0.76, 0.87], [0.8, 0.79], [0.8, 0.73]], 0.02), 'light', { layer: 1, far: true });
+    P.rear(fil([[0.6, 0.8], [0.72, 0.8], [0.72, 0.84], [0.6, 0.84]], 0.01), 'lens', { layer: 2 });
+    P.rear(rct(0.548, 0.7, 0.554, 1.0), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.694, 0.552, 0.7), 'seam', { layer: 0 });
+    P.rear(fil([[-0.03, 0.872], [0.03, 0.872], [0.03, 0.912], [-0.03, 0.912]], 0.01), 'lightlens', { layer: 1, one: true });
+    P.rear(fil([[0, 0.2], [0.62, 0.2], [0.74, 0.26], [0.7, 0.3], [0, 0.3]], 0.02), 'trim', { layer: 0 });
+    // windows: black pillars, the small rear side glass kicking up at the back
+    P.side(D.win(1.05, 3.2, 0.012, 0.004), 'dark', { layer: 0 });
+    P.side(D.win(1.12, 3.2, 0.026, 0.016), 'glass', { layer: 1 });
+    P.side(D.win([[0.7, D.belt(0.7) + 0.035], [0.58, D.rail(0.58) - 0.012], [0.58, D.rail(0.58) - 0.012]], 1.02, 0.012, 0.004), 'dark', { layer: 0 });
+    P.side(D.win([[0.72, D.belt(0.72) + 0.047], [0.61, D.rail(0.61) - 0.024], [0.61, D.rail(0.61) - 0.024]], 1.0, 0.024, 0.016), 'glass', { layer: 1 });
+  },
+  // Subaru Impreza WRX STI (GD, 2006): hawk eye lamps pointed at the inner end, the three part grille, fog pods,
+  // round elements in the rear lamps, plate low on the bumper
+  wrx: (D, P) => {
+    const lamp = fil([[0.37, 0.688], [0.78, 0.716], [0.86, 0.68], [0.855, 0.6], [0.66, 0.585], [0.5, 0.622]], [0.01, 0.04, 0.03, 0.03, 0.05, 0.05]);
+    P.front(grow(lamp, 0.007), 'bezel', { layer: 0, far: true });
+    P.front(lamp, 'lens', { layer: 1 });
+    P.front(ell(0.5, 0.66, 0.034, 0.034, 16), 'chrome', { layer: 2 }); P.front(ell(0.5, 0.66, 0.018, 0.018, 12), 'head', { layer: 3, far: true });
+    P.front(ell(0.69, 0.648, 0.052, 0.048, 18), 'chrome', { layer: 2 }); P.front(ell(0.69, 0.648, 0.024, 0.024, 12), 'head', { layer: 3, far: true });
+    P.front(fil([[0.77, 0.6], [0.845, 0.606], [0.85, 0.64], [0.78, 0.636]], 0.01), 'amber', { layer: 2 });
+    const cg = fil([[0, 0.54], [0.14, 0.545], [0.205, 0.6], [0.195, 0.662], [0, 0.668]], [0, 0.03, 0.02, 0.02, 0]);
+    P.front(grow(cg, 0.012), 'chrome', { layer: 0 }); P.front(cg, 'hole', { layer: 1, far: true });
+    P.front(fil([[0.23, 0.568], [0.35, 0.592], [0.405, 0.64], [0.24, 0.632]], 0.012), 'hole', { layer: 0 });
+    P.front(ell(0, 0.61, 0.058, 0.032, 18), 'chrome', { layer: 2, one: true }); P.front(ell(0, 0.61, 0.046, 0.022, 18), 'bezel', { layer: 3, one: true });
+    P.front(fil([[0, 0.255], [0.44, 0.265], [0.52, 0.41], [0, 0.425]], [0, 0.04, 0.04, 0]), 'hole', { layer: 0 });
+    P.front(fil([[0.58, 0.3], [0.81, 0.33], [0.79, 0.45], [0.61, 0.43]], 0.025), 'trim', { layer: 0 });
+    P.front(ell(0.695, 0.375, 0.04, 0.036, 16), 'lens', { layer: 1 });
+    // rear lamps
+    const tl = fil([[0.47, 0.745], [0.48, 0.885], [0.74, 0.9], [0.868, 0.85], [0.868, 0.745]], [0.02, 0.03, 0.06, 0.03, 0.02]);
+    P.rear(tl, 'lightlens', { layer: 0, far: true });
+    P.rear(ell(0.61, 0.818, 0.064, 0.058, 20), 'light', { layer: 1, far: true });
+    P.rear(ell(0.61, 0.818, 0.036, 0.032, 16), 'lightlens', { layer: 2 });
+    P.rear(fil([[0.69, 0.79], [0.85, 0.79], [0.85, 0.85], [0.74, 0.875], [0.69, 0.87]], 0.02), 'light', { layer: 1 });
+    P.rear(fil([[0.49, 0.755], [0.85, 0.755], [0.85, 0.782], [0.49, 0.782]], 0.008), 'lens', { layer: 1 });
+    P.rear(rct(0.462, 0.7, 0.468, 0.9), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.694, 0.465, 0.7), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.66, 0.2], [0.78, 0.25], [0.74, 0.3], [0, 0.3]], 0.02), 'trim', { layer: 0 });
+    // windows: framed, a black pillar between the doors
+    P.side(D.win([[0.96, D.belt(0.96) + 0.004], [1.14, D.rail(1.14) - 0.012]], 3.0, 0.012, 0.004), 'dark', { layer: 0 });
+    P.side(D.win([[0.99, D.belt(0.99) + 0.016], [1.16, D.rail(1.16) - 0.026], [1.16, D.rail(1.16) - 0.026]], 1.93, 0.026, 0.016), 'glass', { layer: 1 });
+    P.side(D.win(2.05, 3.0, 0.026, 0.016), 'glass', { layer: 1 });
+  },
+  // Toyota Supra A80: long low nose, oval lamps, a big mouth, four round rear lamps in a black band on each side
+  supra: (D, P) => {
+    const lamp = fil([[0.38, 0.572], [0.52, 0.552], [0.8, 0.566], [0.875, 0.598], [0.84, 0.64], [0.6, 0.656], [0.42, 0.628]], 0.045);
+    P.front(grow(lamp, 0.007), 'bezel', { layer: 0, far: true });
+    P.front(lamp, 'lens', { layer: 1 });
+    for (const [cx, rr] of [[0.47, 0.03], [0.58, 0.036], [0.73, 0.046]]) { P.front(ell(cx, 0.603, rr, rr, 18), 'chrome', { layer: 2 }); P.front(ell(cx, 0.603, rr * 0.5, rr * 0.5, 12), 'head', { layer: 3, far: true }); }
+    P.front(ell(0, 0.585, 0.038, 0.026, 16), 'chrome', { layer: 0, one: true });
+    P.front(fil([[0, 0.23], [0.48, 0.24], [0.63, 0.3], [0.6, 0.42], [0.4, 0.46], [0, 0.47]], [0, 0.08, 0.06, 0.06, 0.1, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0.66, 0.37], [0.83, 0.39], [0.84, 0.46], [0.68, 0.46]], 0.02), 'lens', { layer: 0 });
+    P.front(fil([[0.75, 0.38], [0.83, 0.395], [0.835, 0.43], [0.76, 0.43]], 0.01), 'amber', { layer: 1 });
+    // the black band with four round lamps: reversing light inboard, two red, the indicator outboard
+    const band = fil([[0.17, 0.742], [0.2, 0.83], [0.78, 0.842], [0.878, 0.815], [0.878, 0.742], [0.2, 0.732]], [0.04, 0.04, 0.05, 0.03, 0.02, 0.04]);
+    P.rear(band, 'dark', { layer: 0, far: true });
+    [['lens', 0.3], ['light', 0.45], ['light', 0.6], ['amber', 0.75]].forEach(([m, cx]) => {
+      P.rear(ell(cx, 0.787, 0.05, 0.045, 18), 'bezel', { layer: 1 });
+      P.rear(ell(cx, 0.787, 0.04, 0.036, 18), m === 'light' ? 'light' : m, { layer: 2, far: m === 'light' });
+      if (m === 'light') P.rear(ell(cx, 0.787, 0.015, 0.014, 10), 'lightcore', { layer: 3 });
+    });
+    P.rear(fil([[0, 0.43], [0.33, 0.43], [0.35, 0.62], [0, 0.62]], [0, 0.03, 0.03, 0]), 'trim', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.6, 0.2], [0.76, 0.26], [0.72, 0.3], [0, 0.3]], 0.02), 'trim', { layer: 0 });
+    // windows: a small rear side glass with a slanted back edge
+    P.side(D.win([[1.12, D.belt(1.12) + 0.004], [1.38, D.rail(1.38) - 0.012]], 2.85, 0.012, 0.004), 'dark', { layer: 0 });
+    P.side(D.win([[1.16, D.belt(1.16) + 0.016], [1.4, D.rail(1.4) - 0.026], [1.4, D.rail(1.4) - 0.026]], 1.7, 0.026, 0.016), 'glass', { layer: 1 });
+    P.side(D.win(1.78, 2.85, 0.026, 0.016), 'glass', { layer: 1 });
+  },
+  // Nissan GT-R R35: lamps swept up the wings with three round units and the tick shaped running light, the big
+  // grille with its bar and red badge, four round rear lamps, the gill behind the front wheel, the curved rear pillar
+  gtr: (D, P) => {
+    const lamp = fil([[0.43, 0.615], [0.47, 0.705], [0.72, 0.775], [0.91, 0.805], [0.945, 0.72], [0.82, 0.66], [0.62, 0.61]], [0.02, 0.03, 0.04, 0.03, 0.04, 0.05, 0.04]);
+    P.front(grow(lamp, 0.008), 'bezel', { layer: 0, far: true });
+    P.front(lamp, 'lens', { layer: 1 });
+    for (const [cx, cy] of [[0.56, 0.67], [0.68, 0.702], [0.8, 0.735]]) { P.front(ell(cx, cy, 0.036, 0.036, 16), 'bezel', { layer: 2 }); P.front(ell(cx, cy, 0.022, 0.022, 12), 'head', { layer: 3, far: true }); }
+    P.front([[0.47, 0.625], [0.62, 0.622], [0.84, 0.672], [0.92, 0.73], [0.915, 0.745], [0.83, 0.69], [0.62, 0.636], [0.48, 0.64]], 'drl', { layer: 2 });
+    const gr = fil([[0, 0.37], [0.33, 0.37], [0.445, 0.625], [0, 0.63]], [0, 0.05, 0.04, 0]);
+    P.front(grow(gr, 0.012), 'chrome', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    P.front(rct(0, 0.555, 0.41, 0.568), 'chrome', { layer: 2 });
+    P.front(fil([[-0.045, 0.548], [0.045, 0.548], [0.045, 0.576], [-0.045, 0.576]], 0.008), 'lightlens', { layer: 3, one: true });
+    P.front(fil([[0.55, 0.28], [0.86, 0.29], [0.92, 0.42], [0.62, 0.5]], [0.03, 0.03, 0.05, 0.05]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0, 0.2], [0.8, 0.2], [0.9, 0.25], [0.86, 0.27], [0, 0.26]], 0.02), 'dark', { layer: 1 });
+    // four round lamps: a red ring round a darker middle
+    for (const [cx, rr] of [[0.47, 0.068], [0.705, 0.082]]) {
+      P.rear(ell(cx, 0.87, rr + 0.012, rr + 0.012, 22), 'bezel', { layer: 0, far: true });
+      P.rear(ell(cx, 0.87, rr, rr, 22), 'light', { layer: 1, far: true });
+      P.rear(ell(cx, 0.87, rr * 0.62, rr * 0.62, 18), 'lightlens', { layer: 2 });
+      P.rear(ell(cx, 0.87, rr * 0.22, rr * 0.22, 10), 'lightcore', { layer: 3 });
+    }
+    P.rear(fil([[0, 0.2], [0.72, 0.2], [0.9, 0.3], [0.86, 0.43], [0, 0.43]], [0, 0.03, 0.05, 0.05, 0]), 'dark', { layer: 0 });
+    for (const x of [0.38, 0.57]) P.rear(ell(x, 0.3, 0.075, 0.052, 18), 'chrome', { layer: 1 });
+    P.rear(rct(0, 0.735, 0.36, 0.741), 'seam', { layer: 0 });
+    P.rear(rct(0.36, 0.735, 0.366, 1.0), 'seam', { layer: 0 });
+    // windows and the curved rear pillar; the gill behind the front wheel
+    P.side(D.win([[1.26, D.belt(1.26) + 0.004], [1.5, D.rail(1.5) - 0.012]], 3.25, 0.012, 0.004), 'dark', { layer: 0 });
+    P.side(D.win([[1.3, D.belt(1.3) + 0.016], [1.52, D.rail(1.52) - 0.026], [1.52, D.rail(1.52) - 0.026]], 1.64, 0.026, 0.016), 'glass', { layer: 1 });
+    P.side(D.win(1.7, 3.25, 0.026, 0.016), 'glass', { layer: 1 });
+    P.side([[4.02, 0.6], [4.14, 0.61], [4.1, 0.8], [3.99, 0.79]], 'dark', { layer: 0 });
+    for (const y of [0.66, 0.73]) P.side([[4.0, y], [4.13, y + 0.005], [4.13, y + 0.018], [4.0, y + 0.013]], 'chrome', { layer: 1 });
+  },
+  // VW Golf R (Mk7.5): slim lamps with the running light along the bottom, a thin grille with the chrome line running
+  // into the lamps, big side intakes with a silver blade, lamps split across the tailgate, four pipes
+  golf: (D, P) => {
+    fxLamp(P, fil([[0.25, 0.618], [0.27, 0.692], [0.8, 0.708], [0.872, 0.672], [0.852, 0.61], [0.6, 0.6]], [0.01, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.46, 0.655, 0.034], [0.66, 0.66, 0.046]]);
+    P.front([[0.27, 0.617], [0.62, 0.605], [0.63, 0.617], [0.28, 0.628]], 'drl', { layer: 2 });
+    P.front(fil([[0, 0.6], [0.25, 0.605], [0.27, 0.69], [0, 0.695]], [0, 0.01, 0.01, 0]), 'hole', { layer: 0, far: true });
+    P.front(rct(0, 0.672, 0.27, 0.68), 'chrome', { layer: 1 });
+    fxBadge(P, 'front', 0, 0.645, 0.044);
+    P.front(fil([[0, 0.28], [0.3, 0.28], [0.34, 0.39], [0, 0.4]], [0, 0.02, 0.02, 0]), 'hole', { layer: 0 });
+    P.front(fil([[0.46, 0.27], [0.8, 0.29], [0.83, 0.45], [0.52, 0.43]], 0.03), 'hole', { layer: 0, far: true });
+    P.front(fil([[0.48, 0.355], [0.81, 0.37], [0.81, 0.385], [0.49, 0.372]], 0.004), 'chrome', { layer: 1 });
+    fxTail(P, fil([[0.47, 0.84], [0.48, 0.945], [0.82, 0.93], [0.878, 0.885], [0.872, 0.84]], [0.01, 0.02, 0.04, 0.02, 0.02]), fil([[0.49, 0.85], [0.84, 0.85], [0.86, 0.88], [0.49, 0.885]], 0.01));
+    fxTail(P, rct(0.3, 0.86, 0.462, 0.95, 0.01), rct(0.31, 0.868, 0.455, 0.9, 0.006));
+    P.rear(rct(0.466, 0.78, 0.472, 0.97), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.78, 0.47, 0.786), 'seam', { layer: 0 });
+    fxBadge(P, 'rear', 0, 0.9, 0.05);
+    P.rear(fil([[0, 0.2], [0.66, 0.2], [0.78, 0.26], [0.74, 0.32], [0, 0.32]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, 1.91, 3.2, { glass: false }); fxWin(P, D, [[0.5, 0], [0.76, 1]], 0.86);
+    fxWin(P, D, 0.95, 1.92, { frame: false }); fxWin(P, D, 2.03, 3.2, { frame: false });
+  },
+  // Mercedes-AMG A45 S (W177): the upright Panamericana grille, slim lamps with the running light across the top,
+  // big finned intakes, slim rear lamps, four round pipes
+  a45: (D, P) => {
+    fxLamp(P, fil([[0.3, 0.64], [0.34, 0.7], [0.82, 0.718], [0.9, 0.672], [0.862, 0.62], [0.56, 0.612]], [0.02, 0.02, 0.04, 0.03, 0.04, 0.04]), [[0.5, 0.66, 0.024], [0.6, 0.662, 0.024], [0.7, 0.665, 0.024]]);
+    P.front([[0.35, 0.688], [0.82, 0.705], [0.85, 0.694], [0.36, 0.678]], 'drl', { layer: 2 });
+    const gr = fil([[0, 0.46], [0.3, 0.46], [0.27, 0.66], [0, 0.672]], [0, 0.03, 0.03, 0]);
+    P.front(grow(gr, 0.012), 'chrome', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxSlats(P, 0.02, 0.28, 0.47, 0.655, 7, 'chrome', 2, true);
+    fxBadge(P, 'front', 0, 0.575, 0.06, { layer: 3 });
+    P.front(fil([[0.44, 0.25], [0.85, 0.27], [0.9, 0.46], [0.62, 0.5], [0.48, 0.42]], 0.03), 'hole', { layer: 0, far: true });
+    fxSlats(P, 0.5, 0.86, 0.3, 0.44, 2, 'trim', 1);
+    P.front(fil([[0, 0.2], [0.78, 0.2], [0.88, 0.24], [0.84, 0.26], [0, 0.26]], 0.01), 'dark', { layer: 1 });
+    fxTail(P, fil([[0.5, 0.855], [0.5, 0.935], [0.82, 0.93], [0.9, 0.88], [0.886, 0.838], [0.7, 0.83]], [0.01, 0.02, 0.04, 0.03, 0.02, 0.02]), fil([[0.52, 0.86], [0.84, 0.85], [0.87, 0.87], [0.52, 0.885]], 0.006));
+    fxTail(P, rct(0.3, 0.875, 0.49, 0.935, 0.01), rct(0.31, 0.88, 0.48, 0.895));
+    P.rear(rct(0.492, 0.76, 0.498, 0.95), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.76, 0.495, 0.766), 'seam', { layer: 0 });
+    fxBadge(P, 'rear', 0, 0.905, 0.055);
+    P.rear(fil([[0, 0.2], [0.66, 0.2], [0.8, 0.26], [0.74, 0.33], [0, 0.33]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, 1.99, 3.3, { glass: false }); fxWin(P, D, [[0.64, 0], [0.9, 1]], 1.0);
+    fxWin(P, D, 1.07, 2.0, { frame: false }); fxWin(P, D, 2.1, 3.3, { frame: false });
+  },
+  // Mitsubishi Lancer Evo IX: big clear lamps, the small grille with the three diamonds, the huge bumper mouth, fogs in
+  // the corners, the vent in the bonnet, round elements in the rear lamps
+  evo: (D, P) => {
+    fxLamp(P, fil([[0.3, 0.598], [0.31, 0.7], [0.8, 0.72], [0.88, 0.68], [0.872, 0.6], [0.6, 0.58]], [0.01, 0.02, 0.04, 0.03, 0.03, 0.04]), [[0.42, 0.65, 0.04], [0.62, 0.655, 0.058]]);
+    P.front(fil([[0.77, 0.6], [0.865, 0.606], [0.866, 0.64], [0.78, 0.64]], 0.01), 'amber', { layer: 2 });
+    P.front(fil([[0, 0.61], [0.27, 0.6], [0.29, 0.69], [0, 0.7]], [0, 0.02, 0.02, 0]), 'hole', { layer: 0, far: true });
+    for (const [dx, dy, a] of [[0, 0.012, 0], [-0.013, -0.008, 1], [0.013, -0.008, 2]]) P.front(ell(dx, 0.655 + dy, 0.011, 0.016, 4, a * 2.09 + Math.PI / 2), 'chrome', { layer: 1, one: true });
+    P.front(fil([[0, 0.25], [0.44, 0.26], [0.55, 0.46], [0, 0.48]], [0, 0.04, 0.05, 0]), 'hole', { layer: 0, far: true });
+    fxSlats(P, 0, 0.5, 0.28, 0.45, 3, 'trim', 1);
+    P.front(fil([[0.62, 0.3], [0.82, 0.32], [0.8, 0.43], [0.64, 0.42]], 0.02), 'trim', { layer: 0 });
+    P.front(ell(0.72, 0.365, 0.036, 0.032, 16), 'lens', { layer: 1 });
+    P.top(fil([[3.72, -0.24], [4.02, -0.2], [4.02, 0.2], [3.72, 0.24]], 0.03), 'dark', { layer: 0, one: true });
+    fxTail(P, fil([[0.45, 0.76], [0.46, 0.9], [0.78, 0.905], [0.88, 0.85], [0.88, 0.76]], [0.02, 0.02, 0.05, 0.03, 0.02]), null);
+    P.rear(ell(0.72, 0.83, 0.058, 0.052, 20), 'light', { layer: 1, far: true }); P.rear(ell(0.72, 0.83, 0.03, 0.028, 14), 'lightcore', { layer: 2 });
+    P.rear(fil([[0.47, 0.775], [0.62, 0.775], [0.62, 0.885], [0.48, 0.885]], 0.02), 'lens', { layer: 1 });
+    P.rear(ell(0.545, 0.83, 0.04, 0.038, 16), 'light', { layer: 2 });
+    P.rear(rct(0.444, 0.7, 0.45, 0.905), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.694, 0.447, 0.7), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.64, 0.2], [0.76, 0.25], [0.72, 0.3], [0, 0.3]], 0.02), 'trim', { layer: 0 });
+    fxWin(P, D, [[0.98, 0], [1.16, 1]], 3.05, { glass: false });
+    fxWin(P, D, [[1.0, 0], [1.18, 1]], 1.97, { frame: false }); fxWin(P, D, 2.09, 3.05, { frame: false });
+  },
+  // Audi RS3 saloon (8V): the black honeycomb single frame grille with the rings, slim lamps, big corner intakes,
+  // lamps reaching onto the boot lid, two big oval pipes
+  rs3: (D, P) => {
+    fxLamp(P, fil([[0.36, 0.66], [0.4, 0.712], [0.82, 0.722], [0.892, 0.682], [0.862, 0.632], [0.6, 0.618]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.52, 0.672, 0.022], [0.6, 0.674, 0.022], [0.68, 0.676, 0.022]]);
+    P.front([[0.38, 0.69], [0.82, 0.708], [0.86, 0.69], [0.84, 0.68], [0.39, 0.68]], 'drl', { layer: 2 });
+    const gr = fil([[0, 0.36], [0.26, 0.36], [0.33, 0.44], [0.33, 0.62], [0.28, 0.69], [0, 0.692]], [0, 0.03, 0.02, 0.02, 0.03, 0]);
+    P.front(grow(gr, 0.012), 'dark', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxMesh(P, 'front', gr, 0.05, 0.05, 0.016, 0.012, 6, 2);
+    fxRings(P, 'front', 0.64, 0.028, { layer: 3 });
+    P.front(fil([[0.48, 0.27], [0.84, 0.29], [0.88, 0.47], [0.58, 0.51], [0.5, 0.4]], 0.03), 'hole', { layer: 0, far: true });
+    P.front(fil([[0, 0.2], [0.78, 0.2], [0.88, 0.25], [0.84, 0.265], [0, 0.26]], 0.01), 'dark', { layer: 1 });
+    fxTail(P, fil([[0.45, 0.832], [0.46, 0.905], [0.8, 0.91], [0.882, 0.87], [0.874, 0.822], [0.7, 0.812]], [0.01, 0.02, 0.04, 0.03, 0.02, 0.02]), fil([[0.47, 0.84], [0.84, 0.83], [0.86, 0.85], [0.47, 0.856]], 0.005));
+    fxTail(P, rct(0.3, 0.845, 0.44, 0.905, 0.008), rct(0.31, 0.85, 0.43, 0.862));
+    fxRings(P, 'rear', 0.875, 0.026);
+    P.rear(rct(0.442, 0.7, 0.448, 0.91), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.694, 0.445, 0.7), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.72, 0.2], [0.84, 0.27], [0.78, 0.37], [0, 0.37]], 0.03), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.05, 0], [1.24, 1]], 3.1, { glass: false });
+    fxWin(P, D, [[1.08, 0], [1.26, 1]], 1.96, { frame: false }); fxWin(P, D, 2.08, 3.1, { frame: false });
+  },
+  // Mercedes C63 AMG (W204): the big star in a two bar grille, angular lamps, AMG bumper with running lights in the
+  // corner intakes, lamps across wing and boot lid, four pipes
+  c63: (D, P) => {
+    fxLamp(P, fil([[0.36, 0.64], [0.38, 0.72], [0.78, 0.724], [0.884, 0.686], [0.862, 0.63], [0.6, 0.608]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.48, 0.675, 0.042], [0.66, 0.678, 0.05]]);
+    const gr = fil([[0, 0.57], [0.3, 0.57], [0.345, 0.63], [0.325, 0.712], [0, 0.72]], [0, 0.02, 0.02, 0.03, 0]);
+    P.front(grow(gr, 0.01), 'chrome', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    for (const y of [0.612, 0.668]) P.front(rct(0, y, 0.32, y + 0.016), 'chrome', { layer: 2 });
+    fxBadge(P, 'front', 0, 0.642, 0.07, { layer: 3 });
+    P.front(ell(0, 0.642, 0.02, 0.02, 3, Math.PI / 2), 'chrome', { layer: 5, one: true });
+    P.front(fil([[0, 0.26], [0.33, 0.27], [0.38, 0.43], [0, 0.44]], [0, 0.03, 0.03, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0.5, 0.26], [0.84, 0.28], [0.87, 0.43], [0.56, 0.45]], 0.03), 'hole', { layer: 0, far: true });
+    P.front([[0.58, 0.405], [0.84, 0.41], [0.84, 0.422], [0.58, 0.418]], 'drl', { layer: 1 });
+    fxTail(P, fil([[0.46, 0.78], [0.47, 0.9], [0.8, 0.905], [0.884, 0.85], [0.884, 0.78]], [0.02, 0.02, 0.05, 0.03, 0.02]), fil([[0.48, 0.79], [0.87, 0.79], [0.87, 0.83], [0.48, 0.83]], 0.01));
+    P.rear(fil([[0.48, 0.845], [0.84, 0.845], [0.8, 0.885], [0.49, 0.888]], 0.01), 'lens', { layer: 1 });
+    fxTail(P, rct(0.3, 0.8, 0.45, 0.9, 0.01), rct(0.31, 0.81, 0.44, 0.84));
+    fxBadge(P, 'rear', 0, 0.87, 0.045);
+    P.rear(rct(0.452, 0.7, 0.458, 0.91), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.694, 0.455, 0.7), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.7, 0.2], [0.82, 0.26], [0.78, 0.33], [0, 0.33]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.13, 0], [1.33, 1]], 3.25, { glass: false });
+    fxWin(P, D, [[1.16, 0], [1.35, 1]], 2.08, { frame: false }); fxWin(P, D, 2.2, 3.25, { frame: false });
+  },
+  // BMW M3 (E92): lamps with angel eyes and a dark eyebrow, bigger kidneys, three big intakes, the power dome,
+  // L shaped rear lamps, frameless windows with the kink, four pipes
+  m3: (D, P) => {
+    const lamp = fil([[0.3, 0.6], [0.33, 0.705], [0.8, 0.728], [0.902, 0.68], [0.88, 0.62], [0.62, 0.59]], [0.02, 0.02, 0.05, 0.03, 0.03, 0.03]);
+    P.front(grow(lamp, 0.008), 'bezel', { layer: 0, far: true }); P.front(lamp, 'lens', { layer: 1 });
+    for (const [cx, rr] of [[0.44, 0.054], [0.64, 0.058]]) {
+      P.front(ell(cx, 0.655, rr, rr, 22), 'bezel', { layer: 2 }); P.front(ell(cx, 0.655, rr - 0.008, rr - 0.008, 22), 'drl', { layer: 3 });
+      P.front(ell(cx, 0.655, rr - 0.018, rr - 0.018, 20), 'chrome', { layer: 4 }); P.front(ell(cx, 0.655, 0.024, 0.024, 14), 'head', { layer: 5, far: true });
+    }
+    P.front([[0.33, 0.69], [0.8, 0.713], [0.85, 0.7], [0.34, 0.676]], 'bezel', { layer: 3 });
+    const kid = fil([[0.03, 0.58], [0.25, 0.575], [0.27, 0.66], [0.24, 0.705], [0.04, 0.712]], [0.02, 0.03, 0.03, 0.03, 0.02]);
+    P.front(grow(kid, 0.014), 'chrome', { layer: 0, far: true }); P.front(kid, 'hole', { layer: 1, far: true });
+    fxSlats(P, 0.05, 0.25, 0.585, 0.7, 8, 'chrome', 2, true);
+    P.front(fil([[0, 0.26], [0.3, 0.26], [0.34, 0.41], [0, 0.42]], [0, 0.03, 0.03, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0.5, 0.25], [0.84, 0.28], [0.87, 0.45], [0.54, 0.45]], 0.03), 'hole', { layer: 0, far: true });
+    const outer = fil([[0.5, 0.75], [0.51, 0.87], [0.82, 0.875], [0.902, 0.82], [0.895, 0.74]], [0.01, 0.02, 0.05, 0.03, 0.02]);
+    fxTail(P, outer, null); fxTail(P, rct(0.3, 0.79, 0.485, 0.87, 0.01), null);
+    P.rear([[0.52, 0.78], [0.86, 0.77], [0.86, 0.79], [0.54, 0.8], [0.54, 0.85], [0.52, 0.85]], 'light', { layer: 1, far: true });
+    P.rear([[0.31, 0.83], [0.47, 0.83], [0.47, 0.85], [0.31, 0.85]], 'light', { layer: 1, far: true });
+    P.rear(rct(0.489, 0.7, 0.495, 0.88), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.694, 0.492, 0.7), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.7, 0.2], [0.82, 0.26], [0.78, 0.33], [0, 0.33]], 0.02), 'dark', { layer: 0 });
+    const kink = [[1.12, 0], [1.17, 0.35], [1.4, 1]];
+    fxWin(P, D, kink, 3.2, { glass: false });
+    fxWin(P, D, [[1.15, 0], [1.2, 0.35], [1.42, 1]], 1.7, { frame: false }); fxWin(P, D, 1.77, 3.2, { frame: false });
+  },
+  // Porsche 911 GT3 (991): oval lamps up on the nose, three intakes with the running lights over the outer ones, slim
+  // rear lamps, the louvred engine lid, two pipes in the middle
+  p911: (D, P) => {
+    const lamp = ell(0.6, 0.64, 0.13, 0.072, 26);
+    P.front(grow(lamp, 0.008), 'bezel', { layer: 0, far: true }); P.front(lamp, 'lens', { layer: 1 });
+    P.front(ell(0.6, 0.64, 0.085, 0.05, 20), 'chrome', { layer: 2 }); P.front(ell(0.6, 0.64, 0.04, 0.026, 14), 'head', { layer: 3, far: true });
+    P.front(fil([[0, 0.25], [0.3, 0.25], [0.34, 0.36], [0, 0.37]], [0, 0.02, 0.02, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0.42, 0.24], [0.78, 0.26], [0.83, 0.42], [0.47, 0.44]], 0.03), 'hole', { layer: 0, far: true });
+    P.front([[0.5, 0.45], [0.8, 0.438], [0.8, 0.452], [0.5, 0.465]], 'drl', { layer: 1 });
+    P.front(fil([[0, 0.19], [0.8, 0.19], [0.88, 0.23], [0.84, 0.245], [0, 0.24]], 0.01), 'dark', { layer: 1 });
+    fxTail(P, fil([[0.36, 0.8], [0.37, 0.852], [0.8, 0.862], [0.884, 0.83], [0.875, 0.788], [0.6, 0.78]], [0.01, 0.02, 0.04, 0.02, 0.02, 0.02]), fil([[0.38, 0.81], [0.84, 0.81], [0.86, 0.825], [0.38, 0.83]], 0.005));
+    P.rear(fil([[0, 0.855], [0.3, 0.86], [0.3, 0.9], [0, 0.9]], 0.01), 'dark', { layer: 0 });
+    for (let x = 0.02; x < 0.3; x += 0.04) P.rear(rct(x, 0.86, x + 0.012, 0.898), 'trim', { layer: 1 });
+    P.rear(fil([[0, 0.2], [0.72, 0.2], [0.84, 0.26], [0.8, 0.35], [0, 0.36]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.46, 0], [1.7, 1]], 3.0, { glass: false });
+    fxWin(P, D, [[1.49, 0], [1.72, 1]], 1.96, { frame: false }); fxWin(P, D, 2.02, 3.0, { frame: false });
+  },
+  // Audi R8 (2015 on): slim angular lamps in the corners, the wide flat single frame grille, huge side intakes,
+  // the black mesh across the back under slim lamps
+  r8: (D, P) => {
+    fxLamp(P, fil([[0.5, 0.6], [0.54, 0.672], [0.84, 0.694], [0.94, 0.66], [0.922, 0.61], [0.7, 0.584]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.66, 0.64, 0.02], [0.73, 0.642, 0.02], [0.8, 0.646, 0.02]]);
+    P.front([[0.54, 0.66], [0.84, 0.682], [0.9, 0.66], [0.88, 0.652], [0.55, 0.648]], 'drl', { layer: 2 });
+    const gr = fil([[0, 0.3], [0.28, 0.3], [0.36, 0.38], [0.38, 0.52], [0.32, 0.58], [0, 0.585]], [0, 0.03, 0.02, 0.02, 0.03, 0]);
+    P.front(grow(gr, 0.012), 'dark', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxMesh(P, 'front', gr, 0.05, 0.05, 0.016, 0.012, 6, 2);
+    fxRings(P, 'front', 0.61, 0.026);
+    P.front(fil([[0.5, 0.25], [0.88, 0.27], [0.93, 0.5], [0.62, 0.55], [0.52, 0.42]], 0.03), 'hole', { layer: 0, far: true });
+    fxTail(P, fil([[0.44, 0.862], [0.45, 0.91], [0.82, 0.915], [0.91, 0.88], [0.9, 0.84], [0.6, 0.835]], [0.01, 0.02, 0.04, 0.02, 0.02, 0.02]), fil([[0.46, 0.87], [0.86, 0.855], [0.88, 0.87], [0.46, 0.886]], 0.004));
+    P.rear(fil([[0, 0.48], [0.8, 0.48], [0.88, 0.62], [0.86, 0.8], [0, 0.82]], [0, 0.03, 0.04, 0.04, 0]), 'hole', { layer: 0, far: true });
+    fxRings(P, 'rear', 0.85, 0.022);
+    P.rear(fil([[0, 0.2], [0.74, 0.2], [0.86, 0.28], [0.82, 0.4], [0, 0.4]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.52, 0], [1.76, 1]], 3.02);
+  },
+  // Range Rover Sport SVR (L494): slim lamps, the wide mesh grille, big finned intakes, the floating roof with every
+  // pillar black, the vents on the front wings, slim wraparound rear lamps, four pipes
+  svr: (D, P) => {
+    fxLamp(P, fil([[0.44, 0.935], [0.46, 1.0], [0.88, 1.01], [0.975, 0.97], [0.955, 0.915], [0.6, 0.905]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.62, 0.957, 0.026], [0.72, 0.96, 0.026], [0.82, 0.962, 0.026]]);
+    P.front([[0.46, 0.925], [0.9, 0.93], [0.95, 0.925], [0.94, 0.915], [0.47, 0.913]], 'drl', { layer: 2 });
+    const gr = fil([[0, 0.82], [0.42, 0.82], [0.44, 0.97], [0, 0.985]], [0, 0.02, 0.02, 0]);
+    P.front(grow(gr, 0.012), 'dark', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxMesh(P, 'front', gr, 0.06, 0.04, 0.02, 0.012, 4, 2);
+    P.front(fil([[0.48, 0.45], [0.9, 0.47], [0.93, 0.72], [0.56, 0.74]], 0.03), 'hole', { layer: 0, far: true });
+    fxSlats(P, 0.52, 0.9, 0.48, 0.7, 3, 'trim', 1);
+    P.front(fil([[0, 0.44], [0.35, 0.44], [0.38, 0.6], [0, 0.61]], [0, 0.02, 0.02, 0]), 'hole', { layer: 0 });
+    P.front(fil([[0, 0.38], [0.8, 0.38], [0.9, 0.42], [0.86, 0.44], [0, 0.44]], 0.01), 'trim', { layer: 1 });
+    fxTail(P, fil([[0.55, 1.03], [0.56, 1.11], [0.86, 1.11], [0.965, 1.07], [0.955, 1.01], [0.75, 1.0]], [0.01, 0.02, 0.04, 0.03, 0.02, 0.02]), fil([[0.57, 1.04], [0.94, 1.03], [0.95, 1.05], [0.57, 1.06]], 0.005));
+    P.rear(rct(0.54, 0.8, 0.546, 1.12), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.38], [0.76, 0.38], [0.9, 0.45], [0.86, 0.55], [0, 0.55]], 0.03), 'dark', { layer: 0 });
+    fxWin(P, D, [[0.5, 0], [0.62, 1]], 3.5, { glass: false });
+    fxWin(P, D, [[0.53, 0], [0.64, 1]], 1.02, { frame: false }); fxWin(P, D, 1.1, 2.18, { frame: false }); fxWin(P, D, 2.3, 3.5, { frame: false });
+    P.side(fil([[3.72, 0.82], [3.95, 0.84], [3.95, 0.88], [3.72, 0.87]], 0.01), 'dark', { layer: 0 });
+  },
+  // Honda Jazz (2015): winged lamps joined by a slim grille bar, tall rear lamps up the hatch pillars
+  jazz: (D, P) => {
+    fxLamp(P, fil([[0.24, 0.628], [0.26, 0.692], [0.62, 0.722], [0.8, 0.752], [0.845, 0.712], [0.8, 0.662], [0.55, 0.622]], [0.01, 0.02, 0.04, 0.03, 0.03, 0.03, 0.03]), [[0.4, 0.665, 0.03], [0.6, 0.685, 0.04]]);
+    P.front(fil([[0, 0.63], [0.25, 0.632], [0.26, 0.692], [0, 0.7]], [0, 0.01, 0.01, 0]), 'dark', { layer: 0, far: true });
+    P.front(rct(0, 0.676, 0.3, 0.684), 'chrome', { layer: 1 });
+    P.front(ell(0, 0.664, 0.034, 0.026, 14), 'chrome', { layer: 2, one: true });
+    P.front(fil([[0, 0.26], [0.36, 0.27], [0.44, 0.4], [0, 0.42]], [0, 0.03, 0.03, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0.56, 0.28], [0.74, 0.3], [0.72, 0.38], [0.58, 0.37]], 0.02), 'trim', { layer: 0 });
+    fxTail(P, fil([[0.55, 0.78], [0.56, 1.1], [0.61, 1.2], [0.68, 1.14], [0.8, 0.95], [0.83, 0.82], [0.83, 0.78]], [0.01, 0.03, 0.03, 0.04, 0.05, 0.02, 0.01]));
+    P.rear(rct(0.54, 0.74, 0.546, 1.12), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.735, 0.545, 0.741), 'seam', { layer: 0 });
+    P.rear(ell(0, 0.95, 0.034, 0.026, 14), 'chrome', { layer: 1, one: true });
+    P.rear(fil([[0, 0.2], [0.6, 0.2], [0.72, 0.26], [0.68, 0.3], [0, 0.3]], 0.02), 'trim', { layer: 0 });
+    fxWin(P, D, [[0.42, 0.05], [0.6, 1]], 3.18, { glass: false });
+    fxWin(P, D, [[0.46, 0.08], [0.62, 1]], 0.84, { frame: false }); fxWin(P, D, 0.95, 1.84, { frame: false }); fxWin(P, D, 1.96, 3.18, { frame: false });
+  },
+  // Mini Cooper S (R56): round lamps up on the bonnet with chrome rings, the hexagon grille, the chrome handle over
+  // the plate, upright oval rear lamps, black pillars under a floating roof
+  mini: (D, P) => {
+    P.front(ell(0.56, 0.71, 0.112, 0.1, 28), 'chrome', { layer: 0, far: true });
+    P.front(ell(0.56, 0.71, 0.098, 0.087, 28), 'lens', { layer: 1 });
+    P.front(ell(0.56, 0.715, 0.07, 0.062, 22), 'chrome', { layer: 2 }); P.front(ell(0.56, 0.715, 0.034, 0.03, 14), 'head', { layer: 3, far: true });
+    P.front(fil([[0.5, 0.64], [0.62, 0.64], [0.6, 0.66], [0.52, 0.66]], 0.008), 'amber', { layer: 2 });
+    const gr = fil([[0, 0.48], [0.27, 0.48], [0.32, 0.56], [0.29, 0.635], [0, 0.64]], [0, 0.02, 0.02, 0.02, 0]);
+    P.front(grow(gr, 0.012), 'chrome', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    P.front(rct(0, 0.575, 0.3, 0.587), 'chrome', { layer: 2 });
+    P.front(ell(0.62, 0.42, 0.036, 0.034, 14), 'lens', { layer: 0 });
+    P.front(fil([[0, 0.22], [0.5, 0.22], [0.56, 0.28], [0, 0.29]], 0.02), 'hole', { layer: 0 });
+    P.rear(ell(0.67, 0.84, 0.078, 0.118, 24), 'chrome', { layer: 0, far: true });
+    P.rear(ell(0.67, 0.84, 0.066, 0.104, 24), 'lightlens', { layer: 1, far: true });
+    P.rear(ell(0.67, 0.81, 0.05, 0.06, 18), 'light', { layer: 2, far: true });
+    P.rear(ell(0.67, 0.89, 0.04, 0.03, 14), 'lens', { layer: 2 });
+    const hd = fil([[0, 0.715], [0.3, 0.715], [0.31, 0.85], [0, 0.855]], [0, 0.03, 0.03, 0]);
+    P.rear(hd, 'chrome', { layer: 0 });
+    P.rear(grow(hd, -0.014), 'paint', { layer: 1 });
+    P.rear(fil([[0, 0.2], [0.58, 0.2], [0.7, 0.26], [0.66, 0.3], [0, 0.3]], 0.02), 'trim', { layer: 0 });
+    fxWin(P, D, [[0.36, 0.1], [0.44, 1]], 2.92, { glass: false });
+    fxWin(P, D, [[0.39, 0.12], [0.46, 1]], 0.95, { frame: false }); fxWin(P, D, 1.02, 2.92, { frame: false });
+  },
+  // Audi TTS (Mk2): the big single frame grille with a silver surround and bars, swept lamps with the running light
+  // underneath, finned corner intakes, slim rear lamps, four pipes at the corners
+  tts: (D, P) => {
+    fxLamp(P, fil([[0.36, 0.622], [0.4, 0.678], [0.78, 0.7], [0.884, 0.66], [0.85, 0.608], [0.6, 0.6]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.5, 0.648, 0.03], [0.68, 0.656, 0.042]]);
+    P.front([[0.4, 0.61], [0.84, 0.618], [0.86, 0.628], [0.4, 0.622]], 'drl', { layer: 2 });
+    const gr = fil([[0, 0.3], [0.3, 0.3], [0.36, 0.44], [0.34, 0.6], [0.3, 0.64], [0, 0.648]], [0, 0.03, 0.02, 0.02, 0.03, 0]);
+    P.front(grow(gr, 0.02), 'chrome', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    for (const y of [0.52, 0.47]) P.front(rct(0, y, 0.34, y + 0.012), 'chrome', { layer: 2 });
+    fxRings(P, 'front', 0.585, 0.024);
+    P.front(fil([[0.46, 0.26], [0.8, 0.28], [0.84, 0.42], [0.52, 0.44]], 0.03), 'hole', { layer: 0, far: true });
+    fxSlats(P, 0.5, 0.82, 0.3, 0.42, 2, 'chrome', 1);
+    fxTail(P, fil([[0.46, 0.76], [0.47, 0.84], [0.8, 0.852], [0.884, 0.8], [0.875, 0.748]], [0.01, 0.02, 0.05, 0.03, 0.02]));
+    fxRings(P, 'rear', 0.8, 0.026);
+    P.rear(fil([[0, 0.53], [0.3, 0.53], [0.32, 0.67], [0, 0.67]], [0, 0.02, 0.02, 0]), 'trim', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.72, 0.2], [0.84, 0.26], [0.8, 0.33], [0, 0.33]], 0.02), 'dark', { layer: 0 });
+    P.rear(rct(0, 0.335, 0.66, 0.345), 'chrome', { layer: 1 });
+    fxWin(P, D, [[1.0, 0.1], [1.2, 1]], 2.7, { glass: false });
+    fxWin(P, D, [[1.03, 0.12], [1.22, 1]], 1.44, { frame: false }); fxWin(P, D, 1.5, 2.7, { frame: false });
+  },
+  // BMW E46 convertible: the coupe's face, roof down
+  e46c: (D, P) => FX.bmw(D, P),
+  // Lexus IS200t F Sport (2016): the spindle grille, sharp lamps with the arrowhead running light under them,
+  // L shaped rear lamps, the small window in the rear pillar
+  is200t: (D, P) => {
+    fxLamp(P, fil([[0.4, 0.622], [0.44, 0.676], [0.82, 0.696], [0.905, 0.652], [0.86, 0.602], [0.6, 0.598]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.56, 0.648, 0.024], [0.65, 0.65, 0.024], [0.74, 0.652, 0.024]]);
+    P.front([[0.7, 0.58], [0.87, 0.598], [0.855, 0.44], [0.835, 0.44], [0.845, 0.575], [0.71, 0.566]], 'drl', { layer: 1 });
+    const sp2 = [[0, 0.24], [0.44, 0.24], [0.3, 0.44], [0.19, 0.47], [0.3, 0.64], [0.26, 0.668], [0, 0.668]];
+    P.front(grow(sp2, 0.014), 'chrome', { layer: 0, far: true }); P.front(sp2, 'hole', { layer: 1, far: true });
+    fxMesh(P, 'front', sp2, 0.05, 0.045, 0.018, 0.011, 4, 2);
+    fxBadge(P, 'front', 0, 0.6, 0.04, { sy: 0.7, layer: 3 });
+    P.front(fil([[0.5, 0.26], [0.84, 0.28], [0.84, 0.4], [0.56, 0.42]], 0.02), 'hole', { layer: 0 });
+    fxTail(P, fil([[0.45, 0.76], [0.46, 0.88], [0.8, 0.885], [0.9, 0.82], [0.89, 0.72], [0.8, 0.72], [0.78, 0.78], [0.6, 0.76]], [0.01, 0.02, 0.04, 0.03, 0.01, 0.01, 0.02, 0.02]));
+    P.rear([[0.48, 0.855], [0.82, 0.86], [0.87, 0.82], [0.86, 0.74], [0.84, 0.74], [0.845, 0.81], [0.81, 0.842], [0.48, 0.84]], 'lightcore', { layer: 2 });
+    P.rear(rct(0.444, 0.7, 0.45, 0.89), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.694, 0.447, 0.7), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.68, 0.2], [0.8, 0.26], [0.76, 0.32], [0, 0.32]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.08, 0.05], [1.3, 1]], 3.28, { glass: false });
+    fxWin(P, D, [[1.11, 0.07], [1.32, 1]], 1.35, { frame: false }); fxWin(P, D, 1.43, 2.15, { frame: false }); fxWin(P, D, 2.25, 3.28, { frame: false });
+  },
+  // BMW M4 (F82): slim lamps running into wide black kidneys, three big intakes, the carbon roof, three dimensional
+  // L shaped rear lamps, four pipes
+  m4f82: (D, P) => {
+    const lamp = fil([[0.27, 0.598], [0.29, 0.688], [0.8, 0.7], [0.925, 0.652], [0.9, 0.6], [0.62, 0.58]], [0.02, 0.02, 0.05, 0.03, 0.03, 0.03]);
+    P.front(grow(lamp, 0.008), 'bezel', { layer: 0, far: true }); P.front(lamp, 'lens', { layer: 1 });
+    for (const [cx, rr] of [[0.42, 0.05], [0.64, 0.055]]) {
+      P.front(ell(cx, 0.64, rr, rr * 0.9, 6, Math.PI / 6), 'drl', { layer: 2 }); P.front(ell(cx, 0.64, rr - 0.01, (rr - 0.01) * 0.9, 6, Math.PI / 6), 'chrome', { layer: 3 });
+      P.front(ell(cx, 0.64, 0.022, 0.022, 12), 'head', { layer: 4, far: true });
+    }
+    P.front([[0.29, 0.676], [0.8, 0.688], [0.86, 0.672], [0.3, 0.664]], 'bezel', { layer: 3 });
+    const kid = fil([[0.03, 0.56], [0.245, 0.555], [0.27, 0.64], [0.25, 0.685], [0.04, 0.69]], [0.02, 0.03, 0.03, 0.03, 0.02]);
+    P.front(grow(kid, 0.012), 'dark', { layer: 0, far: true }); P.front(kid, 'hole', { layer: 1, far: true });
+    fxSlats(P, 0.05, 0.25, 0.565, 0.68, 7, 'bezel', 2, true);
+    P.front(fil([[0, 0.25], [0.32, 0.25], [0.36, 0.42], [0, 0.43]], [0, 0.03, 0.03, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0.52, 0.24], [0.88, 0.26], [0.91, 0.46], [0.58, 0.46]], 0.03), 'hole', { layer: 0, far: true });
+    P.front(rct(0.69, 0.25, 0.705, 0.46), 'trim', { layer: 1 });
+    P.top(fil([[1.5, -0.56], [2.38, -0.6], [2.38, 0.6], [1.5, 0.56]], 0.06), 'dark', { layer: 0, one: true });
+    fxTail(P, fil([[0.5, 0.74], [0.51, 0.862], [0.84, 0.87], [0.935, 0.82], [0.925, 0.728]], [0.01, 0.02, 0.05, 0.03, 0.02]), grow(fil([[0.5, 0.74], [0.51, 0.862], [0.84, 0.87], [0.935, 0.82], [0.925, 0.728]], [0.01, 0.02, 0.05, 0.03, 0.02]), -0.03));
+    fxTail(P, rct(0.3, 0.78, 0.485, 0.862, 0.01));
+    P.rear([[0.52, 0.76], [0.9, 0.75], [0.9, 0.77], [0.54, 0.78], [0.54, 0.84], [0.52, 0.84]], 'lightcore', { layer: 2 });
+    P.rear(rct(0.489, 0.7, 0.495, 0.87), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.694, 0.492, 0.7), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.72, 0.2], [0.84, 0.26], [0.8, 0.34], [0, 0.34]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.16, 0], [1.21, 0.35], [1.44, 1]], 3.26, { glass: false });
+    fxWin(P, D, [[1.19, 0], [1.24, 0.35], [1.46, 1]], 1.74, { frame: false }); fxWin(P, D, 1.81, 3.26, { frame: false });
+  },
+  // Lamborghini Huracán: thin lamps with the Y running light, big hexagon intakes, the black mesh tail with slim Y lamps
+  huracan: (D, P) => {
+    const lamp = fil([[0.5, 0.5], [0.54, 0.555], [0.88, 0.575], [0.966, 0.54], [0.93, 0.5], [0.7, 0.49]], [0.02, 0.02, 0.04, 0.02, 0.03, 0.03]);
+    P.front(grow(lamp, 0.006), 'bezel', { layer: 0, far: true }); P.front(lamp, 'dark', { layer: 1 });
+    P.front([[0.55, 0.538], [0.86, 0.558], [0.92, 0.54], [0.9, 0.532], [0.56, 0.527]], 'drl', { layer: 2 });
+    P.front([[0.7, 0.535], [0.73, 0.54], [0.715, 0.505], [0.69, 0.505]], 'drl', { layer: 2 });
+    P.front(ell(0.8, 0.52, 0.022, 0.016, 12), 'head', { layer: 3, far: true });
+    const hx = fil([[0.22, 0.2], [0.84, 0.2], [0.95, 0.3], [0.91, 0.46], [0.62, 0.44], [0.3, 0.3]], 0.02);
+    P.front(hx, 'hole', { layer: 0, far: true });
+    fxMesh(P, 'front', hx, 0.06, 0.04, 0.02, 0.012, 6, 1);
+    P.front(fil([[0, 0.2], [0.19, 0.2], [0.19, 0.27], [0, 0.27]], 0.01), 'hole', { layer: 0 });
+    const rm = fil([[0, 0.34], [0.88, 0.34], [0.94, 0.5], [0.93, 0.74], [0, 0.75]], [0, 0.03, 0.03, 0.03, 0]);
+    P.rear(rm, 'hole', { layer: 0, far: true });
+    fxMesh(P, 'rear', rm, 0.06, 0.045, 0.02, 0.012, 6, 1);
+    fxTail(P, fil([[0.42, 0.775], [0.43, 0.82], [0.86, 0.832], [0.95, 0.8], [0.94, 0.768], [0.6, 0.76]], [0.01, 0.01, 0.03, 0.02, 0.02, 0.02]), [[0.44, 0.79], [0.88, 0.8], [0.92, 0.79], [0.9, 0.782], [0.44, 0.781]]);
+    P.rear([[0.7, 0.795], [0.73, 0.795], [0.715, 0.768], [0.69, 0.768]], 'light', { layer: 2 });
+    fxWin(P, D, [[1.66, 0], [1.98, 1]], 3.2);
+  },
+  // Audi RS6 Avant (C8): the huge black honeycomb grille, laser lamps with the stepped running lights, wide intakes,
+  // rear lamps joined by a black strip, two big oval pipes, black window trim
+  rs6: (D, P) => {
+    fxLamp(P, fil([[0.42, 0.66], [0.47, 0.722], [0.84, 0.732], [0.965, 0.692], [0.93, 0.64], [0.66, 0.628]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.6, 0.68, 0.022], [0.68, 0.682, 0.022], [0.76, 0.684, 0.022]]);
+    for (let i = 0; i < 4; i++) { const x = 0.5 + i * 0.1; P.front(rct(x, 0.648 + i * 0.002, x + 0.07, 0.658 + i * 0.002), 'drl', { layer: 2 }); }
+    const gr = fil([[0, 0.3], [0.36, 0.3], [0.44, 0.42], [0.44, 0.62], [0.38, 0.704], [0, 0.708]], [0, 0.03, 0.02, 0.02, 0.03, 0]);
+    P.front(grow(gr, 0.014), 'dark', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxMesh(P, 'front', gr, 0.05, 0.05, 0.017, 0.012, 6, 2);
+    fxRings(P, 'front', 0.665, 0.028, { layer: 3 });
+    P.front(fil([[0.54, 0.26], [0.92, 0.28], [0.955, 0.52], [0.66, 0.56], [0.56, 0.42]], 0.03), 'hole', { layer: 0, far: true });
+    fxTail(P, fil([[0.42, 0.84], [0.43, 0.92], [0.84, 0.928], [0.955, 0.89], [0.945, 0.83], [0.7, 0.82]], [0.01, 0.02, 0.04, 0.03, 0.02, 0.02]), fil([[0.44, 0.85], [0.92, 0.84], [0.94, 0.86], [0.44, 0.868]], 0.005));
+    P.rear(rct(0, 0.85, 0.42, 0.88), 'dark', { layer: 0 }); P.rear(rct(0, 0.862, 0.42, 0.868), 'chrome', { layer: 1 });
+    fxRings(P, 'rear', 0.8, 0.026);
+    P.rear(rct(0.42, 0.66, 0.426, 0.84), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.655, 0.424, 0.661), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.8, 0.2], [0.92, 0.28], [0.88, 0.38], [0, 0.38]], 0.03), 'dark', { layer: 0 });
+    fxWin(P, D, [[0.58, 0.05], [0.72, 1]], 3.58, { glass: false });
+    fxWin(P, D, [[0.61, 0.07], [0.74, 1]], 1.21, { frame: false }); fxWin(P, D, 1.3, 2.27, { frame: false }); fxWin(P, D, 2.37, 3.58, { frame: false });
+  },
+  // McLaren 720S: eye socket lamps that run down into the intakes, no grille, slim C shaped rear lamps round a huge
+  // mesh, the teardrop glass
+  mcl720: (D, P) => {
+    const eye = fil([[0.46, 0.2], [0.72, 0.2], [0.93, 0.34], [0.955, 0.5], [0.86, 0.56], [0.56, 0.54], [0.5, 0.42]], [0.03, 0.04, 0.05, 0.03, 0.03, 0.04, 0.03]);
+    P.front(eye, 'hole', { layer: 0, far: true });
+    P.front([[0.58, 0.5], [0.86, 0.528], [0.91, 0.5], [0.89, 0.49], [0.6, 0.485]], 'drl', { layer: 1 });
+    for (const [cx, cy] of [[0.7, 0.47], [0.79, 0.475]]) { P.front(ell(cx, cy, 0.026, 0.02, 12), 'chrome', { layer: 1 }); P.front(ell(cx, cy, 0.013, 0.01, 10), 'head', { layer: 2, far: true }); }
+    P.front(fil([[0, 0.2], [0.3, 0.2], [0.36, 0.3], [0, 0.3]], 0.02), 'hole', { layer: 0 });
+    P.front(ell(0, 0.48, 0.03, 0.015, 10), 'chrome', { layer: 0, one: true });
+    const rm = fil([[0, 0.28], [0.84, 0.28], [0.9, 0.5], [0.88, 0.8], [0, 0.82]], [0, 0.03, 0.03, 0.03, 0]);
+    P.rear(rm, 'hole', { layer: 0, far: true });
+    fxMesh(P, 'rear', rm, 0.06, 0.045, 0.02, 0.012, 6, 1);
+    P.rear([[0.5, 0.862], [0.88, 0.842], [0.935, 0.8], [0.915, 0.6], [0.89, 0.6], [0.905, 0.79], [0.87, 0.826], [0.52, 0.846]], 'lightlens', { layer: 1, far: true });
+    P.rear([[0.52, 0.856], [0.88, 0.837], [0.925, 0.8], [0.908, 0.62], [0.9, 0.62], [0.914, 0.795], [0.875, 0.83], [0.52, 0.85]], 'light', { layer: 2, far: true });
+    fxWin(P, D, [[1.5, 0], [1.84, 1]], 3.22);
+  },
+  // Kia Picanto GT-Line: a small tiger nose grille with a red line, swept lamps, the four ice cube lamps in each corner
+  picanto: (D, P) => {
+    fxLamp(P, fil([[0.22, 0.63], [0.24, 0.69], [0.56, 0.72], [0.72, 0.75], [0.79, 0.712], [0.75, 0.655], [0.5, 0.622]], [0.01, 0.02, 0.04, 0.03, 0.03, 0.03, 0.03]), [[0.38, 0.668, 0.03], [0.56, 0.682, 0.036]]);
+    const gr = [[0, 0.61], [0.2, 0.62], [0.22, 0.672], [0.1, 0.664], [0, 0.664]];
+    P.front(grow(gr, 0.01), 'chrome', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    P.front(rct(0, 0.614, 0.2, 0.62), 'lightlens', { layer: 2 });
+    P.front(ell(0, 0.642, 0.034, 0.02, 14), 'chrome', { layer: 2, one: true });
+    P.front(fil([[0, 0.25], [0.32, 0.26], [0.38, 0.4], [0, 0.42]], [0, 0.03, 0.03, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0.5, 0.28], [0.72, 0.3], [0.74, 0.44], [0.54, 0.43]], 0.02), 'hole', { layer: 0, far: true });
+    for (let i = 0; i < 4; i++) P.front(rct(0.56 + (i % 2) * 0.06, 0.32 + Math.floor(i / 2) * 0.05, 0.6 + (i % 2) * 0.06, 0.35 + Math.floor(i / 2) * 0.05), 'drl', { layer: 1 });
+    fxTail(P, fil([[0.5, 0.8], [0.51, 0.93], [0.66, 0.96], [0.76, 0.9], [0.78, 0.8]], [0.01, 0.02, 0.04, 0.03, 0.01]));
+    P.rear(rct(0.49, 0.72, 0.496, 0.97), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.715, 0.493, 0.721), 'seam', { layer: 0 });
+    P.rear(ell(0, 0.87, 0.034, 0.02, 14), 'chrome', { layer: 1, one: true });
+    P.rear(fil([[0, 0.2], [0.56, 0.2], [0.68, 0.26], [0.64, 0.31], [0, 0.31]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[0.4, 0.05], [0.56, 1]], 2.74, { glass: false });
+    fxWin(P, D, [[0.43, 0.07], [0.58, 1]], 0.78, { frame: false }); fxWin(P, D, 0.89, 1.68, { frame: false }); fxWin(P, D, 1.8, 2.74, { frame: false });
+  },
+  // Toyota Starlet Glanza V (EP91): oval lamps swept into the wings, a slim slot grille, a wide mouth with round fogs,
+  // tall rear lamps with the amber at the bottom
+  glanza: (D, P) => {
+    fxLamp(P, fil([[0.28, 0.575], [0.3, 0.63], [0.5, 0.652], [0.74, 0.66], [0.8, 0.62], [0.76, 0.57], [0.5, 0.556]], 0.04), [[0.44, 0.605, 0.04], [0.63, 0.612, 0.046]]);
+    P.front(fil([[0, 0.575], [0.24, 0.58], [0.25, 0.62], [0, 0.625]], 0.01), 'hole', { layer: 0, far: true });
+    P.front(ell(0, 0.6, 0.032, 0.022, 14), 'chrome', { layer: 1, one: true });
+    P.front(fil([[0, 0.22], [0.44, 0.23], [0.5, 0.36], [0, 0.37]], [0, 0.04, 0.04, 0]), 'hole', { layer: 0, far: true });
+    P.front(ell(0.62, 0.4, 0.045, 0.042, 16), 'bezel', { layer: 0 }); P.front(ell(0.62, 0.4, 0.034, 0.032, 16), 'lens', { layer: 1 });
+    fxTail(P, fil([[0.54, 0.62], [0.55, 0.9], [0.72, 0.92], [0.8, 0.8], [0.8, 0.62]], [0.01, 0.02, 0.04, 0.03, 0.01]), fil([[0.56, 0.7], [0.56, 0.88], [0.7, 0.9], [0.78, 0.79], [0.78, 0.7]], 0.02));
+    P.rear(fil([[0.56, 0.635], [0.78, 0.635], [0.78, 0.68], [0.56, 0.68]], 0.008), 'amber', { layer: 2 });
+    P.rear(rct(0.53, 0.6, 0.536, 0.94), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.595, 0.533, 0.601), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.56, 0.2], [0.66, 0.26], [0.62, 0.3], [0, 0.3]], 0.02), 'trim', { layer: 0 });
+    fxWin(P, D, [[0.62, 0.05], [0.8, 1]], 2.74, { glass: false });
+    fxWin(P, D, [[0.65, 0.07], [0.82, 1]], 1.19, { frame: false }); fxWin(P, D, 1.3, 2.74, { frame: false });
+  },
+  // Toyota Hilux GR Sport: the big black grille in a chunky frame, slim lamps, black corner vents and a skid plate,
+  // tall lamps on the corners of the bed
+  hilux: (D, P) => {
+    fxLamp(P, fil([[0.44, 0.98], [0.47, 1.04], [0.82, 1.06], [0.905, 1.02], [0.88, 0.96], [0.6, 0.95]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.62, 1.0, 0.03], [0.76, 1.006, 0.038]]);
+    const gr = fil([[0, 0.66], [0.4, 0.66], [0.47, 0.92], [0.44, 1.04], [0, 1.05]], [0, 0.04, 0.03, 0.02, 0]);
+    P.front(grow(gr, 0.03), 'dark', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxSlats(P, 0, 0.44, 0.7, 1.0, 5, 'trim', 2);
+    fxBadge(P, 'front', 0, 0.9, 0.07, { sy: 0.7, layer: 3 });
+    P.front(fil([[0.56, 0.56], [0.88, 0.6], [0.9, 0.84], [0.62, 0.8]], 0.03), 'dark', { layer: 0 });
+    P.front(fil([[0, 0.44], [0.62, 0.44], [0.7, 0.52], [0, 0.54]], 0.02), 'trim', { layer: 0 });
+    fxTail(P, fil([[0.8, 0.78], [0.8, 1.18], [0.925, 1.2], [0.925, 0.78]], 0.02), fil([[0.815, 0.82], [0.815, 1.02], [0.92, 1.03], [0.92, 0.82]], 0.015));
+    P.rear(fil([[0.815, 1.05], [0.92, 1.05], [0.92, 1.16], [0.815, 1.15]], 0.01), 'lens', { layer: 2 });
+    P.rear(rct(0, 0.66, 0.76, 0.672), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.44], [0.86, 0.44], [0.9, 0.52], [0.86, 0.6], [0, 0.6]], 0.02), 'dark', { layer: 0 });
+    P.rear(fil([[0, 0.5], [0.2, 0.5], [0.2, 0.56], [0, 0.56]], 0.005), 'trim', { layer: 1 });
+    fxWin(P, D, [[1.64, 0.05], [1.74, 1]], 3.05, { glass: false });
+    fxWin(P, D, [[1.67, 0.07], [1.76, 1]], 2.3, { frame: false }); fxWin(P, D, 2.42, 3.05, { frame: false });
+  },
+  // Ford Ranger Raptor: the huge black grille with FORD across it, slim lamps, a bash plate, tall rear lamps
+  raptor: (D, P) => {
+    fxLamp(P, fil([[0.56, 1.0], [0.58, 1.07], [0.9, 1.08], [0.99, 1.04], [0.97, 0.98], [0.7, 0.97]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.72, 1.025, 0.03], [0.86, 1.03, 0.036]]);
+    P.front(fil([[0.6, 0.955], [0.96, 0.96], [0.96, 0.972], [0.6, 0.968]], 0.003), 'drl', { layer: 2 });
+    const gr = fil([[0, 0.72], [0.56, 0.72], [0.6, 0.92], [0.58, 1.1], [0, 1.11]], [0, 0.04, 0.03, 0.02, 0]);
+    P.front(grow(gr, 0.03), 'dark', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    P.front(rct(-0.5, 0.86, 0.5, 1.0), 'hole', { layer: 2, one: true, label: 'FORD' });
+    P.front(fil([[0.6, 0.6], [0.96, 0.62], [0.96, 0.86], [0.66, 0.82]], 0.03), 'dark', { layer: 0 });
+    P.front(fil([[0.8, 0.64], [0.9, 0.64], [0.9, 0.8], [0.8, 0.8]], 0.01), 'drl', { layer: 1 });
+    P.front(fil([[0, 0.48], [0.6, 0.48], [0.66, 0.56], [0, 0.58]], 0.02), 'trim', { layer: 0 });
+    fxTail(P, fil([[0.86, 0.82], [0.86, 1.24], [0.995, 1.26], [0.995, 0.82]], 0.02), fil([[0.875, 0.86], [0.875, 1.08], [0.99, 1.09], [0.99, 0.86]], 0.015));
+    P.rear(rct(0, 0.7, 0.82, 0.712), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.48], [0.92, 0.48], [0.96, 0.56], [0.92, 0.64], [0, 0.64]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.58, 0.05], [1.68, 1]], 3.0, { glass: false });
+    fxWin(P, D, [[1.61, 0.07], [1.7, 1]], 2.26, { frame: false }); fxWin(P, D, 2.38, 3.0, { frame: false });
+  },
+  // a double cab pickup for island traffic: a chrome barred grille, plain lamps, tall rear lamps
+  pickup: (D, P) => {
+    fxLamp(P, fil([[0.46, 0.92], [0.48, 1.02], [0.82, 1.04], [0.9, 0.99], [0.88, 0.92], [0.6, 0.9]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.62, 0.97, 0.034], [0.76, 0.975, 0.04]]);
+    const gr = fil([[0, 0.7], [0.4, 0.7], [0.46, 0.9], [0.44, 1.0], [0, 1.01]], [0, 0.03, 0.03, 0.02, 0]);
+    P.front(grow(gr, 0.02), 'chrome', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxSlats(P, 0, 0.44, 0.74, 0.98, 3, 'chrome', 2);
+    P.front(fil([[0, 0.46], [0.7, 0.46], [0.78, 0.56], [0, 0.58]], 0.02), 'trim', { layer: 0 });
+    fxTail(P, fil([[0.8, 0.78], [0.8, 1.14], [0.92, 1.16], [0.92, 0.78]], 0.02), fil([[0.815, 0.82], [0.815, 1.0], [0.915, 1.01], [0.915, 0.82]], 0.015));
+    P.rear(rct(0, 0.66, 0.76, 0.672), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.44], [0.86, 0.44], [0.9, 0.52], [0.86, 0.6], [0, 0.6]], 0.02), 'chrome', { layer: 0 });
+    fxWin(P, D, [[1.62, 0.05], [1.72, 1]], 3.02, { glass: false });
+    fxWin(P, D, [[1.65, 0.07], [1.74, 1]], 2.28, { frame: false }); fxWin(P, D, 2.4, 3.02, { frame: false });
+  },
+  // Alpine A110: round lamps with the X running light, a small low grille, the X shaped rear lamps
+  a110: (D, P) => {
+    const lamp = ell(0.62, 0.575, 0.105, 0.075, 26);
+    P.front(grow(lamp, 0.008), 'bezel', { layer: 0, far: true }); P.front(lamp, 'lens', { layer: 1 });
+    P.front([[0.54, 0.55], [0.56, 0.54], [0.7, 0.6], [0.68, 0.61]], 'drl', { layer: 2 }); P.front([[0.54, 0.6], [0.68, 0.54], [0.7, 0.55], [0.56, 0.61]], 'drl', { layer: 2 });
+    P.front(ell(0.62, 0.575, 0.024, 0.024, 12), 'head', { layer: 3, far: true });
+    P.front(fil([[0, 0.3], [0.3, 0.3], [0.26, 0.42], [0, 0.43]], [0, 0.02, 0.02, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0, 0.2], [0.42, 0.2], [0.5, 0.27], [0, 0.28]], 0.02), 'hole', { layer: 0 });
+    for (const sd of [0]) { P.front(ell(0.5, 0.33, 0.03, 0.03, 12), 'drl', { layer: 1 }); }
+    fxBadge(P, 'front', 0, 0.5, 0.03);
+    for (const [a, b] of [[[0.86, 0.8], [0.5, 0.72]], [[0.86, 0.72], [0.5, 0.8]]]) { const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy), nx = -dy / l * 0.016, ny = dx / l * 0.016; P.rear([[a[0] + nx, a[1] + ny], [b[0] + nx, b[1] + ny], [b[0] - nx, b[1] - ny], [a[0] - nx, a[1] - ny]], 'light', { layer: 1, far: true }); }
+    P.rear(fil([[0.48, 0.7], [0.88, 0.7], [0.88, 0.82], [0.48, 0.82]], 0.03), 'lightlens', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.62, 0.2], [0.74, 0.26], [0.7, 0.32], [0, 0.32]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.3, 0], [1.56, 1]], 2.78);
+  },
+  // BMW M3 Competition (G80): the huge upright kidneys, slim lamps with L running lights, big intakes, slim rear lamps
+  m3g80: (D, P) => {
+    fxLamp(P, fil([[0.3, 0.6], [0.33, 0.69], [0.8, 0.71], [0.935, 0.66], [0.9, 0.6], [0.62, 0.585]], [0.02, 0.02, 0.05, 0.03, 0.03, 0.03]), [[0.62, 0.648, 0.03], [0.74, 0.652, 0.03]]);
+    for (const x of [0.4, 0.5]) P.front([[x, 0.61], [x + 0.08, 0.612], [x + 0.08, 0.622], [x + 0.012, 0.622], [x + 0.012, 0.67], [x, 0.67]], 'drl', { layer: 2 });
+    for (const sd of [1]) {
+      const K = fil([[0.02, 0.33], [0.26, 0.33], [0.29, 0.62], [0.24, 0.7], [0.03, 0.69]], [0.02, 0.03, 0.04, 0.03, 0.02]);
+      P.front(grow(K, 0.014), 'chrome', { layer: 0, far: true }); P.front(K, 'hole', { layer: 1, far: true });
+      fxSlats(P, 0.03, 0.27, 0.34, 0.68, 7, 'bezel', 2);
+    }
+    P.front(fil([[0.5, 0.24], [0.9, 0.26], [0.93, 0.5], [0.58, 0.52]], 0.03), 'hole', { layer: 0, far: true });
+    P.front(fil([[0, 0.2], [0.8, 0.2], [0.9, 0.24], [0.86, 0.26], [0, 0.26]], 0.01), 'dark', { layer: 1 });
+    fxTail(P, fil([[0.44, 0.79], [0.45, 0.87], [0.84, 0.88], [0.94, 0.83], [0.93, 0.78], [0.7, 0.77]], [0.01, 0.02, 0.05, 0.03, 0.02, 0.02]), [[0.47, 0.84], [0.9, 0.83], [0.9, 0.85], [0.47, 0.856]]);
+    P.rear([[0.86, 0.78], [0.88, 0.78], [0.88, 0.84], [0.86, 0.84]], 'light', { layer: 2 });
+    P.rear(rct(0.43, 0.7, 0.436, 0.88), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.694, 0.433, 0.7), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.74, 0.2], [0.86, 0.26], [0.82, 0.34], [0, 0.34]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.18, 0], [1.22, 0.35], [1.44, 1]], 3.34, { glass: false });
+    fxWin(P, D, [[1.21, 0], [1.25, 0.35], [1.46, 1]], 2.12, { frame: false }); fxWin(P, D, 2.24, 3.34, { frame: false });
+  },
+  // traffic: a modern hatch with no badge, a saloon, an SUV, a panel van and a London cab
+  hatch: (D, P) => {
+    fxLamp(P, fil([[0.26, 0.63], [0.28, 0.692], [0.72, 0.712], [0.845, 0.67], [0.82, 0.62], [0.56, 0.61]], [0.01, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.44, 0.662, 0.034], [0.64, 0.668, 0.042]]);
+    P.front(fil([[0, 0.6], [0.24, 0.61], [0.27, 0.69], [0, 0.694]], [0, 0.01, 0.01, 0]), 'hole', { layer: 0, far: true });
+    P.front(rct(0, 0.672, 0.27, 0.68), 'chrome', { layer: 1 });
+    P.front(fil([[0, 0.26], [0.36, 0.26], [0.42, 0.4], [0, 0.41]], [0, 0.03, 0.03, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0.56, 0.28], [0.76, 0.3], [0.74, 0.38], [0.58, 0.37]], 0.02), 'trim', { layer: 0 });
+    fxTail(P, fil([[0.52, 0.8], [0.53, 0.95], [0.66, 0.97], [0.8, 0.9], [0.84, 0.8]], [0.01, 0.02, 0.04, 0.03, 0.01]));
+    P.rear(rct(0.51, 0.72, 0.516, 0.97), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.715, 0.513, 0.721), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.6, 0.2], [0.72, 0.26], [0.68, 0.3], [0, 0.3]], 0.02), 'trim', { layer: 0 });
+    fxWin(P, D, [[0.46, 0.05], [0.64, 1]], 2.95, { glass: false });
+    fxWin(P, D, [[0.49, 0.07], [0.66, 1]], 0.88, { frame: false }); fxWin(P, D, 0.99, 1.78, { frame: false }); fxWin(P, D, 1.9, 2.95, { frame: false });
+  },
+  saloon: (D, P) => {
+    fxLamp(P, fil([[0.34, 0.63], [0.37, 0.7], [0.78, 0.722], [0.88, 0.68], [0.86, 0.62], [0.6, 0.61]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.5, 0.662, 0.036], [0.68, 0.672, 0.046]]);
+    const gr = fil([[0, 0.56], [0.3, 0.57], [0.34, 0.68], [0, 0.69]], [0, 0.02, 0.02, 0]);
+    P.front(grow(gr, 0.01), 'chrome', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxSlats(P, 0, 0.33, 0.58, 0.67, 3, 'chrome', 2);
+    P.front(fil([[0, 0.26], [0.4, 0.27], [0.46, 0.4], [0, 0.41]], [0, 0.03, 0.03, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0.58, 0.28], [0.8, 0.3], [0.78, 0.38], [0.6, 0.37]], 0.02), 'trim', { layer: 0 });
+    fxTail(P, fil([[0.46, 0.76], [0.47, 0.88], [0.8, 0.89], [0.88, 0.84], [0.88, 0.76]], [0.02, 0.02, 0.05, 0.03, 0.02]), fil([[0.48, 0.8], [0.87, 0.8], [0.87, 0.86], [0.48, 0.865]], 0.01));
+    fxTail(P, rct(0.3, 0.8, 0.45, 0.88, 0.01), rct(0.31, 0.83, 0.44, 0.86));
+    P.rear(rct(0.452, 0.7, 0.458, 0.9), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.694, 0.455, 0.7), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.66, 0.2], [0.78, 0.26], [0.74, 0.3], [0, 0.3]], 0.02), 'trim', { layer: 0 });
+    fxWin(P, D, [[1.08, 0], [1.28, 1]], 3.2, { glass: false });
+    fxWin(P, D, [[1.11, 0], [1.3, 1]], 2.04, { frame: false }); fxWin(P, D, 2.16, 3.2, { frame: false });
+  },
+  suv: (D, P) => {
+    fxLamp(P, fil([[0.4, 0.83], [0.43, 0.9], [0.82, 0.92], [0.92, 0.87], [0.9, 0.81], [0.62, 0.8]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.58, 0.86, 0.036], [0.76, 0.866, 0.044]]);
+    const gr = fil([[0, 0.66], [0.36, 0.66], [0.42, 0.82], [0.4, 0.88], [0, 0.89]], [0, 0.03, 0.02, 0.02, 0]);
+    P.front(grow(gr, 0.012), 'chrome', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxSlats(P, 0, 0.4, 0.69, 0.86, 3, 'chrome', 2);
+    P.front(fil([[0, 0.36], [0.62, 0.36], [0.7, 0.44], [0, 0.46]], 0.02), 'trim', { layer: 0 });
+    P.front(fil([[0.6, 0.48], [0.84, 0.5], [0.84, 0.6], [0.64, 0.6]], 0.02), 'trim', { layer: 0 });
+    fxTail(P, fil([[0.5, 0.92], [0.51, 1.06], [0.8, 1.08], [0.92, 1.02], [0.92, 0.92]], [0.02, 0.02, 0.05, 0.03, 0.02]));
+    P.rear(rct(0.49, 0.72, 0.496, 1.1), 'seam', { layer: 0 });
+    P.rear(rct(0, 0.715, 0.493, 0.721), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.34], [0.7, 0.34], [0.84, 0.4], [0.8, 0.46], [0, 0.46]], 0.02), 'trim', { layer: 0 });
+    fxWin(P, D, [[0.5, 0.05], [0.64, 1]], 3.25, { glass: false });
+    fxWin(P, D, [[0.53, 0.07], [0.66, 1]], 0.94, { frame: false }); fxWin(P, D, 1.05, 2.0, { frame: false }); fxWin(P, D, 2.12, 3.25, { frame: false });
+  },
+  van: (D, P) => {
+    fxLamp(P, fil([[0.5, 0.86], [0.52, 1.04], [0.82, 1.06], [0.95, 1.0], [0.94, 0.86], [0.7, 0.84]], [0.02, 0.03, 0.04, 0.03, 0.03, 0.03]), [[0.66, 0.96, 0.05], [0.84, 0.96, 0.04]]);
+    const gr = fil([[0, 0.64], [0.46, 0.64], [0.5, 0.86], [0.48, 0.98], [0, 0.99]], [0, 0.03, 0.03, 0.02, 0]);
+    P.front(grow(gr, 0.014), 'chrome', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxSlats(P, 0, 0.48, 0.68, 0.96, 3, 'chrome', 2);
+    P.front(fil([[0, 0.34], [0.86, 0.34], [0.96, 0.4], [0.94, 0.5], [0, 0.52]], 0.03), 'trim', { layer: 0 });
+    fxTail(P, fil([[0.86, 0.5], [0.86, 1.2], [0.975, 1.22], [0.975, 0.5]], 0.02), fil([[0.87, 0.9], [0.87, 1.18], [0.97, 1.19], [0.97, 0.9]], 0.015));
+    P.rear(fil([[0.87, 0.52], [0.97, 0.52], [0.97, 0.64], [0.87, 0.64]], 0.01), 'amber', { layer: 1 });
+    P.rear(rct(-0.004, 0.5, 0.004, 2.2), 'seam', { layer: 0, one: true });
+    P.rear(fil([[0.06, 1.45], [0.78, 1.45], [0.78, 2.02], [0.06, 2.02]], 0.03), 'glass', { layer: 0 });
+    P.rear(fil([[0, 0.34], [0.9, 0.34], [0.98, 0.4], [0.96, 0.5], [0, 0.5]], 0.02), 'trim', { layer: 0 });
+    fxWin(P, D, 4.02, 4.72);
+  },
+  cab: (D, P) => {
+    P.front(ell(0.62, 0.8, 0.105, 0.1, 26), 'chrome', { layer: 0, far: true }); P.front(ell(0.62, 0.8, 0.09, 0.086, 26), 'lens', { layer: 1 });
+    P.front(ell(0.62, 0.8, 0.06, 0.058, 20), 'chrome', { layer: 2 }); P.front(ell(0.62, 0.8, 0.03, 0.03, 14), 'head', { layer: 3, far: true });
+    P.front(ell(0.62, 0.64, 0.04, 0.03, 14), 'amber', { layer: 0 });
+    const gr = fil([[0, 0.62], [0.3, 0.62], [0.32, 0.9], [0, 0.92]], [0, 0.03, 0.04, 0]);
+    P.front(grow(gr, 0.02), 'chrome', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxSlats(P, 0.02, 0.3, 0.64, 0.9, 8, 'chrome', 2, true);
+    P.front(fil([[0, 0.3], [0.82, 0.3], [0.88, 0.36], [0.86, 0.44], [0, 0.44]], 0.02), 'trim', { layer: 0 });
+    fxTail(P, fil([[0.62, 0.72], [0.62, 0.96], [0.84, 0.96], [0.86, 0.72]], 0.03), fil([[0.64, 0.74], [0.64, 0.86], [0.84, 0.86], [0.845, 0.74]], 0.02));
+    P.rear(fil([[0.64, 0.88], [0.84, 0.88], [0.84, 0.94], [0.64, 0.94]], 0.01), 'amber', { layer: 2 });
+    P.rear(fil([[0, 0.28], [0.78, 0.28], [0.86, 0.34], [0.82, 0.42], [0, 0.42]], 0.02), 'trim', { layer: 0 });
+    fxWin(P, D, [[0.6, 0.05], [0.72, 1]], 3.45, { glass: false });
+    fxWin(P, D, [[0.63, 0.07], [0.74, 1]], 1.38, { frame: false }); fxWin(P, D, 1.5, 2.48, { frame: false }); fxWin(P, D, 2.6, 3.45, { frame: false });
+  },
+};
+for (const k in FX) SPECS[k].fx = FX[k];
 /* ---------- mesh building ---------- */
 function vsub(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
 function vcross(a, b) { return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; }
@@ -5097,10 +5841,62 @@ function earClip(pts) {
   else if (idx.length > 3) for (let i = 1; i < idx.length - 1; i++) out.push([pts[idx[0]], pts[idx[i]], pts[idx[i + 1]]]);
   return out;
 }
+/* flat shapes for the projected parts, as [[a, b]] in the view's own coordinates */
+// a polygon with its corners rounded: r is one radius for every corner or a list, one per corner
+function fil(pts, r, n) {
+  n = n || 5;
+  const out = [];
+  for (let i = 0; i < pts.length; i++) {
+    const P = pts[i], A = pts[(i + pts.length - 1) % pts.length], B = pts[(i + 1) % pts.length], rr = Array.isArray(r) ? r[i] : r;
+    const la = Math.hypot(A[0] - P[0], A[1] - P[1]), lb = Math.hypot(B[0] - P[0], B[1] - P[1]);
+    if (!rr || la < 1e-6 || lb < 1e-6) { out.push(P); continue; }
+    const u = [(A[0] - P[0]) / la, (A[1] - P[1]) / la], v = [(B[0] - P[0]) / lb, (B[1] - P[1]) / lb];
+    const th = Math.acos(clamp(u[0] * v[0] + u[1] * v[1], -1, 1));
+    if (th > Math.PI - 0.02) { out.push(P); continue; }
+    const t = Math.min(rr / Math.tan(th / 2), la * 0.48, lb * 0.48), T1 = [P[0] + u[0] * t, P[1] + u[1] * t], T2 = [P[0] + v[0] * t, P[1] + v[1] * t];
+    for (let k = 0; k <= n; k++) { const s = k / n, a = (1 - s) * (1 - s), b = 2 * s * (1 - s), c = s * s; out.push([a * T1[0] + b * P[0] + c * T2[0], a * T1[1] + b * P[1] + c * T2[1]]); }
+  }
+  return out;
+}
+function ell(cx, cy, rx, ry, n, a0) { const out = []; n = n || 18; for (let i = 0; i < n; i++) { const t = (a0 || 0) + i / n * Math.PI * 2; out.push([cx + Math.cos(t) * rx, cy + Math.sin(t) * ry]); } return out; }
+function rct(x0, y0, x1, y1, r) { const p = [[x0, y0], [x1, y0], [x1, y1], [x0, y1]]; return r ? fil(p, r) : p; }
+// a shape grown or shrunk by d (convex shapes; good enough for a surround or an inner lens)
+function grow(pts, d) {
+  let cx = 0, cy = 0; for (const q of pts) { cx += q[0]; cy += q[1]; } cx /= pts.length; cy /= pts.length;
+  let ar = 0; for (let i = 0; i < pts.length; i++) { const a = pts[i], b = pts[(i + 1) % pts.length]; ar += a[0] * b[1] - b[0] * a[1]; }
+  const sg = ar >= 0 ? 1 : -1;
+  return pts.map((P, i) => {
+    const A = pts[(i + pts.length - 1) % pts.length], B = pts[(i + 1) % pts.length];
+    let n1 = [(P[1] - A[1]) * sg, -(P[0] - A[0]) * sg], n2 = [(B[1] - P[1]) * sg, -(B[0] - P[0]) * sg];
+    const l1 = Math.hypot(n1[0], n1[1]) || 1, l2 = Math.hypot(n2[0], n2[1]) || 1; n1 = [n1[0] / l1, n1[1] / l1]; n2 = [n2[0] / l2, n2[1] / l2];
+    let m = [n1[0] + n2[0], n1[1] + n2[1]]; const lm = Math.hypot(m[0], m[1]);
+    if (lm < 1e-6) m = n1; else m = [m[0] / lm, m[1] / lm];
+    const k = Math.min(3, 1 / Math.max(0.3, m[0] * n1[0] + m[1] * n1[1]));
+    return [P[0] + m[0] * d * k, P[1] + m[1] * d * k];
+  });
+}
 function circlePts(cx, cy, r, z, n, sx) { const a = []; for (let i = 0; i < n; i++) { const t = i / n * Math.PI * 2; a.push([cx + Math.cos(t) * r * (sx || 1), cy + Math.sin(t) * r, z]); } return a; }
 function rectPts(x0, y0, x1, y1, z) { return [[x0, y0, z], [x1, y0, z], [x1, y1, z], [x0, y1, z]]; }
 
-const meshCache = new Map();
+const meshCache = new Map(), FX_CACHE = new Map();
+/* a car's own parts take a few hundredths of a second to fit the first time, so they are fitted in the background:
+   every model at the start, and the cars about to race first of all */
+const warmQ = [];
+let warmT = 0, warmHold = () => false;   // the game holds the background work back while a race is on
+function warmMeshes(list, first) {
+  for (const [m, st] of list) if (SPECS[m] && SPECS[m].fx) for (const d of [2, 1, 0]) { const job = [m, st || 0, d, !!first]; if (first) warmQ.unshift(job); else warmQ.push(job); }
+  if (first && warmT) { clearTimeout(warmT); warmT = 0; }
+  if (!warmT) warmT = setTimeout(warmStep, first ? 0 : 400);
+}
+function warmStep() {
+  let job;
+  while ((job = warmQ[0]) && FX_CACHE.has(job[0] + '|' + job[1] + '|' + job[2])) warmQ.shift();
+  if (!job) { warmT = 0; return; }
+  if (!job[3] && warmHold()) { warmT = setTimeout(warmStep, 600); return; }
+  warmQ.shift();
+  buildCar(job[0], { stance: job[1] }, job[2]);
+  warmT = setTimeout(warmStep, job[3] ? 10 : 50);
+}
 /* look: { spoiler, kit, stance, stripes, exhaust (0..3), turbo (0..3) }. Each mesh carries a lighter copy (lo) for cars further away. */
 function getMesh(model, look) {
   look = look || {};
@@ -5168,7 +5964,7 @@ function buildCar(model, look, detail) {
   // the surface normal of the curved nose (front) or tail at a given x
   // side view: the nose and tail lean back as they rise and roll over into the bonnet and boot lid, like a real bumper.
   // How far back a point at height h above the sill sits: a straight lean plus a curve that steepens towards the top
-  const rkA = { f: sp.rakeF !== undefined ? sp.rakeF : boxy ? 0.12 : 0.1, r: boxy ? 0.05 : 0.06 };
+  const rkA = { f: sp.rakeF !== undefined ? sp.rakeF : boxy ? 0.12 : 0.1, r: sp.rakeR !== undefined ? sp.rakeR : boxy ? 0.05 : 0.06 };
   const rkC = { f: sp.curvF !== undefined ? sp.curvF : sporty ? 0.8 : boxy ? 0.1 : 0.5, r: sp.curvR !== undefined ? sp.curvR : boxy ? 0.1 : 0.35 };
   // the ends move back by up to this much in total: more than about 0.43 of the blend length would crush the panels
   // just behind the corner into a crease, so the lean, the curve and the sweep are scaled down together if needed
@@ -5228,6 +6024,8 @@ function buildCar(model, look, detail) {
     let pts;
     if (detail === 0) pts = [[w - 0.04, sill], [w, sill + hB * 0.45], [w - 0.02, yMax], [x2, belt], [x3, yE], [x4, yT - crown * 0.3], [0, yT]];
     else if (detail === 1) pts = [[w - 0.045, sill], [w - 0.01, sill + hB * 0.14], [w, sill + hB * 0.5], [w - 0.022, yMax], [x2, belt], [x2b, yR], [x3, yE], [x4, yT - crown * 0.35], [x4 * 0.5, yT - crown * 0.07], [0, yT]];
+    else if (sp.crease) pts = [[w - 0.045, sill], [w - 0.012, sill + hB * 0.12], [w - 0.002, sill + hB * 0.42], [w, sill + hB * 0.8], [w - 0.004, yMax], [x2, belt], [x2b, yR], [x3, yE],
+      [x3 - (x3 - x4) * 0.42, yE + (yT - crown * 0.3 - yE) * 0.62], [x4, yT - crown * 0.32], [x4 * 0.5, yT - crown * 0.07], [0, yT]];
     else pts = [[w - 0.05, sill], [w - 0.014, sill + hB * 0.12], [w, sill + hB * 0.42], [w - 0.01, sill + hB * 0.76], [w - 0.024, yMax], [x2, belt], [x2b, yR], [x3, yE],
       [x3 - (x3 - x4) * 0.42, yE + (yT - crown * 0.3 - yE) * 0.62], [x4, yT - crown * 0.32], [x4 * 0.5, yT - crown * 0.07], [0, yT]];
     // the wheel arch: everything below the top of the arch folds up onto its edge
@@ -5241,7 +6039,8 @@ function buildCar(model, look, detail) {
     const dEnd = Math.min(z, L - z), RB = detail ? 0.2 : 0.14;
     if (dEnd < RB) {
       const e = 1 - Math.sqrt(Math.max(0, 1 - Math.pow((RB - dEnd) / RB, 2))), yc0 = (sill + yT) / 2;
-      for (const p of pts) { p[1] = yc0 + (p[1] - yc0) * (1 - e * 0.08) + (p[1] > yc0 ? -e * 0.035 : e * 0.03); }
+      const er = sp.endRound !== undefined ? sp.endRound : 1;
+      for (const p of pts) { p[1] = yc0 + (p[1] - yc0) * (1 - e * 0.08 * er) + (p[1] > yc0 ? -e * 0.035 : e * 0.03) * er; }
     }
     const ix = r => { const j = ROLES.indexOf(r); return pts[j >= 0 ? j : 0]; };
     // the nose and tail lean back as they rise, like a real bumper, instead of standing up flat
@@ -5296,7 +6095,7 @@ function buildCar(model, look, detail) {
   for (let i = 0; i < NS - 1; i++) {
     const a = S[i], b = S[i + 1], zm = (a.z + b.z) / 2;
     const top = at(zm).top, gh = a.gh && b.gh;
-    const sideMat = !gh ? 'paint' : inIv(sp.glass, zm) ? 'glass' : inIv(sp.black, zm) ? 'dark' : 'paint';
+    const sideMat = !gh || (sp.winFx && detail) ? 'paint' : inIv(sp.glass, zm) ? 'glass' : inIv(sp.black, zm) ? 'dark' : 'paint';
     const roof = top === 'paint' && gh;
     for (const sd of [-1, 1]) {
       const row = cell[sd][i] = [];
@@ -5329,7 +6128,22 @@ function buildCar(model, look, detail) {
     const f = cell[sd][i][j]; if (!f) continue;
     f.gv = { sd, i, j };
   }
-  const grid = { NS, NP, S, VN };
+  // a crease (the shoulder line): the panels above and below it keep their own normals along it, so it catches the light as a line
+  const creases = detail && sp.crease ? [ROLES.indexOf('sh')] : [];
+  const VA = { '-1': [], '1': [] }, VB = { '-1': [], '1': [] };
+  for (const sd of [-1, 1]) for (let i = 0; i < NS; i++) {
+    VA[sd][i] = VN[sd][i].slice(); VB[sd][i] = VN[sd][i].slice();
+    for (const j of creases) {
+      const nrm = rows => { let nx = 0, ny = 0, nz = 0; for (const [ii, jj] of rows) { const f = cell[sd][ii] && cell[sd][ii][jj]; if (f) { const ar = polyArea(f.pts) + 1e-4; nx += f.n[0] * ar; ny += f.n[1] * ar; nz += f.n[2] * ar; } } return vnorm([nx, ny, nz]); };
+      VA[sd][i][j] = nrm([[i - 1, j], [i, j]]); VB[sd][i][j] = nrm([[i - 1, j - 1], [i, j - 1]]);
+    }
+  }
+  // the normals at a panel's corners, in the order of its points (bottom edge from the row above a crease, top edge from below)
+  const cellNs = f => {
+    const { sd, i, j } = f.gv, V = VN[sd], A = creases.includes(j) ? VA[sd] : V, B = creases.includes(j + 1) ? VB[sd] : V;
+    return sd > 0 ? [A[i][j], A[i + 1][j], B[i + 1][j + 1], B[i][j + 1]] : [B[i][j + 1], B[i + 1][j + 1], A[i + 1][j], A[i][j]];
+  };
+  const grid = { NS, NP, S, VN, cellNs };
 
   // decals: stripes, shut lines, handles, liveries. Given flat in side view (z, y) or top view (z, x) and wrapped
   // onto whichever panels they cross, so they follow the curves of the body
@@ -5354,6 +6168,7 @@ function buildCar(model, look, detail) {
   // pts: [[z, y]] (kind 'side') or [[z, x]] (kind 'top', x signed); sd: which side for side decals (0 = both)
   // decals sit a hair off the panel, in layers, so ones that overlap (arch trim under a stripe, a handle on a livery) never flicker
   const DECAL_OFF = { flare: 0.0025, seam: 0.0045, handle: 0.0055, chrome: 0.0055 };
+  let decalSink = null;   // collects canvas only pieces while a car's own parts are fitted
   const decal = (pts, mat, kind, sd, onlyPaint) => {
     if (detail === 0 && mat !== 'stripe' && mat !== 'polB' && mat !== 'polY') return;
     // split long edges so the shape bends with the body
@@ -5373,7 +6188,8 @@ function buildCar(model, look, detail) {
         const part = clipBox(uv, i, i + 1, j, j + 1); if (!part) continue;
         const c00 = S[i].pts[j], c10 = S[i + 1].pts[j], c01 = S[i].pts[j + 1], c11 = S[i + 1].pts[j + 1], off = DECAL_OFF[mat] || 0.0035;
         const pts3 = part.map(([u, v]) => { const fu = u - i, fv = v - j, p = lerpP(lerpP(c00, c10, fu), lerpP(c01, c11, fu), fv); return [side * (p[0] + off * Math.abs(f.n[0])) , p[1] + off * f.n[1], p[2]]; });
-        (f.kids = f.kids || []).push({ pts: pts3, mat });
+        const kd = { pts: pts3, mat }; (f.kids = f.kids || []).push(kd);
+        if (decalSink) { kd.cv = true; decalSink.push([f, kd]); }
       }
     }
   };
@@ -5433,7 +6249,7 @@ function buildCar(model, look, detail) {
       const vs = [vtx(j, t0), vtx(j, t1), vtx(j + 1, t1), vtx(j + 1, t0)].filter((v, m, a) => m === 0 || dist2(v.p, a[m - 1].p) > 1e-8);
       const pts = vs.map(v => v.p);
       if (pts.length < 3 || polyArea(pts) < 2e-5) continue;
-      const f = mkFace(pts, 'paint', ref, { glOnly: true }); f.vns = vs.map(v => v.n); faces.push(f);
+      const f = mkFace(pts, 'paint', ref, { glOnly: true, capE: front ? 1 : -1 }); f.vns = vs.map(v => v.n); faces.push(f);
     }
   };
   capGrid(s0, false); capGrid(sN, true);
@@ -5441,7 +6257,7 @@ function buildCar(model, look, detail) {
   rear.n = capN(0, sill + 0.25, false);
   rear.kids = [];
   const zk = -0.006, bl = Math.min(s0.belt, s0.yMax + 0.05), lx = s0.x2 - 0.02, style = sp.rear;
-  rear.kids.push({ pts: rectPts(-s0.w, sill, s0.w, sill + 0.1, zk), mat: 'dark' });
+  if (!sp.fx) rear.kids.push({ pts: rectPts(-s0.w, sill, s0.w, sill + 0.1, zk), mat: 'dark' });
   if (look.kit) {
     rear.kids.push({ pts: rectPts(-s0.w * 0.7, sill - 0.06, s0.w * 0.7, sill + 0.03, zk), mat: 'dark' });
     for (let i = -2; i <= 2; i++) rear.kids.push({ pts: rectPts(i * 0.12 - 0.012, sill - 0.06, i * 0.12 + 0.012, sill + 0.06, zk * 2), mat: 'trim' });
@@ -5451,7 +6267,8 @@ function buildCar(model, look, detail) {
   const lights = [];
   const L2 = (x0, y0, x1, y1, m) => { for (const sd of [-1, 1]) lights.push({ pts: rectPts(sd < 0 ? -x1 : x0, y0, sd < 0 ? -x0 : x1, y1, zk * 2), mat: m || 'light' }); };
   const C2 = (xc, yc2, rr, m, zz) => { for (const sd of [-1, 1]) lights.push({ pts: circlePts(sd * xc, yc2, rr, zz || zk * 2, 14), mat: m || 'light' }); };
-  if (style === 'civic') { L2(lx - 0.2, bl - 0.34, lx, bl + 0.02); }
+  if (sp.fx) { /* drawn by the car's own parts below */ }
+  else if (style === 'civic') { L2(lx - 0.2, bl - 0.34, lx, bl + 0.02); }
   else if (style === 'L') { L2(lx - 0.44, bl - 0.13, lx, bl - 0.01); L2(lx - 0.15, bl - 0.28, lx, bl - 0.13); }
   else if (style === 'round2') { L2(lx - 0.5, bl - 0.21, lx, bl - 0.03, 'dark'); C2(lx - 0.1, bl - 0.12, 0.08); C2(lx - 0.31, bl - 0.12, 0.07); }
   else if (style === 'supra') { L2(-0.02, bl - 0.2, lx, bl - 0.04, 'dark'); C2(lx - 0.13, bl - 0.12, 0.075); C2(lx - 0.34, bl - 0.12, 0.075); L2(0.05, bl - 0.16, lx - 0.46, bl - 0.08, 'amber'); }
@@ -5478,15 +6295,15 @@ function buildCar(model, look, detail) {
   else if (style === 'bar') L2(0, bl - 0.13, lx, bl - 0.03);
   else if (style === 'starlet') { L2(lx - 0.24, bl - 0.22, lx, bl - 0.02); L2(lx - 0.24, bl - 0.29, lx, bl - 0.22, 'amber'); }
   else L2(lx - 0.48, bl - 0.14, lx, bl - 0.02);
-  if (style === 'quad') for (const xc of [lx - 0.1, lx - 0.32]) C2(xc, bl - 0.12, 0.035, 'lightcore', zk * 3);
-  if (style === 'van') for (const sd of [-1, 1]) lights.push({ pts: rectPts(sd < 0 ? -0.8 : 0.08, 1.45, sd < 0 ? -0.08 : 0.8, 2.05, zk), mat: 'glass' });
+  if (style === 'quad' && !sp.fx) for (const xc of [lx - 0.1, lx - 0.32]) C2(xc, bl - 0.12, 0.035, 'lightcore', zk * 3);
+  if (style === 'van' && !sp.fx) for (const sd of [-1, 1]) lights.push({ pts: rectPts(sd < 0 ? -0.8 : 0.08, 1.45, sd < 0 ? -0.08 : 0.8, 2.05, zk), mat: 'glass' });
   rear.kids.push(...lights);
-  const py = style === 'van' ? sill + 0.14 : sill + 0.16;
+  const py = sp.plateR !== undefined ? sp.plateR - drop : style === 'van' ? sill + 0.14 : sill + 0.16;
   rear.kids.push({ pts: rectPts(-0.26, py, 0.26, py + 0.111, zk * 2), mat: 'plate', plate: true });
   const tips = [], nEx = sp.exhaust4 ? 4 : [1, 1, 2, 4][look.exhaust || 0] || (model === 'gtr' ? 4 : 1);
-  const exX = sp.exHigh ? [-0.1, 0.1] : sp.exCentre && nEx >= 4 ? [-0.2, -0.08, 0.08, 0.2] : sp.exCentre ? [-0.07, 0.07] : sp.exTwin && nEx < 4 ? [-(s0.w - 0.36), s0.w - 0.36] : nEx === 1 ? [s0.w - 0.36] : nEx === 2 ? [s0.w - 0.4, s0.w - 0.28] : [-(s0.w - 0.28), -(s0.w - 0.4), s0.w - 0.4, s0.w - 0.28];
+  const exX = sp.exX ? sp.exX : sp.exHigh ? [-0.1, 0.1] : sp.exCentre && nEx >= 4 ? [-0.2, -0.08, 0.08, 0.2] : sp.exCentre ? [-0.07, 0.07] : sp.exTwin && nEx < 4 ? [-(s0.w - 0.36), s0.w - 0.36] : nEx === 1 ? [s0.w - 0.36] : nEx === 2 ? [s0.w - 0.4, s0.w - 0.28] : [-(s0.w - 0.28), -(s0.w - 0.4), s0.w - 0.4, s0.w - 0.28];
   const exR = [0.035, 0.05, 0.045, 0.042][look.exhaust || 0] || 0.04;
-  const exY = sp.exHigh ? bl - 0.2 : sill + 0.02, exRr = sp.exHigh ? 0.06 : exR;
+  const exY = sp.exY !== undefined ? sp.exY - drop : sp.exHigh ? bl - 0.2 : sill + 0.02, exRr = sp.exR || (sp.exHigh ? 0.06 : exR);
   for (const xc of exX) { rear.kids.push({ pts: circlePts(xc, exY, exRr, zk * 3, 10), mat: 'chrome' }); rear.kids.push({ pts: circlePts(xc, exY, exRr * 0.62, zk * 4, 10), mat: 'hole' }); tips.push([xc, exY, -0.02]); }
   faces.push(rear);
 
@@ -5494,9 +6311,10 @@ function buildCar(model, look, detail) {
   const front = mkFace(capPts(sN, L), 'paint', ref, { capC: true });
   front.n = capN(0, sill + 0.25, true);
   const zfk = L + 0.006, fy = Math.min(sN.belt, sN.yMax + 0.05), hx = sN.x2 - 0.03, fs = sp.front;
-  front.kids = [{ pts: rectPts(-sN.w * 0.62, sill + 0.05, sN.w * 0.62, sill + 0.13, zfk), mat: 'dark' }];
+  front.kids = sp.fx ? [] : [{ pts: rectPts(-sN.w * 0.62, sill + 0.05, sN.w * 0.62, sill + 0.13, zfk), mat: 'dark' }];
   const head = (x0, y0, x1, y1) => { for (const sd of [-1, 1]) front.kids.push({ pts: rectPts(sd < 0 ? -x1 : x0, y0, sd < 0 ? -x0 : x1, y1, zfk + 0.002), mat: 'head' }); };
-  if (fs === 'kidney') {
+  if (sp.fx) { /* drawn by the car's own parts below */ }
+  else if (fs === 'kidney') {
     head(hx - 0.42, fy - 0.13, hx, fy - 0.02);
     for (const sd of [-1, 1]) front.kids.push({ pts: [[sd * 0.03, fy - 0.2, zfk], [sd * 0.19, fy - 0.2, zfk], [sd * 0.2, fy - 0.03, zfk], [sd * 0.04, fy - 0.01, zfk]], mat: 'chrome' }, { pts: [[sd * 0.05, fy - 0.18, zfk + 0.002], [sd * 0.17, fy - 0.18, zfk + 0.002], [sd * 0.18, fy - 0.05, zfk + 0.002], [sd * 0.06, fy - 0.03, zfk + 0.002]], mat: 'hole' });
   } else if (fs === 'gtr') {
@@ -5591,7 +6409,8 @@ function buildCar(model, look, detail) {
     head(hx - 0.4, fy - 0.12, hx, fy - 0.02);
     front.kids.push({ pts: rectPts(-0.34, fy - 0.12, 0.34, fy - 0.04, zfk), mat: 'dark' });
   }
-  front.kids.push({ pts: rectPts(0.26, sill + 0.14, -0.26, sill + 0.25, zfk + 0.004), mat: 'plateW', plate: true });
+  const pyF = sp.plateF !== undefined ? sp.plateF - drop : sill + 0.14;
+  front.kids.push({ pts: rectPts(0.26, pyF, -0.26, pyF + 0.111, zfk + 0.004), mat: 'plateW', plate: true });
   if (look.kit) front.kids.push({ pts: rectPts(-sN.w + 0.02, sill - 0.06, sN.w - 0.02, sill + 0.01, zfk + 0.01), mat: 'dark' });
   faces.push(front);
   // lamps with some depth: a dark bezel, a clear lens, the projector and a daytime running light strip in front,
@@ -5668,6 +6487,185 @@ function buildCar(model, look, detail) {
   bend(front, true); bend(rear, false);
   for (const t of tips) t[2] += sweep(t[0], 0);
 
+  // ---------- projected parts: lamps, grilles, intakes, vents and windows ----------
+  // Each part is drawn flat as seen from the front, the back, one side or the top, then projected straight onto the body
+  // along that view, the way a real lamp cluster follows the panel: it wraps round the corners and up the curves.
+  // Every corner takes the position and the smooth normal of the panel under it.
+  const fxKey = model + '|' + (look.stance || 0) + '|' + detail, fxHit = sp.fx && FX_CACHE.get(fxKey);
+  if (fxHit) for (const [fi, k] of fxHit) (faces[fi].kids = faces[fi].kids || []).push(k);
+  else if (sp.fx) {
+    const fxOut = [];
+    const tgt = faces.filter(f => (f.gv || f.capE) && f.mat !== 'hole');
+    const nsOf = f => f.gv ? cellNs(f) : f.vns || f.pts.map(() => f.n);
+    // view coordinates: [across, up, depth], depth growing towards the viewer
+    const V2 = {
+      front: p => [p[0], p[1], p[2]], rear: p => [p[0], p[1], -p[2]],
+      sideR: p => [p[2], p[1], p[0]], sideL: p => [p[2], p[1], -p[0]], top: p => [p[2], p[0], p[1]],
+    };
+    const CS = 0.06, bins = {};
+    const binOf = view => {
+      if (bins[view]) return bins[view];
+      const B = new Map(), to = V2[view]; B.all = [];
+      for (const f of tgt) {
+        if (to(f.n)[2] < -0.05) continue;
+        const P = f.pts, N = nsOf(f);
+        for (let t = 1; t < P.length - 1; t++) {
+          const T = [0, t, t + 1].map(k => ({ q: to(P[k]), p: P[k], n: N[k] })); T.f = f; T.face = to(f.n)[2];
+          T.bb = [Math.min(T[0].q[0], T[1].q[0], T[2].q[0]), Math.max(T[0].q[0], T[1].q[0], T[2].q[0]), Math.min(T[0].q[1], T[1].q[1], T[2].q[1]), Math.max(T[0].q[1], T[1].q[1], T[2].q[1])];
+          const a0 = Math.floor(Math.min(T[0].q[0], T[1].q[0], T[2].q[0]) / CS), a1 = Math.floor(Math.max(T[0].q[0], T[1].q[0], T[2].q[0]) / CS);
+          const b0 = Math.floor(Math.min(T[0].q[1], T[1].q[1], T[2].q[1]) / CS), b1 = Math.floor(Math.max(T[0].q[1], T[1].q[1], T[2].q[1]) / CS);
+          for (let a = a0; a <= a1; a++) for (let b = b0; b <= b1; b++) { const k = a * 4096 + b; let l = B.get(k); if (!l) B.set(k, l = []); l.push(T); }
+          B.all.push(T);
+        }
+      }
+      return (bins[view] = B);
+    };
+    const hit = (view, a, b) => {
+      const l = binOf(view).get(Math.floor(a / CS) * 4096 + Math.floor(b / CS)); if (!l) return null;
+      let best = null;
+      for (const T of l) {
+        const [A, B, C] = T, d = (B.q[1] - C.q[1]) * (A.q[0] - C.q[0]) + (C.q[0] - B.q[0]) * (A.q[1] - C.q[1]);
+        if (Math.abs(d) < 1e-12) continue;
+        const w0 = ((B.q[1] - C.q[1]) * (a - C.q[0]) + (C.q[0] - B.q[0]) * (b - C.q[1])) / d, w1 = ((C.q[1] - A.q[1]) * (a - C.q[0]) + (A.q[0] - C.q[0]) * (b - C.q[1])) / d, w2 = 1 - w0 - w1;
+        if (w0 < -1e-7 || w1 < -1e-7 || w2 < -1e-7) continue;
+        const dep = w0 * A.q[2] + w1 * B.q[2] + w2 * C.q[2];
+        if (!best || dep > best.dep) best = { dep, w: [w0, w1, w2], T };
+      }
+      if (!best) return null;
+      const { w, T } = best, mixv = k => [0, 1, 2].map(c => w[0] * T[0][k][c] + w[1] * T[1][k][c] + w[2] * T[2][k][c]);
+      return { p: mixv('p'), n: vnorm(mixv('n')), f: T.f, T, dep: best.dep };
+    };
+    // a part is cut along the panels under it: every piece lies flat on one panel, so none of it sinks into the body
+    const clipTri = (poly, T) => {
+      const s2 = (T[1].q[0] - T[0].q[0]) * (T[2].q[1] - T[0].q[1]) - (T[1].q[1] - T[0].q[1]) * (T[2].q[0] - T[0].q[0]);
+      if (Math.abs(s2) < 1e-10) return null;
+      let out = poly;
+      for (let e = 0; e < 3; e++) {
+        const A = T[e].q, B = T[(e + 1) % 3].q, inp = out, inside = q => ((B[0] - A[0]) * (q[1] - A[1]) - (B[1] - A[1]) * (q[0] - A[0])) * s2;
+        out = [];
+        for (let m = 0; m < inp.length; m++) {
+          const P = inp[m], Q = inp[(m + 1) % inp.length], a = inside(P), b = inside(Q);
+          if (a >= 0) out.push(P);
+          if ((a >= 0) !== (b >= 0)) { const t = a / (a - b); out.push([P[0] + (Q[0] - P[0]) * t, P[1] + (Q[1] - P[1]) * t]); }
+        }
+        if (out.length < 3) return null;
+      }
+      return out;
+    };
+    const onT = (T, a, b) => {
+      const A = T[0], B = T[1], C = T[2], d = (B.q[1] - C.q[1]) * (A.q[0] - C.q[0]) + (C.q[0] - B.q[0]) * (A.q[1] - C.q[1]);
+      const w0 = ((B.q[1] - C.q[1]) * (a - C.q[0]) + (C.q[0] - B.q[0]) * (b - C.q[1])) / d, w1 = ((C.q[1] - A.q[1]) * (a - C.q[0]) + (A.q[0] - C.q[0]) * (b - C.q[1])) / d, w2 = 1 - w0 - w1;
+      const ap = A.p, bp = B.p, cp = C.p, an = A.n, bn = B.n, cn = C.n;
+      const nx = w0 * an[0] + w1 * bn[0] + w2 * cn[0], ny = w0 * an[1] + w1 * bn[1] + w2 * cn[1], nz = w0 * an[2] + w1 * bn[2] + w2 * cn[2], nl = Math.hypot(nx, ny, nz) || 1;
+      return { p: [w0 * ap[0] + w1 * bp[0] + w2 * cp[0], w0 * ap[1] + w1 * bp[1] + w2 * cp[1], w0 * ap[2] + w1 * bp[2] + w2 * cp[2]], n: [nx / nl, ny / nl, nz / nl], dep: w0 * A.q[2] + w1 * B.q[2] + w2 * C.q[2] };
+    };
+    const OSEG = [0.2, 0.1, 0.05][detail];
+    let stamp = 0;
+    // poly: one shape, or with o.multi a list of shapes that make one part (the cells of a mesh, a row of slats)
+    const part = (view, poly, mat, o) => {
+      o = o || {};
+      if (detail === 0 && !o.far) return;
+      let polys = o.multi ? poly : [poly];
+      if (drop && view !== 'top') polys = polys.map(pl => pl.map(q => [q[0], q[1] - drop]));
+      const off = 0.003 + (o.layer || 0) * 0.002, B = binOf(view), wrap = o.wrap !== undefined ? o.wrap : 0.28;
+      const lift = h => [h.p[0] + h.n[0] * off, h.p[1] + h.n[1] * off, h.p[2] + h.n[2] * off];
+      const gl = []; let nx = 0, ny = 0, nz = 0, first = null;
+      const emit = (pl, T) => {
+        const pc = clipTri(pl, T); if (!pc) return;
+        // only where this panel is the one in front (the far side of a curve can line up behind it)
+        let cx = 0, cy = 0; for (const q of pc) { cx += q[0]; cy += q[1]; } cx /= pc.length; cy /= pc.length;
+        if (T.face < 0.7) { const h = hit(view, cx, cy); if (h && h.T !== T && h.dep > onT(T, cx, cy).dep + 0.01) return; }
+        const vs = pc.map(q => onT(T, q[0], q[1]));
+        // most pieces are convex: a fan does; the rest are ear clipped
+        let sg = 0, convex = true;
+        for (let m = 0; m < pc.length && convex; m++) { const A = pc[m], Bq = pc[(m + 1) % pc.length], C = pc[(m + 2) % pc.length], cr = (Bq[0] - A[0]) * (C[1] - Bq[1]) - (Bq[1] - A[1]) * (C[0] - Bq[0]); if (Math.abs(cr) > 1e-12) { if (sg && Math.sign(cr) !== sg) convex = false; sg = Math.sign(cr); } }
+        let tris;
+        if (convex) { tris = []; for (let m = 1; m < pc.length - 1; m++) tris.push([0, m, m + 1]); }
+        else { const idx = new Map(pc.map((q, i) => [q, i])); tris = earClip(pc).map(t => t.map(q => idx.get(q))); }
+        for (const tri of tris) {
+          const a = vs[tri[0]], b = vs[tri[1]], c = vs[tri[2]];
+          if (polyArea([a.p, b.p, c.p]) < 1e-8) continue;
+          gl.push({ pts: [lift(a), lift(b), lift(c)], ns: [a.n, b.n, c.n], dep: (a.dep + b.dep + c.dep) / 3 });
+        }
+      };
+      for (const pl of polys) {
+        let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const q of pl) { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); }
+        // the middle distance mesh leaves out the smallest bits (mesh cells, slats, badges): nobody sees them from there
+        if (detail === 1 && !o.far && Math.hypot(x1 - x0, y1 - y0) < 0.07) continue;
+        if (!first) first = pl;
+        const a0 = Math.floor(x0 / CS), a1 = Math.floor(x1 / CS), b0 = Math.floor(y0 / CS), b1 = Math.floor(y1 / CS);
+        const test = T => T.bb[0] <= x1 && T.bb[1] >= x0 && T.bb[2] <= y1 && T.bb[3] >= y0 && T.face >= wrap;
+        if ((a1 - a0 + 1) * (b1 - b0 + 1) > 120) { for (const T of B.all) if (test(T)) emit(pl, T); }
+        else {
+          stamp++;
+          for (let a = a0; a <= a1; a++) for (let b = b0; b <= b1; b++) { const l = B.get(a * 4096 + b); if (l) for (const T of l) { if (T.st === stamp) continue; T.st = stamp; if (test(T)) emit(pl, T); } }
+        }
+      }
+      if (!gl.length || !first) return;
+      // nothing more than a hand's width behind the front of the part: a ray that slips past a corner would land far
+      // down the flank
+      let dmax = -1e9; for (const g of gl) dmax = Math.max(dmax, g.dep);
+      const deep = d => d < dmax - (o.depth || 0.4);
+      for (let i = gl.length - 1; i >= 0; i--) if (deep(gl[i].dep)) gl.splice(i, 1);
+      for (const g of gl) { delete g.dep; for (const n of g.ns) { nx += n[0]; ny += n[1]; nz += n[2]; } }
+      // the outline, for the canvas drawing, the plate text and the lamp glow
+      const fine = [];
+      for (let m = 0; m < first.length; m++) {
+        const A = first[m], Q = first[(m + 1) % first.length], n = Math.max(1, Math.ceil(Math.hypot(Q[0] - A[0], Q[1] - A[1]) / OSEG));
+        for (let q = 0; q < n; q++) { const h = hit(view, A[0] + (Q[0] - A[0]) * q / n, A[1] + (Q[1] - A[1]) * q / n); if (h && h.T.face >= wrap && !deep(h.dep)) fine.push(lift(h)); }
+      }
+      if (fine.length < 3) return;
+      let cx = 0, cy = 0; for (const q of first) { cx += q[0]; cy += q[1]; } cx /= first.length; cy /= first.length;
+      const hc = hit(view, cx, cy) || hit(view, first[0][0], first[0][1]) || { f: null };
+      // the canvas drawing paints a part right after the panel that carries it, so every layer of a lamp or grille
+      // rides on the same end panel and they stack in order
+      let f = view === 'front' ? front : view === 'rear' ? rear : hc.f;
+      if (!f || f.capE) f = (f ? f.capE > 0 : view === 'front') ? front : rear;
+      const k = Object.assign({ pts: fine, mat, gl, n: vnorm([nx, ny, nz]) }, o.extra || {});
+      // lettering (FORD across a grille): the four corners, in order, for the text to be mapped onto
+      if (o.label && first.length === 4) { const cs = first.map(q => hit(view, q[0], q[1])); if (cs.every(Boolean)) { k.pts = cs.map(lift); k.label = o.label; } }
+      if (hc.p) k.spot = hc.p;
+      (f.kids = f.kids || []).push(k); fxOut.push([f, k]);
+      // the canvas drawing paints each piece right after its own panel, so a window spread over many panels is cut
+      // along them for it, the way stripes are; the WebGL piece above is then for WebGL only
+      if (detail && view !== 'front' && view !== 'rear') {
+        k.gonly = true; decalSink = fxOut;
+        for (const pl of polys) decal(view === 'top' ? pl : pl, mat, view === 'top' ? 'top' : 'side', view === 'sideR' ? 1 : view === 'sideL' ? -1 : 0);
+        decalSink = null;
+      }
+    };
+    // mirrored pairs: front, rear and top parts are given for the right hand side (x > 0) and copied to the left;
+    // side parts go on both sides unless a side is named
+    const flipX = poly => poly.map(q => [-q[0], q[1]]).reverse(), flipT = poly => poly.map(q => [q[0], -q[1]]).reverse();
+    const mir = (fn, poly, o) => o && o.multi ? poly.map(fn) : fn(poly);
+    const API = {
+      front: (poly, mat, o) => { part('front', poly, mat, o); if (!(o && o.one)) part('front', mir(flipX, poly, o), mat, o); },
+      rear: (poly, mat, o) => { part('rear', poly, mat, o); if (!(o && o.one)) part('rear', mir(flipX, poly, o), mat, o); },
+      side: (poly, mat, o) => { if (!(o && o.sd < 0)) part('sideR', poly, mat, o); if (!(o && o.sd > 0)) part('sideL', poly, mat, o); },
+      top: (poly, mat, o) => { part('top', poly, mat, o); if (!(o && o.one)) part('top', mir(flipT, poly, o), mat, o); },
+    };
+    // sizes as built at standard ride height (a lowered car moves its parts down with it)
+    const D = { L, W, hw, sill: sp.sill, zr, zf, r, ra, yc: r, detail, open: !!sp.open,
+      top: z => { const t = yTopAt(z); return { yT: t.yT + drop, yE: t.yE + drop, x3: t.x3, belt: t.belt + drop, yMax: t.yMax + drop, x2: t.x2, w: t.w }; },
+      // how far out the end panel reaches at a height, for drawing parts that run to the corners
+      endW: (front2, y) => { const s = front2 ? sN : s0; let x = 0; y -= drop; for (const q of s.pts) if (q[1] <= y + 1e-9) x = Math.max(x, q[0]); for (let j = 0; j < s.pts.length - 1; j++) { const a = s.pts[j], b = s.pts[j + 1]; if ((a[1] - y) * (b[1] - y) <= 0 && Math.abs(b[1] - a[1]) > 1e-9) x = Math.max(x, a[0] + (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1])); } return x; } };
+    D.belt = z => D.top(z).belt; D.rail = z => D.top(z).yE;
+    // a side window: the bottom edge along the waist line, the top edge along the roof rail (and so down the A pillar).
+    // rear: a z where the back edge runs straight up, or the back edge as points from bottom to top
+    D.win = (rear, z1, it, ib) => {
+      const R = Array.isArray(rear) ? rear : [[rear, D.belt(rear) + ib], [rear, D.rail(rear) - it]];
+      const za = R[R.length - 1][0], zb = R[0][0], out = R.slice();
+      const bot = z => D.belt(z) + ib, tp = z => Math.max(bot(z) + 0.004, D.rail(z) - it);
+      for (let k = 1, n = Math.max(2, Math.ceil((z1 - za) / 0.04)); k <= n; k++) { const z = za + (z1 - za) * k / n; out.push([z, tp(z)]); }
+      for (let k = 0, n = Math.max(2, Math.ceil((z1 - zb) / 0.04)); k < n; k++) { const z = z1 - (z1 - zb) * k / n; out.push([z, bot(z)]); }
+      return out.filter((q, i) => i === 0 || Math.hypot(q[0] - out[i - 1][0], q[1] - out[i - 1][1]) > 1e-4);
+    };
+    sp.fx(D, API);
+    // the parts depend only on the model and the ride height, so every other look of the car reuses them
+    FX_CACHE.set(fxKey, fxOut.map(([f, k]) => [faces.indexOf(f), k]));
+    if (FX_CACHE.size > 400) FX_CACHE.delete(FX_CACHE.keys().next().value);
+  }
+
   // where the windscreen meets the bonnet, and where the roof starts at the back
   let cowl = null, roofR = null;
   for (let i = 0; i < sp.keys.length - 1; i++) {
@@ -5708,7 +6706,7 @@ function buildCar(model, look, detail) {
     faces.push(mouth);
   }
   if (sp.dome) { const d0 = yTopAt(cowl + 0.15), d1 = yTopAt(cowl + 0.95);
-    faces.push(mkFace([[-0.3, d0.yT + 0.045, cowl + 0.15], [0.3, d0.yT + 0.045, cowl + 0.15], [0.26, d1.yT + 0.01, cowl + 0.95], [-0.26, d1.yT + 0.01, cowl + 0.95]], 'paint', null, { two: true })); }
+    faces.push(mkFace([[-0.3, d0.yT + 0.045, cowl + 0.15], [0.3, d0.yT + 0.045, cowl + 0.15], [0.26, d1.yT + 0.01, cowl + 0.95], [-0.26, d1.yT + 0.01, cowl + 0.95]], 'paint', [0, 0, cowl + 0.5])); }
   if ((look.turbo || 0) >= 2) for (const sd of [-1, 1]) {
     const v0 = yTopAt(cowl + 0.6), v1 = yTopAt(cowl + 0.9);
     faces.push(mkFace([[sd * 0.2, v0.yT + 0.006, cowl + 0.6], [sd * 0.46, v0.yT - 0.004, cowl + 0.6], [sd * 0.46, v1.yT - 0.004, cowl + 0.9], [sd * 0.2, v1.yT + 0.006, cowl + 0.9]], 'dark', null, { two: true }));
@@ -5716,17 +6714,17 @@ function buildCar(model, look, detail) {
   if (sp.open) {
     const fl = yTopAt(1.8).yT;
     for (const [zs, hw2] of [[1.35, 0.3], [2.0, 0.32]]) for (const sd of [-1, 1]) {
-      faces.push(...boxFaces(sd * hw2 - 0.21, sd * hw2 + 0.21, fl, fl + 0.3, zs - 0.08, zs, 'seat'));              // seat back
-      faces.push(...boxFaces(sd * hw2 - 0.11, sd * hw2 + 0.11, fl + 0.34, fl + 0.5, zs - 0.07, zs - 0.01, 'seat'));  // headrest
+      faces.push(...boxFaces(sd * hw2 - 0.2, sd * hw2 + 0.2, fl - 0.04, fl + 0.2, zs - 0.08, zs, 'seat'));          // seat back
+      faces.push(...boxFaces(sd * hw2 - 0.1, sd * hw2 + 0.1, fl + 0.23, fl + 0.34, zs - 0.07, zs - 0.01, 'seat'));   // headrest
     }
     faces.push(...boxFaces(-0.5, 0.5, fl, fl + 0.06, 0.95, 1.15, 'dark'));                                         // folded roof
     if (look.driver) {
       // right hand drive: the driver sits on the right, back against the seat
       const dx = 0.32, zs = 2.0;
-      faces.push(...boxFaces(dx - 0.19, dx + 0.19, fl + 0.02, fl + 0.5, zs, zs + 0.22, 'shirt'));                    // body
-      faces.push(...boxFaces(dx - 0.25, dx - 0.17, fl + 0.3, fl + 0.46, zs + 0.05, zs + 0.5, 'shirt'));             // arm to the wheel
-      faces.push(...boxFaces(dx - 0.06, dx + 0.06, fl + 0.5, fl + 0.56, zs + 0.06, zs + 0.16, 'skin'));             // neck
-      const hy = fl + 0.66, hz = zs + 0.11, hr = 0.1, n = 8;
+      faces.push(...boxFaces(dx - 0.19, dx + 0.19, fl - 0.06, fl + 0.3, zs, zs + 0.22, 'shirt'));                    // body
+      faces.push(...boxFaces(dx - 0.25, dx - 0.17, fl + 0.1, fl + 0.24, zs + 0.05, zs + 0.5, 'shirt'));             // arm to the wheel
+      faces.push(...boxFaces(dx - 0.06, dx + 0.06, fl + 0.3, fl + 0.36, zs + 0.06, zs + 0.16, 'skin'));             // neck
+      const hy = fl + 0.46, hz = zs + 0.11, hr = 0.1, n = 8;
       for (let i = 0; i < n; i++) {
         const a0 = i / n * Math.PI * 2, a1 = (i + 1) / n * Math.PI * 2;
         const q = (a, yy) => [dx + Math.cos(a) * hr, yy, hz + Math.sin(a) * hr];
@@ -6222,6 +7220,7 @@ function drawCar(g, mesh, pose) {
         else col = css([(ca[0] + cb[0]) / 2, (ca[1] + cb[1]) / 2, (ca[2] + cb[2]) / 2]);
         fill(pp, col, true);
         if (f.kids) for (const k of f.kids) {
+          if (k.gonly) continue;
           const kp = proj(k.pts); if (!kp) continue;
           if (!v) v = vOf(f);
           fill(kp, dmg && brokenLight(k.mat, centroid(k.pts), dmg) ? 'rgb(24,8,8)' : matColor(k.mat, n, look, env, fg, 0, v, f));
@@ -6235,7 +7234,7 @@ function drawCar(g, mesh, pose) {
     fill(proj(f.pts), col, !small);
     if (!f.kids) continue;
     for (const k of f.kids) {
-      if (small && k.mat !== 'light' && k.mat !== 'plate' && k.mat !== 'polB' && k.mat !== 'polY') continue;
+      if (k.gonly || (small && k.mat !== 'light' && k.mat !== 'plate' && k.mat !== 'polB' && k.mat !== 'polY')) continue;
       const pp = proj(k.pts);
       if (!pp) continue;
       if (!v) v = vOf(f);
@@ -7195,16 +8194,13 @@ function glMeshData(mesh) {
   for (const f of mesh.faces) {
     const m = mid(f.mat);
     if (f.capC) { /* the curved end is drawn from its own grid of panels; this outline only carries the parts */ }
-    else if (f.gv && G) {
-      const { sd, i, j } = f.gv, VN = G.VN[sd];
-      const ns = sd > 0 ? [VN[i][j], VN[i + 1][j], VN[i + 1][j + 1], VN[i][j + 1]] : [VN[i][j + 1], VN[i + 1][j + 1], VN[i + 1][j], VN[i][j]];
-      fan(body, f.pts, f.n, m, ns);
-    } else fan(body, f.pts, f.n, m, f.vns);
+    else if (f.gv && G) fan(body, f.pts, f.n, m, G.cellNs(f)); else fan(body, f.pts, f.n, m, f.vns);
     if (f.kids) for (const k of f.kids) {
+      if (k.cv) continue;   // canvas only copy of a window or vent
       if (k.gl) for (const pc of k.gl) fan(kids, pc.pts, f.n, mid(k.mat), pc.ns);
       else fan(kids, k.pts, f.n, mid(k.mat), k.ns);
       if (k.plate || k.label || k.route) labels.push({ pts: k.pts, n: f.n, plate: k.plate, label: k.label, route: k.route });
-      if (k.mat === 'light') lights.push({ c: centroid(k.pts), n: f.n, s: Math.sqrt(polyArea(k.pts)) });
+      if (k.mat === 'light' && !k.nospot) lights.push({ c: k.spot || centroid(k.pts), n: k.n || f.n, s: Math.sqrt(polyArea(k.pts)) });
     }
   }
   for (const f of mesh.wheels || []) {
@@ -9523,6 +10519,7 @@ function startRace(spec) {
   hubPage = spec.kind === 'career' || spec.kind === 'essex' || spec.kind === 'mu' ? 'race' : 'street';
   if (spec.kind === 'drag') streetTab = 'drag';
   R = createRace(S, spec);
+  { const lk = R.ev.oppLook || {}, me = lookOf(S, S.current) || {}; warmMeshes([[carById(S.current).model, me.stance], [lk.model, lk.stance]].concat(['hatch', 'saloon', 'suv', 'van', 'cab', 'pickup'].map(m => [m, 0])), true); }
   loadGhosts(R);
   Music.preloadStings();
   mode = 'race'; paused = false; input.nitro = false;
@@ -10339,6 +11336,9 @@ $('b-music').textContent = Music.on ? 'Music on' : 'Music off';
 $('b-sound').textContent = Sound.on ? 'Sound on' : 'Sound off';
 goTitle();
 requestAnimationFrame(frame);
+// fit every car's lamps and grilles in the background: traffic first, then the rest
+warmHold = () => mode === 'race';
+setTimeout(() => warmMeshes(['hatch', 'saloon', 'suv', 'van', 'cab', 'pickup'].concat(Object.keys(SPECS)).map(m => [m, 0])), 1200);
 Online.init();
 document.addEventListener('visibilitychange', () => { if (document.hidden) Online.flushSave(); });
 
