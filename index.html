@@ -10758,11 +10758,14 @@ const MUSIC = window.__musicTest || {"title":{"name":"It Ain't Adding Up","loop"
 const MUSIC_HOME = 'https://elyneel.github.io/street-kings/';
 const Music = {
   on: true, gain: null, cur: null, want: null, bufs: {}, loading: {},
-  area() { return S ? placeNow() : 'title'; },
+  // quiet on the title screen and the car pick; the music starts once you are in one of the places
+  quiet: true,
+  area() { return S && !this.quiet ? placeNow() : 'title'; },
   /* the island has two sega songs: they take turns, a race each. Tokyo has the title song until its own music arrives */
   track(area) {
     if (area === 'mu' && MUSIC.mu && MUSIC.mu2 && S && S.stats && S.stats.races % 2) return MUSIC.mu2;
     if (area === 'tyo' && !MUSIC.tyo) return MUSIC.title || null;
+    if (area === 'title') return null;
     return MUSIC[area] || (area === 'mu' || area === 'atl' || area === 'tyo' ? null : MUSIC.london || MUSIC.title) || null;
   },
   /* a short sting when you cross the line; the menu music waits for it to finish */
@@ -10785,7 +10788,8 @@ const Music = {
   play(area) {
     this.want = area;
     const c = Sound.ctx, t = this.track(area);
-    if (!this.on || !c || !t || (this.cur && this.cur.t === t)) return;
+    if (!t) { this.stop(1.0); return; }
+    if (!this.on || !c || (this.cur && this.cur.t === t)) return;
     this.load(t).then(buf => {
       if (!buf || this.want !== area || !this.on || mode === 'race' || (this.cur && this.cur.t === t)) return;
       this.stop(1.2);
@@ -10818,6 +10822,9 @@ function toast(msg, bad) {
 function showScreen(id) {
   for (const s of document.querySelectorAll('.screen')) s.hidden = s.id !== id;
   document.body.classList.toggle('nav-on', NAV_SCREENS.includes(id));
+  // the title screen and the car pick are quiet; help, names and the leaderboards keep whatever was playing
+  if (['scr-title', 'scr-select'].includes(id)) Music.quiet = true;
+  else if (['scr-hub', 'scr-garage', 'scr-ladder', 'scr-results'].includes(id)) Music.quiet = false;
   if (mode === 'race') Music.stop(); else if (id) Music.play(Music.area());
   const scr = id && $(id);
   $('topbtns').classList.toggle('in-bar', !!(scr && scr.querySelector('.bar, .topback [data-act=sound]')));
