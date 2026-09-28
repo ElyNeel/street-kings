@@ -4047,7 +4047,7 @@ function sideWall(env, k, sd) {
   return 0;
 }
 const wallX = (env, sd) => sd < 0 ? -(ROAD_HALF + 6.5) : (env.opposite ? ROAD_HALF + 13.2 : env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF) + 6.5;
-function drawRoad(pal, dist, evDist) {
+function drawRoad(pal, dist, evDist, noStart) {
   const env = ENV[pal.env] || ENV.aroad;
   const camW = dist - Z_PLAYER;
   const zb = V.camH * V.f / (H - V.hy) - V.camBack;
@@ -4259,7 +4259,7 @@ function drawRoad(pal, dist, evDist) {
       for (let i = 0; i < 11; i++) { const x0 = -ROAD_HALF + 0.3 + i * 1.0; if (i % 2 === 0) quadX(ctx, a, b, x0, x0 + 0.55); }
     }
   }
-  chequer(P_LEN + 0.4 - camW, 1.4, pal);
+  if (!noStart) chequer(P_LEN + 0.4 - camW, 1.4, pal);   // no start line for a rolling start
   chequer(evDist - camW, 2.4, pal);
 }
 function chequer(z, depth, pal) {
@@ -5330,7 +5330,7 @@ function renderScene(R, dt) {
     ctx.fillStyle = css(wc(pal, far, 1, 0.9)); ctx.fillRect(-20, V.hy + tilt, W + 40, H + 40);
   }
   if ((ENV[pal.env] || {}).planes) drawPlane(pal, sceneT, off);
-  drawRoad(pal, p.dist, R.demo ? 1e9 : ev.dist);
+  drawRoad(pal, p.dist, R.demo ? 1e9 : ev.dist, ev.roll || ev.battle);
   drawLampPools(pal, p.dist);
   if (pal.rain) wetCarLights(R, pal);
   drawBuildings(pal, p.dist, ev.rival);
