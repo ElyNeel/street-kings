@@ -241,11 +241,12 @@ body.racing #toast { bottom: calc(env(safe-area-inset-bottom, 0px) + 112px); }
 .bar-btn { font-family: var(--fm); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; background: rgba(10, 15, 18, 0.75); border: 1px solid var(--line-2); color: var(--muted); padding: 8px 10px; cursor: pointer; }
 .bar-btn:hover { color: var(--ink); border-color: var(--sodium); }
 .bar-btn.back-btn { color: var(--ink); border-color: var(--sodium); font-size: 12px; padding: 9px 12px; order: -1; }
-.topback { display: flex; }
+.topback { display: flex; align-items: center; gap: 8px; }
+.topback .grow { flex: 1; }
 .tip.hint { border-left: 3px solid var(--sodium); padding-left: 10px; color: var(--ink); }
 .topback .back-btn { order: 0; }
 #topbtns.in-bar #b-sound { display: none; }
-@media (max-width: 700px) { #scr-title, #scr-results { padding-top: calc(env(safe-area-inset-top, 0px) + 54px); } }
+@media (max-width: 700px) { #scr-title { padding-top: calc(env(safe-area-inset-top, 0px) + 54px); } }
 @media (max-width: 560px) { .stat-car { display: none; } }
 
 /* ---------- short windows (small laptops, landscape phones, side panels) ---------- */
@@ -644,6 +645,18 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 .next-steps .step h4 { margin: 0; font-family: var(--fd); font-weight: 400; font-size: 22px; letter-spacing: 0.02em; text-transform: uppercase; }
 .next-steps .step p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.45; }
 .next-steps .step .kicker { font-size: 11px; }
+
+/* a long unlock note reads as a sentence, not a headline */
+.unlock-note.long { font-family: var(--fb, inherit); text-transform: none; font-size: 16px; line-height: 1.45; letter-spacing: 0; }
+@media (max-width: 520px) { .unlock-note.long { font-size: 15px; } }
+/* Mauritius: saving for the GT-R */
+.tip.gtr-save { border-left: 3px solid #f2c418; padding-left: 10px; }
+.tip.gtr-warn { flex-basis: 100%; margin: 6px 0 0; font-size: 13px; }
+/* on a phone, messages drop in at the top so they never sit over the main button */
+@media (max-width: 700px) {
+  body:not(.racing) #toast { top: calc(env(safe-area-inset-top, 0px) + 58px); bottom: auto; transform: translateX(-50%) translateY(-16px); max-width: calc(100vw - 24px); }
+  body:not(.racing) #toast.show { transform: translateX(-50%) translateY(0); }
+}
 </style>
 </head>
 <body>
@@ -718,7 +731,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         </section>
         <section>
           <h3>Garage</h3>
-          <p>Every upgrade has three stages, and how much each stage adds depends on the car. Small cars like the Civic run out of room early, so you will need something with more potential for North London. In the Body Shop, spoilers, body kits and lowered suspension change top speed, nitro speed and handling. Everything you customise also raises your style rating, and style adds up to 25% to your prize money.</p>
+          <p>Every upgrade has three stages, and how much each stage adds depends on the car. Small cars like the Civic run out of room early, so you will need something with more potential for North London. In the Body Shop, spoilers, body kits and lowered suspension change top speed, nitro speed and handling. Once the engine is fully built, they are the only way to get more speed out of a car, and the last Essex race is hard without them. Everything you customise also raises your style rating, and style adds up to 25% to your prize money.</p>
         </section>
         <section>
           <h3>Checkpoints</h3>
@@ -726,7 +739,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         </section>
         <section>
           <h3>Drag night</h3>
-          <p>On the island, the Street page has drag night on the old airport road: a straight quarter mile, side by side. The big button says WAIT while the ambers count down. When the light goes green it turns into GO: tap it (or press Up) straight away. After that it says SHIFT: tap it each time the needle reaches the green. Too early off the line is a red light and you lose. One shot of nitro. Beat each racer for their prize, then race them again for money.</p>
+          <p>On the island, the Street page has drag night on the old airport road: a straight quarter mile, side by side. The big button says WAIT while the ambers count down. When the light goes green it turns into GO: tap it (or press Up) straight away. After that it says SHIFT: tap it each time the needle reaches the green. Too early off the line is a red light and you lose. One shot of nitro. Any island car can race except your GT-R, which is built for Boss. Beat each racer for their prize, then race them again for money.</p>
         </section>
         <section>
           <h3>Stars</h3>
@@ -837,7 +850,7 @@ const CARS = [
     blurb: 'Brutal pace, huge grip. The car everyone wants to beat.',
     look: { paint: '#3d434b', finish: 'metallic', rims: 'fan', rimColor: '#2a2d31', tint: 2, spoiler: 'gt', kit: 1, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: '#b14bff', smoked: false, plate: 'R35 GTR' } },
   // Essex dealership
-  { id: 'rs6', name: 'Audi RS6 Avant', price: 22000, bhp: 590, handling: 7.6, rep: 44, pot: 1.2, model: 'rs6', chapter: 'essex',
+  { id: 'rs6', name: 'Audi RS6 Avant', price: 22000, bhp: 590, handling: 7.6, rep: 36, pot: 1.2, model: 'rs6', chapter: 'essex',
     blurb: 'A twin turbo V8 estate with room for the shopping. Wide arches, huge grip and it never runs out of pull.',
     look: { paint: '#5d6a73', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ff3355', smoked: false, plate: 'RS66 AVT' } },
   { id: 'mcl720', name: 'McLaren 720S', price: 45000, bhp: 710, handling: 9.3, rep: 55, pot: 1.35, model: 'mcl720', chapter: 'essex',
@@ -867,17 +880,17 @@ const CARS = [
     blurb: 'Your GT-R, shipped to Port Louis and rebuilt in Plaine Lauzun to beat Boss. Over a thousand horsepower, a wing like a table, canards, a splitter you could stand on and arches out to here.',
     look: { paint: '#f2f2ee', finish: 'gloss', rims: 'fan', rimColor: '#8c5f32', tint: 3, spoiler: 'ta', kit: 2, stance: 2, stripes: 'mu', stripeColor: '#c8161d', glow: '#ff3355', smoked: false, plate: 'GTR 230' } },
   // cars you can only win in a pink slip race. They come the way their owner raced them.
-  { id: 'golfr', name: 'VW Golf R', price: 9000, bhp: 320, handling: 8.2, rep: 999, pot: 0.6, model: 'golf', slip: 'tommy', slipUp: 2,
+  { id: 'golfr', name: 'VW Golf R', price: 9000, bhp: 320, handling: 8.2, rep: 999, pot: 0.6, model: 'golf', slip: 'tommy', slipUp: 3,
     look: { paint: '#1e4fa8', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#4aa8ff', smoked: false, plate: 'TH19 GTR' } },
-  { id: 'a45', name: 'Mercedes-AMG A45 S', price: 11000, bhp: 415, handling: 8.0, rep: 999, pot: 0.7, model: 'hatch', slip: 'priya', slipUp: 2,
+  { id: 'a45', name: 'Mercedes-AMG A45 S', price: 11000, bhp: 415, handling: 8.0, rep: 999, pot: 0.7, model: 'hatch', slip: 'priya', slipUp: 3,
     look: { paint: '#e9e9e6', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'big', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ffd23f', smoked: false, plate: 'PM21 AMG' } },
-  { id: 'rs3n', name: 'Audi RS3 (Nardo)', price: 12000, bhp: 400, handling: 7.8, rep: 999, pot: 0.8, model: 'rs3', slip: 'callum', slipUp: 2,
+  { id: 'rs3n', name: 'Audi RS3 (Nardo)', price: 12000, bhp: 400, handling: 7.8, rep: 999, pot: 0.8, model: 'rs3', slip: 'callum', slipUp: 3,
     look: { paint: '#7d8084', finish: 'matte', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 1, stance: 2, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ff3355', smoked: false, plate: 'CR22 RSS' } },
-  { id: 'svr', name: 'Range Rover Sport SVR', price: 16000, bhp: 575, handling: 5.5, rep: 999, pot: 0.6, model: 'suv', slip: 'mick', slipUp: 2,
+  { id: 'svr', name: 'Range Rover Sport SVR', price: 16000, bhp: 575, handling: 5.5, rep: 999, pot: 0.6, model: 'suv', slip: 'mick', slipUp: 3,
     look: { paint: '#141517', finish: 'gloss', rims: 'split', rimColor: '#2a2d31', tint: 3, spoiler: 'none', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#b14bff', smoked: false, plate: 'MF69 SVR' } },
-  { id: 'gt3', name: 'Porsche 911 GT3', price: 22000, bhp: 500, handling: 9.3, rep: 999, pot: 0.7, model: 'p911', slip: 'sophie', slipUp: 2,
+  { id: 'gt3', name: 'Porsche 911 GT3', price: 22000, bhp: 500, handling: 9.3, rep: 999, pot: 0.7, model: 'p911', slip: 'sophie', slipUp: 3,
     look: { paint: '#1f6fd1', finish: 'gloss', rims: 'five', rimColor: '#c9a23a', tint: 1, spoiler: 'big', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#4aa8ff', smoked: false, plate: 'GT33 SLN' } },
-  { id: 'gtrn', name: 'Nissan GT-R Nismo', price: 20000, bhp: 600, handling: 8.8, rep: 999, pot: 1.0, model: 'gtr', slip: 'jay', slipUp: 2,
+  { id: 'gtrn', name: 'Nissan GT-R Nismo', price: 20000, bhp: 600, handling: 8.8, rep: 999, pot: 1.0, model: 'gtr', slip: 'jay', slipUp: 3,
     look: { paint: '#ececec', finish: 'gloss', rims: 'fan', rimColor: '#2a2d31', tint: 2, spoiler: 'gt', kit: 1, stance: 1, stripes: 'racing', stripeColor: '#c8161d', glow: '#ff3355', smoked: false, plate: 'JO23 NSM' } },
   { id: 'm4', name: 'BMW M4 (F82)', price: 24000, bhp: 560, handling: 8.4, rep: 999, pot: 1.3, model: 'm4f82', slip: 'saleenah', slipUp: 3,
     look: { paint: '#f0619f', finish: 'pearl', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, stripes: 'none', stripeColor: '#f2f2ee', glow: '#ff5fa2', smoked: false, plate: 'SAL 33N' } },
@@ -910,11 +923,19 @@ function statsFor(id, up, look) {
     if (u.id === 'tyres') { handling = c.handling + (10 - c.handling) * [0, 0.5, 0.8, 1][n]; continue; }
     for (let s = 1; s <= n; s++) { const g = stageGain(c, u, s); bhp += g.bhp; nitroCap += g.nitro; }
   }
+  bhp += Math.max(0, Math.round(Number(up.tune) || 0));   // engine work beyond the three stages: pink slip cars come the way their owner raced them
   const ae = look ? aeroFor(id, look) : { top: 0, nitro: 0, grip: 0 };
   handling = clamp(handling + ae.grip, 1, 10);
   const vmax = vmaxFor(bhp) * (1 + ae.top), nitroMult = NITRO_MULT * (1 + ae.nitro);
   return { bhp, handling, nitroCap, vmax, nitroMult, accel: accelFor(bhp), laneTime: laneTimeFor(handling), aero: ae,
     style: look ? styleOf(id, look) : 0, topMph: Math.round(vmax * MPH), nitroMph: Math.round(vmax * nitroMult * MPH) };
+}
+/* a pink slip car comes the way its owner raced it: their stages fitted, plus whatever engine work gets it to the power they raced you with */
+function slipBuild(car) {
+  const up = {}; for (const u of UPGRADES) up[u.id] = car.slipUp || 2;
+  const ev = ESSEX.find(e => e.rival === car.slip);
+  if (ev) up.tune = Math.max(0, ev.oppBhp - statsFor(car.id, up).bhp);
+  return up;
 }
 function maxStats(id) { const up = {}; for (const u of UPGRADES) up[u.id] = 3; return statsFor(id, up); }
 
@@ -1606,7 +1627,7 @@ const DRAG = [
   { id: 'anousha', bhp: 230, handling: 7.6, prize: 1200, skill: 0.66, look: { model: 'hatch', paint: '#c9252c', finish: 'metallic', rims: 'split', rimColor: '#c3c8cc', tint: 3, spoiler: 'duck', stance: 2, plate: '1507 AB 21' } },
   { id: 'dev', bhp: 340, handling: 8.0, prize: 2500, skill: 0.74, look: { model: 'civic', paint: '#eeeeea', finish: 'gloss', rims: 'mesh', rimColor: '#1c1e21', tint: 2, spoiler: 'gt', kit: 1, stance: 2, plate: '777 FK 18' } },
   { id: 'chankin', bhp: 520, handling: 8.4, prize: 5000, skill: 0.82, look: { model: 'wrx', paint: '#1f4fb5', finish: 'pearl', rims: 'split', rimColor: '#c9a23a', tint: 3, spoiler: 'big', kit: 1, stance: 2, plate: '8 MAMA 08' } },
-  { id: 'baron', bhp: 820, handling: 9.0, prize: 10000, skill: 0.9, look: { model: 'gtr', paint: '#101012', finish: 'matte', rims: 'fan', rimColor: '#c9a23a', tint: 3, spoiler: 'gt', kit: 1, stance: 2, plate: '1 BARON' } },
+  { id: 'baron', bhp: 750, handling: 9.0, prize: 10000, skill: 0.9, look: { model: 'gtr', paint: '#101012', finish: 'matte', rims: 'fan', rimColor: '#c9a23a', tint: 3, spoiler: 'gt', kit: 1, stance: 2, plate: '1 BARON' } },
 ];
 const dragById = id => DRAG.find(d => d.id === id);
 const dragBeaten = (S, id) => !!(S && S.drag && S.drag.beaten && S.drag.beaten[id]);
@@ -1889,7 +1910,8 @@ function migrateSave(old) {
   for (const id in old.owned) {
     if (!carById(id)) continue;
     const o = old.owned[id], up = {};
-    for (const k in (o.up || {})) up[k] = o.up[k] === true ? 1 : Math.min(3, Number(o.up[k]) || 0);
+    for (const k in (o.up || {})) if (k !== 'tune') up[k] = o.up[k] === true ? 1 : Math.min(3, Number(o.up[k]) || 0);
+    if (carById(id).slip) { const sb = slipBuild(carById(id)); for (const u of UPGRADES) up[u.id] = Math.max(up[u.id] || 0, sb[u.id]); up.tune = sb.tune; }
     S.owned[id] = { up, damage: o.damage || 0, spent: o.spent || 0, look: Object.assign(stockLook(id), o.look || {}) };
   }
   if (!Object.keys(S.owned).length) return null;
@@ -1926,7 +1948,7 @@ function migrateSave(old) {
 }
 
 const curStats = S => statsFor(S.current, S.owned[S.current].up, lookOf(S, S.current));
-const carUnlocked = (S, car) => car.chapter === 'mu' ? muOpen(S) && muWins(S) >= (car.muUnlock || 0) : S.rep >= car.rep;
+const carUnlocked = (S, car) => car.chapter === 'mu' ? muOpen(S) && muWins(S) >= (car.muUnlock || 0) : car.chapter === 'essex' ? essexOpen(S) && S.rep >= car.rep : S.rep >= car.rep;
 const repairCost = S => Math.round(S.owned[S.current].damage * REPAIR_PER_PCT);
 
 function buyUpgrade(S, upId) {
@@ -2479,8 +2501,7 @@ function settleRace(S, R) {
     const car = carById(ev.slipCar), bet = carById(ev.betCar);
     if (R.result.won) {
       S.stats.wins++;
-      const up = {}; for (const u of UPGRADES) up[u.id] = car.slipUp || 2;
-      S.owned[car.id] = { up, damage: 0, spent: 0, look: stockLook(car.id) };
+      S.owned[car.id] = { up: slipBuild(car), damage: 0, spent: 0, look: stockLook(car.id) };
       out.slipWon = car.name; out.story = `${CHARACTERS[ev.rival].name} signed over the ${car.name}. It is in your garage.`; S.news = out.story;
     } else if (S.owned[ev.betCar] && Object.keys(S.owned).length > 1) {
       delete S.owned[ev.betCar];
@@ -2497,7 +2518,7 @@ function settleRace(S, R) {
         S.essex.completed[ev.index] = true;
         S.money += payout(R, ev.reward, out); S.rep += ev.rep;
         out.rep = ev.rep; out.story = ev.win; S.news = ev.win;
-        out.newCars = CARS.filter(c => !c.slip && c.rep > repBefore && c.rep <= S.rep).map(c => c.name);
+        out.newCars = CARS.filter(c => !c.slip && c.chapter === 'essex' && c.rep > repBefore && c.rep <= S.rep).map(c => c.name);
         out.slipOpen = slipCarFor(ev.rival) ? slipCarFor(ev.rival).name : null;
         const nx = nextEssexIndex(S);
         if (nx >= ESSEX.length) { out.essexDone = !S.essex.done; S.essex.done = true; }
@@ -2529,7 +2550,7 @@ function settleRace(S, R) {
       S.completed[ev.index] = true;
       S.money += payout(R, ev.reward, out); S.rep += ev.rep;
       out.rep = ev.rep; out.story = ev.win;
-      out.newCars = CARS.filter(c => !c.slip && c.rep > repBefore && c.rep <= S.rep).map(c => c.name);
+      out.newCars = CARS.filter(c => !c.slip && c.chapter !== 'essex' && c.rep > repBefore && c.rep <= S.rep).map(c => c.name);
       S.news = ev.win;
       const nx = nextEventIndex(S);
       if (nx >= EVENTS.length) { S.careerDone = true; S.kingRevealed = true; out.careerDone = !wasDone; if (!wasDone) S.news = 'The crown is yours. Adam from Ride3 wants a race, and Essex has heard about the new Street King.'; }
@@ -2540,7 +2561,7 @@ function settleRace(S, R) {
       S.street = streetOffers(S);
     }
   }
-  if (!essexBefore && essexOpen(S)) out.essexOpened = true;
+  if (!essexBefore && essexOpen(S)) { out.essexOpened = true; out.newCars.push(...CARS.filter(c => c.chapter === 'essex' && carUnlocked(S, c)).map(c => c.name)); }
   // someone new wants a race after this one (more street races done, or Tush beaten for Ishaaq)
   out.newFriends = FRIENDS.filter(id => specialUnlocked(S, id) && !friendsBefore.includes(id)).map(id => CHARACTERS[SPECIALS[id].rival].name);
   if (!muBefore && muOpen(S)) out.muOpened = true;
@@ -8190,7 +8211,7 @@ function showScreen(id) {
   document.body.classList.toggle('nav-on', NAV_SCREENS.includes(id));
   if (mode === 'race') Music.stop(); else if (id) Music.play(Music.area());
   const scr = id && $(id);
-  $('topbtns').classList.toggle('in-bar', !!(scr && scr.querySelector('.bar')));
+  $('topbtns').classList.toggle('in-bar', !!(scr && scr.querySelector('.bar, .topback [data-act=sound]')));
 }
 const money = n => '£' + fmt(n);
 const pct = (v, max) => clamp(v / max * 100, 0, 100).toFixed(1) + '%';
@@ -8215,6 +8236,8 @@ function paintCar(c) {
   const look = c.dataset.draft === '1' && draft ? draft : own ? lookOf(S, id) : stockLook(id);
   renderCarPreview(c, id, look, own ? own.up : {}, { yaw: c.dataset.spin ? spin.yaw + (c._drag || 0) : -2.45, locked: c.dataset.locked === '1', focus: c.dataset.draft ? spin.zoom : 0, damage: own ? own.damage : 0, seed: id });
 }
+/* music and sound in the page's own top row, so they scroll away with it instead of floating over the text */
+const sndBtns = () => `<span class="grow"></span><button class="bar-btn" type="button" data-act="music">${Music.on ? 'Music on' : 'Music off'}</button><button class="bar-btn" type="button" data-act="sound">${Sound.on ? 'Sound on' : 'Sound off'}</button>`;
 function backBtn(label) { return `<button class="bar-btn back-btn" type="button" data-act="back">&larr; ${label || 'Back'}</button>`; }
 function topBar(back) {
   return `<div class="bar">
@@ -8378,8 +8401,10 @@ function streetBoard() {
 function dragCards() {
   const own = S.owned[S.current], car = carById(S.current), st = curStats(S), best = ((S.drag && S.drag.best) || {})[S.current];
   const est = dragEstimate(st.bhp, st.handling);
-  return `<p class="tip">The old airport road at Plaine Magnien: a straight quarter mile, side by side, no traffic. Tap <b>SHIFT</b> the moment the light goes green (before it and it is a red light, you lose). Then tap it each time the needle reaches the green. One shot of nitro, so save it for third gear. Beat each racer once for their prize, then race them again for money.</p>
-    <p class="tip rec">Your ${esc(car.name)}: ${st.bhp} bhp, about <b>${est.toFixed(1)} s</b> with clean shifts${best ? ` · your best <b>${(best / 1000).toFixed(3)} s</b>` : ''}</p>
+  const gtr = S.current === 'gtrx';
+  return `<p class="tip">The old airport road at Plaine Magnien: a straight quarter mile, side by side, no traffic. The big button says <b>WAIT</b> while the ambers count down. Tap <b>GO</b> the moment the light turns green (tap before it and it is a red light, you lose), then <b>SHIFT</b> each time the needle reaches the green. One shot of nitro, so save it for third gear. Beat each racer once for their prize, then race them again for money.</p>
+    ${gtr ? `<p class="tip warn">Your GT-R is built for Le Morne, not the strip, and nobody here will line up against it. Race one of your other island cars.</p><div class="actions"><button class="btn small primary" data-act="tab" data-arg="mine"><span>My cars</span></button></div>`
+      : `<p class="tip rec">Your ${esc(car.name)}: ${st.bhp} bhp, about <b>${est.toFixed(1)} s</b> with clean shifts${best ? ` · your best <b>${(best / 1000).toFixed(3)} s</b>` : ''}</p>`}
     <div class="offers">${DRAG.map((d, i) => {
       const ch = CHARACTERS[d.id], open = dragUnlocked(S, i), beaten = dragBeaten(S, d.id), et = d._et || (d._et = dragEstimate(d.bhp, d.handling));
       if (!open) return `<div class="offer drag locked">
@@ -8611,12 +8636,56 @@ function awayNote() {
   if (!islandCar(S.current)) return '';
   return `<p class="tip away">You are on the island, so this is the island garage and showroom. Your London and Essex cars and the dealership back home are waiting in London: tap <b>London</b> or <b>Essex</b> at the top to fly back.</p>`;
 }
+/* what would make the car you race quicker now: an upgrade still to fit, a better car in the showroom,
+   Body Shop parts (spoiler, body kit, suspension) once the engine is fully built, or nothing but the driving */
+function aeroRoom(id) {
+  const own = S.owned[id], look = lookOf(S, id), now = statsFor(id, own.up, look);
+  let best = null;
+  for (const sp of BODY.spoilers) { if (sp.only && sp.only !== id) continue;
+    for (const kt of BODY.kits) { if (kt.only && kt.only !== id) continue;
+      for (const sn of BODY.stances) {
+        const s2 = statsFor(id, own.up, Object.assign({}, look, { spoiler: sp.id, kit: kt.id, stance: sn.id }));
+        const top = s2.topMph - now.topMph, nitro = s2.nitroMph - now.nitroMph;
+        if (!best || top + nitro > best.top + best.nitro) best = { top, nitro };
+      }
+    }
+  }
+  return best && best.top + best.nitro >= 6 ? best : null;
+}
+function betterCar() {
+  const island = islandCar(S.current), mine = maxStats(S.current).bhp;
+  return CARS.filter(c => !c.slip && c.id !== 'gtrx' && !S.owned[c.id] && c.price > 0 && islandCar(c.id) === island && carUnlocked(S, c) && maxStats(c.id).bhp > mine * 1.04)
+    .sort((a, b) => a.price - b.price)[0] || null;
+}
+function nextStep() {
+  const own = S.owned[S.current];
+  if (S.current === 'gtrx') return { kind: 'drive' };
+  if (UPGRADES.some(u => (Number(own.up[u.id]) || 0) < 3)) return { kind: 'upgrade' };
+  const car = betterCar(); if (car) return { kind: 'car', car };
+  const room = aeroRoom(S.current); if (room) return { kind: 'aero', room };
+  return { kind: 'drive' };
+}
+const aeroGain = r => [r.top > 0 ? `${r.top} mph top speed` : '', r.nitro > 0 ? `${r.nitro} mph on nitro` : ''].filter(Boolean).join(' and ');
 function powerTip(st, oppBhp) {
   const ratio = st.bhp / oppBhp;
-  return ratio >= 1.08 ? 'You have the power advantage here. Keep it clean and there is no stopping you.'
-    : ratio >= 0.97 ? 'Evenly matched on power. Clean driving and good nitro timing will decide it.'
-    : ratio >= 0.88 ? 'More power on the other side. You need a clean run and every drop of nitro, or an upgrade.'
-    : 'A lot faster on paper. Upgrade, buy a better car or win some street races for cash first.';
+  if (ratio >= 1.08) return 'You have the power advantage here. Keep it clean and there is no stopping you.';
+  if (ratio >= 0.97) return 'Evenly matched on power. Clean driving and good nitro timing will decide it.';
+  const n = nextStep();
+  if (ratio >= 0.88) return 'More power on the other side. You need a clean run and every drop of nitro'
+    + (n.kind === 'upgrade' ? ', or an upgrade.' : n.kind === 'car' ? `, or the ${n.car.name} from the dealership.`
+      : n.kind === 'aero' ? `. Your car is fully built, so the Body Shop is where the speed is: a spoiler, body kit and lower suspension add up to ${aeroGain(n.room)}.` : '.');
+  return n.kind === 'upgrade' ? 'A lot faster on paper. Upgrade, buy a better car or win some street races for cash first.'
+    : n.kind === 'car' ? `A lot faster on paper. The ${n.car.name} in the dealership is the way forward.`
+    : n.kind === 'aero' ? `A lot faster on paper. Your car is fully built, so the Body Shop is where the speed is: a spoiler, body kit and lower suspension add up to ${aeroGain(n.room)}.`
+    : 'A lot faster on paper. Your car is as quick as it gets, so it is down to the driving: no crashes, every gold gate, nitro on the straights.';
+}
+/* after a loss: the one thing that would help most */
+function lossAdvice() {
+  const n = nextStep(), name = carById(S.current).name;
+  if (n.kind === 'upgrade') return { text: 'Study the gaps, save nitro for the straights and try again. Upgrades help too, and street races earn the cash for them.' };
+  if (n.kind === 'car') return { text: `Your ${esc(name)} is fully built. The ${esc(n.car.name)} in the dealership goes further.`, btn: `<button class="btn" data-act="tab" data-arg="cars"><span>Dealership</span></button>` };
+  if (n.kind === 'aero') return { text: `Your ${esc(name)} is fully built, so more upgrades will not help. The Body Shop will: a spoiler, body kit and lower suspension add up to ${aeroGain(n.room)}.`, btn: `<button class="btn" data-act="garage" data-arg="body"><span>Body Shop</span></button>` };
+  return { text: `Your ${esc(name)} is fully built and set up, so it is down to the driving now: fewer crashes, hit the gold gates for nitro, and save nitro for the straights.` };
 }
 function damageWarn(own) {
   if (own.damage >= 100) return `<p class="tip bad">Your car is wrecked. Repair it in the garage before you can race.</p><div class="actions"><button class="btn small primary" data-act="garage" data-arg="upgrades"><span>Repair it</span></button></div>`;
@@ -8624,7 +8693,7 @@ function damageWarn(own) {
   if (own.damage >= 50) return `<p class="tip warn">Your car is ${own.damage}% damaged. Over ${HURT_FROM}% it starts to lose speed and steering, and at 100% it is wrecked. Repair costs ${money(repairCost(S))}.</p>`;
   return '';
 }
-const slipUps = car => { const up = {}; for (const u of UPGRADES) up[u.id] = car.slipUp || 2; return up; };
+const slipUps = car => slipBuild(car);
 /* beaten Essex rivals will race you for their car, if you put yours up */
 function slipCards(own) {
   const ready = ESSEX.filter(e => slipReady(S, e.rival));
@@ -8705,6 +8774,12 @@ function muImportCard(own) {
     <div class="actions">${can ? `<button class="btn primary" data-act="buycar" data-arg="gtrx"><span>Collect it · ${money(car.price)}</span></button>` : `<span class="lock">You need ${money(car.price - S.money)} more. Island street races pay.</span>`}</div>
   </div>`;
 }
+/* Boss only races your own GT-R, and shipping it costs money: say so early, before the showroom spends it for you */
+function gtrSave() {
+  if (S.owned.gtrx || nextMuIndex(S) >= MU.length) return '';
+  const price = carById('gtrx').price, have = S.money;
+  return `<p class="tip gtr-save">Save for the last race: Boss only races your own GT-R, and shipping it over and the rebuild cost <b>${money(price)}</b>. ${have >= price ? 'You have that now, so keep it back.' : `You have ${money(have)}.`}</p>`;
+}
 /* what it takes to race each island rival: the stage of engine upgrades, or the car to buy */
 function muTip(ev, st) {
   const need = carById(ev.need), mine = carById(S.current), own = S.owned[S.current] || { up: {} }, theirs = ev.oppBhp, who = esc(CHARACTERS[ev.rival].name.split(' ')[0]);
@@ -8732,7 +8807,7 @@ function muMain(own, st) {
       </dl>
       <p class="tip">Race any island event again for fun and the stars you missed. No prize money, but island street races still pay.</p>
       ${DRAG.some(d => !dragBeaten(S, d.id)) ? `<div class="next-steps"><p class="kicker">What's next</p><div class="step"><p class="kicker">Drag night</p><h4>The airport road at Plaine Magnien</h4>
-        <p>${DRAG.filter(d => !dragBeaten(S, d.id)).length} drag racers still to beat, Le Baron last. A straight quarter mile: launch on green and shift in the green.</p>
+        <p>${DRAG.filter(d => !dragBeaten(S, d.id)).length} drag racers still to beat, Le Baron last. A straight quarter mile: tap GO on green, then shift in the green. Any island car except your GT-R.</p>
         <div class="actions"><button class="btn primary" data-act="stab" data-arg="drag"><span>Drag night</span></button></div></div></div>` : ''}`;
   } else {
     const ev = MU[i], boss = ev.rival === 'boss', need = boss && S.current !== 'gtrx';
@@ -8752,6 +8827,7 @@ function muMain(own, st) {
         <button class="btn primary big" data-act="mu" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button>
       </div>
       <p class="tip hint">${need ? 'Nothing on the island can live with Boss. Collect your GT-R, then race him in it.' : muTip(ev, st)}</p>
+      ${boss ? '' : gtrSave()}
       ${rivalCarStrip(ev.oppLook, CHARACTERS[ev.rival].car)}
       <p class="story">${esc(ev.intro)}</p>`;
   }
@@ -8927,7 +9003,20 @@ function goGarage(tab, keepScroll) {
     ${body}`;
   showScreen('scr-garage');
   scr.scrollTop = top;
+  // on a phone the showroom is a row you swipe through: open it on the car that matters, not the free Civic
+  if (garageTab === 'cars' || garageTab === 'mine') {
+    const grid = scr.querySelector('.car-grid'), want = garageTab === 'mine' || keepScroll ? S.current : dealerFocus();
+    const card = grid && grid.querySelector(`.car-card[data-id="${want}"]`);
+    if (card && grid.scrollWidth > grid.clientWidth + 4) grid.scrollLeft += card.getBoundingClientRect().left - grid.getBoundingClientRect().left - 16;
+  }
   paintCanvases();
+}
+/* the next step up in the showroom: the cheapest car you do not own that ends up quicker than yours once built */
+function dealerFocus() {
+  const island = islandCar(S.current), mine = maxStats(S.current).bhp;
+  const next = CARS.filter(c => !c.slip && !S.owned[c.id] && islandCar(c.id) === island && (c.chapter !== 'essex' || S.careerDone) && maxStats(c.id).bhp > mine)
+    .sort((a, b) => (carUnlocked(S, b) - carUnlocked(S, a)) || a.price - b.price)[0];
+  return next ? next.id : S.current;
 }
 function upgradesTab(own, car, st) {
   const rc = repairCost(S);
@@ -9054,14 +9143,17 @@ function dealerTab() {
     const st2 = statsFor(c.id, owned ? owned.up : {}), mx = maxStats(c.id);
     let act;
     if (owned) act = ownedActs(c);
-    else if (!unlocked) act = c.chapter === 'mu' ? `<span class="lock">🔒 ${c.id === 'gtrx' ? 'Arrives after the Chamarel race' : 'Win ' + c.muUnlock + ' island race' + (c.muUnlock > 1 ? 's' : '')} (you have ${muWins(S)})</span>` : `<span class="lock">🔒 Needs Rep ${c.rep} (you have ${S.rep})</span>`;
+    else if (!unlocked) act = c.chapter === 'mu' ? `<span class="lock">🔒 ${c.id === 'gtrx' ? 'Arrives after the Chamarel race' : 'Win ' + c.muUnlock + ' island race' + (c.muUnlock > 1 ? 's' : '')} (you have ${muWins(S)})</span>` : c.chapter === 'essex' && !essexOpen(S) ? `<span class="lock">🔒 In the Essex showroom once Essex opens</span>` : `<span class="lock">🔒 Needs Rep ${c.rep} (you have ${S.rep})</span>`;
     else {
       const tv = sellValue(S, S.current), canTrade = S.money < c.price && S.money + tv >= c.price;
       act = `<button class="btn small ${S.money >= c.price ? 'primary' : ''}" data-act="buycar" data-arg="${c.id}" ${S.money >= c.price ? '' : 'disabled'}><span>${c.price ? 'Buy ' + money(c.price) : 'Take it (free)'}</span></button>`
         + (canTrade ? `<button class="btn small primary" data-act="tradein" data-arg="${c.id}"><span>Trade in ${carById(S.current).name.split(' ')[0]} (+${money(tv)})</span></button>`
         : S.money < c.price ? `<span class="lock">Need ${money(c.price - S.money)} more</span>` : '');
+      const gp = carById('gtrx').price, left = S.money - c.price + (S.money < c.price ? sellValue(S, S.current) : 0);
+      if (island && c.id !== 'gtrx' && !S.owned.gtrx && nextMuIndex(S) < MU.length && S.money + sellValue(S, S.current) >= c.price && left < gp)
+        act += `<p class="tip warn gtr-warn">Leaves you ${money(left)}. Boss only races your GT-R, which costs ${money(gp)} to ship.</p>`;
     }
-    return `<div class="car-card ${cur ? 'current' : ''} ${!unlocked && !owned ? 'locked' : ''}">
+    return `<div class="car-card ${cur ? 'current' : ''} ${!unlocked && !owned ? 'locked' : ''}" data-id="${c.id}">
       <canvas data-car="${c.id}" data-locked="${!unlocked && !owned ? 1 : 0}" width="300" height="150"></canvas>
       <div class="car-name"><h3>${c.name}</h3><span class="plate">${esc(owned ? lookOf(S, c.id).plate : c.look.plate)}</span></div>
       ${S.careerDone ? `<p class="cls-line">${clsChip(st2.bhp)}${c.chapter === 'essex' ? '<span class="chip">Essex</span>' : c.chapter === 'mu' ? '<span class="chip">Mauritius</span>' : ''}</p>` : ''}
@@ -9078,7 +9170,7 @@ function collectionTab() {
   return `<p class="tip">Your garage. Classes go by how much power a car makes right now: D, C, B, A, then S at 800 bhp and up.${ids.length > 1 ? `<span class="swipe-hint">You have ${ids.length} cars here. Swipe across to see them all.</span>` : ''}</p>
   <div class="car-grid">${ids.map(id => {
     const c = carById(id), own = S.owned[id], st2 = statsFor(id, own.up, lookOf(S, id));
-    return `<div class="car-card ${S.current === id ? 'current' : ''}">
+    return `<div class="car-card ${S.current === id ? 'current' : ''}" data-id="${id}">
       <canvas data-car="${id}" width="300" height="150"></canvas>
       <div class="car-name"><h3>${c.name}</h3><span class="plate">${esc(lookOf(S, id).plate)}</span></div>
       <p class="cls-line">${clsChip(st2.bhp)}${c.slip ? `<span class="chip slipchip">Pink slip</span>` : ''}</p>
@@ -9188,7 +9280,7 @@ function showDragResults() {
   const again = !ev.rematch || (ev.stake && !dragBetBlock(S, d, ev.stake));
   const btns = `${again && !(res.won && !ev.rematch) ? `<button class="btn primary big" data-act="retry" ${own.damage >= 100 ? 'disabled' : ''}><span>${ev.rematch ? 'Again for ' + money(ev.stake) : 'Go again'}</span></button>` : ''}
     <button class="btn ${res.won && !ev.rematch ? 'primary big' : ''}" data-act="hub" data-arg="street"><span>Drag night</span></button>`;
-  $('results-body').innerHTML = `<div class="topback">${backBtn('Hub')}</div>
+  $('results-body').innerHTML = `<div class="topback">${backBtn('Hub')}${sndBtns()}</div>
     <p class="kicker">Drag night · ${esc(ev.area)}${ev.rematch ? ' · Bet ' + money(ev.stake) : ''}</p>
     <h2 class="result-head ${res.won ? 'win' : 'lose'}">${head}</h2>
     ${foul ? '<p class="story">You went before the green. On the airport road that is a loss, whatever happens next.</p>' : ''}
@@ -9244,7 +9336,7 @@ function showResults() {
   if (sum.imported) notes += `<div class="unlock-note special"><small>Delivered to Port Louis</small>Your GT-R, rebuilt for Boss</div>`;
   let who = '';
   if (sum.careerDone) notes += `<div class="unlock-note special"><small>Invitation unlocked</small>Adam from Ride3 wants a race</div>
-    <div class="unlock-note"><small>Next area · Essex</small>${esc(ishaaqHow())}</div>`;
+    <div class="unlock-note long"><small>Next area · Essex</small>${esc(ishaaqHow())}</div>`;
   if (sum.careerDone) {
     who = `<div class="reveal"><p class="kicker">The King is revealed</p>${rivalCard('king', CHARACTERS.king.youWin, false, 'Ray Walsh')}
       <p class="story">The GT-R door opens as the sun comes up over Canary Wharf. It is Ray Walsh, Danny's uncle from the MOT garage in Canning Town.</p></div>`;
@@ -9259,19 +9351,23 @@ function showResults() {
   if (ev.kind === 'street' && ev.cp) story = res.won ? `<p class="story">Every gate, clean. There are fresh street races on the board.</p>` : `<p class="story">${res.how === 'wrecked' ? 'The car is in bits.' : 'One gate too many.'} There are fresh street races on the board.</p>`;
   else if (ev.kind === 'daily') story = `<p class="story">${res.how === 'wrecked' ? 'Wrecked. The daily car is on loan, so your own garage is untouched. Go again.' : sum.reward ? 'Today\'s prize is yours. Go again as many times as you like to get your time down.' : 'Go again as many times as you like. Your best time today is the one that counts.'}</p>`;
   else if (ev.kind === 'street') story = res.won ? `<p class="story">Easy money. There are fresh street races on the board.</p>` : `<p class="story">${esc(ev.oppName)} got there first. There are fresh street races on the board.</p>`;
+  let advice = null;
+  if (!res.won && !story && res.how !== 'wrecked' && !ev.loaner) advice = lossAdvice();
   else if (!res.won && !story) story = `<p class="story">${res.how === 'wrecked' ? 'The car is in bits. Get it repaired, then go again.' : 'Study the gaps, save nitro for the straights and try again. Street races can earn you cash for upgrades.'}</p>`;
+  if (advice) story = `<p class="story">${advice.text}</p>`;
   if (res.how === 'busted') story = `<p class="story">Essex Police got past you on the ${esc(ev.road)} and pulled you over. That is a ${money(sum.fine || 0)} fine. ${esc(ev.area)} goes quiet again now you have paid up, so spread your racing around.</p>`;
   else if (sum.escaped) story = `<p class="story">${res.won ? 'You won and' : 'You lost the race, but'} the police never got near you. ${esc(ev.area)} is hot though: race somewhere else for a while.</p>`;
   let btns;
   if (ev.kind === 'daily') btns = `<button class="btn primary big" data-act="retry"><span>Go again</span></button><button class="btn" data-act="hub"><span>Career hub</span></button>${Online.on ? `<button class="btn" data-act="board" data-arg="${ev.route}"><span>Today's leaderboard</span></button>` : ''}`;
   else if (ev.kind === 'slip') btns = `<button class="btn primary big" data-act="hub"><span>Continue to career hub</span></button>${res.won ? `<button class="btn" data-act="tab" data-arg="mine"><span>See it in your garage</span></button>` : ''}`;
   else if (ev.kind === 'special' && !res.won) btns = `<button class="btn primary big" data-act="retry" ${own.damage >= 100 ? 'disabled' : ''}><span>Go again</span></button>
-    <button class="btn" data-act="garage" data-arg="upgrades"><span>Garage</span></button><button class="btn" data-act="hub"><span>Career hub</span></button>`;
+    ${advice && advice.btn ? advice.btn : `<button class="btn" data-act="garage" data-arg="upgrades"><span>Garage</span></button>`}<button class="btn" data-act="hub"><span>Career hub</span></button>`;
   else if (res.won || ev.kind === 'street') btns = `<button class="btn primary big" data-act="hub"><span>${sum.careerDone ? 'Claim your crown' : 'Continue to career hub'}</span></button>`;
   else btns = `<button class="btn primary big" data-act="retry" ${own.damage >= 100 ? 'disabled' : ''}><span>Retry event</span></button>
+    ${advice && advice.btn ? advice.btn : ''}
     ${own.damage >= 50 ? `<button class="btn" data-act="garage" data-arg="upgrades"><span>Garage</span></button>` : ''}
     <button class="btn" data-act="hub"><span>Career hub</span></button>`;
-  $('results-body').innerHTML = `<div class="topback">${backBtn('Hub')}</div>
+  $('results-body').innerHTML = `<div class="topback">${backBtn('Hub')}${sndBtns()}</div>
     <p class="kicker">${ev.kind === 'daily' ? 'Daily challenge · ' + esc(ev.area) + ' · ' + esc(carById(ev.loaner).name) : ev.kind === 'street' ? 'Street race · ' + ev.label + ' · ' + esc(ev.area) : ev.kind === 'slip' ? 'Pink slip · ' + ev.title : (ev.kind === 'special' && !ev.brand ? 'Street race · ' : ev.kind === 'essex' ? 'Essex · ' : ev.kind === 'mu' ? 'Mauritius · ' : '') + ev.title + (ev.exhibition || ev.rematch ? (ev.kind === 'special' ? ' · Rematch' : ' · Exhibition') : '')}</p>
     ${ev.kind === 'special' && ev.brand ? `<img class="r3head" src="${RIDE3_LOGO}" alt="Ride3">` : ''}
     <h2 class="result-head ${res.won ? 'win' : 'lose'}">${head}</h2>
@@ -9320,6 +9416,7 @@ function startRace(spec) {
     const i = DRAG.findIndex(d => d.id === spec.id);
     if (i < 0 || !dragUnlocked(S, i)) return;
     if (!islandCar(S.current)) { toast('Drag night is on the island. Tap Mauritius at the top.', true); return; }
+    if (S.current === 'gtrx') { toast('Nobody at drag night will race your GT-R. Pick another island car in My cars.', true); return; }
     if (dragBeaten(S, spec.id)) { const why = dragBetBlock(S, DRAG[i], spec.stake); if (why) { toast(why, true); return; } }
   }
   if ((spec.kind === 'essex' || spec.kind === 'career' || spec.kind === 'special' || spec.kind === 'slip') && islandCar(S.current)) { toast('Your island car stays on the island. Tap London or Essex at the top.', true); return; }
