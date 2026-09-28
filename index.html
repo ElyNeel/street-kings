@@ -657,6 +657,9 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
   body:not(.racing) #toast { top: calc(env(safe-area-inset-top, 0px) + 58px); bottom: auto; transform: translateX(-50%) translateY(-16px); max-width: calc(100vw - 24px); }
   body:not(.racing) #toast.show { transform: translateX(-50%) translateY(0); }
 }
+/* rain: the wet nights in London */
+.tip.rain { border-left: 3px solid #7fb0d8; padding-left: 10px; color: #cfe2f2; }
+.rung .where .wet { color: #8fc0e8; font-weight: 600; }
 </style>
 </head>
 <body>
@@ -813,6 +816,7 @@ const HIT_SLOW = 0.58;         // speed kept after a crash
 const HIT_MIN_V = 26;          // never slowed below this (always faster than traffic)
 const REPAIR_PER_PCT = 6;      // pounds per 1% damage
 const HURT_FROM = 60;          // from this much damage the car drives worse
+const RAIN_GRIP = 1.25;        // on a wet road a lane change takes this much longer
 /* how badly damage hurts the driving: 0 below 60%, then 0.35 at 60% up to 1 at 100% */
 const hurtOf = dmg => dmg < HURT_FROM ? 0 : 0.35 + 0.65 * Math.min(1, (dmg - HURT_FROM) / (100 - HURT_FROM));
 /* what that does: less top speed (4% at 60%, 12% near the end), weaker pull, slower lane changes (20% to 55% slower) */
@@ -1436,9 +1440,9 @@ const EVENTS = [
     win: 'Kasia wants a look under your bonnet. People are starting to fear the name.', oppLook: { model: 'evo', paint: '#e4e4e0', rims: 'split', rimColor: '#c9a23a', spoiler: 'big' },
     diff: { skill: 1.066, inc: [12, 16] } },
   { title: 'THE ISLAND', chapter: 'East London', rival: 'mo', oppBhp: 430, reward: 3000, rep: 3, dist: 5700,
-    area: 'Isle of Dogs', road: 'Westferry Road', time: 'night', env: 'towers', sky: ['canary', 'shard', 'cranes'], map: [-0.022, 51.500],
+    area: 'Isle of Dogs', road: 'Westferry Road', time: 'night', rain: true, env: 'towers', sky: ['canary', 'shard', 'cranes'], map: [-0.022, 51.500],
     signs: [['green', 'A1206', 'Canary Wharf', 'Isle of Dogs'], ['borough', 'London Borough of Tower Hamlets'], ['green', 'A1206', 'Limehouse', 'Blackwall'], ['green', 'A13', 'Canning Town', 'Barking']],
-    intro: 'Mo Tran knows every camera and every empty road on the Isle of Dogs. Beat him under the Canary Wharf towers and East London is yours.',
+    intro: 'Mo Tran knows every camera and every empty road on the Isle of Dogs, and he wanted it wet. It has rained all night under the Canary Wharf towers. Beat him on a slippery Westferry Road and East London is yours.',
     win: 'East London is yours. Word has reached North London.', oppLook: { model: 'rs3', paint: '#8f969b', rims: 'mesh', rimColor: '#1c1e21', tint: 3 },
     diff: { skill: 1.051, inc: [13, 17] } },
   { title: 'GREEN LANES', chapter: 'North London', rival: 'emre', oppBhp: 500, reward: 3300, rep: 3, dist: 5900,
@@ -1448,9 +1452,9 @@ const EVENTS = [
     win: 'Green Lanes knows your name. Next stop, Tottenham.', oppLook: { model: 'c63', paint: '#7a1420', rims: 'five', rimColor: '#2a2d31', tint: 2 },
     diff: { skill: 1.049, inc: [14, 18] } },
   { title: 'THE RIVAL', chapter: 'North London', rival: 'marcus', oppBhp: 560, reward: 3800, rep: 4, dist: 6200,
-    area: 'Tottenham', road: 'Seven Sisters Road', time: 'night', env: 'terrace', sky: ['stadium', 'bttower', 'shard'], map: [-0.072, 51.586],
+    area: 'Tottenham', road: 'Seven Sisters Road', time: 'night', rain: true, env: 'terrace', sky: ['stadium', 'bttower', 'shard'], map: [-0.072, 51.586],
     signs: [['green', 'A503', 'Seven Sisters', 'Tottenham'], ['borough', 'London Borough of Haringey'], ['green', 'A10', 'Tottenham', 'Edmonton'], ['green', 'A503', 'Finsbury Park', 'Holloway']],
-    intro: 'Marcus Campbell has run North London in his M3 for three years. He has heard about you, and he does not like it.',
+    intro: 'Marcus Campbell has run North London in his M3 for three years. He has heard about you, and he does not like it. It is pouring down Seven Sisters Road and he says that suits him fine.',
     win: 'Marcus threw his keys on the bonnet and walked off. North London is wide open.', oppLook: { model: 'm3', paint: '#e3c21c', rims: 'split', rimColor: '#1c1e21', spoiler: 'lip', stance: 1 },
     diff: { skill: 1.042, inc: [15, 19] } },
   { title: 'NORTH CIRCULAR', chapter: 'North London', rival: 'asha', oppBhp: 640, reward: 4400, rep: 4, dist: 6500,
@@ -2100,7 +2104,7 @@ function createRace(S, spec) {
   const pl = (ev.lanes || 3) === 2 ? 0 : 1;   // where you line up: the middle lane of three, the left lane of two (the rival takes the right)
   return {
     ev, carId: ev.loaner || S.current, st, traffic, look: ev.loaner ? stockLook(ev.loaner) : lookOf(S, S.current), up: Object.assign({}, own.up), styleBonus: ev.loaner ? 0 : styleBonus(st.style),
-    rec: { next: 0, d: [], x: [] }, ghosts: [], twoWay: !!ev.twoWay, nl: ev.lanes || 3,
+    rec: { next: 0, d: [], x: [] }, ghosts: [], twoWay: !!ev.twoWay, nl: ev.lanes || 3, wet: ev.rain ? RAIN_GRIP : 1,
     state: 'countdown', countdown: 3.2, t: 0, doneT: 0, wrecked: false,
     p: { dist: 0, v: 0, lane: pl, x: pl, vx: 0, latV: 0, nitro: st.nitroCap, boosting: false, nitroLock: false,
          damage: own.damage, startDamage: own.damage, collisions: 0, topV: 0, finishTime: null },
@@ -2397,7 +2401,7 @@ function updateRace(R, dt, input) {
   if (racing && R.rec) while (R.t >= R.rec.next && R.rec.d.length < 12000) { R.rec.d.push(Math.round(p.dist * 10)); R.rec.x.push(Math.round(p.x * 100)); R.rec.next += 1 / GHOST_HZ; }
 
   const hk = hurtK(p.damage);   // a badly damaged car is slower and heavier to steer
-  laneSpring(p, dt, st.laneTime * hk.lane, (R.nl || 3) - 1);
+  laneSpring(p, dt, st.laneTime * hk.lane * (R.wet || 1), (R.nl || 3) - 1);
   p.latV = p.vx;
 
   // nitro: once the tank runs dry it has to recharge to 25% before it fires again
@@ -2737,7 +2741,19 @@ const ISLAND_TOD = {
   dusk: { sky: [[36, 38, 94], [176, 78, 112], [252, 152, 70]], haze: [255, 136, 80], hazeA: 0.46, fog: [150, 94, 102] },
 };
 const MU_ENVS = new Set(['lagoon', 'harbour', 'ringroad', 'cyber', 'cane', 'airport', 'gorge', 'morne']);
-function palFor(time, env) { const o = Object.assign({ time, env }, TOD[time] || TOD.night); if (MU_ENVS.has(env) && ISLAND_TOD[time]) Object.assign(o, ISLAND_TOD[time]); return o; }
+/* rain: low cloud lit orange by the street lights, no stars or moon, a thicker haze, and everything shines */
+function rainPal(o) {
+  const cloud = [[24, 24, 28], [40, 37, 40], [74, 62, 54]];
+  o.sky = o.sky.map((c, i) => mix(c, cloud[i], 0.75)); o.fog = mix(o.fog, [52, 54, 58], 0.5);
+  o.hazeA = Math.min(0.6, o.hazeA + 0.18); o.stars = 0; o.moon = 0; o.sun = 0; o.clouds = 0;
+  o.spec = Math.max(o.spec, 0.66); o.amb *= 0.92; o.light *= 0.94; o.rain = 1;
+  return o;
+}
+function palFor(time, env, rain) {
+  const o = Object.assign({ time, env }, TOD[time] || TOD.night);
+  if (MU_ENVS.has(env) && ISLAND_TOD[time]) Object.assign(o, ISLAND_TOD[time]);
+  return rain ? rainPal(o) : o;
+}
 function blendPal(a, b, t) {
   const o = { time: a.time, env: a.env };
   for (const k in a) {
@@ -2857,7 +2873,7 @@ function mapImage(g, img, p0, p1, p3, alpha) {
 /* ---------- sky layer with London landmarks ---------- */
 let skyCache = {}, vignette = null;
 function skyLayer(pal, list) {
-  const key = pal.time + '|' + pal.env + '|' + list.join(',');
+  const key = pal.time + '|' + pal.env + '|' + list.join(',') + (pal.rain ? '|rain' : '');
   if (skyCache[key]) return skyCache[key];
   const c = document.createElement('canvas');
   const cw = Math.ceil(W * 1.8), ch = Math.ceil(Math.max(60, V.hy));
@@ -2882,6 +2898,14 @@ function skyLayer(pal, list) {
     const sx = cw * 0.5, sy = ch * pal.sun, sr = clamp(ch * 0.07, 12, 30);
     drawGlow(g, [255, 190, 120], sx, sy, sr * 7, 0.55);
     g.fillStyle = 'rgba(255,226,170,0.95)'; g.beginPath(); g.arc(sx, sy, sr, 0, 7); g.fill();
+  }
+  if (pal.rain) {
+    // a low, heavy ceiling of cloud, lit from underneath by the city
+    for (let i = 0; i < 26; i++) {
+      const x = hash(i, 21) * cw, y = ch * (0.08 + hash(i, 22) * 0.62), w = cw * (0.12 + hash(i, 23) * 0.2);
+      g.fillStyle = css(mix(pal.sky[1], [120, 96, 78], 0.25 + 0.35 * (y / ch)), 0.28 + hash(i, 24) * 0.2);
+      g.beginPath(); g.ellipse(x, y, w, w * 0.1, 0, 0, 7); g.ellipse(x + w * 0.35, y - w * 0.04, w * 0.55, w * 0.08, 0, 0, 7); g.fill();
+    }
   }
   for (let i = 0; i < 9 * pal.clouds; i++) {
     const x = hash(i, 11) * cw, y = ch * (0.12 + hash(i, 12) * 0.4), w = cw * (0.08 + hash(i, 13) * 0.1);
@@ -3253,8 +3277,14 @@ function drawRoad(pal, dist, evDist) {
       ctx.fillStyle = css(wc(pal, MAT.kerb, odd ? 1.2 : 1, fg));
       quadX(ctx, a, b, -ROAD_HALF - 0.25, -ROAD_HALF); if (!env.opposite && !env.sideLane) quadX(ctx, a, b, ROAD_HALF, ROAD_HALF + 0.25);
     }
-    ctx.fillStyle = css(wc(pal, MAT.road, odd ? 1.04 : 0.98, fg));
+    ctx.fillStyle = css(wc(pal, MAT.road, (odd ? 1.04 : 0.98) * (pal.rain ? 0.78 : 1), fg));
     quadX(ctx, a, b, env.shoulder ? -LANE_W / 2 - 0.3 : -ROAD_HALF, env.sideLane ? ROAD_HALF + LANE_W : RE);
+    if (pal.rain) {
+      // wet tarmac mirrors the sky, more and more towards the horizon
+      const zm = (z0 + z1) / 2;
+      ctx.fillStyle = css(mix(pal.sky[2], [150, 130, 110], 0.3), 0.05 + 0.3 * Math.pow(zm / Z_FAR, 0.7) + (hash(k, 71) < 0.12 ? 0.06 : 0));
+      quadX(ctx, a, b, env.shoulder ? -LANE_W / 2 - 0.3 : -ROAD_HALF, env.sideLane ? ROAD_HALF + LANE_W : RE);
+    }
     if (env.twoWay && env.shoulder) { ctx.fillStyle = css(wc(pal, MAT[env.shoulder], (odd ? 1.05 : 0.97) * (hash(k, 66) < 0.2 ? 0.92 : 1), fg)); quadX(ctx, a, b, -ROAD_HALF - 0.4, -LANE_W / 2 - 0.3); }   // a dirt or sand verge people pull onto
     else if (env.twoWay) { ctx.fillStyle = css(wc(pal, MAT.bay, odd ? 1.04 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF, -LANE_W / 2 - 0.05); }   // parking bays
     if (env.busLane) { ctx.fillStyle = css(wc(pal, MAT.bus, odd ? 1.04 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF, -LANE_W / 2 - 0.1); }
@@ -3390,9 +3420,67 @@ function drawLampPools(pal, dist) {
       const zn = Math.max(V.zStart, z - 9), zf = z + 10;
       const n = G(zn), f = G(zf), xl = sd < 0 ? -(ROAD_HALF - 1.5) : env.lanes2 ? LANE_W / 2 - 0.8 : ROAD_HALF - 1.5;
       drawGlowRect(ctx, lamp, X(n, xl - 8), f.y, X(n, xl + 8), n.y + (n.y - f.y) * 0.15, 0.5 * pal.lit * (1 - fogK(z)));
+      if (pal.rain) wetStreak(lamp, xl + sd * 0.4, z, 22, 0.7, 0.55 * pal.lit * (1 - fogK(z)));
     }
   }
   ctx.globalCompositeOperation = 'source-over';
+}
+
+/* ---------- rain ---------- */
+/* a light smeared across wet tarmac: from under the light, stretching back towards you */
+function wetStreak(rgb, x, z, len, wid, a) {
+  if (z < V.zStart + 0.5 || a <= 0.01) return;
+  const n = G(Math.max(V.zStart, z - len)), f = G(z + 0.8);
+  drawGlowRect(ctx, rgb, X(n, x - wid), f.y - (n.y - f.y) * 0.08, X(n, x + wid), n.y, a);
+}
+/* tail lights (brighter when they brake) and oncoming headlights, mirrored in the road */
+function wetCarLights(R, pal) {
+  const red = [255, 44, 30], white = [255, 238, 210];
+  ctx.globalCompositeOperation = 'lighter';
+  const tail = (x, z, w, hot) => { const a = (hot ? 0.55 : 0.3) * (1 - fogK(z)); wetStreak(red, x - w * 0.36, z, 8, 0.3, a); wetStreak(red, x + w * 0.36, z, 8, 0.3, a); };
+  for (const w of R.waves) for (const c of w.cars) {
+    const z = Z_PLAYER + carRel(R, w, c);
+    if (z < 3 || z > 180 || c.hit) continue;
+    const onc = R.twoWay && c.lane === 2, parked = R.twoWay && c.lane === 0;
+    if (parked) continue;
+    const mesh = getMesh(c.type, {});
+    if (onc) { const hz = z - mesh.L, a = 0.45 * (1 - fogK(hz)); wetStreak(white, laneToX(2) - 0.6, hz, 14, 0.4, a); wetStreak(white, laneToX(2) + 0.6, hz, 14, 0.4, a); }
+    else tail(laneToX(c.lane), z, mesh.W, c.brake > 0);
+  }
+  if (R.o && !R.demo && !R.ev.cp && !R.ev.solo) { const z = Z_PLAYER + R.o.dist - R.p.dist; if (z > 3 && z < 180) tail(laneToX(R.o.x), z, 1.85, R.o.finished); }
+  for (const c of oncoming) if (!c.side && c.z > 3 && c.z < 180) {
+    const x = ROAD_HALF + 4.2 + c.lane * 3.6, hz = c.z - 4.6, a = 0.35 * (1 - fogK(hz));
+    wetStreak(white, x - 0.6, hz, 14, 0.4, a); wetStreak(white, x + 0.6, hz, 14, 0.4, a);
+  }
+  ctx.globalCompositeOperation = 'source-over';
+}
+/* spray thrown up behind the rear tyres: soft mist trailing back towards you */
+function spray(x, z, w, k) {
+  if (z < 1.5 || z > 95 || k <= 0) return;
+  const f = 1 - fogK(z), near = clamp((z - 1.5) / 8, 0.3, 1), big = Math.max(W, H);
+  for (const sd of [-1, 1]) for (let i = 0; i < 5; i++) {
+    const back = rand(0, 2.8), q = P(x + sd * w * 0.36 + rand(-0.25, 0.25), rand(0.1, 0.55) + back * 0.12, z - back);
+    const r = Math.min(q.s * rand(0.45, 0.9), big * 0.06);
+    drawGlow(ctx, [198, 206, 214], q.x, q.y, r, 0.2 * k * f * near * (1 - back / 3.4));
+  }
+}
+/* rain falling past the camera: it rushes out from the road ahead faster the faster you go */
+const rainDrops = [];
+function drawRain(R, dt) {
+  const n = Math.round(clamp(W * H / 2300, 120, 520));
+  while (rainDrops.length < n) rainDrops.push({ x: Math.random() * W, y: Math.random() * H, l: rand(0.7, 1.3), a: rand(0.14, 0.36), w: rand(0.7, 1.4) });
+  if (rainDrops.length > n) rainDrops.length = n;
+  const v = R.demo ? 25 : R.p.v, cx = V.cx, cy = V.hy - H * 0.06, k = 0.3 + v / 45, fall = H * 1.35;
+  ctx.lineCap = 'round'; ctx.strokeStyle = '#c8d3dd';
+  for (const d of rainDrops) {
+    const vx = (d.x - cx) * k, vy = (d.y - cy) * k + fall;
+    d.x += vx * dt; d.y += vy * dt;
+    if (d.y > H + 30 || d.x < -30 || d.x > W + 30) { d.x = cx + (Math.random() - 0.5) * W * 1.3; d.y = Math.random() * H * 0.6 - H * 0.12; continue; }
+    const bl = 0.026 * d.l;
+    ctx.globalAlpha = d.a; ctx.lineWidth = d.w;
+    ctx.beginPath(); ctx.moveTo(d.x, d.y); ctx.lineTo(d.x - vx * bl, d.y - vy * bl); ctx.stroke();
+  }
+  ctx.globalAlpha = 1; ctx.lineCap = 'butt';
 }
 
 /* ---------- buildings ---------- */
@@ -4167,7 +4255,7 @@ function curveAt(dist, evi) {
   return c * clamp(dist / 400, 0, 1);
 }
 function racePal(R) {
-  if (!R._pal) R._pal = palFor(R.ev.time, R.ev.env);
+  if (!R._pal) R._pal = palFor(R.ev.time, R.ev.env, R.ev.rain);
   if (R.ev.dawn) {
     const t = clamp((R.p.dist / R.ev.dist - 0.62) / 0.38, 0, 1) * 0.85 + (R.state === 'finishing' ? Math.min(0.15, R.doneT * 0.1) : 0);
     if (!R._dawnPal) R._dawnPal = palFor('dawn', R.ev.env);
@@ -4204,7 +4292,7 @@ function renderScene(R, dt) {
   ctx.save(); ctx.translate(sx, sy);
   const off = -W * 0.4 - V.curve * W * 0.12 - V.camX * 2, tilt = V.pitch * V.f;   // tilting the camera up moves the horizon down
   ctx.fillStyle = css(pal.sky[0]); ctx.fillRect(-20, -20, W + 40, V.hy + tilt + 40);
-  const sky = skyLayer(palFor(ev.time, ev.env), ev.sky || []);
+  const sky = skyLayer(palFor(ev.time, ev.env, ev.rain), ev.sky || []);
   ctx.drawImage(sky, off, V.hy + tilt - sky.height + 2);
   if (ev.dawn && R._blend > 0) { const s2 = skyLayer(R._dawnPal, ev.sky || []); ctx.globalAlpha = R._blend; ctx.drawImage(s2, off, V.hy + tilt - s2.height + 2); ctx.globalAlpha = 1; }
   if (V.hill) {
@@ -4215,6 +4303,7 @@ function renderScene(R, dt) {
   if ((ENV[pal.env] || {}).planes) drawPlane(pal, sceneT, off);
   drawRoad(pal, p.dist, R.demo ? 1e9 : ev.dist);
   drawLampPools(pal, p.dist);
+  if (pal.rain) wetCarLights(R, pal);
   drawBuildings(pal, p.dist, ev.rival);
   if (pal.lit > 0.3) {
     const zn = Z_PLAYER + P_LEN, zf = zn + 55, a = G(zn), b = G(zf);
@@ -4262,6 +4351,7 @@ function renderScene(R, dt) {
         brake: c.brake > 0 && !c.hit && !parked && !onc, route: c.route,
         look: { paint: c.color, finish: c.type === 'bus' ? 'gloss' : hash(c.lane * 7 + w.id, 3) > 0.5 ? 'metallic' : 'gloss', tint: c.type === 'cab' ? 2 : 1, rims: 'five', rimColor: '#9aa0a6' } });
       ctx.globalAlpha = 1;
+      if (pal.rain && !onc && !parked && !c.hit) spray(laneToX(c.lane), z, mesh.W, 0.7);
       // oncoming headlights, so you can see them coming down the high street
       if (onc && pal.lit > 0.3 && z > 3 && !c.hit) { const hp = P(laneToX(2), 0.7, z), r = clamp(1.3 * hp.s, 3, Math.max(W, H) * 0.07), al = 0.95 * clamp((z - 3) / 10, 0, 1) * a; ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, [255, 245, 220], hp.x - 0.6 * hp.s, hp.y, r, al); drawGlow(ctx, [255, 245, 220], hp.x + 0.6 * hp.s, hp.y, r, al); ctx.globalCompositeOperation = 'source-over'; }
     } });
@@ -4272,7 +4362,7 @@ function renderScene(R, dt) {
   }
   if (R.o && !R.demo && !R.ev.cp && !R.ev.solo) {
     const rel = R.o.dist - p.dist, z = Z_PLAYER + rel;
-    if (z > Z_PLAYER - 1 && z < Z_FAR) list.push({ z: z + 0.01, draw: () => drawRival(R, z, pal, env) });
+    if (z > Z_PLAYER - 1 && z < Z_FAR) list.push({ z: z + 0.01, draw: () => { drawRival(R, z, pal, env); if (pal.rain) spray(laneToX(R.o.x), z, 1.85, clamp(R.o.v / 40, 0, 1.3)); } });
   }
   if (R.cop && R.cop.on && !R.cop.gone && !R.demo) {
     const z = Z_PLAYER + R.cop.dist - p.dist;
@@ -4282,11 +4372,12 @@ function renderScene(R, dt) {
     const at = ghostAt(g, R.t), z = Z_PLAYER + at.dist - p.dist;
     if (z > Z_PLAYER - 1.5 && z < Z_FAR) list.push({ z: z + 0.005, draw: () => drawGhost(R, g, at, z, env) });
   }
-  list.push({ z: Z_PLAYER, draw: () => drawPlayer(R, pal, env, lampK(Z_PLAYER)) });
+  list.push({ z: Z_PLAYER, draw: () => { drawPlayer(R, pal, env, lampK(Z_PLAYER)); if (pal.rain && !R.demo) spray(laneToX(p.x), Z_PLAYER, 1.85, clamp(p.v / 40, 0, 1.4)); } });
   list.sort((a, b) => b.z - a.z);
   for (const s of list) s.draw();
   drawFx();
   ctx.restore();
+  if (pal.rain) drawRain(R, dt);
 
   if (V.boost > 0.05) {
     ctx.strokeStyle = 'rgba(200,225,255,0.5)';
@@ -4523,7 +4614,7 @@ function renderIntro(R, t, len) {
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
   ctx.font = `700 ${Math.round(12 * u + 3)}px ${FONT_M}`; ctx.fillStyle = '#f2a33a';
   const kick = ev.kind === 'drag' ? 'DRAG NIGHT · ' + (ev.rematch ? 'BET £' + fmt(ev.stake) : 'QUARTER MILE') : ev.kind === 'street' ? 'STREET RACE · ' + (ev.label || '').toUpperCase() : ev.kind === 'special' && ev.brand ? 'INVITATION' : ev.kind === 'special' ? 'STREET RACE · CHALLENGE' : ev.kind === 'slip' ? 'PINK SLIP · ' + ev.title : (ev.kind === 'essex' ? 'ESSEX ' : 'EVENT ') + ((ev.index || 0) + 1) + ' · ' + ev.title;
-  ctx.fillText(kick, tx, ty);
+  ctx.fillText(kick + (ev.rain ? ' · RAIN' : ''), tx, ty);
   // portrait
   const ps = Math.round(clamp(84 * u, 58, 110));
   if (ch) {
@@ -7490,6 +7581,7 @@ let paused = false;
 let garageTab = 'upgrades', pendingSell = null, draft = null, plateMsg = '';
 const input = { nitro: false };
 const TIME_NAMES = { day: 'Daytime', dusk: 'Dusk', night: 'Night', late: '3am', dawn: 'Dawn' };
+const timeName = ev => TIME_NAMES[ev.time] + (ev.rain ? ' · Rain' : '');
 
 /* ---------- save ---------- */
 function save(sync) {
@@ -7731,6 +7823,11 @@ const Sound = {
       const wh = c.createBiquadFilter(); wh.type = 'highpass'; wh.frequency.value = 180;
       this.wind = c.createGain(); this.wind.gain.value = 0;
       ns.connect(wl); wl.connect(wh); wh.connect(this.wind); this.wind.connect(this.master);
+      // rain on the roof and the hiss of wet tyres, only on wet nights
+      const rh = c.createBiquadFilter(); rh.type = 'highpass'; rh.frequency.value = 1400;
+      const rl = c.createBiquadFilter(); rl.type = 'lowpass'; rl.frequency.value = 7500;
+      this.rainG = c.createGain(); this.rainG.gain.value = 0;
+      ns.connect(rh); rh.connect(rl); rl.connect(this.rainG); this.rainG.connect(this.master);
       ns.start();
       this.curves = {};
     }
@@ -7920,7 +8017,7 @@ const Sound = {
     const c = this.ctx, t = c.currentTime;
     if (!race || race.wrecked || intro) this.siren(null);
     if (!race || race.wrecked) {
-      this.hiss.gain.setTargetAtTime(0, t, 0.05); this.wind.gain.setTargetAtTime(0, t, 0.1);
+      this.hiss.gain.setTargetAtTime(0, t, 0.05); this.wind.gain.setTargetAtTime(0, t, 0.1); this.rainG.gain.setTargetAtTime(0, t, 0.3);
       if (this.voices) {
         for (const V of [this.voices.me, this.voices.opp]) if (V) { V.vol.gain.setTargetAtTime(0, t, 0.08); if (V.tg) V.tg.gain.setTargetAtTime(0, t, 0.08); }
         this.idleT += 1 / 60;
@@ -7961,6 +8058,7 @@ const Sound = {
       Vs.boosting = p.boosting;
       this.hiss.gain.setTargetAtTime(p.boosting ? 0.07 : 0, t, 0.05);
       this.wind.gain.setTargetAtTime(0.1 * Math.pow(clamp(p.v / vtop, 0, 1), 2), t, 0.2);
+      this.rainG.gain.setTargetAtTime(race.ev.rain ? 0.035 + 0.035 * clamp(p.v / vtop, 0, 1) : 0, t, 0.3);
       // traffic flying past
       for (const w of race.waves) for (const car of w.cars) {
         if (car.hit) continue;
@@ -8466,7 +8564,7 @@ function newRivalCard() {
       <div><dt>Their ${ev.bike ? 'bike' : 'car'}</dt><dd>${ev.bike ? esc(ev.oppLabel) : ev.oppBhp + ' <small>bhp</small>'}</dd></div>
       <div><dt>Prize</dt><dd>${money(ev.reward)}</dd></div>
       <div><dt>Reputation</dt><dd>+${ev.rep}</dd></div>
-      <div><dt>Route</dt><dd>${(ev.dist / 1000).toFixed(1)} km <small>${TIME_NAMES[ev.time]}</small></dd></div>
+      <div><dt>Route</dt><dd>${(ev.dist / 1000).toFixed(1)} km <small>${timeName(ev)}</small></dd></div>
     </dl>
     <div class="actions"><button class="btn primary" data-act="race" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button></div>
   </div>`;
@@ -8745,7 +8843,7 @@ function essexMain(own, st) {
         <div><dt>Their car</dt><dd>${ev.oppBhp} <small>bhp</small></dd></div>
         <div><dt>Prize</dt><dd>${money(ev.reward)}${st.style ? ` <small>+${Math.round(styleBonus(st.style) * 100)}% style</small>` : ''}</dd></div>
         <div><dt>Reputation</dt><dd>+${ev.rep}</dd></div>
-        <div><dt>Route</dt><dd>${(ev.dist / 1000).toFixed(1)} km <small>${TIME_NAMES[ev.time]}</small></dd></div>
+        <div><dt>Route</dt><dd>${(ev.dist / 1000).toFixed(1)} km <small>${timeName(ev)}</small></dd></div>
       </dl>
       ${recordLine('essex:' + ev.rival, 'tip rec')}
       ${damageWarn(own)}
@@ -8818,7 +8916,7 @@ function muMain(own, st) {
         <div><dt>Their car</dt><dd>${ev.oppBhp} <small>bhp</small></dd></div>
         <div><dt>Prize</dt><dd>${money(ev.reward)}${st.style ? ` <small>+${Math.round(styleBonus(st.style) * 100)}% style</small>` : ''}</dd></div>
         <div><dt>Road</dt><dd>${ev.twoWay ? 'One lane each way' : ev.lanes === 2 ? 'Two lanes' : 'Three lanes'}</dd></div>
-        <div><dt>Route</dt><dd>${(ev.dist / 1000).toFixed(1)} km <small>${TIME_NAMES[ev.time]}</small></dd></div>
+        <div><dt>Route</dt><dd>${(ev.dist / 1000).toFixed(1)} km <small>${timeName(ev)}</small></dd></div>
       </dl>
       ${recordLine('mu:' + ev.rival, 'tip rec')}
       ${damageWarn(own)}
@@ -8936,7 +9034,7 @@ function goHub(page, sub) {
         <div><dt>Their ${ev.bike ? 'bike' : 'car'}</dt><dd>${ev.bike ? esc(ev.oppLabel) : ev.oppBhp + ' <small>bhp</small>'}</dd></div>
         <div><dt>Prize</dt><dd>${money(ev.reward)}${st.style ? ` <small>+${Math.round(styleBonus(st.style) * 100)}% style</small>` : ''}</dd></div>
         <div><dt>Reputation</dt><dd>+${ev.rep}</dd></div>
-        <div><dt>Route</dt><dd>${(ev.dist / 1000).toFixed(1)} km <small>${TIME_NAMES[ev.time]}</small></dd></div>
+        <div><dt>Route</dt><dd>${(ev.dist / 1000).toFixed(1)} km <small>${timeName(ev)}</small></dd></div>
       </dl>
       ${recordLine('career:' + ev.rival, 'tip rec')}
       ${warn}
@@ -8944,6 +9042,7 @@ function goHub(page, sub) {
         <button class="btn primary big" data-act="race" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button>
       </div>
       <p class="tip">${ev.bike ? `A superbike weighs a fraction of your car, so it will pull away off the line. You need a fast car, clean driving and every drop of nitro to reel it in.` : `Your ${st.bhp} bhp against ${ev.oppBhp} bhp. ${tip}`}</p>
+      ${ev.rain ? `<p class="tip warn rain">Rain all night. On a wet road lane changes take longer and the spray hides the traffic, so move early. ${esc(CHARACTERS[ev.rival].name.split(' ')[0])} will slip up more in the wet too.</p>` : ''}
       ${rivalCarStrip(ev.oppLook, isKing ? 'Black Nissan GT-R' : CHARACTERS[ev.rival].car)}
       <p class="story">${esc(ev.intro)}</p>
     </article>`;
@@ -9196,7 +9295,7 @@ function goLadder() {
     if (ev.chapter !== chapter) { head = `<p class="chapter">${ev.chapter}</p>`; chapter = ev.chapter; }
     return `${head}<div class="rung ${st}"><div class="ic">${ic}</div>
       <canvas class="portrait sm" data-portrait="${ev.rival}" data-hidden="${hidden ? 1 : 0}" width="44" height="44"></canvas>
-      <div><h4><span class="num">${i + 1}</span> ${ev.title}</h4><p>${hidden ? 'The King' : esc(CHARACTERS[ev.rival].name)} · ${esc(CHARACTERS[ev.rival].car)}${ev.bike ? '' : ' · ' + ev.oppBhp + ' bhp'}</p><p class="where">${esc(ev.area)} · ${esc(ev.road)}</p></div>
+      <div><h4><span class="num">${i + 1}</span> ${ev.title}</h4><p>${hidden ? 'The King' : esc(CHARACTERS[ev.rival].name)} · ${esc(CHARACTERS[ev.rival].car)}${ev.bike ? '' : ' · ' + ev.oppBhp + ' bhp'}</p><p class="where">${esc(ev.area)} · ${esc(ev.road)}${ev.rain ? ' · <b class="wet">Rain</b>' : ''}</p></div>
       <div class="pz">${money(ev.reward)}<br>+${ev.rep} rep${S.completed[i] ? '<br>' + starsHtml((S.stars || {})['career:' + ev.rival]) : ''}</div></div>`;
   }).join('<div class="down" aria-hidden="true">↓</div>');
   // Essex: shows once the crown is won, locked until Ishaaq is beaten
@@ -9483,7 +9582,7 @@ function processEvents() {
         const ev = R.ev;
         const sub = e.n === 3 ? (ev.area + ' · ' + ev.road).toUpperCase()
           : e.n === 1 && S.stats.races < 2 ? 'LEFT / RIGHT TO CHANGE LANE   HOLD SPACE FOR NITRO'
-          : ev.cp ? 'HIT EVERY CHECKPOINT' : e.n === 2 && S.stats.races < 4 ? 'GOLD GATES PAY CASH   HIT THEM IN A ROW FOR MORE' : 'VS  ' + ev.oppName.toUpperCase();
+          : ev.cp ? 'HIT EVERY CHECKPOINT' : ev.rain && e.n === 2 ? 'WET ROAD   MOVE EARLY, LANE CHANGES TAKE LONGER' : e.n === 2 && S.stats.races < 4 ? 'GOLD GATES PAY CASH   HIT THEM IN A ROW FOR MORE' : 'VS  ' + ev.oppName.toUpperCase();
         showBanner(String(e.n), sub, 0.95, '#e9e4d8'); Sound.tone(440, 0.14, 0.14); break;
       }
       case 'dragLight': if (e.n >= 2) Sound.tone(e.n === 5 ? 880 : 520, e.n === 5 ? 0.3 : 0.1, 0.12); break;
