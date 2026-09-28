@@ -378,6 +378,7 @@ canvas.spin.big { height: clamp(140px, 30vh, 230px); }
 .bill { display: flex; flex-direction: column; gap: 4px; font-family: var(--fm); font-size: 13px; padding: 10px 12px; background: #0a1013; border: 1px solid var(--line); }
 .bill div { display: flex; justify-content: space-between; gap: 10px; }
 .bill .total { border-top: 1px solid var(--line-2); padding-top: 6px; margin-top: 2px; font-size: 15px; color: var(--sodium); }
+.plate.us { background: #f1f1ec; color: #1b2c5e; }   /* Georgia plates: white, navy letters */
 .plate-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .plate-input { font-family: var(--fp); font-weight: 700; font-size: 22px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--plate); color: #111; border: 2px solid #111; border-radius: 4px; padding: 6px 12px; width: 190px; max-width: 100%; }
 .plate-input:focus-visible { outline: 2px solid var(--sodium); outline-offset: 2px; }
@@ -696,7 +697,7 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
       <div class="help">
         <section>
           <h3>Getting around</h3>
-          <p>The menu bar has five buttons: Race for your next story race, Street for quick races and people who want a race, Garage, Dealership and Map. On a phone it sits at the bottom of the screen. Once Essex opens, London, Essex and Mauritius sit at the top: tap one to go there. Island cars stay on the island, so flying there or back swaps the car you race.</p>
+          <p>The menu bar has five buttons: Race for your next story race, Street for quick races and people who want a race, Garage, Dealership and Map. On a phone it sits at the bottom of the screen. Once Essex opens, the places you can race sit at the top: London, Essex, then Mauritius and Atlanta. Tap one to go there. Island cars stay on the island and American cars stay in Atlanta, so flying swaps the car you race.</p>
         </section>
         <section>
           <h3>Controls</h3>
@@ -751,6 +752,10 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         <section>
           <h3>Essex and pink slips</h3>
           <p>Take the crown and beat Ishaaq, and the border opens. Ishaaq calls you out once you have beaten Tush. Essex has eight rivals, faster cars and pink slips: once you have beaten someone, they will race you for their car if you put yours up. Win and it is yours. Lose and they keep the car you raced.</p>
+        </section>
+        <section>
+          <h3>Mauritius and Atlanta</h3>
+          <p>Beat the Duke and Mauritius opens: eight races on island roads, starting again in your cousin's Picanto. Beat Boss and Atlanta opens: eight races from the airport to the Downtown Connector in American cars, starting again in Dre's Mustang. Each win there opens the next car in that showroom.</p>
         </section>
       </div>
       <button class="btn" data-act="title"><span>Back</span></button>
@@ -883,6 +888,31 @@ const CARS = [
   { id: 'gtrx', name: 'Nissan GT-R (Island build)', price: 40000, bhp: 1050, handling: 9.9, rep: 0, pot: 1.4, model: 'gtr', chapter: 'mu', muUnlock: 7, built: 3,
     blurb: 'Your GT-R, shipped to Port Louis and rebuilt in Plaine Lauzun to beat Boss. Over a thousand horsepower, a wing like a table, canards, a splitter you could stand on and arches out to here.',
     look: { paint: '#f2f2ee', finish: 'gloss', rims: 'fan', rimColor: '#8c5f32', tint: 3, spoiler: 'ta', kit: 2, stance: 2, stripes: 'mu', stripeColor: '#c8161d', glow: '#ff3355', smoked: false, plate: 'GTR 230' } },
+  // Atlanta: American cars that stay in Atlanta. Dre leaves you his Mustang at the airport; each Atlanta win opens the next car.
+  { id: 'mustang', name: 'Ford Mustang GT', price: 0, bhp: 460, handling: 7.2, rep: 0, pot: 0.9, s1: 0.9, model: 'mustang', chapter: 'atl', atlUnlock: 0,
+    blurb: 'Dre\'s Mustang. A five litre V8 with no turbos, a lot of noise and plenty of room for more power.',
+    look: { paint: '#1f4fb5', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: 'DRE 50' } },
+  { id: 'camaro', name: 'Chevrolet Camaro ZL1', price: 32000, bhp: 650, handling: 8.0, rep: 0, pot: 0.8, model: 'camaro', chapter: 'atl', atlUnlock: 1,
+    blurb: 'A supercharged 6.2 V8 in a car built for the track. The windows are slits and the grille is mostly hole.',
+    look: { paint: '#e8761e', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: 'ZL1 CHV' } },
+  { id: 'trackhawk', name: 'Jeep Grand Cherokee Trackhawk', price: 38000, bhp: 707, handling: 5.9, rep: 0, pot: 0.75, model: 'trackhawk', chapter: 'atl', atlUnlock: 2,
+    blurb: 'A family SUV with a Hellcat engine and four wheel drive. It leaves the lights like nothing else and turns like a boat.',
+    look: { paint: '#3d434b', finish: 'metallic', rims: 'split', rimColor: '#1c1e21', tint: 3, spoiler: 'none', kit: 0, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: 'TRK HWK' } },
+  { id: 'charger', name: 'Dodge Charger SRT Hellcat', price: 44000, bhp: 707, handling: 6.6, rep: 0, pot: 1.1, model: 'charger', chapter: 'atl', atlUnlock: 3,
+    blurb: 'Four doors, a supercharged 6.2 HEMI and a whine you can hear from the next street. It takes boost like a champ.',
+    look: { paint: '#5b2a8c', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: 'HEL CAT' } },
+  { id: 'challenger', name: 'Dodge Challenger SRT Hellcat Redeye', price: 52000, bhp: 797, handling: 6.4, rep: 0, pot: 1.1, model: 'challenger', chapter: 'atl', atlUnlock: 4,
+    blurb: 'The big two door with the Demon\'s supercharger. Heavy, loud and very, very fast in a straight line.',
+    look: { paint: '#c9252c', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: 'REDEYE' } },
+  { id: 'gt500', name: 'Ford Mustang Shelby GT500', price: 60000, bhp: 760, handling: 8.4, rep: 0, pot: 1.5, model: 'gt500', chapter: 'atl', atlUnlock: 5,
+    blurb: 'The most powerful Ford ever sold. A supercharged 5.2 V8, a seven speed twin clutch and the chassis to use it.',
+    look: { paint: '#eeeeea', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 0, stripes: 'racing', stripeColor: '#1f4fb5', glow: 'none', smoked: false, plate: 'SHELBY' } },
+  { id: 'corvette', name: 'Chevrolet Corvette Z06', price: 66000, bhp: 670, handling: 9.6, rep: 0, pot: 1.7, model: 'corvette', chapter: 'atl', atlUnlock: 6,
+    blurb: 'Mid engined, with a flat plane crank V8 that screams to 8,600 rpm. Less power than the Dodges, far more grip, and it takes all the tuning you can give it.',
+    look: { paint: '#f2c418', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, spoiler: 'none', kit: 0, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: 'Z06 C8' } },
+  { id: 'demon', name: 'Dodge Challenger SRT Demon 170', price: 95000, bhp: 1025, handling: 6.8, rep: 0, pot: 1.0, model: 'demon', chapter: 'atl', atlUnlock: 7,
+    blurb: 'Over a thousand horsepower on E85, straight from the factory. Built for the drag strip, and the only thing in Atlanta that can live with the Deacon.',
+    look: { paint: '#eeeeea', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'none', kit: 0, stance: 0, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: 'DMN 170' } },
   // cars you can only win in a pink slip race. They come the way their owner raced them.
   { id: 'golfr', name: 'VW Golf R', price: 9000, bhp: 320, handling: 8.2, rep: 999, pot: 0.6, model: 'golf', slip: 'tommy', slipUp: 3,
     look: { paint: '#1e4fa8', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#4aa8ff', smoked: false, plate: 'TH19 GTR' } },
@@ -1335,6 +1365,55 @@ const CHARACTERS = {
     paidUp: 'Keep the change.',
     tookIt: 'Nine seconds. As always.',
     face: { skin: '#d9b08a', hair: 'slick', hairCol: '#9a9a96', facial: 'goatee', facialCol: '#8d8d88', mouth: 'smirk', top: '#101012', chain: '#c9ccd0', bg: '#141414' } },
+  // Atlanta
+  tay: { name: 'Taylor "Tay" Brooks', from: 'College Park', car: 'Chevrolet Camaro SS',
+    bio: 'Loads bags on the ramp at Hartsfield-Jackson and races I-85 on the way home. Knows every new face that comes off a plane.',
+    pre: 'Welcome to the A. Hope you brought something quicker than a rental.',
+    youWin: 'Alright, London. Kiana is going to want a look at you on the Westside.',
+    youLose: 'Take that Mustang back to Dre.',
+    face: { skin: '#5c3a26', hair: 'fade', hairCol: '#120d0a', mouth: 'grin', top: '#c9252c', chain: '#c9ccd0', bg: '#b3163a' } },
+  kiana: { name: 'Kiana Wells', from: 'West End', car: 'Dodge Charger Scat Pack',
+    bio: 'Paints murals on the Westside warehouses. Her Charger is wrapped in one of them, and she races it down Marietta Street after dark.',
+    pre: 'The Westside is my canvas. Try not to scratch it.',
+    youWin: 'Clean. DeShawn runs Peachtree, and he is not as nice as me.',
+    youLose: 'Come back when you can keep up.',
+    face: { skin: '#6a432d', hair: 'bun', hairCol: '#1b1310', lashes: true, lips: '#7a3a34', hoops: '#e2b650', top: '#12a3a8', bg: '#5b2a8c' } },
+  deshawn: { name: 'DeShawn Carter', from: 'Midtown', car: 'Jeep Grand Cherokee Trackhawk',
+    bio: 'Owns a detailing studio off Peachtree Street and a Trackhawk that launches like a rocket. Sits higher than everyone on the road and likes it that way.',
+    pre: 'Seven hundred horses and four wheel drive. Good luck.',
+    youWin: 'Respect. Brooke up in Buckhead has heard about you. She does not lose.',
+    youLose: 'Peachtree is mine.',
+    face: { skin: '#4f3222', hair: 'crop', hairCol: '#0f0c0a', facial: 'shortbeard', facialCol: '#0f0c0a', top: '#15171b', chain: '#e2b650', bg: '#1c4f96' } },
+  brooke: { name: 'Brooke Whitfield', from: 'Buckhead', car: 'Lamborghini Huracán EVO',
+    bio: 'Sells houses in Buckhead that cost more than the street they are on. Races her white Huracán down Peachtree Road once the bars close.',
+    pre: 'You do know this is Buckhead, right?',
+    youWin: 'Fine. Big Earl wants you on the Perimeter, and he is big.',
+    youLose: 'Buckhead is not for everyone.',
+    face: { skin: '#f0cdb0', hair: 'long', hairCol: '#d6b06a', browCol: '#8a6a3a', lashes: true, lips: '#b8626c', earrings: '#e2b650', top: '#e0508f', bg: '#8a5a2b' } },
+  earl: { name: 'Earl "Big Earl" Pruitt', from: 'Lithonia', car: 'Ford F-150 Raptor R',
+    bio: 'Hauls freight round the Perimeter all week, then races it at the weekend in a truck with a supercharged V8 and tyres like tractor wheels.',
+    pre: 'I drive the 285 every day of my life. You drive it once.',
+    youWin: 'Well I will be. Jolene is waiting out by the mountain.',
+    youLose: 'Stay off my Perimeter, son.',
+    face: { skin: '#e8bf9f', hair: 'crop', hairCol: '#6a4a2a', facial: 'fullbeard', facialCol: '#6a4a2a', hat: 'cap', hatCol: '#1e4d2b', top: '#8c1d1d', bg: '#2f6f4f' } },
+  jolene: { name: 'Jolene Hart', from: 'Stone Mountain', car: 'Dodge Challenger SRT Hellcat',
+    bio: 'Grew up in the shadow of the mountain and learnt to drive on US 78 in her daddy\'s Challenger. It is hers now, and it is a lot quicker.',
+    pre: 'The mountain has seen plenty of folks come and go.',
+    youWin: 'Well now. Nino is waiting at Spaghetti Junction. Try not to get lost.',
+    youLose: 'Head on home, sugar.',
+    face: { skin: '#f0cdb0', hair: 'long', hairCol: '#8a3a1a', browCol: '#6a2a14', lashes: true, lips: '#b8323c', top: '#15171b', bg: '#c9252c' } },
+  nino: { name: 'Nino Castillo', from: 'Doraville', car: 'Ford Mustang Shelby GT500',
+    bio: 'Runs a tuning shop on Buford Highway. Every car he builds makes more power than the one before, and his own GT500 makes the most.',
+    pre: 'Five levels of road and one way out. Keep up.',
+    youWin: 'Ay. The Deacon has heard. He only races at dawn, on the Connector.',
+    youLose: 'Lost in the junction, like everybody.',
+    face: { skin: '#c99a72', hair: 'slick', hairCol: '#141210', facial: 'goatee', facialCol: '#141210', top: '#1f4fb5', chain: '#e2b650', bg: '#27408a' } },
+  deacon: { name: 'The Deacon', from: 'Downtown', car: 'Dodge Challenger SRT Demon 170', real: 'Elijah Grant',
+    bio: 'Nobody has beaten him on the Downtown Connector in twenty years. A black Demon 170 on race fuel, and he only races as the sun comes up over the city.',
+    pre: 'Twenty years. You are not the first to try.',
+    youWin: 'Twenty years and nobody. The A is yours now. Look after it.',
+    youLose: 'The sun came up, and you were still behind me.',
+    face: { skin: '#3f281c', hair: 'bald', facial: 'beard', facialCol: '#c8c8c4', glasses: 'thin', top: '#101012', chain: '#e2b650', bg: '#3a3f46' } },
   // Adam, owner of Ride3
   ride3: { name: 'Adam', from: 'Ride3', car: 'Kawasaki Ninja H2R',
     bio: 'Owner of Ride3 and first out on every ride. His H2R is supercharged, over 300 horsepower and barely 200 kilos. Nobody on four wheels has beaten him yet.',
@@ -1598,27 +1677,96 @@ const MU = [
     win: 'The whole island saw it. Boss handed you the keys to Le Morne.', oppLook: { engine: 'm3g80', model: 'm3g80', paint: '#1d6b4a', finish: 'metallic', rims: 'split', rimColor: '#1c1e21', tint: 3, spoiler: 'gt', kit: 1, stance: 2, plate: 'BOSS 1' },
     diff: { skill: 1.254, inc: [18, 24] } },
 ];
-const muOpen = S => !!(S && S.essex && S.essex.done);
-const muWins = S => ((S && S.mu && S.mu.completed) || []).filter(Boolean).length;
-const nextMuIndex = S => { const c = (S.mu && S.mu.completed) || []; const i = MU.findIndex((e, k) => !c[k]); return i < 0 ? MU.length : i; };
-const islandCar = id => { const c = carById(id); return !!(c && c.chapter === 'mu'); };
-const areaList = ch => ch === 'essex' ? ESSEX : ch === 'mu' ? MU : EVENTS;
-/* the first time the island opens: your cousin lends you his Picanto */
-function openIsland(S) {
-  if (!S.mu) S.mu = { completed: MU.map(() => false), done: false, cur: 'picanto', home: null };
-  if (!S.owned.picanto) S.owned.picanto = { up: {}, damage: 0, spent: 0, look: stockLook('picanto') };
-  return S.mu;
+/* ---------- Atlanta: opens once Mauritius is done. American cars only, and they stay in Atlanta.
+   Interstates three and four lanes wide, one city street with a lane each way, and the Deacon at dawn on the Connector. ---------- */
+const ATL = [
+  { title: 'ARRIVALS', chapter: 'Atlanta', rival: 'tay', need: 'mustang', oppBhp: 430, reward: 12000, rep: 2, dist: 5600, d: 0.3,
+    area: 'College Park', road: 'I-85 north from the airport', time: 'night', env: 'atlair', sky: ['atltower', 'skyline'], map: [-84.45, 33.64],
+    signs: [['i', '85', 'Atlanta', 'Downtown'], ['city', 'City of College Park'], ['i', '285', 'Macon', 'Augusta'], ['i', '85', 'Montgomery', 'Airport']],
+    intro: 'Dre left his Mustang in the cell phone lot with the keys on the back tyre. Before you are off the airport road Tay Brooks pulls up next to you in a Camaro SS. Three lanes of I-85, planes coming in low over the road, all the way to the city.',
+    win: 'The A has heard about you. Kiana wants you on the Westside.', oppLook: { model: 'camaro', paint: '#c9252c', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, stance: 1, plate: 'TAY 85' },
+    diff: { skill: 1.11, inc: [12, 16] } },
+  { title: 'WESTSIDE', chapter: 'Atlanta', rival: 'kiana', need: 'mustang', oppBhp: 540, reward: 14000, rep: 2, dist: 5800, d: 0.4,
+    area: 'Westside', road: 'Marietta Street', time: 'late', env: 'westside', twoWay: true, sky: ['skyline', 'mbstadium'], map: [-84.425, 33.785],
+    signs: [['city', 'City of Atlanta'], ['ga', '9', 'Marietta St', 'Downtown'], ['city', 'Westside Arts District'], ['i', '75', 'Chattanooga', 'Marietta']],
+    intro: 'Warehouses, rail yards and murals the size of buildings. Kiana Wells races Marietta Street with one lane each way, parked cars down one side and headlights coming at you on the other.',
+    win: 'The Westside is yours. DeShawn is waiting on Peachtree.', oppLook: { model: 'charger', paint: '#12a3a8', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 2, stance: 1, stripes: 'side', stripeColor: '#e0508f', plate: 'KIA 404' },
+    diff: { skill: 1.07, inc: [13, 17] } },
+  { title: 'PEACHTREE', chapter: 'Atlanta', rival: 'deshawn', need: 'camaro', oppBhp: 690, reward: 16000, rep: 3, dist: 6000, d: 0.5,
+    area: 'Midtown', road: 'Peachtree Street', time: 'night', env: 'midtown', sky: ['midtown', 'boa', 'plaza191'], map: [-84.383, 33.787],
+    signs: [['city', 'Midtown Atlanta'], ['ga', '9', 'Peachtree St', 'Buckhead'], ['i', '85', 'Greenville', 'Downtown'], ['city', 'Fox Theatre']],
+    intro: 'Glass towers all the way up Peachtree Street, the Fox Theatre lit up and the bars emptying out. DeShawn Carter\'s Trackhawk sits a foot above everything else and gets off the line like it was fired.',
+    win: 'Peachtree is yours. Brooke wants you up in Buckhead.', oppLook: { model: 'trackhawk', paint: '#101113', finish: 'gloss', rims: 'split', rimColor: '#1c1e21', tint: 3, stance: 1, plate: 'DSHAWN' },
+    diff: { skill: 1.22, inc: [14, 18] } },
+  { title: 'BUCKHEAD', chapter: 'Atlanta', rival: 'brooke', need: 'trackhawk', oppBhp: 770, reward: 18000, rep: 3, dist: 6200, d: 0.55,
+    area: 'Buckhead', road: 'Peachtree Road', time: 'late', env: 'buckhead', sky: ['buckhead', 'midtown'], map: [-84.378, 33.846],
+    signs: [['city', 'Buckhead Village'], ['ga', '141', 'Peachtree Rd', 'Lenox'], ['ga', '400', 'Alpharetta', 'Cumming'], ['city', 'City of Atlanta']],
+    intro: 'Designer shops, glass towers and valet stands, all closed for the night. Brooke Whitfield races Peachtree Road in a white Huracán and does not think much of anything you can buy in this town.',
+    win: 'Buckhead went quiet. Big Earl is waiting on the Perimeter.', oppLook: { model: 'huracan', paint: '#ececec', finish: 'pearl', rims: 'five', rimColor: '#c9a23a', tint: 2, spoiler: 'gt', stance: 2, plate: 'BRKE 1' },
+    diff: { skill: 1.18, inc: [15, 19] } },
+  { title: 'THE PERIMETER', chapter: 'Atlanta', rival: 'earl', need: 'charger', oppBhp: 860, reward: 20000, rep: 4, dist: 7000, d: 0.62,
+    area: 'Tucker', road: 'I-285, the Perimeter', time: 'dusk', env: 'perimeter', sky: ['skyline', 'stonemtn'], map: [-84.25, 33.86],
+    signs: [['i', '285', 'Chattanooga', 'Greenville'], ['city', 'DeKalb County'], ['us', '78', 'Stone Mountain', 'Snellville'], ['i', '285', 'Augusta', 'Macon']],
+    intro: 'Sixty four miles of interstate round the whole city, pine woods and sound walls and trucks all day long. Big Earl drives it for a living. His Raptor has a supercharged V8 and he knows every bump.',
+    win: 'The Perimeter is yours. Jolene is waiting out at Stone Mountain.', oppLook: { model: 'raptor', paint: '#1e4d2b', finish: 'matte', rims: 'five', rimColor: '#1c1e21', tint: 2, plate: 'BIG EARL' },
+    diff: { skill: 1.14, inc: [16, 20] } },
+  { title: 'STONE MOUNTAIN', chapter: 'Atlanta', rival: 'jolene', need: 'challenger', oppBhp: 940, reward: 23000, rep: 4, dist: 6800, d: 0.66, hill: [1200, 2300, 3100, 4400, 24],
+    area: 'Stone Mountain', road: 'US 78 Stone Mountain Freeway', time: 'day', env: 'stonemtn', sky: ['stonemtn'], map: [-84.15, 33.81],
+    signs: [['us', '78', 'Stone Mountain', 'Athens'], ['city', 'City of Stone Mountain'], ['i', '285', 'Atlanta', 'Chattanooga'], ['us', '78', 'Snellville', 'Park Entrance']],
+    intro: 'The freeway runs out through the pines to the biggest lump of granite you will ever see, rising right out of the trees. Jolene Hart learnt to drive out here. A long climb, a long drop and a red Hellcat.',
+    win: 'The mountain is yours. Nino is waiting at Spaghetti Junction.', oppLook: { model: 'challenger', paint: '#c9252c', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 2, stance: 1, stripes: 'racing', stripeColor: '#15171b', plate: 'JOLENE' },
+    diff: { skill: 1.165, inc: [17, 21] } },
+  { title: 'SPAGHETTI JUNCTION', chapter: 'Atlanta', rival: 'nino', need: 'gt500', oppBhp: 1000, reward: 26000, rep: 5, dist: 6600, d: 0.72,
+    area: 'Doraville', road: 'I-85 through the Tom Moreland Interchange', time: 'night', env: 'junction', sky: ['skyline', 'midtown'], map: [-84.26, 33.9],
+    signs: [['i', '85', 'Greenville', 'Atlanta'], ['i', '285', 'Chattanooga', 'Augusta'], ['city', 'City of Doraville'], ['ga', '141', 'Peachtree Ind Blvd', 'Chamblee']],
+    intro: 'Five levels of ramps stacked on top of each other where I-85 meets the Perimeter, lit up orange all night. Nino Castillo builds engines on Buford Highway and his GT500 is the best thing he has ever made.',
+    win: 'The junction is yours. The Deacon has sent word: the Connector, at dawn.', oppLook: { model: 'gt500', paint: '#15171b', finish: 'matte', rims: 'split', rimColor: '#c9a23a', tint: 3, spoiler: 'gt', kit: 1, stance: 2, stripes: 'racing', stripeColor: '#c9a23a', plate: 'NINO 5' },
+    diff: { skill: 1.14, inc: [18, 22] } },
+  { title: 'THE CONNECTOR', chapter: 'Atlanta', rival: 'deacon', need: 'demon', oppBhp: 1150, reward: 40000, rep: 8, dist: 7800, d: 0.8, lanes: 4, dawn: true,
+    area: 'Downtown', road: 'I-75/85 Downtown Connector', time: 'late', env: 'connector', sky: ['boa', 'westin', 'plaza191', 'capitol', 'mbstadium', 'midtown'], map: [-84.39, 33.748],
+    signs: [['i', '75', 'Chattanooga', 'Macon'], ['i', '85', 'Greenville', 'Montgomery'], ['city', 'City of Atlanta'], ['i', '20', 'Birmingham', 'Augusta']],
+    intro: 'Four lanes each way straight through the middle of the city, towers on both sides and the Capitol\'s gold dome catching the first light. The Deacon has not lost here in twenty years. His Demon is black, runs on race fuel and makes more power than anything you have raced.',
+    win: 'The whole city saw it. The Deacon handed you the keys to the A.', oppLook: { model: 'demon', paint: '#101113', finish: 'gloss', rims: 'five', rimColor: '#1c1e21', tint: 3, stance: 1, plate: 'DEACON' },
+    diff: { skill: 1.12, inc: [20, 26] } },
+];
+
+/* ---------- away chapters: Mauritius and Atlanta. Each has its own cars, which stay there,
+   and you start again in a car somebody lends you. ---------- */
+const REGIONS = {
+  mu: { list: MU, name: 'Mauritius', start: 'picanto', unlock: 'muUnlock', open: S => !!(S && S.essex && S.essex.done) },
+  atl: { list: ATL, name: 'Atlanta', start: 'mustang', unlock: 'atlUnlock', open: S => !!(S && S.mu && S.mu.done) },
+};
+const regionOf = id => { const c = carById(id); return c && REGIONS[c.chapter] ? c.chapter : null; };
+const regionOpen = (S, r) => !!REGIONS[r] && REGIONS[r].open(S);
+const regionWins = (S, r) => ((S && S[r] && S[r].completed) || []).filter(Boolean).length;
+const nextRegionIndex = (S, r) => { const L = REGIONS[r].list, c = (S[r] && S[r].completed) || []; const i = L.findIndex((e, k) => !c[k]); return i < 0 ? L.length : i; };
+/* the first time a place opens: the car somebody lends you */
+function openRegion(S, r) {
+  const G = REGIONS[r];
+  if (!S[r]) S[r] = { completed: G.list.map(() => false), done: false, cur: G.start };
+  if (!S.owned[G.start]) S.owned[G.start] = { up: {}, damage: 0, spent: 0, look: stockLook(G.start) };
+  return S[r];
 }
-/* island cars stay on the island: switching between London/Essex and Mauritius swaps which car you race */
-function goIsland(S, on) {
-  if (!muOpen(S)) return;
-  openIsland(S);
-  if (on && !islandCar(S.current)) { S.mu.home = S.current; S.current = S.owned[S.mu.cur] ? S.mu.cur : 'picanto'; }
-  else if (!on && islandCar(S.current)) {
-    S.mu.cur = S.current;
-    S.current = S.owned[S.mu.home] && !islandCar(S.mu.home) ? S.mu.home : Object.keys(S.owned).find(id => !islandCar(id)) || S.current;
-  }
+/* go somewhere: r is 'mu' or 'atl', or null for home (London and Essex). The cars stay where they belong,
+   so going somewhere swaps the car you race for the one you last raced there */
+function goRegion(S, r) {
+  const from = regionOf(S.current);
+  if (from === (r || null)) return;
+  if (r && !regionOpen(S, r)) return;
+  if (from) openRegion(S, from).cur = S.current; else S.home = S.current;
+  if (r) { const st = openRegion(S, r); S.current = S.owned[st.cur] && regionOf(st.cur) === r ? st.cur : REGIONS[r].start; }
+  else S.current = S.owned[S.home] && !regionOf(S.home) ? S.home : Object.keys(S.owned).find(id => !regionOf(id)) || S.current;
 }
+const muOpen = S => regionOpen(S, 'mu');
+const muWins = S => regionWins(S, 'mu');
+const nextMuIndex = S => nextRegionIndex(S, 'mu');
+const islandCar = id => regionOf(id) === 'mu';
+const atlOpen = S => regionOpen(S, 'atl');
+const atlWins = S => regionWins(S, 'atl');
+const nextAtlIndex = S => nextRegionIndex(S, 'atl');
+const areaList = ch => ch === 'essex' ? ESSEX : ch === 'mu' ? MU : ch === 'atl' ? ATL : EVENTS;
+const openIsland = S => openRegion(S, 'mu');
+function goIsland(S, on) { if (muOpen(S)) goRegion(S, on ? 'mu' : null); }
 
 /* ---------- Mauritius drag nights ----------
    The old airport road at Plaine Magnien: a straight quarter mile, side by side, no traffic. Launch on the green light,
@@ -1786,14 +1934,17 @@ function dailyDate(d) {
   catch (e) { return (d || new Date()).toISOString().slice(0, 10); }
 }
 const DAILY_MU_FROM = '2026-09-28', DAILY_MU_CARS = [['picanto', 3], ['hilux', 3], ['evo9', 2], ['a110', 2], ['m3g80', 1]];
+const DAILY_ATL_FROM = '2026-10-01', DAILY_ATL_CARS = [['mustang', 3], ['camaro', 2], ['charger', 2], ['corvette', 1], ['gt500', 1]];
 function dailyFor(date) {
-  const island = date >= DAILY_MU_FROM;
-  const r = seededRng(hashStr('daily|' + date)), pool = island ? EVENTS.concat(ESSEX, MU) : EVENTS.concat(ESSEX), cars = island ? DAILY_CARS.concat(DAILY_MU_CARS) : DAILY_CARS;
+  const island = date >= DAILY_MU_FROM, atl = date >= DAILY_ATL_FROM;
+  const r = seededRng(hashStr('daily|' + date)), pool = atl ? EVENTS.concat(ESSEX, MU, ATL) : island ? EVENTS.concat(ESSEX, MU) : EVENTS.concat(ESSEX);
+  const cars = atl ? DAILY_CARS.concat(DAILY_MU_CARS, DAILY_ATL_CARS) : island ? DAILY_CARS.concat(DAILY_MU_CARS) : DAILY_CARS;
   const area = Math.floor(r() * pool.length), pickCar = cars[Math.floor(r() * cars.length)];
   const up = {}; for (const u of UPGRADES) up[u.id] = pickCar[1];
-  const ch = area >= EVENTS.length + ESSEX.length ? 'mu' : area >= EVENTS.length ? 'essex' : 'london';
+  const e2 = EVENTS.length + ESSEX.length, e3 = e2 + MU.length;
+  const ch = area >= e3 ? 'atl' : area >= e2 ? 'mu' : area >= EVENTS.length ? 'essex' : 'london';
   // idx: where the route sits in its own list. Before the island joined, Essex dailies took area % 8 (kept so old dailies do not change)
-  const idx = island ? (ch === 'mu' ? area - EVENTS.length - ESSEX.length : ch === 'essex' ? area - EVENTS.length : area) : area % areaList(ch).length;
+  const idx = island ? (ch === 'atl' ? area - e3 : ch === 'mu' ? area - e2 : ch === 'essex' ? area - EVENTS.length : area) : area % areaList(ch).length;
   return { date, area: area % pool.length, idx, ch, car: pickCar[0], lvl: pickCar[1], up,
     time: ['dusk', 'night', 'late', 'day', 'night'][Math.floor(r() * 5)], dist: 4000 + Math.floor(r() * 21) * 100, d: 0.45 + r() * 0.45 };
 }
@@ -1852,14 +2003,29 @@ const MU_CARS = [
   { name: 'Alpine A110', lo: 250, hi: 380, model: 'a110' }, { name: 'BMW M3 (E92)', lo: 400, hi: 560, model: 'm3' }, { name: 'Mercedes C63', lo: 450, hi: 620, model: 'c63' },
   { name: 'BMW M3 Competition', lo: 500, hi: 800, model: 'm3g80' }, { name: 'Nissan GT-R', lo: 550, hi: 900, model: 'gtr' },
 ];
+// Atlanta street racers
+const ATL_NAMES = ['Jaylen', 'Keisha', 'Tre', 'Brianna', 'Darius', 'Tasha', 'Cody', 'Amber', 'Malik', 'Destiny', 'Hunter', 'Imani', 'Javier', 'Kayla', 'Andre', 'Shay',
+  'Luis', 'Bree', 'Terrence', 'Ashley', 'Quincy', 'Maria', 'Brandon', 'Jasmine', 'Dante', 'Krystal', 'Wes', 'Tiana', 'Carlos', 'Nia', 'Garrett', 'Aaliyah'];
+const ATL_CARS = [
+  { name: 'Ford Mustang EcoBoost', lo: 300, hi: 380, model: 'mustang' }, { name: 'Dodge Charger R/T', lo: 350, hi: 430, model: 'charger' }, { name: 'Chevy Silverado', lo: 350, hi: 440, model: 'pickup' },
+  { name: 'Honda Civic Type R', lo: 300, hi: 400, model: 'civic' }, { name: 'Subaru WRX STI', lo: 300, hi: 440, model: 'wrx' }, { name: 'Ford F-150 Raptor', lo: 400, hi: 480, model: 'raptor' },
+  { name: 'Chevrolet Camaro SS', lo: 430, hi: 540, model: 'camaro' }, { name: 'Ford Mustang GT', lo: 440, hi: 560, model: 'mustang' }, { name: 'Dodge Challenger Scat Pack', lo: 470, hi: 580, model: 'challenger' },
+  { name: 'Jeep Grand Cherokee SRT', lo: 460, hi: 580, model: 'trackhawk' }, { name: 'Toyota Supra', lo: 380, hi: 560, model: 'supra' }, { name: 'Chevrolet Corvette Stingray', lo: 490, hi: 620, model: 'corvette' },
+  { name: 'Nissan GT-R', lo: 560, hi: 760, model: 'gtr' }, { name: 'Camaro ZL1 1LE', lo: 650, hi: 820, model: 'camaro' }, { name: 'Dodge Charger Hellcat', lo: 700, hi: 860, model: 'charger' },
+  { name: 'Dodge Challenger Hellcat', lo: 710, hi: 900, model: 'challenger' }, { name: 'Jeep Trackhawk', lo: 700, hi: 900, model: 'trackhawk' }, { name: 'Shelby GT500', lo: 760, hi: 960, model: 'gt500' },
+  { name: 'Corvette Z06', lo: 670, hi: 940, model: 'corvette' }, { name: 'Tuned Supra', lo: 700, hi: 1000, model: 'supra' }, { name: 'Challenger Demon', lo: 840, hi: 1150, model: 'demon' },
+  { name: 'Twin turbo Corvette', lo: 900, hi: 1200, model: 'corvette' },
+];
 const LOCAL_PAINTS = ['#eeeeea', '#15171b', '#3d434b', '#b9c2cb', '#c9252c', '#e8761e', '#f2c418', '#1f4fb5', '#12a3a8', '#5b2a8c', '#8a5a2b', '#7fc241', '#e0508f'];
 const TIMES = ['day', 'dusk', 'night', 'night', 'late'];
 function streetOffers(S) {
-  const onIsland = islandCar(S.current) && muOpen(S);
-  const rep = onIsland ? 6 + muWins(S) * 3.2 : S.rep * 33 / REP_TOTAL, pb = curStats(S).bhp, rb = onIsland ? 140 + muWins(S) * 70 : 175 + rep * 11;   // scaled so the board keeps the same curve with more events
-  const island = islandCar(S.current) && muOpen(S), essex = !island && essexOpen(S), list = island ? MU : essex ? ESSEX : EVENTS;
-  const ch = island ? 'mu' : essex ? 'essex' : 'london';
-  const areas = list.map((e, i) => i).filter(i => island ? i <= Math.max(1, nextMuIndex(S)) : essex || i < NORTH_FROM || nextEventIndex(S) >= NORTH_FROM || S.careerDone);
+  const away = regionOf(S.current) && regionOpen(S, regionOf(S.current)) ? regionOf(S.current) : null, wins = away ? regionWins(S, away) : 0;
+  // away from home the board follows your wins there: the island starts small, Atlanta starts at muscle car power
+  const rep = away === 'atl' ? 14 + wins * 3 : away ? 6 + wins * 3.2 : S.rep * 33 / REP_TOTAL, pb = curStats(S).bhp;
+  const rb = away === 'atl' ? 400 + wins * 85 : away ? 140 + wins * 70 : 175 + rep * 11;   // scaled so the board keeps the same curve with more events
+  const island = away === 'mu', essex = !away && essexOpen(S), list = away ? REGIONS[away].list : essex ? ESSEX : EVENTS;
+  const ch = away || (essex ? 'essex' : 'london');
+  const areas = list.map((e, i) => i).filter(i => away ? i <= Math.max(1, nextRegionIndex(S, away)) : essex || i < NORTH_FROM || nextEventIndex(S) >= NORTH_FROM || S.careerDone);
   const base = 220 + rep * 22;
   const tiers = [
     { label: 'Easy', bhp: Math.min(rb, pb) * 0.88, prize: base, skill: 0.95, inc: [9, 13], dd: -0.12 },
@@ -1869,9 +2035,9 @@ function streetOffers(S) {
   const used = new Set();
   const offers = tiers.map(t => {
     const bhp = Math.round(Math.max(150, t.bhp));
-    const pool = island ? MU_CARS : LOCAL_CARS, fits = pool.filter(c => bhp >= c.lo && bhp <= c.hi);
+    const pool = away === 'atl' ? ATL_CARS : island ? MU_CARS : LOCAL_CARS, fits = pool.filter(c => bhp >= c.lo && bhp <= c.hi);
     const car = fits.length ? pick(fits) : pool.reduce((a, c) => Math.abs((c.lo + c.hi) / 2 - bhp) < Math.abs((a.lo + a.hi) / 2 - bhp) ? c : a);
-    const names = island ? MU_NAMES : LOCAL_NAMES;
+    const names = away === 'atl' ? ATL_NAMES : island ? MU_NAMES : LOCAL_NAMES;
     let name; do { name = pick(names); } while (used.has(name)); used.add(name);
     return { id: Math.random().toString(36).slice(2, 9), label: t.label, ch, area: pick(areas), time: pick(TIMES), name: name + ' ' + String.fromCharCode(65 + randInt(26)) + '.',
       car: car.name, bhp, prize: Math.round(t.prize / 10) * 10, dist: Math.round((3600 + rep * 60) / 100) * 100, skill: t.skill, inc: t.inc,
@@ -1889,7 +2055,7 @@ function streetOffers(S) {
 function blankState() {
   return { v: 2, money: 5000, rep: 0, current: 'civic', owned: {}, eventIndex: 0, completed: EVENTS.map(() => false),
     careerDone: false, kingRevealed: false, news: '', stats: { races: 0, wins: 0, streetWins: 0, street: 0 }, street: [], specials: {}, found: {},
-    essex: null, stars: {}, announced: {}, daily: null, mu: null };
+    essex: null, stars: {}, announced: {}, daily: null, mu: null, atl: null, home: null };
 }
 function newCareer(starterId) {
   const car = carById(starterId);
@@ -1936,7 +2102,11 @@ function migrateSave(old) {
     S.stars = Object.assign({}, old.stars || {});
     if (old.daily && typeof old.daily.date === 'string') S.daily = { date: old.daily.date, paid: !!old.daily.paid, best: +old.daily.best || 0, runs: +old.daily.runs || 0 };
     if (old.essex && Array.isArray(old.essex.completed)) S.essex = { completed: ESSEX.map((e, i) => !!old.essex.completed[i]), done: !!old.essex.done };
-    if (old.mu && Array.isArray(old.mu.completed)) S.mu = { completed: MU.map((e, i) => !!old.mu.completed[i]), done: !!old.mu.done, cur: carById(old.mu.cur) ? old.mu.cur : 'picanto', home: carById(old.mu.home) ? old.mu.home : null };
+    if (old.mu && Array.isArray(old.mu.completed)) S.mu = { completed: MU.map((e, i) => !!old.mu.completed[i]), done: !!old.mu.done, cur: carById(old.mu.cur) ? old.mu.cur : 'picanto' };
+    if (old.atl && Array.isArray(old.atl.completed)) S.atl = { completed: ATL.map((e, i) => !!old.atl.completed[i]), done: !!old.atl.done, cur: carById(old.atl.cur) ? old.atl.cur : 'mustang' };
+    // the car you left at home when you flew out (saves from before Atlanta kept it with the island)
+    const home = old.home || (old.mu && old.mu.home);
+    S.home = carById(home) && !regionOf(home) ? home : null;
     if (old.drag && typeof old.drag === 'object') S.drag = { beaten: Object.assign({}, old.drag.beaten || {}), best: Object.assign({}, old.drag.best || {}) };
     S.street = Array.isArray(old.street) && old.street.length === 4 && old.street.every(o => areaList(o.ch)[o.area]) ? old.street : [];
 
@@ -1952,7 +2122,8 @@ function migrateSave(old) {
 }
 
 const curStats = S => statsFor(S.current, S.owned[S.current].up, lookOf(S, S.current));
-const carUnlocked = (S, car) => car.chapter === 'mu' ? muOpen(S) && muWins(S) >= (car.muUnlock || 0) : car.chapter === 'essex' ? essexOpen(S) && S.rep >= car.rep : S.rep >= car.rep;
+const carUnlocked = (S, car) => REGIONS[car.chapter] ? regionOpen(S, car.chapter) && regionWins(S, car.chapter) >= (car[REGIONS[car.chapter].unlock] || 0)
+  : car.chapter === 'essex' ? essexOpen(S) && S.rep >= car.rep : S.rep >= car.rep;
 const repairCost = S => Math.round(S.owned[S.current].damage * REPAIR_PER_PCT);
 
 function buyUpgrade(S, upId) {
@@ -1991,7 +2162,7 @@ function buyCar(S, id, tradeIn) {
   if (!carUnlocked(S, c)) return { ok: false, msg: 'Locked. Needs Rep ' + c.rep + '.' };
   const old = S.current, credit = tradeIn ? sellValue(S, old) : 0;
   if (S.money + credit < c.price) return { ok: false, msg: 'Not enough money. You need £' + fmt(c.price - S.money - credit) + ' more.' };
-  if (tradeIn && islandCar(old) !== islandCar(id)) return { ok: false, msg: 'Island cars stay on the island, and London cars stay in London.' };
+  if (tradeIn && regionOf(old) !== regionOf(id)) return { ok: false, msg: regionOf(old) === 'atl' || regionOf(id) === 'atl' ? 'Atlanta cars stay in Atlanta.' : 'Island cars stay on the island, and London cars stay in London.' };
   if (tradeIn) { delete S.owned[old]; S.money += credit; }
   const up = {}; if (c.built) for (const u of UPGRADES) up[u.id] = c.built;
   S.money -= c.price; S.owned[id] = { up, damage: 0, spent: 0, look: stockLook(id) }; S.current = id;
@@ -2026,11 +2197,14 @@ const BUS1 = { id: 'bus1', w: 2.5, len: 10.8 };
 const MU_BUS = { colors: ['#e9e6de', '#2c8a4a', '#d8342c', '#f0b323', '#1f5fb8', '#8a2f8f'], routes: ['PORT LOUIS', 'CUREPIPE', 'GRAND BAIE', 'ROSE HILL', 'QUATRE BORNES', 'MAHEBOURG', 'FLACQ', 'VACOAS', 'TRIOLET', 'GOODLANDS', 'ROSE BELLE', 'BAMBOUS', 'CHAMAREL', 'LE MORNE'] };
 // island traffic: small hatches, pickups, no cabs
 const MU_TYPES = [{ id: 'hatch', w: 1.72, len: 4.0, wt: 4 }, { id: 'saloon', w: 1.8, len: 4.6, wt: 2.2 }, { id: 'suv', w: 1.88, len: 4.6, wt: 1.6 }, { id: 'pickup', w: 1.86, len: 5.3, wt: 1.4 }, { id: 'van', w: 1.98, len: 5.4, wt: 0.8 }];
+// Atlanta: SUVs and pickups everywhere, hardly any small hatches, MARTA buses
+const ATL_TYPES = [{ id: 'hatch', w: 1.72, len: 4.0, wt: 0.6 }, { id: 'saloon', w: 1.8, len: 4.6, wt: 3 }, { id: 'suv', w: 1.88, len: 4.6, wt: 3.2 }, { id: 'pickup', w: 1.86, len: 5.3, wt: 2.4 }, { id: 'van', w: 1.98, len: 5.4, wt: 0.6 }];
+const ATL_BUS = { colors: ['#eeeeea', '#e9e6de'], routes: ['110 PEACHTREE', '2 PONCE', '15 CANDLER RD', '26 MARIETTA ST', '36 N DECATUR', '39 BUFORD HWY', '73 FULTON IND', '83 CAMPBELLTON', '120 STONE MTN', '191 AIRPORT', '5 PIEDMONT', '12 HOWELL MILL'] };
 // Essex buses are not London red, and there are no black cabs out there
 const ESSEX_BUS = { colors: ['#6b2c91', '#1aa39a', '#e2e4e6'], routes: ['X1', '1', '9', '21', '25', '66', '70', '100', '151', '200', '351', 'X30'] };
 const TRAFFIC_COLORS = ['#d9dadb', '#1d2b4d', '#8c1d1d', '#2f6f4f', '#c9a227', '#5b6770', '#eeeeee', '#2a2a2c', '#6a3d8a', '#b8551f', '#3f7fbf', '#8f9aa3'];
-function pickType(r, noCab, island) {
-  const types = island ? MU_TYPES : noCab ? TRAFFIC_TYPES.filter(t => t.id !== 'cab') : TRAFFIC_TYPES;
+function pickType(r, noCab, island, us) {
+  const types = us ? ATL_TYPES : island ? MU_TYPES : noCab ? TRAFFIC_TYPES.filter(t => t.id !== 'cab') : TRAFFIC_TYPES;
   let t = (r || Math.random)() * types.reduce((a, b) => a + b.wt, 0);
   for (const ty of types) { if ((t -= ty.wt) <= 0) return ty; }
   return types[0];
@@ -2082,10 +2256,10 @@ function createRace(S, spec) {
     ev = Object.assign({}, e, { kind: spec.kind, index: idx, exhibition: spec.kind === 'essex' && !!spec.exhibition, oppName: ch.name, oppCar: ch.car,
       skill: e.diff.skill, inc: e.diff.inc, d: 1, open: true, slipCar: spec.kind === 'slip' ? slipCarFor(e.rival).id : null, betCar: spec.kind === 'slip' ? S.current : null,
       reward: spec.kind === 'slip' ? 0 : e.reward });
-  } else if (spec.kind === 'mu') {
-    // the island: career races on island roads, island cars only
-    const e = MU[spec.index], ch = CHARACTERS[e.rival];
-    ev = Object.assign({}, e, { kind: 'mu', index: spec.index, exhibition: !!spec.exhibition, oppName: ch.name, oppCar: ch.car,
+  } else if (spec.kind === 'mu' || spec.kind === 'atl') {
+    // the island and Atlanta: career races on their own roads, their own cars only
+    const e = REGIONS[spec.kind].list[spec.index], ch = CHARACTERS[e.rival];
+    ev = Object.assign({}, e, { kind: spec.kind, index: spec.index, exhibition: !!spec.exhibition, oppName: ch.name, oppCar: ch.car,
       skill: e.diff.skill, inc: e.diff.inc, d: e.d, reward: e.reward });
   } else {
     const e = EVENTS[spec.index], ch = CHARACTERS[e.rival];
@@ -2093,7 +2267,7 @@ function createRace(S, spec) {
       skill: e.diff.skill, inc: e.diff.inc, d: spec.index / (EVENTS.length - 1) });
   }
   // the route a time counts for on the leaderboard (career events and friend races), and its traffic seed
-  ev.route = spec.kind === 'street' ? null : spec.kind === 'daily' ? 'daily:' + ev.date : spec.kind === 'special' ? 'special:' + spec.id : spec.kind === 'essex' || spec.kind === 'slip' ? 'essex:' + ev.rival : spec.kind === 'mu' ? 'mu:' + ev.rival : 'career:' + ev.rival;
+  ev.route = spec.kind === 'street' ? null : spec.kind === 'daily' ? 'daily:' + ev.date : spec.kind === 'special' ? 'special:' + spec.id : spec.kind === 'essex' || spec.kind === 'slip' ? 'essex:' + ev.rival : spec.kind === 'mu' ? 'mu:' + ev.rival : spec.kind === 'atl' ? 'atl:' + ev.rival : 'career:' + ev.rival;
   const seed = hashStr((ev.route || 'street:' + ev.offerId) + '|v1');
   const rw = seededRng(seed), rr = seededRng(seed ^ 0x9E3779B9);
   const oppV = vmaxFor(ev.oppBhp) * ev.skill;
@@ -2151,16 +2325,16 @@ function updateCop(R, dt) {
   else if (gap > 420) { c.gone = true; R.events.push({ type: 'lostCops' }); }
 }
 
-/* one traffic car. island: Mauritian mix and buses; essex: no cabs, Essex buses */
+/* one traffic car. island: Mauritian mix and buses; essex: no cabs, Essex buses; Atlanta: SUVs, pickups and MARTA */
 function trafficCar(R, r, ri, lane, bus) {
-  const essex = R.ev.chapter === 'Essex', island = R.ev.chapter === 'Mauritius';
-  const ty = bus ? (island ? BUS1 : BUS) : pickType(r, essex, island);
+  const essex = R.ev.chapter === 'Essex', island = R.ev.chapter === 'Mauritius', us = R.ev.chapter === 'Atlanta';
+  const ty = bus ? (island || us ? BUS1 : BUS) : pickType(r, essex, island, us);
   let color = TRAFFIC_COLORS[ri(TRAFFIC_COLORS.length)];
   if (ty.id === 'van') color = r() < 0.7 ? '#e9ebec' : '#9aa3aa';
   if (ty.id === 'cab') color = '#141517';
   if (ty.id === 'bus') color = essex ? ESSEX_BUS.colors[ri(ESSEX_BUS.colors.length)] : '#c8161d';
-  if (ty.id === 'bus1') color = MU_BUS.colors[ri(MU_BUS.colors.length)];
-  const routes = island ? MU_BUS.routes : essex ? ESSEX_BUS.routes : BUS_ROUTES;
+  if (ty.id === 'bus1') color = us ? ATL_BUS.colors[ri(ATL_BUS.colors.length)] : MU_BUS.colors[ri(MU_BUS.colors.length)];
+  const routes = us ? ATL_BUS.routes : island ? MU_BUS.routes : essex ? ESSEX_BUS.routes : BUS_ROUTES;
   return { lane, off: 0, type: ty.id, w: ty.w, len: ty.len, color, hit: false, hitT: 0, push: 0, spin: 0, route: bus ? routes[ri(routes.length)] : null, brake: 0 };
 }
 /* two lanes (the island's motorways): one car to go round, or two in a row, one in each lane, to weave through */
@@ -2443,7 +2617,7 @@ function payout(R, base, out) {
 function settleRace(S, R) {
   if (R.settled || !R.result) return R.summary || null;
   R.settled = true;
-  const essexBefore = essexOpen(S), muBefore = muOpen(S), friendsBefore = FRIENDS.filter(id => specialUnlocked(S, id));
+  const essexBefore = essexOpen(S), muBefore = muOpen(S), atlBefore = atlOpen(S), friendsBefore = FRIENDS.filter(id => specialUnlocked(S, id));
   const ev = R.ev, own = ev.loaner ? null : S.owned[R.carId];
   if (own) own.damage = Math.round(Math.min(100, R.p.damage));
   const out = { kind: ev.kind, won: R.result.won, how: R.result.how, reward: 0, rep: 0, newCars: [], nextEvent: null, chapter: null,
@@ -2547,6 +2721,22 @@ function settleRace(S, R) {
         S.street = streetOffers(S);
       }
     }
+  } else if (ev.kind === 'atl') {
+    if (R.result.won) {
+      S.stats.wins++;
+      openRegion(S, 'atl');
+      if (!ev.exhibition && !S.atl.completed[ev.index] && ev.index === nextAtlIndex(S)) {
+        const winsBefore = atlWins(S);
+        S.atl.completed[ev.index] = true;
+        S.money += payout(R, ev.reward, out); S.rep += ev.rep;
+        out.rep = ev.rep; out.story = ev.win; S.news = ev.win;
+        out.newCars = CARS.filter(c => c.chapter === 'atl' && c.atlUnlock > winsBefore && c.atlUnlock <= atlWins(S)).map(c => c.name);
+        const nx = nextAtlIndex(S);
+        if (nx >= ATL.length) { out.atlDone = !S.atl.done; S.atl.done = true; }
+        else out.nextEvent = ATL[nx].title;
+        S.street = streetOffers(S);
+      }
+    }
   } else if (R.result.won) {
     S.stats.wins++;
     if (!ev.exhibition && !S.completed[ev.index] && ev.index === nextEventIndex(S)) {
@@ -2569,6 +2759,7 @@ function settleRace(S, R) {
   // someone new wants a race after this one (more street races done, or Tush beaten for Ishaaq)
   out.newFriends = FRIENDS.filter(id => specialUnlocked(S, id) && !friendsBefore.includes(id)).map(id => CHARACTERS[SPECIALS[id].rival].name);
   if (!muBefore && muOpen(S)) out.muOpened = true;
+  if (!atlBefore && atlOpen(S)) out.atlOpened = true;
   R.summary = out;
   return out;
 }
@@ -2741,6 +2932,14 @@ const ISLAND_TOD = {
   dusk: { sky: [[36, 38, 94], [176, 78, 112], [252, 152, 70]], haze: [255, 136, 80], hazeA: 0.46, fog: [150, 94, 102] },
 };
 const MU_ENVS = new Set(['lagoon', 'harbour', 'ringroad', 'cyber', 'cane', 'airport', 'gorge', 'morne']);
+/* Atlanta: hazy summer blue by day, big pink sunsets, and the sky over the city glowing orange at night */
+const ATL_TOD = {
+  day: { sky: [[64, 112, 170], [134, 172, 208], [206, 216, 214]], haze: [255, 248, 236], hazeA: 0.26, fog: [182, 190, 192], light: 1.04, keyCol: [1.04, 1, 0.94], refl: [196, 210, 232] },
+  dusk: { sky: [[34, 40, 90], [170, 86, 118], [250, 158, 88]], haze: [255, 150, 90], hazeA: 0.44, fog: [140, 98, 108] },
+  night: { sky: [[6, 9, 16], [24, 26, 40], [74, 56, 52]], haze: [255, 160, 80], hazeA: 0.3 },
+  late: { sky: [[4, 6, 10], [14, 18, 28], [52, 42, 44]], haze: [255, 160, 80], hazeA: 0.2 },
+};
+const ATL_ENVS = new Set(['atlair', 'westside', 'midtown', 'buckhead', 'perimeter', 'stonemtn', 'junction', 'connector']);
 /* rain: low cloud lit orange by the street lights, no stars or moon, a thicker haze, and everything shines */
 function rainPal(o) {
   const cloud = [[24, 24, 28], [40, 37, 40], [74, 62, 54]];
@@ -2752,6 +2951,7 @@ function rainPal(o) {
 function palFor(time, env, rain) {
   const o = Object.assign({ time, env }, TOD[time] || TOD.night);
   if (MU_ENVS.has(env) && ISLAND_TOD[time]) Object.assign(o, ISLAND_TOD[time]);
+  if (ATL_ENVS.has(env) && ATL_TOD[time]) Object.assign(o, ATL_TOD[time]);
   return rain ? rainPal(o) : o;
 }
 function blendPal(a, b, t) {
@@ -2780,7 +2980,9 @@ const MAT = { road: [86, 88, 92], pave: [150, 148, 142], kerb: [176, 173, 166], 
   reed: [118, 110, 66], mud: [70, 66, 54], chalk: [214, 210, 196], lake: [38, 66, 84], bay: [96, 98, 102],
   // the island
   lagoon: [52, 176, 178], ocean: [22, 74, 128], wsand: [228, 214, 176], cane: [86, 128, 62], redearth: [146, 72, 44], basalt: [72, 72, 74], lush: [72, 128, 52],
-  field: [104, 140, 66], creole1: [70, 172, 164], creole2: [228, 142, 152], creole3: [238, 204, 92], creole4: [150, 198, 108], creole5: [120, 170, 220], tin: [150, 150, 146], quay: [128, 126, 118], gravel: [150, 132, 104] };
+  field: [104, 140, 66], creole1: [70, 172, 164], creole2: [228, 142, 152], creole3: [238, 204, 92], creole4: [150, 198, 108], creole5: [120, 170, 220], tin: [150, 150, 146], quay: [128, 126, 118], gravel: [150, 132, 104],
+  // Atlanta
+  pine: [38, 66, 42], clay: [170, 84, 50], concreteRoad: [118, 118, 114], yellow: [236, 190, 40], mural1: [230, 90, 60], mural2: [60, 150, 210], mural3: [240, 200, 60], mural4: [150, 80, 180], mural5: [60, 180, 120] };
 function wc(pal, base, k, fg) {
   const l = pal.light * (k || 1), c = [base[0] * l * pal.keyCol[0], base[1] * l * pal.keyCol[1], base[2] * l * pal.keyCol[2]];
   return fg > 0 ? mix(c, pal.fog, fg) : c;
@@ -2828,6 +3030,23 @@ const ENV = {
   // Chamarel: one lane each way through the forest, red earth banks, the odd car pulled in at a fruit stall
   gorge:      { skyH: 0.3, block: 100, density: 0, set: [30, 40], h: [0, 0], mats: ['concrete'], win: 'none', shops: 0, twoWay: true, shoulder: 'redearth', lampSp: 0, woods: true, redbank: true, ground: 'lush', earths: true, noPave: true },
   // Le Morne: the coast road, the lagoon on the left with kite surfers, filaos along the beach, the mountain over everything
+  // Atlanta. us: American road markings; pines: loblolly pines along the verges; roadC: pale concrete interstate
+  // I-85 from the airport: parking decks and hotels, pines, the planes coming in over the road
+  atlair:     { skyH: 0.35, block: 80, density: 0.34, set: [30, 52], h: [8, 26], mats: ['concrete', 'render', 'glass'], win: 'estate', shops: 0, barrier: true, opposite: true, lampSp: 44, planes: true, pines: 1, us: true, roadC: true },
+  // Marietta Street: brick warehouses and murals, a lane each way with parking down one side
+  westside:   { skyH: 0.8, block: 18, density: 0.9, set: [9.2, 9.8], h: [6, 13], mats: ['brick2', 'brick', 'steel', 'concrete', 'brick2'], win: 'sparse', shops: 0.4, names: 'atl', twoWay: true, lampSp: 30, murals: 0.55, us: true },
+  // Peachtree Street through Midtown: towers, street trees, bars and the theatre
+  midtown:    { skyH: 1, block: 34, density: 0.85, set: [13, 20], h: [30, 140], mats: ['glass', 'glass', 'concrete', 'render'], win: 'tower', shops: 0.5, names: 'atl', lampSp: 30, trees: 0.6, us: true, lampCol: [220, 230, 255] },
+  // Peachtree Road through Buckhead: glass towers, designer shops, more trees
+  buckhead:   { skyH: 0.9, block: 30, density: 0.8, set: [14, 22], h: [18, 110], mats: ['glass', 'render', 'glass', 'concrete'], win: 'tower', shops: 0.72, names: 'buckhead', lampSp: 28, trees: 1, us: true, lampCol: [220, 230, 255] },
+  // I-285: pine woods, sound walls and not much else
+  perimeter:  { skyH: 0.3, block: 150, density: 0.08, set: [40, 70], h: [8, 14], mats: ['concrete', 'render'], win: 'sparse', shops: 0, barrier: true, opposite: true, lampSp: 70, pines: 2, soundwall: 0.55, us: true, roadC: true },
+  // US 78 out to Stone Mountain: red clay cuttings, pines, the granite dome
+  stonemtn:   { skyH: 0.22, block: 160, density: 0.05, set: [40, 70], h: [5, 8], mats: ['render', 'brick'], win: 'sparse', shops: 0, barrier: true, opposite: true, lampSp: 90, pines: 2, clay: true, us: true, roadC: true, ground: 'verge' },
+  // Spaghetti Junction: ramps stacked five high over the road, lit orange
+  junction:   { skyH: 0.55, block: 110, density: 0.12, set: [40, 60], h: [10, 20], mats: ['concrete', 'glass'], win: 'estate', shops: 0, barrier: true, opposite: true, lampSp: 34, flyover: 230, stack: true, pines: 1, us: true, roadC: true },
+  // the Downtown Connector: four lanes each way between the towers
+  connector:  { skyH: 1, block: 40, density: 0.8, set: [26, 40], h: [30, 150], mats: ['glass', 'concrete', 'glass', 'render'], win: 'tower', shops: 0, barrier: true, sideLane: true, lampSp: 36, us: true, roadC: true, lampCol: [225, 232, 255] },
   morne:      { skyH: 0.15, block: 34, density: 0.16, set: [22, 36], h: [3.5, 6], mats: ['render', 'creole1', 'creole3', 'creole2'], win: 'sash', shops: 0, sea: true, lagoon: true, twoWay: true, shoulder: 'wsand', lampSp: 70, filaos: true, palms: 0.5, ground: 'lush', kites: true, noPave: true, fishers: 0.45 },
 };
 const groundOf = env => MAT[env.ground] || MAT.verge;
@@ -2837,9 +3056,12 @@ const SEASIDE_NAMES = ['AMUSEMENTS', 'ARCADE', 'FISH & CHIPS', 'ROCK SHOP', 'ICE
 const RETAIL_NAMES = ['HOMEWARE', 'SPORTS', 'ELECTRICALS', 'CINEMA', 'DRIVE THRU', 'TYRES & EXHAUSTS', 'FURNITURE', 'GYM', 'TOYS', 'PETS', 'DIY', 'CARPETS', 'BOWLING', 'FASHION OUTLET'];
 const SHOP_NAMES = ['GRILL', 'CAFE', 'BARBERS', 'MINI MARKET', 'PHONE REPAIR', 'BAKERY', 'SWEET CENTRE', 'OFF LICENCE', 'LAUNDERETTE', 'CHICKEN', 'PHARMACY',
   'CASH & CARRY', 'NAILS', 'TAILOR', 'PIZZA', 'MONEY TRANSFER', 'FISH BAR', 'OPTICIANS', 'HARDWARE', 'FLORIST', 'DRY CLEANERS', 'JEWELLERS'];
-const SHOP_SPECIAL = { tariq: 'RAHMAN PHARMACY', kasia: 'NOWAK TUNING', emre: 'YILDIZ GRILL', marcus: 'CAMPBELL DETAILING', asha: 'WARSAME DRIVING SCHOOL', kevin: 'SNACK LAM' };
+const SHOP_SPECIAL = { tariq: 'RAHMAN PHARMACY', kasia: 'NOWAK TUNING', emre: 'YILDIZ GRILL', marcus: 'CAMPBELL DETAILING', asha: 'WARSAME DRIVING SCHOOL', kevin: 'SNACK LAM', kiana: 'WELLS STUDIO', deshawn: 'CARTER DETAILING', brooke: 'WHITFIELD REALTY' };
 const MU_SHOP_NAMES = ['BOUTIK', 'SNACK', 'DHOLL PURI', 'FARATA', 'BRIANI', 'MINE FRIT', 'ALOUDA', 'QUINCAILLERIE', 'PHARMACIE', 'TABAGIE', 'SUPERETTE', 'BOULANGERIE',
   'GATO PIMENT', 'RESTAURANT', 'MOBILE SHOP', 'COIFFURE', 'DIVE CENTRE', 'CAR HIRE', 'BEACH BAR', 'GLACES', 'FRUITS', 'PIROGUE TRIPS', 'SOUVENIRS', 'CAR WASH'];
+const ATL_SHOP_NAMES = ['BBQ', 'WINGS', 'TACOS', 'COFFEE', 'BARBER SHOP', 'TATTOO', 'BREWERY', 'LIQUOR', 'PAWN SHOP', 'SNEAKERS', 'SOUL FOOD', 'DINER', 'PHARMACY',
+  'TIRES', 'GYM', 'RECORDS', 'VINTAGE', 'PIZZA', 'NAILS', 'CHECK CASHING', 'LOUNGE', 'ROOFTOP BAR', 'PEACH COBBLER', 'HOT CHICKEN'];
+const BUCKHEAD_NAMES = ['BOUTIQUE', 'STEAKHOUSE', 'JEWELERS', 'GALLERY', 'WINE BAR', 'SUSHI', 'TAILOR', 'DESIGNER', 'SPA', 'CIGAR LOUNGE', 'CHAMPAGNE BAR', 'WATCHES', 'BISTRO', 'ROOFTOP'];
 const ARCH_NAMES = ['MOT & TYRES', 'BODY SHOP', 'COFFEE', 'GYM', 'BREWERY', 'SCAFFOLDING', 'MOTOR REPAIRS', 'CAR WASH'];
 const NEON = [[255, 60, 90], [60, 200, 255], [120, 255, 140], [255, 190, 60], [200, 110, 255], [255, 255, 255]];
 const WIN_COL = [[247, 197, 107], [217, 226, 232], [240, 154, 62], [190, 215, 240]];
@@ -3096,8 +3318,8 @@ function drawLandmark(g, id, x, base, u, pal, seed) {
     g.beginPath(); for (let i = 0; i <= 40; i++) { const t = i / 40, px = x - 60 * u + t * 120 * u, py = base - (14 + Math.abs(Math.sin(t * 7.5)) * 26 * (1 - t * 0.4)) * u; if (i) g.lineTo(px, py); else g.moveTo(px, py); } g.stroke();
     for (let i = 0; i <= 12; i++) { const t = i / 12, px = x - 60 * u + t * 120 * u, py = base - (14 + Math.abs(Math.sin(t * 7.5)) * 26 * (1 - t * 0.4)) * u; g.beginPath(); g.moveTo(px, base); g.lineTo(px, py); g.stroke(); }
     if (night) for (let i = 0; i < 30; i++) { const t = i / 29, px = x - 60 * u + t * 120 * u, py = base - (14 + Math.abs(Math.sin(t * 7.5)) * 26 * (1 - t * 0.4)) * u; g.fillStyle = css(NEON[i % NEON.length]); g.fillRect(px - 1, py - 1, 2, 2); }
-  } else if (MU_LANDMARKS[id]) {
-    MU_LANDMARKS[id](g, x, base, u, pal, seed, night, fillC, windows, redLight);
+  } else if (MU_LANDMARKS[id] || ATL_LANDMARKS[id]) {
+    (MU_LANDMARKS[id] || ATL_LANDMARKS[id])(g, x, base, u, pal, seed, night, fillC, windows, redLight, sil);
   } else if (id === 'cranes') {
     for (const dx of [-120, 90, 170]) {
       const cx = x + dx * u, h = (60 + hash(dx, seed) * 40) * u;
@@ -3202,6 +3424,107 @@ const MU_LANDMARKS = {
     g.fillStyle = night ? 'rgba(200,210,220,0.35)' : 'rgba(246,250,252,0.9)'; g.fillRect(x - 1.6 * u, base - 50 * u, 3.2 * u, 46 * u);
   },
 };
+/* ---------- Atlanta's skyline: the towers downtown and in Midtown, the stadium, the Capitol, the airport tower and Stone Mountain ---------- */
+const ATL_LANDMARKS = {
+  // Bank of America Plaza: the tallest, with the open gold pyramid and spire on top
+  boa(g, x, base, u, pal, seed, night, fillC, windows, redLight, sil) {
+    const w = 30 * u, h = 150 * u, gold = night ? [255, 196, 90] : mix([196, 160, 80], pal.fog, 0.25);
+    fillC(sil); g.fillRect(x - w / 2, base - h, w, h); windows(x - w / 2, base - h, w, h, 0.45, [255, 214, 150]);
+    g.beginPath(); g.moveTo(x - w / 2, base - h); g.lineTo(x, base - h - 26 * u); g.lineTo(x + w / 2, base - h); g.closePath(); fillC(sil); g.fill();
+    g.strokeStyle = css(gold); g.lineWidth = Math.max(1, 1.2 * u);
+    for (let i = 0; i < 4; i++) { const f = i / 4; g.beginPath(); g.moveTo(x - w / 2 * (1 - f), base - h - 26 * u * f); g.lineTo(x + w / 2 * (1 - f), base - h - 26 * u * f); g.stroke(); }
+    g.beginPath(); g.moveTo(x - w / 2, base - h); g.lineTo(x, base - h - 26 * u); g.lineTo(x + w / 2, base - h); g.stroke();
+    g.beginPath(); g.moveTo(x, base - h - 26 * u); g.lineTo(x, base - h - 44 * u); g.stroke();
+    if (night) drawGlow(g, [255, 190, 90], x, base - h - 16 * u, 30 * u, 0.45);
+    redLight(x, base - h - 44 * u);
+  },
+  // the Westin Peachtree Plaza: a round glass tower with the restaurant on top
+  westin(g, x, base, u, pal, seed, night, fillC, windows, redLight, sil) {
+    const w = 22 * u, h = 118 * u;
+    fillC(sil); g.fillRect(x - w / 2, base - h, w, h); windows(x - w / 2 + 2 * u, base - h + 10 * u, w - 4 * u, h - 10 * u, 0.4, [200, 220, 245]);
+    g.beginPath(); g.ellipse(x, base - h, w / 2, 3 * u, 0, 0, 7); g.fill();
+    fillC(night ? [40, 48, 60] : mix([130, 146, 160], pal.fog, 0.3)); g.fillRect(x - w / 2 - 1.5 * u, base - h + 2 * u, w + 3 * u, 6 * u);
+    if (night) { g.fillStyle = 'rgba(255,220,170,0.8)'; g.fillRect(x - w / 2, base - h + 4 * u, w, 2 * u); }
+    redLight(x, base - h - 3 * u);
+  },
+  // 191 Peachtree: two open crowns on top, lit at night
+  plaza191(g, x, base, u, pal, seed, night, fillC, windows, redLight, sil) {
+    const w = 28 * u, h = 128 * u;
+    fillC(sil); g.fillRect(x - w / 2, base - h, w, h); windows(x - w / 2, base - h, w, h, 0.4, [255, 214, 150]);
+    for (const dx of [-9, 9]) {
+      g.fillRect(x + (dx - 5) * u, base - h - 16 * u, 10 * u, 16 * u);
+      if (night) { g.fillStyle = 'rgba(255,236,190,0.85)'; for (let i = 0; i < 3; i++) g.fillRect(x + (dx - 4 + i * 3) * u, base - h - 14 * u, 1.6 * u, 11 * u); fillC(sil); drawGlow(g, [255, 220, 160], x + dx * u, base - h - 8 * u, 12 * u, 0.4); }
+    }
+  },
+  // the State Capitol and its gold dome
+  capitol(g, x, base, u, pal, seed, night, fillC) {
+    fillC(night ? [34, 32, 30] : mix([190, 182, 164], pal.fog, 0.35)); g.fillRect(x - 32 * u, base - 18 * u, 64 * u, 18 * u);
+    g.fillRect(x - 12 * u, base - 26 * u, 24 * u, 8 * u);
+    const gold = night ? [240, 190, 80] : [214, 170, 70];
+    fillC(gold); g.beginPath(); g.arc(x, base - 26 * u, 11 * u, Math.PI, 0); g.fill(); g.fillRect(x - 2 * u, base - 42 * u, 4 * u, 6 * u);
+    if (night) drawGlow(g, [255, 200, 110], x, base - 30 * u, 26 * u, 0.5);
+  },
+  // Mercedes-Benz Stadium: a low bowl with the pinwheel roof of triangles
+  mbstadium(g, x, base, u, pal, seed, night, fillC, windows, redLight, sil) {
+    const w = 110 * u, h = 30 * u;
+    fillC(night ? [26, 30, 36] : mix([150, 158, 166], pal.fog, 0.3));
+    g.beginPath(); g.moveTo(x - w / 2, base); g.lineTo(x - w / 2 + 8 * u, base - h); g.lineTo(x + w / 2 - 8 * u, base - h); g.lineTo(x + w / 2, base); g.closePath(); g.fill();
+    fillC(night ? [40, 46, 54] : mix([196, 202, 208], pal.fog, 0.3));
+    for (let i = 0; i < 8; i++) { const x0 = x - w / 2 + 8 * u + i * (w - 16 * u) / 8; g.beginPath(); g.moveTo(x0, base - h); g.lineTo(x0 + (w - 16 * u) / 16, base - h - 12 * u); g.lineTo(x0 + (w - 16 * u) / 8, base - h); g.closePath(); g.fill(); }
+    if (night) { g.fillStyle = 'rgba(120,200,255,0.7)'; g.fillRect(x - w / 2 + 10 * u, base - h + 4 * u, w - 20 * u, 2.4 * u); drawGlow(g, [120, 190, 255], x, base - h, 50 * u, 0.25); }
+  },
+  // Midtown: a cluster of towers, One Atlantic Center with its copper pyramid, and the glowing top of 1180 Peachtree
+  midtown(g, x, base, u, pal, seed, night, fillC, windows, redLight, sil) {
+    for (const [dx, w, h] of [[-110, 18, 56], [-84, 22, 80], [-58, 16, 64], [-30, 24, 104], [26, 20, 88], [50, 16, 60], [76, 24, 72], [104, 18, 50]]) {
+      const bx = x + dx * u - w * u / 2, by = base - h * u; fillC(sil); g.fillRect(bx, by, w * u, h * u); windows(bx, by, w * u, h * u, 0.45, [200, 220, 245]);
+    }
+    fillC(sil); g.fillRect(x - 12 * u, base - 112 * u, 24 * u, 112 * u); windows(x - 12 * u, base - 112 * u, 24 * u, 112 * u, 0.4, [255, 214, 150]);
+    fillC(night ? [70, 110, 90] : mix([96, 140, 116], pal.fog, 0.3)); g.beginPath(); g.moveTo(x - 12 * u, base - 112 * u); g.lineTo(x, base - 134 * u); g.lineTo(x + 12 * u, base - 112 * u); g.closePath(); g.fill();
+    redLight(x, base - 136 * u);
+    if (night) { g.fillStyle = 'rgba(160,210,255,0.85)'; g.fillRect(x + 20 * u, base - 92 * u, 12 * u, 4 * u); drawGlow(g, [150, 200, 255], x + 26 * u, base - 90 * u, 16 * u, 0.5); }
+  },
+  // Buckhead: glass towers, a couple with sloped tops
+  buckhead(g, x, base, u, pal, seed, night, fillC, windows, redLight, sil) {
+    for (const [dx, w, h, cut] of [[-90, 20, 60, 0], [-62, 24, 84, 1], [-34, 18, 70, 0], [-8, 26, 96, 1], [22, 20, 78, 0], [48, 22, 66, 1], [76, 18, 54, 0]]) {
+      const bx = x + dx * u - w * u / 2, by = base - h * u; fillC(sil);
+      if (cut) { g.beginPath(); g.moveTo(bx, base); g.lineTo(bx, by + 10 * u); g.lineTo(bx + w * u, by); g.lineTo(bx + w * u, base); g.closePath(); g.fill(); }
+      else g.fillRect(bx, by, w * u, h * u);
+      windows(bx, by + 10 * u, w * u, h * u - 10 * u, 0.5, [190, 215, 240]);
+    }
+  },
+  // downtown seen from further out: the Plaza's spire, the round Westin and a band of towers
+  skyline(g, x, base, u, pal, seed, night, fillC, windows, redLight, sil) {
+    const k = 0.62;
+    for (const [dx, w, h] of [[-80, 14, 40], [-60, 18, 58], [-40, 14, 70], [-20, 16, 52], [22, 18, 64], [42, 14, 76], [60, 20, 50], [82, 14, 36]]) {
+      const bx = x + dx * u * k - w * u * k / 2, by = base - h * u * k; fillC(sil); g.fillRect(bx, by, w * u * k, h * u * k); windows(bx, by, w * u * k, h * u * k, 0.4, [255, 214, 150]);
+    }
+    const bw = 18 * u * k, bh = 100 * u * k; fillC(sil); g.fillRect(x - bw / 2, base - bh, bw, bh);
+    g.beginPath(); g.moveTo(x - bw / 2, base - bh); g.lineTo(x, base - bh - 18 * u * k); g.lineTo(x + bw / 2, base - bh); g.closePath(); g.fill();
+    g.strokeStyle = night ? '#ffc45a' : css(mix([196, 160, 80], pal.fog, 0.3)); g.lineWidth = Math.max(1, u * k); g.beginPath(); g.moveTo(x, base - bh - 18 * u * k); g.lineTo(x, base - bh - 30 * u * k); g.stroke();
+    if (night) drawGlow(g, [255, 190, 90], x, base - bh - 10 * u * k, 20 * u * k, 0.4);
+    fillC(sil); g.fillRect(x - 38 * u * k, base - 78 * u * k, 13 * u * k, 78 * u * k);
+    redLight(x, base - bh - 30 * u * k);
+  },
+  // Hartsfield-Jackson: the tall control tower, the terminal and hotels
+  atltower(g, x, base, u, pal, seed, night, fillC, windows, redLight) {
+    fillC(night ? [26, 30, 34] : mix([176, 180, 184], pal.fog, 0.3));
+    g.beginPath(); g.moveTo(x - 5 * u, base); g.lineTo(x - 3 * u, base - 60 * u); g.lineTo(x + 3 * u, base - 60 * u); g.lineTo(x + 5 * u, base); g.closePath(); g.fill();
+    g.beginPath(); g.moveTo(x - 6 * u, base - 60 * u); g.lineTo(x - 10 * u, base - 70 * u); g.lineTo(x + 10 * u, base - 70 * u); g.lineTo(x + 6 * u, base - 60 * u); g.closePath(); g.fill();
+    fillC(night ? [120, 200, 255] : [70, 90, 110]); g.fillRect(x - 10 * u, base - 75 * u, 20 * u, 5 * u);
+    fillC(night ? [26, 30, 34] : mix([176, 180, 184], pal.fog, 0.3)); g.fillRect(x - 8 * u, base - 78 * u, 16 * u, 3 * u);
+    redLight(x, base - 80 * u);
+    fillC(night ? [30, 34, 38] : mix([196, 196, 190], pal.fog, 0.3)); g.fillRect(x + 20 * u, base - 14 * u, 150 * u, 14 * u); g.fillRect(x - 120 * u, base - 30 * u, 26 * u, 30 * u); g.fillRect(x - 88 * u, base - 22 * u, 20 * u, 22 * u);
+    if (night) { g.fillStyle = 'rgba(255,225,170,0.75)'; g.fillRect(x + 22 * u, base - 10 * u, 146 * u, 3 * u); windows(x - 120 * u, base - 30 * u, 26 * u, 30 * u, 0.6); }
+  },
+  // Stone Mountain: a huge bare granite dome rising out of the pines
+  stonemtn(g, x, base, u, pal, seed, night) {
+    const k = pal.env === 'stonemtn' ? 1.5 : 0.7;
+    const col = night ? [22, 24, 26] : mix([146, 146, 142], pal.fog, 0.3 + (k < 1 ? 0.25 : 0));
+    ridge(g, x, base, u * k, [[-190, 0], [-160, 10], [-130, 24], [-100, 40], [-70, 54], [-40, 62], [-10, 66], [20, 66], [50, 62], [80, 52], [104, 38], [120, 24], [134, 10], [150, 0]], col);
+    if (!night) { g.fillStyle = css(mix([110, 110, 108], pal.fog, 0.3)); for (let i = 0; i < 6; i++) { const dx = -80 + i * 30; g.fillRect(x + dx * u * k, base - (50 - Math.abs(i - 2.5) * 6) * u * k, 1.2 * u * k, (40 - Math.abs(i - 2.5) * 5) * u * k); } }   // the dark streaks down the rock
+    ridge(g, x, base, u, [[-220, 0], [-200, 8], [-160, 10], [-120, 7], [-60, 9], [0, 8], [60, 10], [120, 8], [180, 9], [220, 0]], night ? [12, 16, 14] : mix([52, 76, 50], pal.fog, 0.4));   // the pines in front
+  },
+};
 /* ---------- road ---------- */
 function quadX(g, a, b, xl, xr) {
   g.beginPath(); g.moveTo(X(a, xl), a.y + 0.5); g.lineTo(X(a, xr), a.y + 0.5);
@@ -3209,6 +3532,14 @@ function quadX(g, a, b, xl, xr) {
 }
 function vquad(g, x, y0, y1, z0, z1) { const p0 = P(x, y0, z0), p1 = P(x, y1, z0), p2 = P(x, y1, z1), p3 = P(x, y0, z1); g.beginPath(); g.moveTo(p0.x, p0.y); g.lineTo(p1.x, p1.y); g.lineTo(p2.x, p2.y); g.lineTo(p3.x, p3.y); g.closePath(); g.fill(); return [p0, p1, p2, p3]; }
 const ZEBRA_SP = 620;
+/* the walls beside an American road: concrete sound walls on the Perimeter, red clay cuttings out to Stone Mountain.
+   Height of the wall at road segment k on side sd, 0 where there is none. Trees behind it only show above it. */
+function sideWall(env, k, sd) {
+  if (env.soundwall && hash(Math.floor(k / 30), sd > 0 ? 143 : 141) < env.soundwall) return 4.6;
+  if (env.clay) { const cb = Math.floor(k / 25); if (hash(cb, sd > 0 ? 151 : 152) < 0.6) return 2.2 + hash(cb, 153 + sd) * 2.6; }
+  return 0;
+}
+const wallX = (env, sd) => sd < 0 ? -(ROAD_HALF + 6.5) : (env.opposite ? ROAD_HALF + 13.2 : env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF) + 6.5;
 function drawRoad(pal, dist, evDist) {
   const env = ENV[pal.env] || ENV.aroad;
   const camW = dist - Z_PLAYER;
@@ -3277,8 +3608,10 @@ function drawRoad(pal, dist, evDist) {
       ctx.fillStyle = css(wc(pal, MAT.kerb, odd ? 1.2 : 1, fg));
       quadX(ctx, a, b, -ROAD_HALF - 0.25, -ROAD_HALF); if (!env.opposite && !env.sideLane) quadX(ctx, a, b, ROAD_HALF, ROAD_HALF + 0.25);
     }
-    ctx.fillStyle = css(wc(pal, MAT.road, (odd ? 1.04 : 0.98) * (pal.rain ? 0.78 : 1), fg));
+    const roadM = env.roadC ? MAT.concreteRoad : MAT.road;
+    ctx.fillStyle = css(wc(pal, roadM, (odd ? 1.04 : 0.98) * (pal.rain ? 0.78 : 1), fg));
     quadX(ctx, a, b, env.shoulder ? -LANE_W / 2 - 0.3 : -ROAD_HALF, env.sideLane ? ROAD_HALF + LANE_W : RE);
+    if (env.roadC && hash(k, 147) < 0.5) { ctx.fillStyle = css(wc(pal, roadM, 0.8, fg)); const t0 = G(z0), t1 = G(Math.min(z1, z0 + 0.05)); quadX(ctx, t0, t1, -ROAD_HALF, env.sideLane ? ROAD_HALF + LANE_W : RE); }   // joints between the concrete slabs
     if (pal.rain) {
       // wet tarmac mirrors the sky, more and more towards the horizon
       const zm = (z0 + z1) / 2;
@@ -3290,19 +3623,21 @@ function drawRoad(pal, dist, evDist) {
     if (env.busLane) { ctx.fillStyle = css(wc(pal, MAT.bus, odd ? 1.04 : 0.98, fg)); quadX(ctx, a, b, -ROAD_HALF, -LANE_W / 2 - 0.1); }
     if (env.opposite) {
       ctx.fillStyle = css(wc(pal, L2 ? groundOf(env) : MAT.median, L2 ? 0.92 : 1, fg)); quadX(ctx, a, b, RE, oppX0);
-      ctx.fillStyle = css(wc(pal, MAT.road, odd ? 1.02 : 0.96, fg)); quadX(ctx, a, b, oppX0, oppX1);
+      ctx.fillStyle = css(wc(pal, env.roadC ? MAT.concreteRoad : MAT.road, odd ? 1.02 : 0.96, fg)); quadX(ctx, a, b, oppX0, oppX1);
       if (((k % 3) + 3) % 3 === 0 && z0 < 220) { ctx.fillStyle = css(wc(pal, MAT.line, 0.9, fg * 1.05)); if (L2) quadX(ctx, a, b, oppX0 + 3.72, oppX0 + 3.87); else { quadX(ctx, a, b, oppX0 + 3.55, oppX0 + 3.7); quadX(ctx, a, b, oppX0 + 7.15, oppX0 + 7.3); } }
     }
     // markings (white lines stay bright, lit by headlights and lamps)
     const lineC = css(mix([232, 232, 222].map(v => v * Math.max(0.62, pal.light + 0.25)), pal.fog, fg * 1.05));
     ctx.fillStyle = lineC;
     if (env.busLane) { quadX(ctx, a, b, -LANE_W / 2 - 0.22, -LANE_W / 2 - 0.02); }
-    const m3 = ((k % 3) + 3) % 3;
+    const m3 = ((k % 3) + 3) % 3, US = !!env.us, m4 = ((k % 4) + 4) % 4;
+    // American roads: a yellow line down the left edge and the centre, shorter dashes further apart, amber markers on the yellow
+    const yellowC = US ? css(mix([236, 190, 40].map(v => v * Math.max(0.62, pal.light + 0.25)), pal.fog, fg * 1.05)) : lineC;
     if (env.twoWay) {
       // a solid line along the parking bays with a tick between each bay, and the long dashed centre line
       quadX(ctx, a, b, -LANE_W / 2 - 0.12, -LANE_W / 2 - 0.02);
       quadX(ctx, a, b, ROAD_HALF - 0.45, ROAD_HALF - 0.3);
-      if (m3 !== 2) quadX(ctx, a, b, LANE_W / 2 - 0.08, LANE_W / 2 + 0.08);
+      if (US ? m4 < 2 : m3 !== 2) { ctx.fillStyle = yellowC; quadX(ctx, a, b, LANE_W / 2 - 0.08, LANE_W / 2 + 0.08); ctx.fillStyle = lineC; }
       if (!env.shoulder && ((k % 2) + 2) % 2 === 0 && z0 < 200) { const t0 = G(z0), t1 = G(Math.min(z1, z0 + 0.14)); quadX(ctx, t0, t1, -ROAD_HALF + 0.2, -LANE_W / 2 - 0.1); }
     } else if (L2) {
       // two lanes: edge lines both sides and one dashed line between the lanes
@@ -3317,15 +3652,18 @@ function drawRoad(pal, dist, evDist) {
         }
       }
     } else {
-    quadX(ctx, a, b, -ROAD_HALF + 0.3, -ROAD_HALF + 0.45); quadX(ctx, a, b, (env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF) - 0.45, (env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF) - 0.3);
-    if (env.sideLane && m3 === 0) quadX(ctx, a, b, LANE_W * 1.5 - 0.07, LANE_W * 1.5 + 0.07);
-    if (m3 === 0) {
+    ctx.fillStyle = yellowC; quadX(ctx, a, b, -ROAD_HALF + 0.3, -ROAD_HALF + 0.45); ctx.fillStyle = lineC;
+    quadX(ctx, a, b, (env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF) - 0.45, (env.sideLane ? ROAD_HALF + LANE_W : ROAD_HALF) - 0.3);
+    const dash = US ? m4 === 0 : m3 === 0;
+    if (env.sideLane && dash) quadX(ctx, a, b, LANE_W * 1.5 - 0.07, LANE_W * 1.5 + 0.07);
+    if (dash) {
       if (!env.busLane) quadX(ctx, a, b, -LANE_W / 2 - 0.07, -LANE_W / 2 + 0.07);
       quadX(ctx, a, b, LANE_W / 2 - 0.07, LANE_W / 2 + 0.07);
-    } else if (m3 === 1 && z0 < 140 && z0 > Z_PLAYER + 2 && pal.lit > 0.3) {
-      // UK cat's eyes: red on the left edge, white between lanes, amber on the right
+    } else if ((US ? m4 === 2 : m3 === 1) && z0 < 140 && z0 > Z_PLAYER + 2 && pal.lit > 0.3) {
+      // UK cat's eyes: red on the left edge, white between lanes, amber on the right. American markers: amber on the yellow line, white between lanes
       const r = clamp(0.07 * a.s, 1, 3.2), y = a.y - (a.y - b.y) * 0.5;
-      const studs = [[-ROAD_HALF + 0.37, [255, 60, 50]], [-LANE_W / 2, [235, 235, 225]], [LANE_W / 2, [235, 235, 225]], [ROAD_HALF - 0.37, [255, 170, 40]]];
+      const studs = US ? [[-ROAD_HALF + 0.37, [255, 180, 40]], [-LANE_W / 2, [235, 235, 225]], [LANE_W / 2, [235, 235, 225]]].concat(env.sideLane ? [[LANE_W * 1.5, [235, 235, 225]]] : [])
+        : [[-ROAD_HALF + 0.37, [255, 60, 50]], [-LANE_W / 2, [235, 235, 225]], [LANE_W / 2, [235, 235, 225]], [ROAD_HALF - 0.37, [255, 170, 40]]];
       for (const [sx, c] of studs) {
         const px = (X(a, sx) + X(b, sx)) / 2;
         ctx.fillStyle = css(mix(c, pal.fog, fg)); ctx.fillRect(px - r, y - r * 0.6, r * 2, r * 1.2);
@@ -3373,6 +3711,28 @@ function drawRoad(pal, dist, evDist) {
       const hb = 2 + hash(Math.floor(k / 3), xb > 0 ? 76 : 77) * 2.6;
       ctx.fillStyle = css(wc(pal, mix(MAT.redearth, [96, 70, 52], hash(Math.floor(k / 2), 79) * 0.45), (odd ? 1.04 : 0.95) * (0.88 + hash(k, 78) * 0.14), fg)); vquad(ctx, xb, 0, hb, z0, z1);
       ctx.fillStyle = css(wc(pal, [48, 86, 40], 1, fg)); vquad(ctx, xb + (xb > 0 ? 0.01 : -0.01), hb - 0.2, hb + 1.4, z0, z1);
+    }
+    if ((env.soundwall || env.clay) && z0 < 320) for (const sd of [-1, 1]) {
+      const hw = sideWall(env, k, sd); if (!hw) continue;
+      const xb = wallX(env, sd);
+      if (env.clay) {
+        // a cutting through the red Georgia clay, grass and pines along the top
+        ctx.fillStyle = css(wc(pal, mix(MAT.clay, [120, 70, 44], hash(Math.floor(k / 3), 154 + sd) * 0.4), (odd ? 1.04 : 0.95) * (0.9 + hash(k, 156) * 0.12), fg)); vquad(ctx, xb, 0, hw, z0, z1);
+        ctx.fillStyle = css(wc(pal, [66, 96, 50], 1, fg)); vquad(ctx, xb + sd * 0.01, hw - 0.25, hw + 0.5, z0, z1);
+      } else {
+        // concrete sound wall panels, a darker line at each post
+        ctx.fillStyle = css(wc(pal, [156, 150, 138], 0.9 + hash(Math.floor(k / 2), 142) * 0.07, fg)); vquad(ctx, xb, 0, hw, z0, z1);
+        if (!odd && (k & 3) === 0) { const q0 = P(xb, 0, z0), q1 = P(xb, hw, z0); ctx.fillStyle = css(wc(pal, [110, 106, 98], 1, fg)); ctx.fillRect(q0.x - 0.1 * q0.s, q1.y, Math.max(1, 0.2 * q0.s), q0.y - q1.y); }
+      }
+    }
+    if (env.stack && z0 < 330) for (const sd of [-1, 1]) {
+      // Spaghetti Junction: ramps running alongside high overhead on their columns
+      const xi = sd < 0 ? -(ROAD_HALF + 7) : ROAD_HALF + 13.2 + 4, xo = xi + sd * 11, yd = sd < 0 ? 11 : 17;
+      const u0 = P(xi, yd, z0), u1 = P(xo, yd, z0), u2 = P(xo, yd, z1), u3 = P(xi, yd, z1);
+      ctx.fillStyle = css(wc(pal, [66, 68, 70], 1, fg)); ctx.beginPath(); ctx.moveTo(u0.x, u0.y); ctx.lineTo(u1.x, u1.y); ctx.lineTo(u2.x, u2.y); ctx.lineTo(u3.x, u3.y); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = css(wc(pal, MAT.concrete, 1.02, fg)); vquad(ctx, xi, yd, yd + 1.6, z0, z1);
+      if (((k % 8) + 8) % 8 === 0) { ctx.fillStyle = css(wc(pal, MAT.concrete, 0.86, fg)); const c0 = P(xi + sd * 3, 0, z0 + 1), c1 = P(xi + sd * 3, yd, z0 + 1); ctx.fillRect(c0.x - 0.8 * c0.s, c1.y, 1.6 * c0.s, c0.y - c1.y); }
+      if (pal.lit > 0.3 && ((k % 5) + 5) % 5 === 0 && z0 < 220) { const q = P(xi + sd * 1.5, yd - 0.1, z0); ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, [255, 190, 110], q.x, q.y, clamp(1.2 * q.s, 2, 50), 0.45 * (1 - fg)); ctx.globalCompositeOperation = 'source-over'; }
     }
     if (env.hedge && z0 < 240) for (const xb of [-ROAD_HALF - 6.5, oppR + 6]) { ctx.fillStyle = css(wc(pal, MAT.hedge, odd ? 1.05 : 0.95, fg)); vquad(ctx, xb, 0, 1.6 + hash(k, xb > 0 ? 71 : 72) * 0.5, z0, z1); }
   }
@@ -3438,6 +3798,7 @@ function wetCarLights(R, pal) {
   const red = [255, 44, 30], white = [255, 238, 210];
   ctx.globalCompositeOperation = 'lighter';
   const tail = (x, z, w, hot) => { const a = (hot ? 0.55 : 0.3) * (1 - fogK(z)); wetStreak(red, x - w * 0.36, z, 8, 0.3, a); wetStreak(red, x + w * 0.36, z, 8, 0.3, a); };
+  const us = ATL_ENVS.has(pal.env);
   for (const w of R.waves) for (const c of w.cars) {
     const z = Z_PLAYER + carRel(R, w, c);
     if (z < 3 || z > 180 || c.hit) continue;
@@ -3528,12 +3889,26 @@ function drawBuildings(pal, dist, rival) {
         ctx.beginPath(); ctx.moveTo(r0.x, r0.y); ctx.lineTo(r1.x, r1.y); ctx.lineTo(r2.x, r2.y); ctx.lineTo(r3.x, r3.y); ctx.closePath(); ctx.fill();
         if (!clipped && hash(bi, sd + 42) < 0.7) { const c0 = P(xs + sd * 2.5, hgt + 1.6, z0 + 3.4), c1 = P(xs + sd * 2.5, hgt + 4, z0 + 3.4); ctx.fillStyle = css(wc(pal, MAT.brick2, 0.9, fg)); ctx.fillRect(c0.x - 0.3 * c0.s, c1.y, 0.6 * c0.s, c0.y - c1.y); }   // chimney
       }
+      // Westside murals: big blocks of colour, a band and a circle, on some of the warehouse walls
+      let mural = false;
+      if (env.murals && !clipped && z0 < 220 && hash(bi, sd + 61) < env.murals) {
+        mural = true;
+        const cols = [MAT.mural1, MAT.mural2, MAT.mural3, MAT.mural4, MAT.mural5], za = z0 + 0.5, span = z1 - z0 - 1;
+        ctx.fillStyle = css(wc(pal, cols[Math.floor(hash(bi, sd + 62) * 5)], 0.9, fg)); vquad(ctx, xs + sd * 0.01, 0.3, hgt - 0.4, za, za + span);
+        for (let i = 0; i < 4; i++) {
+          const c = cols[Math.floor(hash(bi * 7 + i, sd + 63) * 5)], f0 = hash(bi * 5 + i, sd + 64) * 0.7, f1 = Math.min(1, f0 + 0.18 + hash(bi * 3 + i, sd + 65) * 0.3);
+          const y0 = 0.3 + hash(bi * 11 + i, sd + 66) * hgt * 0.5, y1 = Math.min(hgt - 0.4, y0 + 1.2 + hash(bi * 13 + i, sd + 67) * hgt * 0.5);
+          ctx.fillStyle = css(wc(pal, c, 0.95, fg)); vquad(ctx, xs + sd * 0.012, y0, y1, za + span * f0, za + span * f1);
+        }
+        const cz = za + span * (0.3 + hash(bi, sd + 68) * 0.4), cy = hgt * 0.55, q0 = P(xs, cy, cz - 1.8), q1 = P(xs, cy, cz + 1.8), qc = P(xs, cy, cz);
+        ctx.fillStyle = css(wc(pal, cols[Math.floor(hash(bi, sd + 69) * 5)], 1.05, fg)); ctx.beginPath(); ctx.ellipse(qc.x, qc.y, Math.max(1, Math.abs(q1.x - q0.x) / 2), Math.max(1, 1.8 * qc.s), 0, 0, 7); ctx.fill();
+      }
       if (z0 > 240) continue;
       const winLit = pal.win;
       const winCol = (hv) => night || pal.time === 'dusk' ? css(mix(WIN_COL[Math.floor(hv * 40) % 4], pal.fog, fg * 0.8), 0.9)
         : css(wc(pal, [60, 72, 84], 1, fg));
       // windows
-      if (env.win === 'none') { /* big sheds with no windows */ }
+      if (env.win === 'none' || mural) { /* big sheds with no windows, and murals */ }
       else if (env.win === 'house') {
         // a pair of 1930s semis: two windows up, a bay and a front door down, each side
         const zA = bi * BL - camW + 0.6 + (env.win !== 'sash' ? 0.9 : 0), zB = zA + BL - 1.2 - 1.8, len = zB - zA;
@@ -3582,7 +3957,7 @@ function drawBuildings(pal, dist, rival) {
       }
       // shop fronts with signs
       if (env.shops && hash(bi, sd + 21) < env.shops) {
-        const names = env.names === 'seaside' ? SEASIDE_NAMES : env.names === 'essex' ? ESSEX_NAMES : env.names === 'mu' ? MU_SHOP_NAMES : SHOP_NAMES;
+        const names = env.names === 'seaside' ? SEASIDE_NAMES : env.names === 'essex' ? ESSEX_NAMES : env.names === 'mu' ? MU_SHOP_NAMES : env.names === 'atl' ? ATL_SHOP_NAMES : env.names === 'buckhead' ? BUCKHEAD_NAMES : SHOP_NAMES;
         const nm = SHOP_SPECIAL[rival] && hash(bi, sd + 25) < 0.22 ? SHOP_SPECIAL[rival] : names[Math.floor(hash(bi, sd + 23) * names.length)];
         const za = Math.max(z0, bi * BL - camW + 1.2), zb2 = Math.min(z1, bi * BL - camW + BL - 1.2);
         if (zb2 > za) {
@@ -3664,7 +4039,7 @@ function drawViaduct(pal, dist, rival) {
 function lampSprites(list, pal, dist) {
   const env = ENV[pal.env] || ENV.aroad, SP = env.lampSp, camW = dist - Z_PLAYER;
   if (!SP) return;
-  const lamp = pal.env === 'towers' ? [220, 230, 255] : [242, 163, 58];
+  const lamp = env.lampCol || (pal.env === 'towers' ? [220, 230, 255] : [242, 163, 58]);
   for (const sd of [-1, 1]) {
     const off = sd < 0 ? 0 : SP / 2;
     const k0 = Math.floor((camW - off) / SP), k1 = Math.floor((camW + Z_FAR - off) / SP);
@@ -3768,28 +4143,62 @@ function reedSprites(list, pal, dist) {
     }
   }
 }
-/* bridges over the A12 through Romford */
+/* bridges over the A12 through Romford, and at Spaghetti Junction ramps stacked up to three high over the road */
 function flyoverSprites(list, pal, dist) {
   const env = ENV[pal.env]; if (!env || !env.flyover) return;
-  const camW = dist - Z_PLAYER, SP = env.flyover, DEPTH = 12;
-  const k0 = Math.floor((camW - DEPTH - 400) / SP), k1 = Math.floor((camW + Z_FAR - 400) / SP);
+  const camW = dist - Z_PLAYER, SP = env.flyover, DEPTH = env.stack ? 10 : 12;
+  const k0 = Math.floor((camW - DEPTH - 460) / SP), k1 = Math.floor((camW + Z_FAR - 400) / SP);
   for (let k = k0; k <= k1; k++) {
-    const zf = 400 + k * SP - camW;
-    if (zf + DEPTH < 2 || zf > Z_FAR) continue;
-    list.push({ z: clamp(zf, 2, Z_FAR), draw: () => {
-      const fg = fogK(clamp(zf, 0, Z_FAR)), xl = -ROAD_HALF - 16, xr = ROAD_HALF + 13.2 + 16, y0 = 5.4, y1 = 7.3;
-      const za = Math.max(2, zf), zb = zf + DEPTH;
-      // the underside you drive beneath, then the front face and its parapet
-      const u0 = P(xl, y0, za), u1 = P(xr, y0, za), u2 = P(xr, y0, zb), u3 = P(xl, y0, zb);
-      ctx.fillStyle = css(wc(pal, [60, 62, 64], 1, fg)); ctx.beginPath(); ctx.moveTo(u0.x, u0.y); ctx.lineTo(u1.x, u1.y); ctx.lineTo(u2.x, u2.y); ctx.lineTo(u3.x, u3.y); ctx.closePath(); ctx.fill();
-      if (zf >= 2) {
-        const f0 = P(xl, y0, zf), f1 = P(xr, y1 + 1.1, zf);
-        ctx.fillStyle = css(wc(pal, MAT.concrete, 1.05, fg)); ctx.fillRect(f0.x, f1.y, f1.x - f0.x, f0.y - f1.y);
-        ctx.fillStyle = css(wc(pal, MAT.concrete, 0.8, fg)); const p0 = P(xl, y1, zf); ctx.fillRect(f0.x, p0.y, f1.x - f0.x, Math.max(1, 0.12 * f0.s));
-        for (const xp of [-ROAD_HALF - 2.2, ROAD_HALF + 1.2, ROAD_HALF + 13.2 + 2.2]) { const b = P(xp, 0, zf + 3), t = P(xp, y0, zf + 3); ctx.fillStyle = css(wc(pal, MAT.concrete, 0.92, fg)); ctx.fillRect(b.x - 0.5 * b.s, t.y, 1.0 * b.s, b.y - t.y); }
-        if (pal.lit > 0.3) { ctx.globalCompositeOperation = 'lighter'; for (let i = 0; i < 6; i++) { const q = P(-ROAD_HALF + i * 3.6, y0 - 0.1, zf + 1); drawGlow(ctx, [255, 200, 130], q.x, q.y, clamp(0.8 * q.s, 2, 40), 0.4 * (1 - fg)); } ctx.globalCompositeOperation = 'source-over'; }
-      }
-    } });
+    const lvls = env.stack ? [0, 1, 2].filter(i => i === 0 || hash(k * 3 + i, 171) < 0.7) : [0];
+    for (const lv of lvls) {
+      const zf = 400 + k * SP - camW + lv * 22;
+      if (zf + DEPTH < 2 || zf > Z_FAR) continue;
+      const y0 = 5.4 + lv * 6.4, y1 = y0 + 1.9;
+      list.push({ z: clamp(zf, 2, Z_FAR), draw: () => {
+        const fg = fogK(clamp(zf, 0, Z_FAR)), xl = -ROAD_HALF - 16, xr = ROAD_HALF + 13.2 + 16;
+        const za = Math.max(2, zf), zb = zf + DEPTH;
+        // the underside you drive beneath, then the front face and its parapet
+        const u0 = P(xl, y0, za), u1 = P(xr, y0, za), u2 = P(xr, y0, zb), u3 = P(xl, y0, zb);
+        ctx.fillStyle = css(wc(pal, [60, 62, 64], 1, fg)); ctx.beginPath(); ctx.moveTo(u0.x, u0.y); ctx.lineTo(u1.x, u1.y); ctx.lineTo(u2.x, u2.y); ctx.lineTo(u3.x, u3.y); ctx.closePath(); ctx.fill();
+        if (zf >= 2) {
+          const f0 = P(xl, y0, zf), f1 = P(xr, y1 + 1.1, zf);
+          ctx.fillStyle = css(wc(pal, MAT.concrete, 1.05 - lv * 0.05, fg)); ctx.fillRect(f0.x, f1.y, f1.x - f0.x, f0.y - f1.y);
+          ctx.fillStyle = css(wc(pal, MAT.concrete, 0.8, fg)); const p0 = P(xl, y1, zf); ctx.fillRect(f0.x, p0.y, f1.x - f0.x, Math.max(1, 0.12 * f0.s));
+          for (const xp of [-ROAD_HALF - 2.2, ROAD_HALF + 1.2, ROAD_HALF + 13.2 + 2.2]) { const b = P(xp, 0, zf + 3), t = P(xp, y0, zf + 3); ctx.fillStyle = css(wc(pal, MAT.concrete, 0.92, fg)); ctx.fillRect(b.x - 0.5 * b.s, t.y, 1.0 * b.s, b.y - t.y); }
+          if (pal.lit > 0.3) { ctx.globalCompositeOperation = 'lighter'; for (let i = 0; i < 6; i++) { const q = P(-ROAD_HALF + i * 3.6, y0 - 0.1, zf + 1); drawGlow(ctx, [255, 200, 130], q.x, q.y, clamp(0.8 * q.s, 2, 40), 0.4 * (1 - fg)); } ctx.globalCompositeOperation = 'source-over'; }
+        }
+      } });
+    }
+  }
+}
+/* loblolly pines: tall bare trunks and a ragged dark crown at the top, rows of them along American roads.
+   Behind a sound wall or up on a clay cutting only the part above it shows */
+function pineSprites(list, pal, dist) {
+  const env = ENV[pal.env]; if (!env || !env.pines) return;
+  const camW = dist - Z_PLAYER, SP = env.pines > 1 ? 6 : 10;
+  for (const sd of [-1, 1]) for (let row = 0; row < 2; row++) {
+    const k0 = Math.floor(camW / SP), k1 = Math.floor((camW + (row ? 240 : Z_FAR)) / SP);
+    for (let k = k0; k <= k1; k++) {
+      const h0 = hash(k * 3 + row, sd + 160);
+      if (h0 < (env.pines > 1 ? 0.15 : 0.45)) continue;
+      const z = k * SP - camW + hash(k, sd + row + 161) * SP * 0.8;
+      if (z < 1.5 || z > Z_FAR) continue;
+      const xt = wallX(env, sd) + sd * (3 + row * 7 + hash(k, sd + row + 162) * 5), ht = 14 + hash(k, sd + row + 163) * 9;
+      const yb = sideWall(env, Math.floor((camW + z) / 4), sd);
+      list.push({ z, draw: () => {
+        const fg = fogK(z), b = P(xt, yb, z), t = P(xt, ht - 5, z), s2 = b.s;
+        ctx.fillStyle = css(wc(pal, [74, 58, 44], 1, fg)); ctx.fillRect(b.x - 0.13 * s2, t.y, Math.max(1, 0.26 * s2), b.y - t.y);
+        ctx.fillStyle = css(wc(pal, shade(MAT.pine, 0.72 + h0 * 0.4), 1, fg));
+        // the crown: a ragged column of clumps over the top third of the tree, wider low down
+        const n = 6;
+        ctx.beginPath();
+        for (let i = 0; i < n; i++) {
+          const f = i / (n - 1), q = P(xt + (hash(k * 7 + i, sd + 164) - 0.5) * 2.4, ht - 6 + f * 7, z), r = (2.4 - f * 1.1) * s2 * (0.8 + hash(k * 5 + i, sd + 165) * 0.4);
+          ctx.moveTo(q.x + r, q.y); ctx.ellipse(q.x, q.y, r, r * 0.6, 0, 0, 7);
+        }
+        ctx.fill();
+      } });
+    }
   }
 }
 /* pylons marching alongside the A127 with the lines slung between them */
@@ -4127,7 +4536,7 @@ function signSprites(list, pal, dist, ev) {
     if (z < 1.5 || z > Z_FAR || 260 + k * SIGN_SP > ev.dist - 150) continue;
     const s = ev.signs[k % ev.signs.length];
     list.push({ z, draw: () => {
-      const fg = fogK(z), x0 = -(ROAD_HALF + 4.4), x1 = -(ROAD_HALF + 1.2), yb = 1.9, yt = s[0] === 'borough' ? 3.1 : 3.9;
+      const fg = fogK(z), x0 = -(ROAD_HALF + 4.4), x1 = -(ROAD_HALF + 1.2), yb = 1.9, yt = s[0] === 'borough' || s[0] === 'city' ? 3.1 : 3.9;
       const a = P(x0, yt + (s[0] === 'dart' ? 0.5 : 0), z), b = P(x1, yb, z), bw = b.x - a.x, bh = b.y - a.y;
       const post = css(wc(pal, [110, 116, 122], 1, fg));
       for (const xp of [x0 + 0.4, x1 - 0.4]) { const p0 = P(xp, 0, z), p1 = P(xp, yb, z); ctx.fillStyle = post; ctx.fillRect(p0.x - 0.05 * p0.s, p1.y, Math.max(1, 0.1 * p0.s), p0.y - p1.y); }
@@ -4140,6 +4549,37 @@ function signSprites(list, pal, dist, ev) {
           ctx.fillStyle = white; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
           ctx.font = `700 ${Math.round(bh * 0.26)}px ${FONT_PLATE}`; ctx.fillText(s[1].toUpperCase(), a.x + bw / 2, a.y + bh * 0.32);
           ctx.font = `${Math.round(bh * 0.14)}px ${FONT_PLATE}`; ctx.fillText(s[2] || '', a.x + bw / 2, a.y + bh * 0.68);
+        }
+      } else if (s[0] === 'i' || s[0] === 'us' || s[0] === 'ga' || s[0] === 'city') {
+        // American signs: green with white letters. Interstates get the red and blue shield, US routes the white one
+        ctx.fillStyle = css(mix(wc(pal, [0, 104, 72], lift, 0), pal.fog, fg)); ctx.fillRect(a.x, a.y, bw, bh);
+        const white = css(mix([245, 245, 245].map(v => v * Math.min(1, pal.light * lift + 0.35)), pal.fog, fg));
+        ctx.strokeStyle = white; ctx.lineWidth = Math.max(1, bw * 0.015); ctx.strokeRect(a.x + bw * 0.03, a.y + bh * 0.05, bw * 0.94, bh * 0.9);
+        if (bw > 40) {
+          ctx.textBaseline = 'middle';
+          if (s[0] === 'city') {
+            ctx.fillStyle = white; ctx.textAlign = 'center';
+            const words = s[1].split(' of ');
+            if (words.length > 1) { ctx.font = `${Math.round(bh * 0.2)}px ${FONT_PLATE}`; ctx.fillText(words[0] + ' of', a.x + bw / 2, a.y + bh * 0.32); ctx.font = `700 ${Math.round(bh * 0.3)}px ${FONT_PLATE}`; ctx.fillText(words[1], a.x + bw / 2, a.y + bh * 0.66); }
+            else { ctx.font = `700 ${Math.round(bh * 0.26)}px ${FONT_PLATE}`; ctx.fillText(s[1], a.x + bw / 2, a.y + bh * 0.52); }
+          } else {
+            const sx = a.x + bw * 0.08, sy = a.y + bh * 0.14, sw = bh * 0.34, sh = bh * 0.36, lit = Math.min(1, pal.light * lift + 0.35);
+            if (s[0] === 'i') {
+              ctx.fillStyle = css(mix([20, 60, 150].map(v => v * lit), pal.fog, fg));
+              ctx.beginPath(); ctx.moveTo(sx, sy + sh * 0.2); ctx.quadraticCurveTo(sx + sw / 2, sy - sh * 0.05, sx + sw, sy + sh * 0.2); ctx.lineTo(sx + sw, sy + sh * 0.55); ctx.quadraticCurveTo(sx + sw, sy + sh * 0.9, sx + sw / 2, sy + sh); ctx.quadraticCurveTo(sx, sy + sh * 0.9, sx, sy + sh * 0.55); ctx.closePath(); ctx.fill();
+              ctx.fillStyle = css(mix([200, 30, 40].map(v => v * lit), pal.fog, fg)); ctx.fillRect(sx + sw * 0.08, sy + sh * 0.12, sw * 0.84, sh * 0.2);
+            } else {
+              ctx.fillStyle = white;
+              if (s[0] === 'us') { ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx + sw, sy); ctx.lineTo(sx + sw, sy + sh * 0.6); ctx.quadraticCurveTo(sx + sw, sy + sh, sx + sw / 2, sy + sh); ctx.quadraticCurveTo(sx, sy + sh, sx, sy + sh * 0.6); ctx.closePath(); ctx.fill(); }
+              else { ctx.beginPath(); ctx.ellipse(sx + sw / 2, sy + sh / 2, sw * 0.52, sh * 0.5, 0, 0, 7); ctx.fill(); }
+            }
+            ctx.fillStyle = s[0] === 'i' ? white : '#111'; ctx.textAlign = 'center';
+            ctx.font = `700 ${Math.round(bh * (s[1].length > 2 ? 0.14 : 0.17))}px ${FONT_PLATE}`; ctx.fillText(s[1], sx + sw / 2, sy + sh * (s[0] === 'i' ? 0.62 : 0.55));
+            ctx.fillStyle = white; ctx.textAlign = 'left'; ctx.font = `700 ${Math.round(bh * 0.2)}px ${FONT_PLATE}`;
+            ctx.fillText(s[2], a.x + bw * 0.08, a.y + bh * 0.66); ctx.fillText(s[3] || '', a.x + bw * 0.08, a.y + bh * 0.86);
+            ctx.beginPath(); ctx.moveTo(a.x + bw * 0.88, a.y + bh * 0.2); ctx.lineTo(a.x + bw * 0.93, a.y + bh * 0.4); ctx.lineTo(a.x + bw * 0.83, a.y + bh * 0.4); ctx.closePath(); ctx.fill();
+            ctx.fillRect(a.x + bw * 0.87, a.y + bh * 0.4, bw * 0.02, bh * 0.45);
+          }
         }
       } else if (s[0] === 'green') {
         ctx.fillStyle = css(mix(wc(pal, [0, 112, 60], lift, 0), pal.fog, fg)); ctx.fillRect(a.x, a.y, bw, bh);
@@ -4215,7 +4655,7 @@ function updateOncoming(pal, v, dt, active) {
   // c.z is the far end of an oncoming car; drop it once its front has passed the camera
   for (let i = oncoming.length - 1; i >= 0; i--) if (oncoming[i].z < 7) oncoming.splice(i, 1);
   if (oncoming.length < 5 && Math.random() < dt * 1.4) {
-    const lane = randInt(env.lanes2 ? 2 : 3), ty = pickType(null, ESSEX_ENVS.has(pal.env), MU_ENVS.has(pal.env));
+    const lane = randInt(env.lanes2 ? 2 : 3), ty = pickType(null, ESSEX_ENVS.has(pal.env), MU_ENVS.has(pal.env), ATL_ENVS.has(pal.env));
     if (!oncoming.some(c => c.lane === lane && c.z > Z_FAR - 40))
       oncoming.push({ z: Z_FAR - 5, lane, v: rand(14, 24), type: ty.id, color: ty.id === 'cab' ? '#141517' : ty.id === 'van' ? '#e9ebec' : TRAFFIC_COLORS[randInt(TRAFFIC_COLORS.length)] });
   }
@@ -4316,7 +4756,7 @@ function renderScene(R, dt) {
   const list = [];
   lampSprites(list, pal, p.dist);
   treeSprites(list, pal, p.dist);
-  woodSprites(list, pal, p.dist); reedSprites(list, pal, p.dist); flyoverSprites(list, pal, p.dist); pylonSprites(list, pal, p.dist); tankSprites(list, pal, p.dist);
+  woodSprites(list, pal, p.dist); reedSprites(list, pal, p.dist); flyoverSprites(list, pal, p.dist); pineSprites(list, pal, p.dist); pylonSprites(list, pal, p.dist); tankSprites(list, pal, p.dist);
   islandSprites(list, pal, p.dist, sceneT);
   bridgeSprites(list, pal, p.dist, ev.towers);
   beaconSprites(list, pal, p.dist, R.demo ? 1e9 : ev.dist, sceneT);
@@ -4339,6 +4779,7 @@ function renderScene(R, dt) {
       if (pal.lit > 0.3 && hz > 3) { const hp = P(ROAD_HALF + 4.2 + c.lane * 3.6, 0.7, hz), r = clamp(1.2 * hp.s, 3, Math.max(W, H) * 0.06), a = 0.9 * clamp((hz - 3) / 10, 0, 1); ctx.globalCompositeOperation = 'lighter'; drawGlow(ctx, [255, 245, 220], hp.x - 0.6 * hp.s, hp.y, r, a); drawGlow(ctx, [255, 245, 220], hp.x + 0.6 * hp.s, hp.y, r, a); ctx.globalCompositeOperation = 'source-over'; }
     } });
   }
+  const us = ATL_ENVS.has(pal.env);
   for (const w of R.waves) for (const c of w.cars) {
     const z = Z_PLAYER + carRel(R, w, c);
     if (z < 1.3 || z > Z_FAR || (c.hit && c.hitT > 0.75)) continue;
@@ -4349,7 +4790,7 @@ function renderScene(R, dt) {
       const mesh = getMesh(c.type, {});
       drawCar(ctx, mesh, { x: laneToX(c.lane) + (c.hit ? c.spin * c.hitT * 1.2 : 0) + (parked ? -0.25 : 0), z, yaw: (onc ? Math.PI : 0) + (c.hit ? c.spin * c.hitT * 2.2 : 0), fog: fogK(z), env, lamp: lampK(z),
         brake: c.brake > 0 && !c.hit && !parked && !onc, route: c.route,
-        look: { paint: c.color, finish: c.type === 'bus' ? 'gloss' : hash(c.lane * 7 + w.id, 3) > 0.5 ? 'metallic' : 'gloss', tint: c.type === 'cab' ? 2 : 1, rims: 'five', rimColor: '#9aa0a6' } });
+        look: { paint: c.color, finish: c.type === 'bus' ? 'gloss' : hash(c.lane * 7 + w.id, 3) > 0.5 ? 'metallic' : 'gloss', tint: c.type === 'cab' ? 2 : 1, rims: 'five', rimColor: '#9aa0a6', usPlate: us } });
       ctx.globalAlpha = 1;
       if (pal.rain && !onc && !parked && !c.hit) spray(laneToX(c.lane), z, mesh.W, 0.7);
       // oncoming headlights, so you can see them coming down the high street
@@ -4467,7 +4908,7 @@ function drawRival(R, z, pal, env) {
   if (bw <= 0 || bh <= 0) return;
   gctx.clearRect(bx - 2, by - 2, bw + 4, bh + 4);
   drawCar(gctx, mesh, { x: xm, z, yaw: clamp(o.vx * 0.012, -0.1, 0.1), roll: bike ? clamp(-o.vx * 0.06, -0.35, 0.35) : 0, fog: fogK(z), env, brake: o.finished, nitro: bike && o.boosting ? 0.6 : 0, flame: o.pop ? Math.min(1, o.pop / 0.12) : 0, plateText: lk.plate,
-    look: Object.assign({ finish: 'metallic', tint: 2, rims: 'five', rimColor: '#c3c8cc' }, lk) });
+    look: Object.assign({ finish: 'metallic', tint: 2, rims: 'five', rimColor: '#c3c8cc' }, lk, R.ev.chapter === 'Atlanta' ? { usPlate: true } : null) });
   const near = Math.abs(o.x - R.p.x) < 0.7 && Math.abs(z - Z_PLAYER) < 6;
   ctx.globalAlpha = R.ev.drag ? 1 : (near ? 0.25 : 0.62) * clamp((Z_FAR - z) / 45, 0, 1);
   ctx.drawImage(ghostCvs, bx * DPR, by * DPR, bw * DPR, bh * DPR, bx, by, bw, bh);
@@ -4478,7 +4919,8 @@ function drawRival(R, z, pal, env) {
     ctx.globalAlpha = 0.92; ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.fillRect(cx - lw / 2 - 5, y0 - 1, lw + 10, lh + 8);
     ctx.drawImage(logoImg, cx - lw / 2, y0 + 3, lw, lh); ctx.globalAlpha = 1;
   } else if (bw > 26) {
-    const tag = R.ev.brand || (R.ev.oppTag ? R.ev.oppTag.toUpperCase() : null) || (R.ev.rival === 'king' ? 'THE KING' : (R.ev.oppName || 'RIVAL').split(' ')[0].toUpperCase()), fs = clamp(bw * (bike ? 0.2 : 0.12), 10, 15);
+    const nm = R.ev.oppName || 'RIVAL', nick = /"(.*)"/.test(nm) ? nm.match(/"(.*)"/)[1] : /^The /.test(nm) ? nm : nm.split(' ')[0];
+    const tag = R.ev.brand || (R.ev.oppTag ? R.ev.oppTag.toUpperCase() : null) || (R.ev.rival === 'king' ? 'THE KING' : nick.toUpperCase()), fs = clamp(bw * (bike ? 0.2 : 0.12), 10, 15);
     ctx.font = `${fs}px ${FONT_D}`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
     const tw = ctx.measureText(tag).width + 10, cx = (x0 + x1) / 2, ty = y0 + fs + 4;
     ctx.fillStyle = 'rgba(255,59,59,0.85)'; ctx.fillRect(cx - tw / 2, ty - fs - 4, tw, fs + 4);
@@ -5058,6 +5500,47 @@ const SPECS = {
   m3g80: { L: 4.794, W: 1.903, ro: 1.02, wb: 2.857, r: 0.36, sill: 0.2, beltR: 0.96, beltF: 0.88, rear: 'L', front: 'kidneyXL', mount: 'deck', dome: true, exhaust4: true, flares: true,
     keys: [[0, 0.95, 0.1, 'paint', 0.01], [0.6, 0.99, 0.12, 'glass', 0.03], [1.3, 1.4, 0.3, 'paint', 0.04], [2.5, 1.42, 0.31, 'glass', 0.02], [3.34, 0.96, 0.14, 'paint', 0.02], [4.67, 0.8, 0.2], [4.794, 0.7, 0.28]],
     glass: [[1.2, 2.14], [2.22, 3.34]], black: [[2.14, 2.22]], doors: [[1.36, 2.18], [2.18, 3.42]], crease: true, winFx: true, plateR: 0.47, plateF: 0.21, exY: 0.27, endRound: 0.6, curvR: 0.16 },
+  // Atlanta. US cars carry one plate, at the back, white
+  // Ford Mustang GT (2018): long bonnet, fastback roof, tri-bar rear lamps in a black panel
+  mustang: { L: 4.79, W: 1.916, ro: 1.1, wb: 2.72, r: 0.345, sill: 0.19, beltR: 0.98, beltF: 0.9, rear: 'bar', front: 'plain', mount: 'deck', crease: true, winFx: true, usPlate: true,
+    plateR: 0.5, exX: [-0.64, -0.52, 0.52, 0.64], exY: 0.29, exR: 0.045, endRound: 0.5, curvR: 0.14, swF: 0.12,
+    keys: [[0, 0.97, 0.12, 'paint', 0.01], [0.3, 1.0, 0.14, 'glass', 0.02], [1.56, 1.36, 0.31, 'paint', 0.03], [2.3, 1.37, 0.32, 'glass', 0.02], [3.12, 0.98, 0.14, 'paint', 0.02], [4.62, 0.84, 0.15], [4.79, 0.78, 0.2]],
+    glass: [[1.2, 1.8], [1.86, 3.12]], doors: [[1.8, 3.35]] },
+  // Ford Mustang Shelby GT500: the same shape with wider arches, a bigger mouth and the vent in the bonnet
+  gt500: { L: 4.816, W: 1.94, ro: 1.1, wb: 2.72, r: 0.355, sill: 0.17, beltR: 0.98, beltF: 0.9, rear: 'bar', front: 'plain', mount: 'deck', crease: true, winFx: true, usPlate: true, flares: true,
+    plateR: 0.5, exX: [-0.66, -0.54, 0.54, 0.66], exY: 0.28, exR: 0.05, endRound: 0.5, curvR: 0.14, swF: 0.12,
+    keys: [[0, 0.98, 0.12, 'paint', 0.01], [0.3, 1.01, 0.14, 'glass', 0.02], [1.56, 1.35, 0.31, 'paint', 0.03], [2.3, 1.36, 0.32, 'glass', 0.02], [3.12, 0.99, 0.14, 'paint', 0.03], [4.64, 0.84, 0.15], [4.816, 0.77, 0.2]],
+    glass: [[1.2, 1.8], [1.86, 3.12]], doors: [[1.8, 3.35]] },
+  // Chevrolet Camaro ZL1: a high waist and a chopped roof, slim angry lamps, the huge lower grille, square rear lamps
+  camaro: { L: 4.783, W: 1.897, ro: 1.05, wb: 2.811, r: 0.35, sill: 0.18, beltR: 1.02, beltF: 0.95, rear: 'bar', front: 'plain', mount: 'deck', crease: true, winFx: true, usPlate: true, flares: true,
+    plateR: 0.49, exX: [-0.64, -0.52, 0.52, 0.64], exY: 0.3, exR: 0.045, endRound: 0.5, curvR: 0.16, swF: 0.12,
+    keys: [[0, 0.98, 0.12, 'paint', 0.01], [0.46, 1.02, 0.14, 'glass', 0.02], [1.32, 1.32, 0.33, 'paint', 0.02], [2.24, 1.34, 0.34, 'glass', 0.02], [3.05, 1.0, 0.15, 'paint', 0.02], [4.64, 0.84, 0.15], [4.783, 0.77, 0.2]],
+    glass: [[1.16, 1.68], [1.74, 3.05]], doors: [[1.76, 3.3]] },
+  // Dodge Challenger SRT Hellcat: a big square coupe, four round lamps in a full width grille, the racetrack rear lamps
+  challenger: { L: 5.027, W: 1.923, ro: 1.05, wb: 2.946, r: 0.36, sill: 0.2, beltR: 1.0, beltF: 0.98, rear: 'bar', front: 'plain', mount: 'deck', crease: true, winFx: true, usPlate: true,
+    plateR: 0.48, exTwin: true, exY: 0.3, exR: 0.06, endRound: 0.3, curvR: 0.08, curvF: 0.2, rakeF: 0.06, swF: 0.05, swR: 0.04,
+    keys: [[0, 1.02, 0.1, 'paint', 0.01], [0.62, 1.05, 0.14, 'glass', 0.02], [1.45, 1.42, 0.31, 'paint', 0.02], [2.35, 1.44, 0.32, 'glass', 0.02], [3.2, 1.03, 0.14, 'paint', 0.01], [4.9, 0.95, 0.12], [5.027, 0.9, 0.16]],
+    glass: [[1.3, 1.8], [1.86, 3.2]], doors: [[1.88, 3.45]] },
+  // Dodge Challenger SRT Demon 170: the Challenger in wide body, with the big scoop up through the bonnet
+  demon: { L: 5.027, W: 2.02, ro: 1.05, wb: 2.946, r: 0.36, sill: 0.2, beltR: 1.0, beltF: 0.98, rear: 'bar', front: 'plain', mount: 'deck', crease: true, winFx: true, usPlate: true, flares: true, scoop: true,
+    plateR: 0.48, exTwin: true, exY: 0.3, exR: 0.06, endRound: 0.3, curvR: 0.08, curvF: 0.2, rakeF: 0.06, swF: 0.05, swR: 0.04,
+    keys: [[0, 1.02, 0.1, 'paint', 0.01], [0.62, 1.05, 0.14, 'glass', 0.02], [1.45, 1.42, 0.31, 'paint', 0.02], [2.35, 1.44, 0.32, 'glass', 0.02], [3.2, 1.03, 0.14, 'paint', 0.01], [4.9, 0.95, 0.12], [5.027, 0.9, 0.16]],
+    glass: [[1.3, 1.8], [1.86, 3.2]], doors: [[1.88, 3.45]] },
+  // Dodge Charger: the four door, a racetrack lamp right across the back
+  charger: { L: 5.1, W: 1.905, ro: 1.07, wb: 3.052, r: 0.36, sill: 0.2, beltR: 1.02, beltF: 0.98, rear: 'bar', front: 'plain', mount: 'deck', crease: true, winFx: true, usPlate: true,
+    plateR: 0.5, exTwin: true, exY: 0.3, exR: 0.055, endRound: 0.35, curvR: 0.1, curvF: 0.25, swF: 0.07, swR: 0.05,
+    keys: [[0, 1.02, 0.1, 'paint', 0.01], [0.55, 1.05, 0.13, 'glass', 0.03], [1.32, 1.46, 0.3, 'paint', 0.03], [2.5, 1.48, 0.31, 'glass', 0.02], [3.3, 1.02, 0.14, 'paint', 0.02], [4.96, 0.93, 0.13], [5.1, 0.87, 0.18]],
+    glass: [[1.2, 2.2], [2.28, 3.3]], black: [[2.2, 2.28]], doors: [[1.42, 2.24], [2.24, 3.42]] },
+  // Jeep Grand Cherokee Trackhawk: the seven slot grille, a supercharged V8 in a family SUV, four pipes
+  trackhawk: { L: 4.846, W: 1.954, ro: 1.0, wb: 2.915, r: 0.39, sill: 0.43, beltR: 1.18, beltF: 1.12, rear: 'rect', front: 'plain', mount: 'roof', crease: true, winFx: true, usPlate: true, flares: true,
+    plateR: 0.84, exX: [-0.72, -0.6, 0.6, 0.72], exY: 0.44, exR: 0.05, endRound: 0.5, curvR: 0.08,
+    keys: [[0, 1.2, 0.12], [0.14, 1.24, 0.16, 'glass', 0.02], [0.62, 1.65, 0.27, 'paint', 0.03], [2.75, 1.73, 0.28, 'glass', 0.02], [3.55, 1.16, 0.13, 'paint', 0.02], [4.72, 1.04, 0.15], [4.846, 0.96, 0.2]],
+    glass: [[0.62, 1.04], [1.12, 2.2], [2.28, 3.5]], black: [[2.2, 2.28]], doors: [[1.24, 2.24], [2.24, 3.42]] },
+  // Chevrolet Corvette Z06 (C8): mid engine, a low sharp nose, the big intakes behind the doors, four pipes in the middle
+  corvette: { L: 4.685, W: 2.025, ro: 0.96, wb: 2.722, r: 0.355, sill: 0.16, beltR: 0.86, beltF: 0.74, rear: 'bar', front: 'plain', mount: 'deck', blade: [1.1, 1.58], winFx: true, usPlate: true, flares: true,
+    plateR: 0.58, exX: [-0.2, -0.07, 0.07, 0.2], exY: 0.43, exR: 0.045, swF: 0.2,
+    keys: [[0, 0.92, 0.12, 'paint', 0.02], [0.26, 0.95, 0.18, 'dark', 0.01], [1.05, 1.0, 0.26, 'glass', 0.04], [1.58, 1.19, 0.4, 'paint', 0.02], [2.24, 1.21, 0.41, 'glass', 0.02], [3.2, 0.82, 0.13, 'paint', 0.03], [4.55, 0.66, 0.2], [4.685, 0.56, 0.3]],
+    glass: [[1.62, 3.2]], doors: [[1.7, 3.08]] },
   van: { L: 5.4, W: 1.98, ro: 1.0, wb: 3.3, r: 0.34, sill: 0.34, beltR: 1.12, beltF: 1.12, rear: 'van', front: 'plain', mount: 'roof',
     keys: [[0, 2.36, 0.08, 'paint', 0.03], [4.2, 2.4, 0.14, 'glass', 0.02], [4.72, 1.24, 0.15, 'paint', 0.03], [5.28, 1.04, 0.2], [5.4, 0.94, 0.28]],
     glass: [[4.05, 4.72]], doors: [[3.9, 4.6]], winFx: true, plateR: 0.54, plateF: 0.52, curvR: 0.015, rakeR: 0.015 },
@@ -5801,6 +6284,143 @@ const FX = {
     fxWin(P, D, [[0.6, 0.05], [0.72, 1]], 3.45, { glass: false });
     fxWin(P, D, [[0.63, 0.07], [0.74, 1]], 1.38, { frame: false }); fxWin(P, D, 1.5, 2.48, { frame: false }); fxWin(P, D, 2.6, 3.45, { frame: false });
   },
+  // ---------- Atlanta ----------
+  // Ford Mustang GT (2018): the big trapezoid grille with the pony, slanted lamps with three bar running lights,
+  // three bars in each rear lamp on a gloss black panel
+  mustang: (D, P) => {
+    fxLamp(P, fil([[0.44, 0.662], [0.5, 0.726], [0.84, 0.762], [0.955, 0.722], [0.905, 0.664], [0.64, 0.636]], [0.02, 0.02, 0.05, 0.03, 0.03, 0.03]), [[0.66, 0.7, 0.03], [0.78, 0.712, 0.03]]);
+    for (let i = 0; i < 3; i++) { const x = 0.52 + i * 0.05; P.front([[x, 0.648], [x + 0.022, 0.652], [x + 0.036, 0.69], [x + 0.014, 0.686]], 'drl', { layer: 2 }); }
+    const gr = fil([[0, 0.4], [0.4, 0.4], [0.44, 0.52], [0.42, 0.7], [0.38, 0.73], [0, 0.735]], [0, 0.05, 0.03, 0.03, 0.03, 0]);
+    P.front(grow(gr, 0.01), 'dark', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxMesh(P, 'front', gr, 0.05, 0.045, 0.017, 0.012, 6, 2);
+    P.front(fil([[-0.05, 0.56], [0.05, 0.56], [0.06, 0.6], [-0.06, 0.6]], 0.01), 'chrome', { layer: 3, one: true });
+    P.front(fil([[0.5, 0.26], [0.84, 0.28], [0.9, 0.42], [0.56, 0.4]], 0.03), 'hole', { layer: 0 });
+    P.front(fil([[0, 0.2], [0.8, 0.2], [0.92, 0.25], [0.88, 0.27], [0, 0.26]], 0.01), 'dark', { layer: 1 });
+    P.top(fil([[4.0, 0.26], [4.36, 0.24], [4.36, 0.34], [4.0, 0.37]], 0.02), 'dark', { layer: 0 });
+    P.rear(fil([[0, 0.66], [0.86, 0.66], [0.925, 0.74], [0.925, 0.86], [0, 0.87]], [0, 0.03, 0.03, 0.03, 0]), 'dark', { layer: 0, far: true });
+    for (let i = 0; i < 3; i++) { const x = 0.62 + i * 0.09; fxTail(P, fil([[x, 0.69], [x + 0.055, 0.69], [x + 0.075, 0.845], [x + 0.02, 0.845]], 0.01), fil([[x + 0.008, 0.7], [x + 0.047, 0.7], [x + 0.065, 0.835], [x + 0.026, 0.835]], 0.006)); }
+    fxBadge(P, 'rear', 0, 0.77, 0.045);
+    P.rear(fil([[0, 0.2], [0.72, 0.2], [0.86, 0.26], [0.82, 0.34], [0, 0.34]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.15, 0], [1.46, 1]], 3.12, { glass: false });
+    fxWin(P, D, [[1.19, 0], [1.48, 1]], 1.74, { frame: false }); fxWin(P, D, 1.81, 3.12, { frame: false });
+  },
+  // Shelby GT500: a taller mouth with the cobra, the big vent in the bonnet, a splitter and a diffuser
+  gt500: (D, P) => {
+    fxLamp(P, fil([[0.46, 0.67], [0.52, 0.73], [0.84, 0.762], [0.965, 0.72], [0.915, 0.664], [0.66, 0.642]], [0.02, 0.02, 0.05, 0.03, 0.03, 0.03]), [[0.68, 0.702, 0.03], [0.8, 0.712, 0.03]]);
+    for (let i = 0; i < 3; i++) { const x = 0.54 + i * 0.05; P.front([[x, 0.652], [x + 0.022, 0.656], [x + 0.036, 0.694], [x + 0.014, 0.69]], 'drl', { layer: 2 }); }
+    const gr = fil([[0, 0.3], [0.44, 0.3], [0.5, 0.46], [0.46, 0.7], [0.4, 0.735], [0, 0.74]], [0, 0.05, 0.04, 0.03, 0.03, 0]);
+    P.front(grow(gr, 0.01), 'dark', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxMesh(P, 'front', gr, 0.05, 0.045, 0.017, 0.012, 6, 2);
+    P.front(fil([[-0.05, 0.6], [0.05, 0.6], [0.04, 0.64], [-0.04, 0.64]], 0.01), 'chrome', { layer: 3, one: true });
+    P.front(fil([[0.56, 0.24], [0.88, 0.26], [0.93, 0.44], [0.6, 0.42]], 0.03), 'hole', { layer: 0 });
+    P.front(fil([[0, 0.17], [0.86, 0.17], [0.96, 0.22], [0.92, 0.24], [0, 0.23]], 0.01), 'dark', { layer: 1 });
+    P.top(fil([[3.72, -0.34], [4.12, -0.3], [4.12, 0.3], [3.72, 0.34]], 0.04), 'hole', { layer: 0, one: true });
+    fxMesh(P, 'top', fil([[3.72, -0.34], [4.12, -0.3], [4.12, 0.3], [3.72, 0.34]], 0.04), 0.06, 0.05, 0.02, 0.014, 6, 1);
+    P.rear(fil([[0, 0.66], [0.86, 0.66], [0.935, 0.74], [0.935, 0.86], [0, 0.87]], [0, 0.03, 0.03, 0.03, 0]), 'dark', { layer: 0, far: true });
+    for (let i = 0; i < 3; i++) { const x = 0.63 + i * 0.09; fxTail(P, fil([[x, 0.69], [x + 0.055, 0.69], [x + 0.075, 0.845], [x + 0.02, 0.845]], 0.01), fil([[x + 0.008, 0.7], [x + 0.047, 0.7], [x + 0.065, 0.835], [x + 0.026, 0.835]], 0.006)); }
+    fxBadge(P, 'rear', 0, 0.77, 0.045);
+    P.rear(fil([[0, 0.18], [0.74, 0.18], [0.88, 0.26], [0.84, 0.36], [0, 0.36]], 0.02), 'dark', { layer: 0 });
+    for (const x of [0.12, 0.26, 0.4]) P.rear(rct(x, 0.18, x + 0.02, 0.3), 'trim', { layer: 1 });
+    fxWin(P, D, [[1.15, 0], [1.46, 1]], 3.12, { glass: false });
+    fxWin(P, D, [[1.19, 0], [1.48, 1]], 1.74, { frame: false }); fxWin(P, D, 1.81, 3.12, { frame: false });
+  },
+  // Chevrolet Camaro ZL1: thin lamps, a slot grille with the gold bowtie, the huge mesh mouth below, the carbon vent in
+  // the bonnet, two square lamps each side at the back
+  camaro: (D, P) => {
+    fxLamp(P, fil([[0.42, 0.682], [0.47, 0.73], [0.82, 0.756], [0.925, 0.718], [0.88, 0.672], [0.6, 0.66]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.64, 0.704, 0.026], [0.76, 0.714, 0.026]]);
+    P.front([[0.46, 0.668], [0.86, 0.68], [0.88, 0.69], [0.47, 0.678]], 'drl', { layer: 2 });
+    P.front(fil([[0, 0.63], [0.4, 0.645], [0.42, 0.7], [0, 0.712]], [0, 0.01, 0.01, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[-0.055, 0.656], [0.055, 0.656], [0.055, 0.684], [-0.055, 0.684]], 0.004), 'amber', { layer: 1, one: true });
+    const mouth = fil([[0, 0.26], [0.46, 0.26], [0.57, 0.46], [0.5, 0.6], [0, 0.61]], [0, 0.04, 0.05, 0.04, 0]);
+    P.front(mouth, 'hole', { layer: 0, far: true });
+    fxMesh(P, 'front', mouth, 0.05, 0.04, 0.018, 0.011, 4, 1);
+    P.front(fil([[0.6, 0.3], [0.88, 0.32], [0.9, 0.5], [0.64, 0.5]], 0.03), 'hole', { layer: 0 });
+    P.front(fil([[0, 0.18], [0.84, 0.18], [0.94, 0.23], [0.9, 0.25], [0, 0.24]], 0.01), 'dark', { layer: 1 });
+    P.top(fil([[4.02, -0.3], [4.4, -0.26], [4.4, 0.26], [4.02, 0.3]], 0.03), 'dark', { layer: 0, one: true });
+    P.rear(fil([[0, 0.78], [0.86, 0.78], [0.92, 0.84], [0.92, 0.92], [0, 0.93]], [0, 0.02, 0.02, 0.02, 0]), 'dark', { layer: 0, far: true });
+    for (const x0 of [0.52, 0.72]) fxTail(P, rct(x0, 0.8, x0 + 0.15, 0.91, 0.012), rct(x0 + 0.015, 0.815, x0 + 0.135, 0.895, 0.008));
+    P.rear(fil([[-0.055, 0.84], [0.055, 0.84], [0.055, 0.866], [-0.055, 0.866]], 0.004), 'amber', { layer: 1, one: true });
+    P.rear(fil([[0, 0.2], [0.72, 0.2], [0.86, 0.26], [0.82, 0.36], [0, 0.36]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.16, 0], [1.4, 1]], 3.05, { glass: false });
+    fxWin(P, D, [[1.2, 0], [1.42, 1]], 1.7, { frame: false }); fxWin(P, D, 1.77, 3.05, { frame: false });
+  },
+  // Dodge Challenger SRT Hellcat: four round lamps with halo rings set in a full width black grille, the SRT badge,
+  // two nostrils in the bonnet, the racetrack rear lamps
+  challenger: (D, P) => {
+    const gr = fil([[0, 0.64], [0.9, 0.64], [0.955, 0.7], [0.95, 0.88], [0, 0.885]], [0, 0.03, 0.03, 0.03, 0]);
+    P.front(gr, 'hole', { layer: 0, far: true });
+    fxMesh(P, 'front', fil([[0, 0.65], [0.5, 0.65], [0.5, 0.87], [0, 0.87]], 0), 0.05, 0.045, 0.018, 0.012, 6, 1);
+    for (const cx of [0.62, 0.81]) {
+      P.front(ell(cx, 0.765, 0.08, 0.08, 24), 'bezel', { layer: 2, far: true });
+      P.front(ell(cx, 0.765, 0.07, 0.07, 24), 'drl', { layer: 3 });
+      P.front(ell(cx, 0.765, 0.058, 0.058, 22), 'chrome', { layer: 4 });
+      P.front(ell(cx, 0.765, 0.028, 0.028, 14), 'head', { layer: 5, far: true });
+    }
+    P.front(fil([[0.34, 0.74], [0.46, 0.74], [0.46, 0.765], [0.34, 0.765]], 0.004), 'lightlens', { layer: 2 });
+    P.front(fil([[0, 0.26], [0.6, 0.26], [0.72, 0.46], [0, 0.48]], [0, 0.04, 0.04, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0, 0.2], [0.84, 0.2], [0.94, 0.25], [0.9, 0.27], [0, 0.26]], 0.01), 'dark', { layer: 1 });
+    for (const x of [0.22, 0.46]) P.top(fil([[4.2, x - 0.07], [4.5, x - 0.06], [4.5, x + 0.06], [4.2, x + 0.07]], 0.02), 'dark', { layer: 0 });
+    const tl = rct(0.16, 0.84, 0.935, 0.95, 0.03);
+    P.rear(tl, 'lightlens', { layer: 0, far: true });
+    P.rear(rct(0.18, 0.855, 0.915, 0.935, 0.025), 'light', { layer: 1, far: true });
+    P.rear(rct(0.21, 0.873, 0.885, 0.917, 0.015), 'lightlens', { layer: 2 });
+    P.rear(rct(0.54, 0.84, 0.56, 0.95), 'lightlens', { layer: 3 });
+    P.rear(fil([[0, 0.2], [0.76, 0.2], [0.88, 0.26], [0.84, 0.34], [0, 0.34]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.28, 0], [1.56, 1]], 3.2, { glass: false });
+    fxWin(P, D, [[1.31, 0], [1.58, 1]], 1.84, { frame: false }); fxWin(P, D, 1.9, 3.2, { frame: false });
+  },
+  // the Demon 170: the Challenger's face with the scoop and a lower, meaner bumper
+  demon: (D, P) => { FX.challenger(D, P); P.front(fil([[0, 0.17], [0.9, 0.17], [1.0, 0.22], [0.96, 0.24], [0, 0.23]], 0.01), 'dark', { layer: 1 }); },
+  // Dodge Charger: a wide grille, slim lamps with the C running lights, one racetrack lamp across the whole back
+  charger: (D, P) => {
+    fxLamp(P, fil([[0.46, 0.75], [0.5, 0.82], [0.84, 0.836], [0.945, 0.8], [0.92, 0.75], [0.68, 0.735]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.66, 0.785, 0.03], [0.78, 0.79, 0.03]]);
+    P.front([[0.5, 0.748], [0.9, 0.758], [0.93, 0.8], [0.91, 0.8], [0.885, 0.768], [0.51, 0.76]], 'drl', { layer: 2 });
+    const gr = fil([[0, 0.62], [0.44, 0.62], [0.47, 0.72], [0.45, 0.82], [0, 0.83]], [0, 0.03, 0.02, 0.02, 0]);
+    P.front(grow(gr, 0.012), 'dark', { layer: 0, far: true }); P.front(gr, 'hole', { layer: 1, far: true });
+    fxMesh(P, 'front', gr, 0.05, 0.045, 0.018, 0.012, 6, 2);
+    P.front(fil([[0, 0.26], [0.58, 0.27], [0.68, 0.46], [0, 0.48]], [0, 0.04, 0.04, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0, 0.2], [0.82, 0.2], [0.92, 0.25], [0.88, 0.27], [0, 0.26]], 0.01), 'dark', { layer: 1 });
+    P.rear(rct(0, 0.85, 0.925, 0.955, 0.03), 'lightlens', { layer: 0, far: true });
+    P.rear(rct(0, 0.865, 0.905, 0.94, 0.025), 'light', { layer: 1, far: true });
+    P.rear(rct(0, 0.883, 0.875, 0.922, 0.015), 'lightlens', { layer: 2 });
+    P.rear(rct(0, 0.76, 0.47, 0.766), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.2], [0.74, 0.2], [0.86, 0.26], [0.82, 0.34], [0, 0.34]], 0.02), 'dark', { layer: 0 });
+    fxWin(P, D, [[1.18, 0], [1.36, 1]], 3.3, { glass: false });
+    fxWin(P, D, [[1.21, 0], [1.38, 1]], 2.18, { frame: false }); fxWin(P, D, 2.3, 3.3, { frame: false });
+  },
+  // Jeep Grand Cherokee Trackhawk: the seven slots, lamps with a running light frame, big intakes, vents in the bonnet
+  trackhawk: (D, P) => {
+    fxLamp(P, fil([[0.4, 0.935], [0.42, 1.025], [0.86, 1.03], [0.96, 0.985], [0.94, 0.925], [0.62, 0.91]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.6, 0.97, 0.034], [0.76, 0.975, 0.04]]);
+    P.front([[0.42, 0.935], [0.62, 0.918], [0.93, 0.93], [0.93, 0.942], [0.62, 0.93], [0.43, 0.946]], 'drl', { layer: 2 });
+    P.front(fil([[0, 0.8], [0.35, 0.8], [0.37, 1.03], [0, 1.04]], [0, 0.02, 0.02, 0]), 'dark', { layer: 0, far: true });
+    for (const x of [0, 0.1, 0.2, 0.3]) P.front(fil([[x - 0.03, 0.82], [x + 0.03, 0.82], [x + 0.03, 1.02], [x - 0.03, 1.02]], 0.012), 'hole', { layer: 1, one: x === 0 });
+    P.front(fil([[0, 0.5], [0.34, 0.5], [0.4, 0.72], [0, 0.73]], [0, 0.02, 0.03, 0]), 'hole', { layer: 0, far: true });
+    P.front(fil([[0.5, 0.48], [0.9, 0.52], [0.93, 0.74], [0.56, 0.74]], 0.03), 'hole', { layer: 0 });
+    P.front(fil([[0.62, 0.5], [0.72, 0.51], [0.72, 0.54], [0.62, 0.53]], 0.004), 'drl', { layer: 1 });
+    P.front(fil([[0, 0.38], [0.72, 0.38], [0.84, 0.44], [0.8, 0.47], [0, 0.46]], 0.01), 'trim', { layer: 1 });
+    for (const x of [0.22, 0.44]) P.top(fil([[4.12, x - 0.07], [4.45, x - 0.06], [4.45, x + 0.06], [4.12, x + 0.07]], 0.02), 'dark', { layer: 0 });
+    fxTail(P, fil([[0.56, 1.02], [0.57, 1.1], [0.88, 1.1], [0.97, 1.06], [0.96, 1.0], [0.72, 0.99]], [0.01, 0.02, 0.04, 0.03, 0.02, 0.02]), fil([[0.58, 1.03], [0.94, 1.02], [0.95, 1.05], [0.58, 1.06]], 0.005));
+    P.rear(rct(0.55, 0.78, 0.556, 1.12), 'seam', { layer: 0 });
+    P.rear(fil([[0, 0.36], [0.78, 0.36], [0.92, 0.42], [0.88, 0.54], [0, 0.54]], 0.03), 'dark', { layer: 0 });
+    fxWin(P, D, [[0.5, 0.05], [0.64, 1]], 3.5, { glass: false });
+    fxWin(P, D, [[0.53, 0.07], [0.66, 1]], 1.0, { frame: false }); fxWin(P, D, 1.12, 2.18, { frame: false }); fxWin(P, D, 2.3, 3.5, { frame: false });
+  },
+  // Chevrolet Corvette Z06 (C8): sharp lamps low on the nose, a big mouth and side intakes, slim angular rear lamps
+  // above a black mesh, four pipes in the middle
+  corvette: (D, P) => {
+    fxLamp(P, fil([[0.5, 0.572], [0.56, 0.622], [0.86, 0.648], [0.995, 0.6], [0.95, 0.558], [0.72, 0.542]], [0.02, 0.02, 0.04, 0.03, 0.03, 0.03]), [[0.74, 0.59, 0.022], [0.83, 0.594, 0.022]]);
+    P.front([[0.56, 0.566], [0.94, 0.572], [0.97, 0.59], [0.95, 0.592], [0.57, 0.58]], 'drl', { layer: 2 });
+    const mouth = fil([[0, 0.2], [0.42, 0.2], [0.5, 0.34], [0, 0.36]], [0, 0.03, 0.03, 0]);
+    P.front(mouth, 'hole', { layer: 0, far: true }); fxMesh(P, 'front', mouth, 0.05, 0.04, 0.018, 0.011, 4, 1);
+    const side = fil([[0.52, 0.2], [0.9, 0.22], [0.99, 0.44], [0.64, 0.48]], 0.03);
+    P.front(side, 'hole', { layer: 0, far: true }); fxMesh(P, 'front', side, 0.05, 0.04, 0.018, 0.011, 4, 1);
+    P.front(fil([[-0.04, 0.47], [0.04, 0.47], [0.04, 0.5], [-0.04, 0.5]], 0.004), 'chrome', { layer: 0, one: true });
+    fxTail(P, fil([[0.44, 0.8], [0.45, 0.855], [0.84, 0.872], [0.975, 0.83], [0.965, 0.782], [0.7, 0.768]], [0.01, 0.02, 0.04, 0.02, 0.02, 0.02]), fil([[0.47, 0.81], [0.62, 0.8], [0.62, 0.84], [0.47, 0.845]], 0.004));
+    P.rear(fil([[0.66, 0.785], [0.94, 0.8], [0.95, 0.83], [0.66, 0.845]], 0.004), 'light', { layer: 1, far: true });
+    const mesh = fil([[0, 0.3], [0.8, 0.3], [0.9, 0.52], [0.86, 0.7], [0, 0.72]], [0, 0.03, 0.03, 0.03, 0]);
+    P.rear(mesh, 'hole', { layer: 0, far: true }); fxMesh(P, 'rear', mesh, 0.06, 0.045, 0.02, 0.012, 6, 1);
+    fxWin(P, D, [[1.62, 0], [1.86, 1]], 3.2);
+  },
 };
 for (const k in FX) SPECS[k].fx = FX[k];
 /* ---------- mesh building ---------- */
@@ -6299,7 +6919,9 @@ function buildCar(model, look, detail) {
   if (style === 'van' && !sp.fx) for (const sd of [-1, 1]) lights.push({ pts: rectPts(sd < 0 ? -0.8 : 0.08, 1.45, sd < 0 ? -0.08 : 0.8, 2.05, zk), mat: 'glass' });
   rear.kids.push(...lights);
   const py = sp.plateR !== undefined ? sp.plateR - drop : style === 'van' ? sill + 0.14 : sill + 0.16;
-  rear.kids.push({ pts: rectPts(-0.26, py, 0.26, py + 0.111, zk * 2), mat: 'plate', plate: true });
+  // UK plates are 52 by 11 cm, yellow at the back; a US plate is 30 by 15 and white
+  if (sp.usPlate) rear.kids.push({ pts: rectPts(-0.153, py, 0.153, py + 0.152, zk * 2), mat: 'plateW', plate: true, us: true });
+  else rear.kids.push({ pts: rectPts(-0.26, py, 0.26, py + 0.111, zk * 2), mat: 'plate', plate: true });
   const tips = [], nEx = sp.exhaust4 ? 4 : [1, 1, 2, 4][look.exhaust || 0] || (model === 'gtr' ? 4 : 1);
   const exX = sp.exX ? sp.exX : sp.exHigh ? [-0.1, 0.1] : sp.exCentre && nEx >= 4 ? [-0.2, -0.08, 0.08, 0.2] : sp.exCentre ? [-0.07, 0.07] : sp.exTwin && nEx < 4 ? [-(s0.w - 0.36), s0.w - 0.36] : nEx === 1 ? [s0.w - 0.36] : nEx === 2 ? [s0.w - 0.4, s0.w - 0.28] : [-(s0.w - 0.28), -(s0.w - 0.4), s0.w - 0.4, s0.w - 0.28];
   const exR = [0.035, 0.05, 0.045, 0.042][look.exhaust || 0] || 0.04;
@@ -6410,7 +7032,7 @@ function buildCar(model, look, detail) {
     front.kids.push({ pts: rectPts(-0.34, fy - 0.12, 0.34, fy - 0.04, zfk), mat: 'dark' });
   }
   const pyF = sp.plateF !== undefined ? sp.plateF - drop : sill + 0.14;
-  front.kids.push({ pts: rectPts(0.26, pyF, -0.26, pyF + 0.111, zfk + 0.004), mat: 'plateW', plate: true });
+  if (!sp.usPlate) front.kids.push({ pts: rectPts(0.26, pyF, -0.26, pyF + 0.111, zfk + 0.004), mat: 'plateW', plate: true });   // Georgia plates go on the back only
   if (look.kit) front.kids.push({ pts: rectPts(-sN.w + 0.02, sill - 0.06, sN.w - 0.02, sill + 0.01, zfk + 0.01), mat: 'dark' });
   faces.push(front);
   // lamps with some depth: a dark bezel, a clear lens, the projector and a daytime running light strip in front,
@@ -7048,7 +7670,7 @@ function matRGB(mat, n, look, env, fogK2, extra, v, face) {
     case 'light': c = look.smoked ? [90, 16, 18] : env.lit ? [255, 40, 42] : [190, 28, 30]; if (extra === 2) c = [255, 70, 70]; break;
     case 'lightcore': c = env.lit ? [255, 200, 190] : [120, 30, 30]; break;
     case 'head': c = env.lit ? [255, 250, 225] : [200, 205, 210]; break;
-    case 'plate': c = [245, 197, 24]; break;
+    case 'plate': c = look.usPlate ? [236, 236, 230] : [245, 197, 24]; break;
     case 'plateW': c = [236, 236, 230]; break;
     case 'blind': c = [20, 20, 20]; break;
     case 'ad': c = [230, 225, 210]; break;
@@ -7153,7 +7775,7 @@ function drawCar(g, mesh, pose) {
       for (const lb of GM.labels || []) {
         if (!facing(lb.n, lb.pts[0])) continue;
         const pp = proj(lb.pts); if (!pp || pp.clipped) continue;
-        if (lb.plate && pose.plateText) plateText(g, pp, pose.plateText);
+        if (lb.plate && pose.plateText) plateText(g, pp, pose.plateText, null, null, lb.us);
         if (lb.label) plateText(g, pp, lb.label, null, '#e4e4de');
         if (lb.route && pose.route) plateText(g, pp, pose.route, null, '#ffb020');
       }
@@ -7242,7 +7864,7 @@ function drawCar(g, mesh, pose) {
       fill(pp, broke ? 'rgb(24,8,8)' : matColor(k.mat, n, look, env, k.mat === 'light' ? fg * 0.5 : fg, k.mat === 'light' && pose.brake ? 2 : 0, v, f));
       if (pp.clipped) continue;
       if (k.mat === 'light' && !broke) { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const q of pp) { x0 = Math.min(x0, q.x); x1 = Math.max(x1, q.x); y0 = Math.min(y0, q.y); y1 = Math.max(y1, q.y); } glows.push([(x0 + x1) / 2, (y0 + y1) / 2, Math.sqrt((x1 - x0) * (y1 - y0)) * 1.2]); }
-      if (k.plate && pose.plateText && !small) plateText(g, pp, pose.plateText);
+      if (k.plate && pose.plateText && !small) plateText(g, pp, pose.plateText, null, null, k.us);
       if (k.label && !small) plateText(g, pp, k.label, null, '#e4e4de');
       if (k.route && pose.route && !small) plateText(g, pp, pose.route, null, '#ffb020');
     }
@@ -7283,19 +7905,20 @@ function carTail(g, mesh, pose, env, look, fg, glows, tx, ZN) {
   }
 }
 function dist2(a, b) { const x = a[0] - b[0], y = a[1] - b[1], z = a[2] - b[2]; return x * x + y * y + z * z; }
-function plateText(g, pp, text, bg, fgc) {
-  // the plate is 52 by 11 cm; text is drawn in that space and mapped onto the plate as it appears on screen
+function plateText(g, pp, text, bg, fgc, us) {
+  // the plate is 52 by 11 cm (a US one 30.5 by 15); text is drawn in that space and mapped onto the plate as it appears on screen
   const w = Math.hypot(pp[1].x - pp[0].x, pp[1].y - pp[0].y);
-  if (w < 13 || pp.length !== 4) return;
-  const PW = 52, PH = 11.1;
+  if (w < (us ? 9 : 13) || pp.length !== 4) return;
+  const PW = us ? 30.5 : 52, PH = us ? 15.2 : 11.1;
   const ux = (pp[2].x - pp[3].x) / PW, uy = (pp[2].y - pp[3].y) / PW, vx = (pp[0].x - pp[3].x) / PH, vy = (pp[0].y - pp[3].y) / PH;
   if (ux * vy - uy * vx <= 0) return;      // seen from behind: nothing to read
   g.save(); g.transform(ux, uy, vx, vy, pp[3].x, pp[3].y);
-  g.fillStyle = fgc || '#111'; g.font = `700 8.6px ${FONT_PLATE}`;
+  g.fillStyle = fgc || (us ? '#1b2a5c' : '#111'); g.font = `700 ${us ? 7.2 : 8.6}px ${FONT_PLATE}`;
   g.textAlign = 'center'; g.textBaseline = 'middle';
   const tw = g.measureText(text).width;
   if (tw > PW * 0.9) { g.translate(PW / 2, 0); g.scale(PW * 0.9 / tw, 1); g.translate(-PW / 2, 0); }
-  g.fillText(text, PW / 2, PH / 2 + 0.4);
+  g.fillText(text, PW / 2, PH / 2 + (us ? 1.4 : 0.4));
+  if (us) { g.setTransform(1, 0, 0, 1, 0, 0); g.restore(); g.save(); g.transform(ux, uy, vx, vy, pp[3].x, pp[3].y); g.fillStyle = '#1b2a5c'; g.font = `700 2.6px ${FONT_PLATE}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('GEORGIA', PW / 2, 2.6); }
   g.restore();
 }
 
@@ -7761,6 +8384,50 @@ function drawEssexMap(canvas, S) {
   });
 }
 
+/* ---------- Atlanta: the Perimeter, the interstates through the middle and the race pins ---------- */
+const ATL_BOX = { lon0: -84.6, lon1: -84.1, lat0: 33.59, lat1: 33.96 };
+const ATL_285 = [[-84.36, 33.925], [-84.27, 33.9], [-84.24, 33.85], [-84.235, 33.75], [-84.27, 33.665], [-84.36, 33.62], [-84.46, 33.62], [-84.52, 33.665],
+  [-84.55, 33.75], [-84.525, 33.83], [-84.46, 33.885], [-84.4, 33.918]];
+const ATL_ROADS = [['I-75', [[-84.56, 33.95], [-84.46, 33.885], [-84.405, 33.8], [-84.39, 33.76], [-84.395, 33.7], [-84.37, 33.6]]],
+  ['I-85', [[-84.2, 33.955], [-84.27, 33.9], [-84.33, 33.835], [-84.375, 33.8], [-84.39, 33.76], [-84.415, 33.69], [-84.45, 33.64], [-84.5, 33.6]]],
+  ['I-20', [[-84.6, 33.755], [-84.39, 33.75], [-84.1, 33.72]]], ['GA 400', [[-84.365, 33.95], [-84.365, 33.83], [-84.372, 33.8]]], ['US 78', [[-84.24, 33.8], [-84.14, 33.81]]]];
+const ATL_LABELS = [['AIRPORT', -84.428, 33.628], ['DECATUR', -84.296, 33.772], ['STONE MTN', -84.145, 33.79], ['SANDY SPRINGS', -84.37, 33.93], ['EAST POINT', -84.44, 33.67]];
+function drawAtlantaMap(canvas, S) {
+  const cw = canvas.clientWidth || 400, ch = canvas.clientHeight || 400, dpr = Math.min(2, window.devicePixelRatio || 1);
+  canvas.width = Math.round(cw * dpr); canvas.height = Math.round(ch * dpr);
+  const g = canvas.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const pad = 16, B = ATL_BOX, kl = 0.83;   // a degree of longitude is shorter than one of latitude this far north
+  const k = Math.min((cw - pad * 2) / ((B.lon1 - B.lon0) * kl), (ch - pad * 2) / (B.lat1 - B.lat0));
+  const ox = (cw - k * kl * (B.lon1 - B.lon0)) / 2, oy = (ch - k * (B.lat1 - B.lat0)) / 2;
+  const M = (lon, lat) => [ox + (lon - B.lon0) * k * kl, oy + (B.lat1 - lat) * k];
+  const line = pts => { g.beginPath(); pts.forEach((p, i) => { const q = M(p[0], p[1]); if (i) g.lineTo(q[0], q[1]); else g.moveTo(q[0], q[1]); }); };
+  g.fillStyle = '#121714'; g.fillRect(0, 0, cw, ch);
+  // inside the Perimeter
+  g.fillStyle = '#18201b'; line(ATL_285); g.closePath(); g.fill();
+  g.lineJoin = 'round';
+  g.strokeStyle = 'rgba(90,160,220,0.55)'; g.lineWidth = 3; line(ATL_285); g.closePath(); g.stroke();
+  for (const [name, pts] of ATL_ROADS) {
+    g.strokeStyle = 'rgba(242,163,58,0.45)'; g.lineWidth = 2; line(pts); g.stroke();
+    const lq = M(pts[0][0], pts[0][1]);
+    g.font = `600 ${clamp(Math.round(cw * 0.022), 8, 11)}px ${FONT_M}`; g.fillStyle = 'rgba(242,163,58,0.75)'; g.textAlign = 'center';
+    g.fillText(name, clamp(lq[0], 20, cw - 20), clamp(lq[1] + (lq[1] < ch / 2 ? 12 : -6), 12, ch - 6));
+  }
+  const pq = M(-84.235, 33.8); g.font = `600 ${clamp(Math.round(cw * 0.022), 8, 11)}px ${FONT_M}`; g.fillStyle = 'rgba(90,160,220,0.85)'; g.textAlign = 'left'; g.fillText('I-285', pq[0] + 6, pq[1]);
+  g.font = `600 ${clamp(Math.round(cw * 0.024), 9, 12)}px ${FONT_M}`; g.fillStyle = 'rgba(147,162,164,0.75)'; g.textAlign = 'center';
+  for (const [t, lon, lat] of ATL_LABELS) { const q = M(lon, lat); g.fillText(t, q[0], q[1] + 16); }
+  g.font = `${Math.max(12, Math.round(cw * 0.05))}px ${FONT_D}`; g.fillStyle = 'rgba(235,230,218,0.12)';
+  const el = M(-84.47, 33.72); g.fillText('ATLANTA', el[0], el[1]);
+  const next = S ? nextAtlIndex(S) : 0, done = (S && S.atl && S.atl.completed) || [];
+  ATL.forEach((e, i) => {
+    const q = M(e.map[0], e.map[1]), rr = clamp(cw * 0.026, 8, 12), cur = i === next;
+    g.fillStyle = done[i] ? '#5fd38a' : cur ? '#f2a33a' : '#33464d';
+    g.beginPath(); g.arc(q[0], q[1], rr, 0, 7); g.fill();
+    if (cur) { g.strokeStyle = 'rgba(242,163,58,0.5)'; g.lineWidth = 3; g.beginPath(); g.arc(q[0], q[1], rr + 5, 0, 7); g.stroke(); }
+    g.fillStyle = done[i] || cur ? '#10120e' : '#93a2a4'; g.font = `700 ${Math.round(rr * 1.1)}px ${FONT_M}`; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(String(i + 1), q[0], q[1] + 0.5); g.textBaseline = 'alphabetic';
+  });
+}
+
 /* ---------- Mauritius: the island outline, the motorways and the race pins ---------- */
 const MU_BOX = { lon0: 57.28, lon1: 57.82, lat0: -20.54, lat1: -19.96 };
 const MU_COAST = [[57.61, -19.975], [57.66, -20.005], [57.70, -20.05], [57.73, -20.11], [57.745, -20.16], [57.775, -20.195], [57.795, -20.245], [57.78, -20.29], [57.74, -20.36],
@@ -8173,7 +8840,7 @@ function glMaterials(look, env, pose) {
   set('head', lit ? [255, 250, 225] : [200, 205, 210], 4, 0, 1, 0);
   set('drl', lit ? [255, 255, 250] : [235, 240, 245], 4, 0, 1, 0);
   set('amber', lit ? [255, 150, 30] : [200, 110, 30], 4, 0, 1, 0);
-  set('plate', shade([245, 197, 24], dim(1)), 4, 0, 1, 0); set('plateW', shade([236, 236, 230], dim(1)), 4, 0, 1, 0); set('ad', shade([230, 225, 210], dim(1)), 4, 0, 1, 0);
+  set('plate', shade(look.usPlate ? [236, 236, 230] : [245, 197, 24], dim(1)), 4, 0, 1, 0); set('plateW', shade([236, 236, 230], dim(1)), 4, 0, 1, 0); set('ad', shade([230, 225, 210], dim(1)), 4, 0, 1, 0);
   set('hole', [7, 7, 8], 3, 0.04, 30, 0.5);
   set('polLight', pose.flash ? [90, 140, 255] : [40, 60, 160], 4, 0, 1, 0); set('blind', [20, 20, 20], 4, 0, 1, 0);
   return { col, par };
@@ -8199,7 +8866,7 @@ function glMeshData(mesh) {
       if (k.cv) continue;   // canvas only copy of a window or vent
       if (k.gl) for (const pc of k.gl) fan(kids, pc.pts, f.n, mid(k.mat), pc.ns);
       else fan(kids, k.pts, f.n, mid(k.mat), k.ns);
-      if (k.plate || k.label || k.route) labels.push({ pts: k.pts, n: f.n, plate: k.plate, label: k.label, route: k.route });
+      if (k.plate || k.label || k.route) labels.push({ pts: k.pts, n: f.n, plate: k.plate, label: k.label, route: k.route, us: k.us });
       if (k.mat === 'light' && !k.nospot) lights.push({ c: k.spot || centroid(k.pts), n: k.n || f.n, s: Math.sqrt(polyArea(k.pts)) });
     }
   }
@@ -8281,7 +8948,7 @@ const SB_KEY = 'sb_publishable_Llb7ESB5jkatL60gq7vNpw_WXucSND0';   // publishabl
 const GOOGLE_CLIENT_ID = '976658848882-hsh1cgvct6gpfjkh0lu0bt1nttk2nqgq.apps.googleusercontent.com';
 const SESSION_KEY = 'streetkings.session', PENDING_KEY = 'streetkings.pending', BACKUP_KEY = 'streetkings.save.backup';
 // ?test=essex opens a separate test garage: its own save, no sign in, nothing posted to the leaderboards
-const TEST_MODE = /[?&]test=(essex|mauritius)\b/.test(location.search), TEST_ISLAND = /[?&]test=mauritius\b/.test(location.search);
+const TEST_MODE = /[?&]test=(essex|mauritius|atlanta)\b/.test(location.search), TEST_ISLAND = /[?&]test=mauritius\b/.test(location.search), TEST_ATL = /[?&]test=atlanta\b/.test(location.search);
 const ONLINE_OK = !TEST_MODE && (/(^|\.)elyneel\.github\.io$/.test(location.hostname) || window.__online === true);
 
 const Online = {
@@ -8479,12 +9146,13 @@ const Online = {
     if (kind === 'career') { const i = EVENTS.findIndex(e => e.rival === id); return i >= 0 ? `${i + 1}. ${EVENTS[i].title}` : route; }
     if (kind === 'essex') { const i = ESSEX.findIndex(e => e.rival === id); return i >= 0 ? `Essex ${i + 1}. ${ESSEX[i].title}` : route; }
     if (kind === 'mu') { const i = MU.findIndex(e => e.rival === id); return i >= 0 ? `Mauritius ${i + 1}. ${MU[i].title}` : route; }
+    if (kind === 'atl') { const i = ATL.findIndex(e => e.rival === id); return i >= 0 ? `Atlanta ${i + 1}. ${ATL[i].title}` : route; }
     if (kind === 'daily') { const d = new Date(id + 'T12:00:00Z'); return 'Daily challenge · ' + (isNaN(d) ? id : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })); }
     const sp = SPECIALS[id]; if (!sp) return route;
     return sp.friend ? `${CHARACTERS[sp.rival].name} · ${sp.title}` : sp.title;
   },
   routes() {
-    return EVENTS.map(e => 'career:' + e.rival).concat(SPECIAL_ORDER.map(id => 'special:' + id), ESSEX.map(e => 'essex:' + e.rival), MU.map(e => 'mu:' + e.rival));
+    return EVENTS.map(e => 'career:' + e.rival).concat(SPECIAL_ORDER.map(id => 'special:' + id), ESSEX.map(e => 'essex:' + e.rival), MU.map(e => 'mu:' + e.rival), ATL.map(e => 'atl:' + e.rival));
   },
   // posts a finished time. Returns { best_ms, place, total, improved } or a reason it was not posted
   async submit(route, ms, car) {
@@ -8569,7 +9237,7 @@ const Online = {
    STREET KINGS : UI, INPUT, AUDIO, SAVE, MAIN LOOP
    ===================================================================== */
 const $ = id => document.getElementById(id);
-const SAVE_KEY = TEST_ISLAND ? 'streetkings.test.mu' : TEST_MODE ? 'streetkings.test.v2' : 'streetkings.save.v2', OLD_SAVE_KEY = 'streetkings.save.v1', SOUND_KEY = 'streetkings.sound';
+const SAVE_KEY = TEST_ATL ? 'streetkings.test.atl' : TEST_ISLAND ? 'streetkings.test.mu' : TEST_MODE ? 'streetkings.test.v2' : 'streetkings.save.v2', OLD_SAVE_KEY = 'streetkings.save.v1', SOUND_KEY = 'streetkings.sound';
 let S = null;            // career
 let R = null;            // current race
 let mode = 'menu';       // menu | race | results
@@ -9243,13 +9911,13 @@ let toastTimer = 0;
 const MUSIC_KEY = 'streetkings.music';
 /* each part of the game can have its own track. loop: [start, end] in seconds is the part that repeats.
    Filled in when the tracks arrive, e.g. london: { src: 'music/london.mp3', loop: [12.5, 98.2] } */
-const MUSIC = window.__musicTest || {"title":{"name":"It Ain't Adding Up","loop":[1.0,96.049501],"vol":0.18,"src":"music/ne-it-aint-adding-up.72f04209.mp3"},"london":{"name":"1919","loop":[1.0,57.47059],"vol":0.18,"src":"music/ne-1919.5d166132.mp3"},"essex":{"name":"1926","loop":[1.0,97.0],"vol":0.18,"src":"music/ne-1926.d89adf94.mp3"},"mu":{"name":"Sega (island)","loop":[1.0,60.076916],"start":1.0,"vol":0.18,"src":"music/sega-mauritius.691069e6.mp3"},"win":{"name":"Win sting","sting":true,"vol":0.26,"src":"music/sting-win.c89be5d9.mp3"},"lose":{"name":"Lose sting","sting":true,"vol":0.22,"src":"music/sting-lose.da7d864c.mp3"}};
+const MUSIC = window.__musicTest || {"title":{"name":"It Ain't Adding Up","loop":[1.0,96.049501],"vol":0.18,"src":"music/ne-it-aint-adding-up.72f04209.mp3"},"london":{"name":"1919","loop":[1.0,57.47059],"vol":0.18,"src":"music/ne-1919.5d166132.mp3"},"essex":{"name":"1926","loop":[1.0,97.0],"vol":0.18,"src":"music/ne-1926.d89adf94.mp3"},"mu":{"name":"Sega (island)","loop":[1.0,60.076916],"start":1.0,"vol":0.18,"src":"music/sega-mauritius.691069e6.mp3"},"atl":{"name":"N.E (Atlanta)","loop":[1.0,60.076735],"vol":0.18,"src":"music/ne-atl.4363b31e.mp3"},"win":{"name":"Win sting","sting":true,"vol":0.26,"src":"music/sting-win.c89be5d9.mp3"},"lose":{"name":"Lose sting","sting":true,"vol":0.22,"src":"music/sting-lose.da7d864c.mp3"}};
 // the single-file copy of the game has no music folder beside it, so it borrows the files from the website
 const MUSIC_HOME = 'https://elyneel.github.io/street-kings/';
 const Music = {
   on: true, gain: null, cur: null, want: null, bufs: {}, loading: {},
   area() { return S ? placeNow() : 'title'; },
-  track(area) { return MUSIC[area] || (area === 'mu' ? null : MUSIC.london || MUSIC.title) || null; },
+  track(area) { return MUSIC[area] || (area === 'mu' || area === 'atl' ? null : MUSIC.london || MUSIC.title) || null; },
   /* a short sting when you cross the line; the menu music waits for it to finish */
   sting(kind) {
     const c = Sound.ctx, t = MUSIC[kind];
@@ -9316,7 +9984,7 @@ function paintCanvases() {
   requestAnimationFrame(() => {
     for (const c of document.querySelectorAll('.screen:not([hidden]) canvas[data-car], .screen:not([hidden]) canvas[data-model]')) paintCar(c);
     for (const c of document.querySelectorAll('.screen:not([hidden]) canvas[data-portrait]')) drawPortrait(c, CHARACTERS[c.dataset.portrait].face, c.dataset.hidden === '1');
-    for (const c of document.querySelectorAll('.screen:not([hidden]) canvas[data-map]')) (c.dataset.map === 'essex' ? drawEssexMap : c.dataset.map === 'mu' ? drawMauritiusMap : drawLondonMap)(c, S);
+    for (const c of document.querySelectorAll('.screen:not([hidden]) canvas[data-map]')) (c.dataset.map === 'essex' ? drawEssexMap : c.dataset.map === 'mu' ? drawMauritiusMap : c.dataset.map === 'atl' ? drawAtlantaMap : drawLondonMap)(c, S);
   });
 }
 const spin = { yaw: -2.45, hold: 0, plate: 0, zoom: 0 };
@@ -9446,7 +10114,7 @@ function goSelect() {
 function streetPage() {
   if (!S.street || S.street.length !== 4) S.street = streetOffers(S);
   const place = placeNow(), own = S.owned[S.current], who = challengers(), fresh = freshChallenger();
-  const soon = place === 'mu' ? [] : FRIENDS.filter(id => !specialUnlocked(S, id) && !(S.specials && S.specials[id]));
+  const soon = place === 'mu' || place === 'atl' ? [] : FRIENDS.filter(id => !specialUnlocked(S, id) && !(S.specials && S.specials[id]));
   const slipN = place === 'essex' ? ESSEX.filter(e => slipReady(S, e.rival)).length : 0;
   const dragN = place === 'mu' ? DRAG.filter((d, i) => dragUnlocked(S, i)).length : 0;
   const tabs = [['races', 'Races', 5]].concat(who.length || soon.length ? [['people', 'Challengers', who.length]] : [], slipN ? [['slips', 'Pink slips', slipN]] : [], dragN ? [['drag', 'Drag night', dragN]] : []);
@@ -9632,7 +10300,7 @@ function routeSpec(route) {
   const [kind, id] = route.split(':');
   if (kind === 'career') { const i = EVENTS.findIndex(e => e.rival === id); if (i < 0) return null; if (!S.careerDone && i === nextEventIndex(S)) return { kind: 'career', index: i }; return S.careerDone && S.completed[i] ? { kind: 'career', index: i, exhibition: true } : null; }
   if (kind === 'essex') { const i = ESSEX.findIndex(e => e.rival === id); if (i < 0 || !essexOpen(S)) return null; const done = S.essex && S.essex.completed[i]; return done ? { kind: 'essex', index: i, exhibition: true } : i === nextEssexIndex(S) ? { kind: 'essex', index: i } : null; }
-  if (kind === 'mu') { const i = MU.findIndex(e => e.rival === id); if (i < 0 || !muOpen(S)) return null; const done = S.mu && S.mu.completed[i]; return done ? { kind: 'mu', index: i, exhibition: true } : i === nextMuIndex(S) ? { kind: 'mu', index: i } : null; }
+  if (kind === 'mu' || kind === 'atl') { const L = areaList(kind), i = L.findIndex(e => e.rival === id); if (i < 0 || !regionOpen(S, kind)) return null; const done = S[kind] && S[kind].completed[i]; return done ? { kind, index: i, exhibition: true } : i === nextRegionIndex(S, kind) ? { kind, index: i } : null; }
   if (kind === 'special') return SPECIALS[id] && specialUnlocked(S, id) ? { kind: 'special', id } : null;
   if (kind === 'daily') return id === dailyDate() ? { kind: 'daily' } : null;
   return null;
@@ -9679,6 +10347,18 @@ function testIsland() {
   return T;
 }
 
+/* the Atlanta test garage: the island done, Atlanta just open, plenty of cash */
+function testAtlanta() {
+  const T = testIsland();
+  T.mu = { completed: MU.map(() => true), done: true, cur: 'm3g80' };
+  for (const e of MU) T.stars['mu:' + e.rival] = STAR_WIN;
+  T.owned.picanto = { up: {}, damage: 0, spent: 0, look: stockLook('picanto') };
+  T.owned.m3g80 = { up: { ecu: 3, exhaust: 3, turbo: 3, nitrous: 3, tyres: 3 }, damage: 0, spent: 20000, look: stockLook('m3g80') };
+  T.announced.mu = true; T.announced.flown = true; T.money = 160000;
+  T.street = streetOffers(T);
+  return T;
+}
+
 /* ---------- Essex ---------- */
 let hubTab = null, pendingSlip = null;
 const STAR_NAMES = ['Win', 'No crashes', 'Every gate'];
@@ -9690,9 +10370,10 @@ function starsHtml(bits, big) {
 /* ---------- getting around: the menu bar (Race, Street, Garage, Dealership, Map) and where you race ---------- */
 let hubPage = 'race', streetTab = 'races', hubShown = '';
 const NAV_SCREENS = ['scr-hub', 'scr-garage', 'scr-ladder'];
-/* where you are racing right now: island cars mean Mauritius, otherwise Essex once it is open, unless you picked London */
-function placeNow() { return !S ? 'london' : islandCar(S.current) ? 'mu' : S.careerDone && essexOpen(S) && hubTab !== 'london' ? 'essex' : 'london'; }
-const PLACE_NAMES = { london: 'London', essex: 'Essex', mu: 'Mauritius' };
+/* where you are racing right now: island cars mean Mauritius and American cars Atlanta, otherwise Essex once it is open, unless you picked London */
+function placeNow() { return !S ? 'london' : regionOf(S.current) || (S.careerDone && essexOpen(S) && hubTab !== 'london' ? 'essex' : 'london'); }
+const PLACE_NAMES = { london: 'London', essex: 'Essex', mu: 'Mauritius', atl: 'Atlanta' };
+const AWAY = r => r === 'mu' || r === 'atl';
 const NAV_ICONS = {
   race: '<path d="M5 21V4"/><path d="M5 4h13l-3 4.5 3 4.5H5"/>',
   street: '<path d="M8 3 4 21M16 3l4 18"/><path d="M12 4v3M12 11v3M12 18v3"/>',
@@ -9701,7 +10382,7 @@ const NAV_ICONS = {
   map: '<path d="M2 6v15l7-3 6 3 7-3V3l-7 3-6-3z"/><path d="M9 3v15M15 6v15"/>',
 };
 /* the people who want a race with you: friends from the street, and the Ride3 invitation once you have the crown */
-const challengers = () => islandCar(S.current) ? [] : FRIENDS.filter(id => specialUnlocked(S, id)).concat(S.careerDone ? ['ride3'] : []);
+const challengers = () => regionOf(S.current) ? [] : FRIENDS.filter(id => specialUnlocked(S, id)).concat(S.careerDone ? ['ride3'] : []);
 /* someone new wants a race: a dot on Street until you have looked at them */
 const freshChallenger = () => challengers().some(id => !(S.found && S.found[id]) && !(S.announced && S.announced['ch:' + id]));
 /* a new racer at drag night that you have not looked at yet */
@@ -9715,20 +10396,23 @@ function navBar(active) {
       <svg viewBox="0 0 24 24" aria-hidden="true">${NAV_ICONS[id]}</svg><span>${label}</span>${dot ? `<i class="dot" aria-label="${id === 'garage' ? 'Your car is damaged' : 'Someone new wants a race'}"></i>` : ''}</button>`;
   }).join('')}</nav>`;
 }
-/* London, Essex and Mauritius: tap one to go there. Island cars stay on the island, so flying swaps the car you race. */
+/* London, Essex, Mauritius and Atlanta: tap one to go there. Island and Atlanta cars stay where they are, so flying swaps the car you race. */
 function placeBar() {
   if (!essexOpen(S)) return '';
   const now = placeNow(), prog = (list, i, done) => i >= list.length ? done : `Race ${i + 1} of ${list.length}`;
   const places = [['london', prog(EVENTS, S.careerDone ? EVENTS.length : nextEventIndex(S), 'Crown won ✓')], ['essex', prog(ESSEX, nextEssexIndex(S), 'All won ✓')]];
   if (muOpen(S)) places.push(['mu', prog(MU, nextMuIndex(S), 'All won ✓')]);
+  if (atlOpen(S)) places.push(['atl', prog(ATL, nextAtlIndex(S), 'All won ✓')]);
   return `<div class="places" role="tablist" aria-label="Where you race">${places.map(([id, sub]) =>
     `<button class="place${id === now ? ' on' : ''}" type="button" role="tab" aria-selected="${id === now}" data-act="hubtab" data-arg="${id}"><b>${PLACE_NAMES[id]}</b><small>${sub}</small></button>`).join('')}</div>`;
 }
 const menuHead = active => `<div class="menuhead">${navBar(active)}${placeBar()}</div>`;
-/* on the island, point the way home: the London and Essex cars and dealership are back there */
+/* away from home, point the way back: the London and Essex cars and dealership are back there */
 function awayNote() {
-  if (!islandCar(S.current)) return '';
-  return `<p class="tip away">You are on the island, so this is the island garage and showroom. Your London and Essex cars and the dealership back home are waiting in London: tap <b>London</b> or <b>Essex</b> at the top to fly back.</p>`;
+  const r = regionOf(S.current);
+  if (!r) return '';
+  const other = r === 'atl' ? ' Your island cars are still in Mauritius.' : atlOpen(S) ? ' Your American cars are still in Atlanta.' : '';
+  return `<p class="tip away">You are ${r === 'atl' ? 'in Atlanta, so this is the Atlanta garage and showroom' : 'on the island, so this is the island garage and showroom'}. Your London and Essex cars and the dealership back home are waiting in London: tap <b>London</b> or <b>Essex</b> at the top to fly back.${other}</p>`;
 }
 /* what would make the car you race quicker now: an upgrade still to fit, a better car in the showroom,
    Body Shop parts (spoiler, body kit, suspension) once the engine is fully built, or nothing but the driving */
@@ -9747,8 +10431,8 @@ function aeroRoom(id) {
   return best && best.top + best.nitro >= 6 ? best : null;
 }
 function betterCar() {
-  const island = islandCar(S.current), mine = maxStats(S.current).bhp;
-  return CARS.filter(c => !c.slip && c.id !== 'gtrx' && !S.owned[c.id] && c.price > 0 && islandCar(c.id) === island && carUnlocked(S, c) && maxStats(c.id).bhp > mine * 1.04)
+  const here = regionOf(S.current), mine = maxStats(S.current).bhp;
+  return CARS.filter(c => !c.slip && c.id !== 'gtrx' && !S.owned[c.id] && c.price > 0 && regionOf(c.id) === here && carUnlocked(S, c) && maxStats(c.id).bhp > mine * 1.04)
     .sort((a, b) => a.price - b.price)[0] || null;
 }
 function nextStep() {
@@ -9884,6 +10568,9 @@ function muTip(ev, st) {
     const b = statsFor(S.current, up).bhp;
     if (b >= theirs * 1.07) return `Your ${st.bhp} bhp against ${who}'s ${theirs}. Stage ${n} on the ECU, exhaust and turbo takes your ${esc(mine.name)} to ${b} bhp, enough to race ${who}. Short of cash? Win a few street races first.`;
   }
+  // already in the right car, or one at least as good: it is down to the upgrades and the driving
+  const full = maxStats(S.current).bhp;
+  if (S.current === need.id || full >= maxStats(need.id).bhp) return `Your ${st.bhp} bhp against ${who}'s ${theirs}. ${full > st.bhp ? `Fully built your ${esc(mine.name)} makes ${full} bhp. ` : ''}It is enough, just: a clean run, every gold gate and every drop of nitro.`;
   return `Your ${st.bhp} bhp against ${who}'s ${theirs}. Even fully built, your ${esc(mine.name)} is not enough: you need a ${esc(need.name)} for this one${S.owned[need.id] ? '. Yours is in the garage.' : carUnlocked(S, need) ? '. It is in the showroom now.' : '.'}`;
 }
 function muMain(own, st) {
@@ -9900,6 +10587,9 @@ function muMain(own, st) {
         <div><dt>Money</dt><dd>${money(S.money)}</dd></div><div><dt>Reputation</dt><dd>${S.rep}</dd></div>
       </dl>
       <p class="tip">Race any island event again for fun and the stars you missed. No prize money, but island street races still pay.</p>
+      <div class="invite teaser atl-teaser"><p class="kicker">Next · Atlanta</p><h3 class="invite-title">Welcome to the A</h3>
+        <p class="story">The video from Le Morne went round the world, and somebody in Atlanta saw it. Eight races from the airport to the Downtown Connector, American muscle only, and you start again in a Mustang.</p>
+        <div class="actions"><button class="btn primary" data-act="hubtab" data-arg="atl"><span>Go to Atlanta</span></button></div></div>
       ${DRAG.some(d => !dragBeaten(S, d.id)) ? `<div class="next-steps"><p class="kicker">What's next</p><div class="step"><p class="kicker">Drag night</p><h4>The airport road at Plaine Magnien</h4>
         <p>${DRAG.filter(d => !dragBeaten(S, d.id)).length} drag racers still to beat, Le Baron last. A straight quarter mile: tap GO on green, then shift in the green. Any island car except your GT-R.</p>
         <div class="actions"><button class="btn primary" data-act="stab" data-arg="drag"><span>Drag night</span></button></div></div></div>` : ''}`;
@@ -9929,6 +10619,56 @@ function muMain(own, st) {
       ${S.news ? `<p class="news">“${esc(S.news)}”</p>` : ''}
       ${body}
       ${exh ? `<p class="kicker">Race again · ★ ${stars} of ${MU.length * 3}</p><div class="actions">${exh}</div>` : ''}
+    </article></div>`;
+}
+/* ---------- Atlanta ---------- */
+/* the Deacon's Demon makes more than anything else in town: say early that the last race needs a Demon of your own */
+function demonSave() {
+  if (S.owned.demon || nextAtlIndex(S) >= ATL.length || nextAtlIndex(S) < 4) return '';
+  const price = carById('demon').price;
+  return `<p class="tip gtr-save">Save for the last race: the Deacon's Demon makes ${ATL[ATL.length - 1].oppBhp} bhp and only a Demon 170 of your own can live with it. It opens after race 7 and costs <b>${money(price)}</b>. ${S.money >= price ? 'You have that now, so keep it back.' : `You have ${money(S.money)}.`}</p>`;
+}
+function atlMain(own, st) {
+  const i = nextAtlIndex(S), done = (S.atl && S.atl.completed) || [];
+  const stars = ATL.reduce((a, e) => a + starCount((S.stars || {})['atl:' + e.rival]), 0);
+  const exh = ATL.map((e, k) => done[k] ? `<button class="btn small" data-act="atlex" data-arg="${k}"><span>${e.title}</span></button>` : '').join('');
+  let body;
+  if (i >= ATL.length) {
+    body = `<p class="kicker">Atlanta complete</p>
+      <h2 class="flyer-title">King of the A</h2>
+      ${rivalCard('deacon', CHARACTERS.deacon.youWin, false, 'The Deacon')}
+      <dl class="facts">
+        <div><dt>Atlanta stars</dt><dd>${stars} <small>of ${ATL.length * 3}</small></dd></div><div><dt>Wins</dt><dd>${S.stats.wins}</dd></div>
+        <div><dt>Money</dt><dd>${money(S.money)}</dd></div><div><dt>Reputation</dt><dd>${S.rep}</dd></div>
+      </dl>
+      <p class="tip">Race any Atlanta event again for fun and the stars you missed. No prize money, but Atlanta street races still pay.</p>
+      <div class="invite teaser"><p class="kicker">Next · Tokyo</p><h3 class="invite-title">The last flight</h3>
+        <p class="story">London, Essex, the island and now Atlanta. There is one city left, and everyone who is anyone ends up there. Coming soon.</p></div>`;
+  } else {
+    const ev = ATL[i];
+    body = `<p class="kicker">Atlanta · Race ${i + 1} of ${ATL.length} · ${esc(ev.area)}</p>
+      <h2 class="flyer-title">${ev.title}</h2>
+      ${rivalCard(ev.rival, CHARACTERS[ev.rival].pre)}
+      <dl class="facts">
+        <div><dt>Their car</dt><dd>${ev.oppBhp} <small>bhp</small></dd></div>
+        <div><dt>Prize</dt><dd>${money(ev.reward)}${st.style ? ` <small>+${Math.round(styleBonus(st.style) * 100)}% style</small>` : ''}</dd></div>
+        <div><dt>Road</dt><dd>${ev.twoWay ? 'One lane each way' : ev.lanes === 2 ? 'Two lanes' : ev.lanes === 4 ? 'Four lanes' : 'Three lanes'}</dd></div>
+        <div><dt>Route</dt><dd>${(ev.dist / 1000).toFixed(1)} km <small>${ev.dawn ? 'Dawn' : timeName(ev)}</small></dd></div>
+      </dl>
+      ${recordLine('atl:' + ev.rival, 'tip rec')}
+      ${damageWarn(own)}
+      <div class="actions">
+        <button class="btn primary big" data-act="atl" ${own.damage >= 100 ? 'disabled' : ''}><span>Race</span></button>
+      </div>
+      <p class="tip hint">${muTip(ev, st)}</p>
+      ${demonSave()}
+      ${rivalCarStrip(ev.oppLook, CHARACTERS[ev.rival].car)}
+      <p class="story">${esc(ev.intro)}</p>`;
+  }
+  return `<div class="hub-main"><article class="flyer atl">
+      ${S.news ? `<p class="news">“${esc(S.news)}”</p>` : ''}
+      ${body}
+      ${exh ? `<p class="kicker">Race again · ★ ${stars} of ${ATL.length * 3}</p><div class="actions">${exh}</div>` : ''}
     </article></div>`;
 }
 /* what it takes for a challenger to turn up, in plain words */
@@ -9988,9 +10728,16 @@ function goHub(page, sub) {
     hubPage = 'race';
     setTimeout(() => Cine.play('fly', () => toast('Mauritius is open. Island cars only: you start again in a Picanto.')), 30);
   }
-  if (hubTab === null && islandCar(S.current)) hubTab = 'mu';
-  if (hubTab === 'mu' && muOpen(S) && !islandCar(S.current)) { goIsland(S, true); S.street = streetOffers(S); save(); }
-  else if (hubTab !== 'mu' && islandCar(S.current)) { goIsland(S, false); S.street = streetOffers(S); save(); }
+  // the first time Atlanta opens: Dre's Mustang is waiting at the airport
+  if (atlOpen(S) && !(S.announced || {}).atl) {
+    S.announced = Object.assign(S.announced || {}, { atl: true }); openRegion(S, 'atl'); hubTab = 'atl'; goRegion(S, 'atl');
+    S.news = 'Dre has left his Mustang at the airport for you. Welcome to Atlanta.'; S.street = streetOffers(S); save();
+    hubPage = 'race';
+    setTimeout(() => Cine.play('fly', () => toast('Atlanta is open. American cars only: you start again in a Mustang.'), { to: 'atl', from: 'MRU' }), 30);
+  }
+  if (hubTab === null && regionOf(S.current)) hubTab = regionOf(S.current);
+  if (AWAY(hubTab) && regionOpen(S, hubTab) && regionOf(S.current) !== hubTab) { goRegion(S, hubTab); S.street = streetOffers(S); save(); }
+  else if (!AWAY(hubTab) && regionOf(S.current)) { goRegion(S, null); S.street = streetOffers(S); save(); }
   const own = S.owned[S.current], car = carById(S.current), st = curStats(S);
   const exOpen = essexOpen(S);
   let main;
@@ -10001,6 +10748,7 @@ function goHub(page, sub) {
     setTimeout(() => toast('Essex is open. Eight new races, new cars and pink slips.'), 500);
   }
   if (hubTab === 'mu' && muOpen(S)) main = muMain(own, st);
+  else if (hubTab === 'atl' && atlOpen(S)) main = atlMain(own, st);
   else if (exOpen && hubTab !== 'london') main = essexMain(own, st);
   else if (S.careerDone) {
     main = `<article class="flyer">
@@ -10048,7 +10796,7 @@ function goHub(page, sub) {
       <aside class="car-panel">
         <p class="kicker">Your race car</p>
         <canvas data-car="${car.id}" data-spin="1" width="300" height="170" class="spin" aria-label="Your car. Drag to turn it."></canvas>
-        <div class="car-name"><h3>${car.name}</h3><span class="plate">${esc(lookOf(S, car.id).plate)}</span></div>
+        <div class="car-name"><h3>${car.name}</h3><span class="plate${regionOf(car.id) === 'atl' ? ' us' : ''}">${esc(lookOf(S, car.id).plate)}</span></div>
         ${S.careerDone ? `<p class="cls-line"><span class="chip cls">Class ${carClass(st.bhp)}</span></p>` : ''}
         ${specRows(st, own.damage)}
         <div class="chips">${UPGRADES.map(u => { const n = Number(own.up[u.id]) || 0; return `<span class="chip ${n ? 'on' : ''}">${u.name}${n ? ' S' + n : ''}</span>`; }).join('')}</div>
@@ -10084,10 +10832,10 @@ function goGarage(tab, keepScroll) {
   else if (garageTab === 'body') body = bodyTab(own, car);
   else if (garageTab === 'mine') body = collectionTab();
   else body = dealerTab();
-  const island = islandCar(S.current);
+  const here = regionOf(S.current);
   $('garage-body').innerHTML = `${topBar()}
     ${menuHead(garageTab === 'cars' ? 'cars' : 'garage')}
-    ${garageTab === 'cars' ? `<p class="kicker">${island ? 'Island showroom · Mauritius' : S.careerDone ? 'Dealership · London and Essex' : 'Dealership · London'}</p>`
+    ${garageTab === 'cars' ? `<p class="kicker">${here === 'atl' ? 'Atlanta showroom · American cars' : here ? 'Island showroom · Mauritius' : S.careerDone ? 'Dealership · London and Essex' : 'Dealership · London'}</p>`
     : `<p class="kicker">Garage · ${car.name}</p>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" aria-selected="${garageTab === 'upgrades'}" data-act="tab" data-arg="upgrades">Upgrades</button>
@@ -10108,8 +10856,8 @@ function goGarage(tab, keepScroll) {
 }
 /* the next step up in the showroom: the cheapest car you do not own that ends up quicker than yours once built */
 function dealerFocus() {
-  const island = islandCar(S.current), mine = maxStats(S.current).bhp;
-  const next = CARS.filter(c => !c.slip && !S.owned[c.id] && islandCar(c.id) === island && (c.chapter !== 'essex' || S.careerDone) && maxStats(c.id).bhp > mine)
+  const here = regionOf(S.current), mine = maxStats(S.current).bhp;
+  const next = CARS.filter(c => !c.slip && !S.owned[c.id] && regionOf(c.id) === here && (c.chapter !== 'essex' || S.careerDone) && maxStats(c.id).bhp > mine)
     .sort((a, b) => (carUnlocked(S, b) - carUnlocked(S, a)) || a.price - b.price)[0];
   return next ? next.id : S.current;
 }
@@ -10143,7 +10891,7 @@ function upgradesTab(own, car, st) {
   return `<div class="garage-grid">
     <aside class="car-panel">
       <canvas data-car="${car.id}" data-spin="1" width="300" height="170" class="spin" aria-label="Your car. Drag to turn it."></canvas>
-      <div class="car-name"><h3>${car.name}</h3><span class="plate">${esc(lookOf(S, car.id).plate)}</span></div>
+      <div class="car-name"><h3>${car.name}</h3><span class="plate${regionOf(car.id) === 'atl' ? ' us' : ''}">${esc(lookOf(S, car.id).plate)}</span></div>
       ${specRows(st, own.damage)}
       <p class="tip">Fully upgraded this car makes <b>${mx.bhp} bhp</b>. ${car.pot >= 0.9 ? 'Huge tuning potential.' : car.pot >= 0.75 ? 'Strong tuning potential.' : car.pot >= 0.55 ? 'Decent tuning potential.' : 'Not much tuning potential. Fine for the early races, but it runs out of steam later on.'}</p>
     </aside>
@@ -10229,16 +10977,16 @@ function ownedActs(c) {
 const clsChip = bhp => `<span class="chip cls cls-${carClass(bhp)}">Class ${carClass(bhp)}</span>`;
 function dealerTab() {
   // pink slip cars are never for sale, and the Essex showroom only shows up once you have the crown
-  // on the island the showroom only has island cars; back home it never shows them
-  const island = islandCar(S.current);
-  const list = CARS.filter(c => !c.slip && (island ? c.chapter === 'mu' : c.chapter !== 'mu' && (!c.chapter || S.careerDone)));
+  // on the island the showroom only has island cars, in Atlanta only American ones; back home it never shows them
+  const here = regionOf(S.current), island = here === 'mu';
+  const list = CARS.filter(c => !c.slip && (here ? c.chapter === here : !regionOf(c.id) && (!c.chapter || S.careerDone)));
   return `${list.length > 1 ? `<p class="tip swipe-hint">${list.length} cars. Swipe across to see them all.</p>` : ''}
   <div class="car-grid">${list.map(c => {
     const owned = S.owned[c.id], cur = S.current === c.id, unlocked = carUnlocked(S, c);
     const st2 = statsFor(c.id, owned ? owned.up : {}), mx = maxStats(c.id);
     let act;
     if (owned) act = ownedActs(c);
-    else if (!unlocked) act = c.chapter === 'mu' ? `<span class="lock">🔒 ${c.id === 'gtrx' ? 'Arrives after the Chamarel race' : 'Win ' + c.muUnlock + ' island race' + (c.muUnlock > 1 ? 's' : '')} (you have ${muWins(S)})</span>` : c.chapter === 'essex' && !essexOpen(S) ? `<span class="lock">🔒 In the Essex showroom once Essex opens</span>` : `<span class="lock">🔒 Needs Rep ${c.rep} (you have ${S.rep})</span>`;
+    else if (!unlocked) act = c.chapter === 'atl' ? `<span class="lock">🔒 Win ${c.atlUnlock} Atlanta race${c.atlUnlock > 1 ? 's' : ''} (you have ${atlWins(S)})</span>` : c.chapter === 'mu' ? `<span class="lock">🔒 ${c.id === 'gtrx' ? 'Arrives after the Chamarel race' : 'Win ' + c.muUnlock + ' island race' + (c.muUnlock > 1 ? 's' : '')} (you have ${muWins(S)})</span>` : c.chapter === 'essex' && !essexOpen(S) ? `<span class="lock">🔒 In the Essex showroom once Essex opens</span>` : `<span class="lock">🔒 Needs Rep ${c.rep} (you have ${S.rep})</span>`;
     else {
       const tv = sellValue(S, S.current), canTrade = S.money < c.price && S.money + tv >= c.price;
       act = `<button class="btn small ${S.money >= c.price ? 'primary' : ''}" data-act="buycar" data-arg="${c.id}" ${S.money >= c.price ? '' : 'disabled'}><span>${c.price ? 'Buy ' + money(c.price) : 'Take it (free)'}</span></button>`
@@ -10250,8 +10998,8 @@ function dealerTab() {
     }
     return `<div class="car-card ${cur ? 'current' : ''} ${!unlocked && !owned ? 'locked' : ''}" data-id="${c.id}">
       <canvas data-car="${c.id}" data-locked="${!unlocked && !owned ? 1 : 0}" width="300" height="150"></canvas>
-      <div class="car-name"><h3>${c.name}</h3><span class="plate">${esc(owned ? lookOf(S, c.id).plate : c.look.plate)}</span></div>
-      ${S.careerDone ? `<p class="cls-line">${clsChip(st2.bhp)}${c.chapter === 'essex' ? '<span class="chip">Essex</span>' : c.chapter === 'mu' ? '<span class="chip">Mauritius</span>' : ''}</p>` : ''}
+      <div class="car-name"><h3>${c.name}</h3><span class="plate${c.chapter === 'atl' ? ' us' : ''}">${esc(owned ? lookOf(S, c.id).plate : c.look.plate)}</span></div>
+      ${S.careerDone ? `<p class="cls-line">${clsChip(st2.bhp)}${c.chapter === 'essex' ? '<span class="chip">Essex</span>' : c.chapter === 'mu' ? '<span class="chip">Mauritius</span>' : c.chapter === 'atl' ? '<span class="chip">Atlanta</span>' : ''}</p>` : ''}
       <p>${c.blurb} Fully upgraded: <b>${mx.bhp} bhp</b>${S.careerDone ? ` (class ${carClass(mx.bhp)})` : ''}.</p>
       ${specRows(st2, owned ? owned.damage : undefined)}
       <div class="actions">${act}</div>
@@ -10261,13 +11009,13 @@ function dealerTab() {
 }
 /* every car you own, with its class. Cars won in pink slips show who you took them from. */
 function collectionTab() {
-  const island = islandCar(S.current), ids = CARS.filter(c => S.owned[c.id] && islandCar(c.id) === island).map(c => c.id);
+  const here = regionOf(S.current), ids = CARS.filter(c => S.owned[c.id] && regionOf(c.id) === here).map(c => c.id);
   return `<p class="tip">Your garage. Classes go by how much power a car makes right now: D, C, B, A, then S at 800 bhp and up.${ids.length > 1 ? `<span class="swipe-hint">You have ${ids.length} cars here. Swipe across to see them all.</span>` : ''}</p>
   <div class="car-grid">${ids.map(id => {
     const c = carById(id), own = S.owned[id], st2 = statsFor(id, own.up, lookOf(S, id));
     return `<div class="car-card ${S.current === id ? 'current' : ''}" data-id="${id}">
       <canvas data-car="${id}" width="300" height="150"></canvas>
-      <div class="car-name"><h3>${c.name}</h3><span class="plate">${esc(lookOf(S, id).plate)}</span></div>
+      <div class="car-name"><h3>${c.name}</h3><span class="plate${c.chapter === 'atl' ? ' us' : ''}">${esc(lookOf(S, id).plate)}</span></div>
       <p class="cls-line">${clsChip(st2.bhp)}${c.slip ? `<span class="chip slipchip">Pink slip</span>` : ''}</p>
       <p>${c.slip ? `Won from ${esc(CHARACTERS[c.slip].name)} in a pink slip race.` : c.blurb}</p>
       ${specRows(st2, own.damage)}
@@ -10320,6 +11068,18 @@ function goLadder() {
         <div class="pz">${money(ev.reward)}<br>+${ev.rep} rep${done[i] ? '<br>' + starsHtml((S.stars || {})['mu:' + ev.rival]) : ''}</div></div>`;
     }).join('<div class="down" aria-hidden="true">↓</div>');
   }
+  let atlRungs = '';
+  if (place === 'atl' || (place === 'mu' && !atlOpen(S))) {
+    const open = atlOpen(S), nx = nextAtlIndex(S), done = (S.atl && S.atl.completed) || [];
+    atlRungs = `<p class="chapter">Atlanta${open ? '' : ' · beat Boss to open it'}</p>` + ATL.map((ev, i) => {
+      const st = done[i] ? 'done' : open && i === nx ? 'current' : 'locked', ic = st === 'done' ? '✓' : st === 'current' ? '→' : '🔒';
+      return `<div class="rung ${st}"><div class="ic">${ic}</div>
+        <canvas class="portrait sm" data-portrait="${ev.rival}" data-hidden="${open ? 0 : 1}" width="44" height="44"></canvas>
+        <div><h4><span class="num">${i + 1}</span> ${ev.title}</h4><p>${open ? esc(CHARACTERS[ev.rival].name) + ' · ' + esc(CHARACTERS[ev.rival].car) + ' · ' + ev.oppBhp + ' bhp' : 'Unknown'}</p>
+          <p class="where">${esc(ev.area)} · ${esc(ev.road)}</p></div>
+        <div class="pz">${money(ev.reward)}<br>+${ev.rep} rep${done[i] ? '<br>' + starsHtml((S.stars || {})['atl:' + ev.rival]) : ''}</div></div>`;
+    }).join('<div class="down" aria-hidden="true">↓</div>');
+  }
   const bonus = S.careerDone && place === 'london' ? `<p class="chapter">Invitation</p>` + ['ride3'].map(id => {
     const sp = SPECIALS[id], done = S.specials && S.specials[id], ch = CHARACTERS[sp.rival];
     return `<div class="rung ${done ? 'done' : 'open'} special"><div class="ic">${done ? '✓' : '→'}</div>
@@ -10327,21 +11087,22 @@ function goLadder() {
       <div><h4><img class="r3logo" src="${RIDE3_LOGO}" alt="Ride3"> Invitational</h4><p>${esc(ch.name)} · ${esc(ch.car)}</p><p class="where">${esc(sp.area)} · ${esc(sp.road)}</p></div>
       <div class="pz">${money(sp.reward)}<br>+${sp.rep} rep</div></div>`;
   }).join('') : '';
-  const onIsland = islandCar(S.current);
-  const unl = onIsland ? CARS.filter(c => c.chapter === 'mu').map(c => `<div class="${carUnlocked(S, c) ? 'ok' : ''}"><span>${c.name}</span><b>${c.muUnlock ? c.muUnlock + ' WIN' + (c.muUnlock > 1 ? 'S' : '') : 'START'} ${carUnlocked(S, c) ? '✓' : '🔒'}</b></div>`).join('')
-    : CARS.filter(c => !c.slip && c.chapter !== 'mu' && (!c.chapter || S.careerDone)).map(c => `<div class="${carUnlocked(S, c) ? 'ok' : ''}"><span>${c.name}</span><b>${c.rep ? 'REP ' + c.rep : 'START'} ${carUnlocked(S, c) ? '✓' : '🔒'}</b></div>`).join('');
+  const here = regionOf(S.current), onIsland = !!here, uk = here ? REGIONS[here].unlock : '';
+  const unl = here ? CARS.filter(c => c.chapter === here).map(c => `<div class="${carUnlocked(S, c) ? 'ok' : ''}"><span>${c.name}</span><b>${c[uk] ? c[uk] + ' WIN' + (c[uk] > 1 ? 'S' : '') : 'START'} ${carUnlocked(S, c) ? '✓' : '🔒'}</b></div>`).join('')
+    : CARS.filter(c => !c.slip && !regionOf(c.id) && (!c.chapter || S.careerDone)).map(c => `<div class="${carUnlocked(S, c) ? 'ok' : ''}"><span>${c.name}</span><b>${c.rep ? 'REP ' + c.rep : 'START'} ${carUnlocked(S, c) ? '✓' : '🔒'}</b></div>`).join('');
   $('ladder-body').innerHTML = `${topBar()}
     ${menuHead('map')}
     <p class="kicker">Career ladder · ${PLACE_NAMES[place]}${totalStars(S) ? ` · ★ ${totalStars(S)} stars` : ''}</p>
-    <h2 class="h2">${place === 'mu' ? 'From Grand Baie to Le Morne' : place === 'essex' ? 'From Romford to the QE2 Bridge' : 'From Canning Town to the crown'}</h2>
+    <h2 class="h2">${place === 'atl' ? 'From the airport to the Connector' : place === 'mu' ? 'From Grand Baie to Le Morne' : place === 'essex' ? 'From Romford to the QE2 Bridge' : 'From Canning Town to the crown'}</h2>
     <p class="tip">Stars: one for the win, one for a race with no crashes, one for hitting every gate. They stay with the route, so you can go back for them.</p>
     <div class="ladder-grid">
-      <div class="ladder">${place === 'london' ? rungs + bonus : ''}${essexRungs}${muRungs}</div>
+      <div class="ladder">${place === 'london' ? rungs + bonus : ''}${essexRungs}${muRungs}${atlRungs}</div>
       <div class="unlocks">
         ${place === 'london' ? `<canvas class="map" data-map="1" width="400" height="400" aria-label="Map of the career across East and North London"></canvas>` : ''}
         ${place === 'essex' ? `<canvas class="map" data-map="essex" width="400" height="400" aria-label="Map of the Essex races"></canvas>` : ''}
         ${place === 'mu' ? `<canvas class="map" data-map="mu" width="400" height="400" aria-label="Map of the Mauritius races"></canvas>` : ''}
-        <p class="kicker">${onIsland ? `Island showroom · you have ${muWins(S)} island win${muWins(S) === 1 ? '' : 's'}` : `Dealership unlocks · you have Rep ${S.rep}`}</p>
+        ${place === 'atl' ? `<canvas class="map" data-map="atl" width="400" height="400" aria-label="Map of the Atlanta races"></canvas>` : ''}
+        <p class="kicker">${here === 'atl' ? `Atlanta showroom · you have ${atlWins(S)} Atlanta win${atlWins(S) === 1 ? '' : 's'}` : onIsland ? `Island showroom · you have ${muWins(S)} island win${muWins(S) === 1 ? '' : 's'}` : `Dealership unlocks · you have Rep ${S.rep}`}</p>
         ${unl}
         <p class="tip">Reputation only comes from career wins, and each career event pays out once. Street races can be replayed for cash.</p>
       </div>
@@ -10428,6 +11189,7 @@ function showResults() {
   if (sum.essexOpened) notes += `<div class="unlock-note special"><small>New area unlocked</small>Essex</div>`;
   for (const n of sum.newFriends || []) notes += `<div class="unlock-note special"><small>New challenger · Street, Challengers</small>${esc(n)} wants a race</div>`;
   if (sum.muOpened) notes += `<div class="unlock-note special"><small>New area unlocked</small>Mauritius</div>`;
+  if (sum.atlOpened) notes += `<div class="unlock-note special"><small>New area unlocked</small>Atlanta</div>`;
   if (sum.imported) notes += `<div class="unlock-note special"><small>Delivered to Port Louis</small>Your GT-R, rebuilt for Boss</div>`;
   let who = '';
   if (sum.careerDone) notes += `<div class="unlock-note special"><small>Invitation unlocked</small>Adam from Ride3 wants a race</div>
@@ -10441,6 +11203,9 @@ function showResults() {
   } else if (sum.muDone) {
     who = `<div class="reveal"><p class="kicker">King of the Island</p>${rivalCard('boss', CHARACTERS.boss.youWin, false, 'Boss')}
       <p class="story">Boss pulls over under the mountain as the sun drops into the sea. Ten years unbeaten. He hands you the keys to the M3 for a photo, then takes them back.</p></div>`;
+  } else if (sum.atlDone) {
+    who = `<div class="reveal"><p class="kicker">King of the A</p>${rivalCard('deacon', CHARACTERS.deacon.youWin, false, 'The Deacon')}
+      <p class="story">The Deacon pulls onto the hard shoulder under the Capitol dome as the sun comes up. Twenty years. He gets out, takes off his glasses and hands you a set of keys with a Georgia peach on the ring.</p></div>`;
   } else if (ev.rival) who = rivalCard(ev.rival, sum.line, ev.rival === 'king' && !S.kingRevealed);
   let story = sum.story ? `<p class="news">“${esc(sum.story)}”</p>` : '';
   if (ev.kind === 'street' && ev.cp) story = res.won ? `<p class="story">Every gate, clean. There are fresh street races on the board.</p>` : `<p class="story">${res.how === 'wrecked' ? 'The car is in bits.' : 'One gate too many.'} There are fresh street races on the board.</p>`;
@@ -10507,6 +11272,13 @@ function startRace(spec) {
     if (!islandCar(S.current)) { toast('Island races need an island car. Tap Mauritius at the top.', true); return; }
     if (MU[spec.index].rival === 'boss' && !spec.exhibition && !S.owned.gtrx) { toast('Nothing on the island can beat Boss. Collect your GT-R first.', true); return; }
   }
+  if (spec.kind === 'atl') {
+    if (!atlOpen(S) || !ATL[spec.index]) return;
+    const done = S.atl && S.atl.completed[spec.index];
+    if (spec.exhibition ? !done : done || spec.index !== nextAtlIndex(S)) return;
+    if (regionOf(S.current) !== 'atl') { toast('Atlanta races need an American car. Tap Atlanta at the top.', true); return; }
+  }
+  if (spec.kind === 'mu' && regionOf(S.current) === 'atl') { toast('Your American car stays in Atlanta. Tap Mauritius at the top.', true); return; }
   if (spec.kind === 'drag') {
     const i = DRAG.findIndex(d => d.id === spec.id);
     if (i < 0 || !dragUnlocked(S, i)) return;
@@ -10514,9 +11286,9 @@ function startRace(spec) {
     if (S.current === 'gtrx') { toast('Nobody at drag night will race your GT-R. Pick another island car in My cars.', true); return; }
     if (dragBeaten(S, spec.id)) { const why = dragBetBlock(S, DRAG[i], spec.stake); if (why) { toast(why, true); return; } }
   }
-  if ((spec.kind === 'essex' || spec.kind === 'career' || spec.kind === 'special' || spec.kind === 'slip') && islandCar(S.current)) { toast('Your island car stays on the island. Tap London or Essex at the top.', true); return; }
+  if ((spec.kind === 'essex' || spec.kind === 'career' || spec.kind === 'special' || spec.kind === 'slip') && regionOf(S.current)) { toast(regionOf(S.current) === 'atl' ? 'Your American car stays in Atlanta. Tap London or Essex at the top.' : 'Your island car stays on the island. Tap London or Essex at the top.', true); return; }
   if (spec.kind === 'slip' && (!slipReady(S, spec.id) || Object.keys(S.owned).length < 2 || S.current === slipCarFor(spec.id).id)) return;
-  hubPage = spec.kind === 'career' || spec.kind === 'essex' || spec.kind === 'mu' ? 'race' : 'street';
+  hubPage = spec.kind === 'career' || spec.kind === 'essex' || spec.kind === 'mu' || spec.kind === 'atl' ? 'race' : 'street';
   if (spec.kind === 'drag') streetTab = 'drag';
   R = createRace(S, spec);
   { const lk = R.ev.oppLook || {}, me = lookOf(S, S.current) || {}; warmMeshes([[carById(S.current).model, me.stance], [lk.model, lk.stance]].concat(['hatch', 'saloon', 'suv', 'van', 'cab', 'pickup'].map(m => [m, 0])), true); }
@@ -10638,11 +11410,11 @@ function processEvents() {
 /* ---------- menu background ---------- */
 let demo = null;
 function setDemo() {
-  const isl = S && islandCar(S.current) && muOpen(S), ex = !isl && S && essexOpen(S), list = isl ? MU : ex ? ESSEX : EVENTS;
-  const evi = S ? Math.min(isl ? nextMuIndex(S) : ex ? nextEssexIndex(S) : nextEventIndex(S), list.length - 1) : 0;
+  const away = S && regionOf(S.current) && regionOpen(S, regionOf(S.current)) ? regionOf(S.current) : null, isl = !!away, ex = !isl && S && essexOpen(S), list = away ? REGIONS[away].list : ex ? ESSEX : EVENTS;
+  const evi = S ? Math.min(away ? nextRegionIndex(S, away) : ex ? nextEssexIndex(S) : nextEventIndex(S), list.length - 1) : 0;
   const carId = S ? S.current : 'civic';
   const look = S ? lookOf(S, carId) : stockLook(carId), up = S ? S.owned[carId].up : {};
-  const key = (isl ? 'm' : ex ? 'x' : '') + evi + carId + JSON.stringify(look) + JSON.stringify(up);
+  const key = (away || (ex ? 'x' : '')) + evi + carId + JSON.stringify(look) + JSON.stringify(up);
   if (demo && demo.key === key) return;
   demo = { key, demo: true, ev: Object.assign({}, list[evi], { index: evi }), carId, look, up, waves: [], o: null, state: 'demo',
     p: { dist: demo ? demo.p.dist : 120, v: 30, x: 1, vx: 0, latV: 0, boosting: false, damage: 0 } };
@@ -10683,7 +11455,7 @@ const Cine = {
       addEventListener('keydown', e => { if (this.on && !e.repeat && this.t > 0.35) { e.preventDefault(); e.stopPropagation(); this.skip(); } }, true);
     }
     this.kind = kind; this.done = done; this.opts = opts || {}; this.t = 0; this.last = performance.now(); this.on = true;
-    this.len = kind === 'fly' ? (this.opts.short ? 4.4 : 6.4) : 7.2;
+    this.len = kind === 'fly' ? (this.opts.short || this.opts.to === 'atl' ? 4.4 : 6.4) : 7.2;
     this.cues = {}; this.seed = Math.random() * 1000;
     this.cv.hidden = false; this.tip.hidden = false; this.tip.textContent = kind === 'crate' ? 'Tap to skip' : 'Tap to skip';
     this.resize();
@@ -10713,12 +11485,13 @@ const Cine = {
 
   /* ---- London, the long haul, the island ---- */
   fly() {
-    const g = this.g, w = this.w, h = this.h, t = this.t, short = !!this.opts.short;
+    const g = this.g, w = this.w, h = this.h, t = this.t, atl = this.opts.to === 'atl', short = !!this.opts.short || atl;
     const t1 = short ? 0 : 1.7, t2 = t1 + 1.9, L = this.len;   // phase ends: take off, cruise, arrive
     if (!short) this.cue('roar', 0.05, () => Sound.swell && Sound.swell(2.4, 0.16, 300, 900));
     this.cue('wind', t1 + 0.1, () => Sound.swell && Sound.swell(1.6, 0.07, 1200, 500));
     if (t < t1) this.london(g, w, h, t / t1);
     else if (t < t2) this.cruise(g, w, h, (t - t1) / (t2 - t1));
+    else if (atl) this.atlanta(g, w, h, (t - t2) / (L - t2));
     else this.island(g, w, h, (t - t2) / (L - t2));
     // soft cuts between the scenes
     const edge = [t1, t2].reduce((m, x) => Math.min(m, Math.abs(t - x)), 9);
@@ -10787,14 +11560,16 @@ const Cine = {
     const s = Math.min(w * 0.6, h), x = w * 0.5, y = h * 0.42 + Math.sin(k * 7) * 4;
     g.strokeStyle = 'rgba(255,255,255,0.3)'; g.lineWidth = s * 0.012; g.beginPath(); g.moveTo(x - s * 0.1, y + s * 0.11); g.lineTo(-10, y + s * 0.1); g.stroke();
     this.jet(g, x, y, s, -0.02, { dark: false, lights: true });
-    // the route: LHR to MRU
+    // the route: London, Mauritius or Atlanta to wherever you are going
+    const from = this.opts.from || 'LHR', to = this.opts.to === 'atl' ? 'ATL' : 'MRU';
+    const leg = { 'LHR-MRU': [9700, '11 h 50'], 'LHR-ATL': [6760, '9 h 55'], 'MRU-ATL': [15300, '22 h via Paris'], 'ATL-MRU': [15300, '22 h via Paris'] }[from + '-' + to] || [9700, '11 h 50'];
     const bx0 = w * 0.18, bx1 = w * 0.82, by = h * 0.12, px = bx0 + (bx1 - bx0) * (0.15 + 0.7 * k);
     g.strokeStyle = 'rgba(255,255,255,0.35)'; g.setLineDash([6, 6]); g.lineWidth = 2; g.beginPath(); g.moveTo(bx0, by); g.lineTo(bx1, by); g.stroke(); g.setLineDash([]);
     g.strokeStyle = '#f2a33a'; g.beginPath(); g.moveTo(bx0, by); g.lineTo(px, by); g.stroke();
     g.fillStyle = '#f2a33a'; g.beginPath(); g.arc(px, by, 5, 0, 7); g.fill();
     g.font = `700 ${Math.round(clamp(w * 0.02, 11, 15))}px ${FONT_M}`; g.fillStyle = '#e9e4d8'; g.textAlign = 'center';
-    g.fillText('LHR', bx0, by - 12); g.fillText('MRU', bx1, by - 12);
-    g.fillStyle = 'rgba(233,228,216,0.7)'; g.fillText(`${Math.round(9700 * (0.15 + 0.7 * k)).toLocaleString('en-GB')} km · 11 h 50`, w / 2, by + 24);
+    g.fillText(from, bx0, by - 12); g.fillText(to, bx1, by - 12);
+    g.fillStyle = 'rgba(233,228,216,0.7)'; g.fillText(`${Math.round(leg[0] * (0.15 + 0.7 * k)).toLocaleString('en-GB')} km · ${leg[1]}`, w / 2, by + 24);
   },
   island(g, w, h, k) {
     const sky = g.createLinearGradient(0, 0, 0, h * 0.55); sky.addColorStop(0, '#3f9ad6'); sky.addColorStop(1, '#bfe6f5');
@@ -10834,6 +11609,53 @@ const Cine = {
       const fw = Math.min(w * 0.5, fs * 4.5), fx = w / 2 - fw / 2;
       ['#ea2839', '#1a206d', '#ffd500', '#00a551'].forEach((c, i) => { g.fillStyle = c; g.fillRect(fx + i * fw / 4, h * 0.8 + fs * 0.18, fw / 4, 6); });
       g.font = `700 ${Math.round(clamp(w * 0.022, 12, 17))}px ${FONT_M}`; g.fillStyle = '#f6f1e3'; g.fillText('BIENVINI · SSR INTERNATIONAL · 29°C', w / 2, h * 0.8 + fs * 0.5);
+      g.globalAlpha = 1;
+    }
+  },
+  /* ---- Atlanta at sunset: pine woods, the towers downtown and the plane coming in over them ---- */
+  atlanta(g, w, h, k) {
+    const hz = h * 0.62;
+    const sky = g.createLinearGradient(0, 0, 0, hz); sky.addColorStop(0, '#2a2f5c'); sky.addColorStop(0.55, '#b0567a'); sky.addColorStop(1, '#f5a25e');
+    g.fillStyle = sky; g.fillRect(0, 0, w, h);
+    g.globalCompositeOperation = 'lighter'; drawGlow(g, [255, 180, 110], w * 0.22, hz - h * 0.04, h * 0.45, 0.55); g.globalCompositeOperation = 'source-over';
+    const R2 = seededRng(9);
+    g.fillStyle = 'rgba(255,200,170,0.35)';
+    for (let i = 0; i < 5; i++) { const x = R2() * w - k * 40, y = h * (0.1 + R2() * 0.25); g.beginPath(); g.ellipse(x, y, 70 + R2() * 70, 6 + R2() * 6, 0, 0, 7); g.fill(); }
+    // downtown and Midtown: a band of towers with a few famous tops
+    const base = hz, u = h / 700, sil = '#1d1a2b';
+    g.fillStyle = sil;
+    for (let x = w * 0.28; x < w * 0.86;) { const bw = (10 + R2() * 26) * u, bh = (30 + R2() * 110) * u; g.fillRect(x, base - bh, bw, bh); x += bw + 2 * u; }
+    const bx = w * 0.55;   // Bank of America Plaza: the tall one with the open gold spire
+    g.fillRect(bx - 16 * u, base - 250 * u, 32 * u, 250 * u);
+    g.beginPath(); g.moveTo(bx - 16 * u, base - 250 * u); g.lineTo(bx, base - 292 * u); g.lineTo(bx + 16 * u, base - 250 * u); g.fill();
+    g.strokeStyle = '#e8b44a'; g.lineWidth = 2 * u; g.beginPath(); g.moveTo(bx - 10 * u, base - 254 * u); g.lineTo(bx, base - 286 * u); g.lineTo(bx + 10 * u, base - 254 * u); g.stroke();
+    g.fillStyle = sil; const wx = w * 0.42; g.fillRect(wx - 13 * u, base - 190 * u, 26 * u, 190 * u); g.beginPath(); g.ellipse(wx, base - 190 * u, 13 * u, 4 * u, 0, 0, 7); g.fill();   // the Westin's round tower
+    const px2 = w * 0.66; g.fillRect(px2 - 14 * u, base - 205 * u, 28 * u, 205 * u);   // 191 Peachtree and its two crowns
+    g.fillRect(px2 - 14 * u, base - 222 * u, 8 * u, 17 * u); g.fillRect(px2 + 6 * u, base - 222 * u, 8 * u, 17 * u);
+    g.fillStyle = 'rgba(255,214,150,0.55)';
+    for (let i = 0; i < 90; i++) { const x = w * 0.28 + R2() * w * 0.58, y = base - R2() * 150 * u; g.fillRect(x, y, 1.5 * u + 0.5, 1.2 * u + 0.5); }
+    // the pines in front, then the airport
+    g.fillStyle = '#15251b'; g.strokeStyle = '#15251b'; g.lineWidth = Math.max(1, 1.6 * u);
+    g.fillRect(0, base - 12 * u, w, 16 * u);
+    for (let x = -10; x < w + 20; x += (10 + R2() * 12) * u) {
+      const th = (34 + R2() * 34) * u, cr = (7 + R2() * 6) * u;
+      g.beginPath(); g.moveTo(x, base); g.lineTo(x, base - th); g.stroke();
+      g.beginPath(); g.ellipse(x, base - th, cr, cr * 1.5, 0, 0, 7); g.ellipse(x - cr * 0.8, base - th + cr * 0.9, cr * 0.7, cr * 0.5, 0, 0, 7); g.ellipse(x + cr * 0.8, base - th + cr * 0.5, cr * 0.6, cr * 0.45, 0, 0, 7); g.fill();
+    }
+    g.fillStyle = '#20262a'; g.fillRect(0, base, w, h - base);
+    g.fillStyle = '#2d3438'; g.fillRect(0, base + h * 0.12, w, h * 0.07);
+    for (let i = 0; i < 16; i++) { const x = ((i * 80 + k * 400) % (w + 100)) - 50; g.fillStyle = i % 4 ? '#fff3c4' : '#6fd07a'; g.fillRect(x, base + h * 0.155, 6, 3); }
+    const s = Math.min(w * 0.42, h * 0.7) * (1.3 - 0.75 * k), x = w * (0.1 + 0.62 * k), y = h * (0.18 + 0.26 * k);
+    this.jet(g, x, y, s, 0.1 - 0.12 * k, { gear: Math.min(1, k * 2.5), lights: true });
+    const a = clamp((k - 0.25) / 0.2, 0, 1);
+    if (a > 0) {
+      g.globalAlpha = a;
+      const fs = Math.round(clamp(w * 0.11, 40, 110));
+      g.font = `${fs}px ${FONT_D}`; g.textAlign = 'center'; g.fillStyle = '#10120e'; g.fillText('ATLANTA', w / 2 + 3, h * 0.85 + 3);
+      g.fillStyle = '#f6f1e3'; g.fillText('ATLANTA', w / 2, h * 0.85);
+      const fw = Math.min(w * 0.5, fs * 4.2), fx = w / 2 - fw / 2;
+      ['#f6a26b', '#e0508f', '#2a2f5c'].forEach((c, i) => { g.fillStyle = c; g.fillRect(fx + i * fw / 3, h * 0.85 + fs * 0.18, fw / 3, 6); });
+      g.font = `700 ${Math.round(clamp(w * 0.022, 12, 17))}px ${FONT_M}`; g.fillStyle = '#f6f1e3'; g.fillText('WELCOME TO THE A · HARTSFIELD-JACKSON · 29°C', w / 2, h * 0.85 + fs * 0.5);
       g.globalAlpha = 1;
     }
   },
@@ -11138,6 +11960,7 @@ function boardRoutes() {
   if (S) for (const id of SPECIAL_ORDER) if (specialUnlocked(S, id) || (S.specials && S.specials[id])) list.push('special:' + id);
   if (S && essexOpen(S)) list.push(...ESSEX.map(e => 'essex:' + e.rival));
   if (S && muOpen(S)) list.push(...MU.map(e => 'mu:' + e.rival));
+  if (S && atlOpen(S)) list.push(...ATL.map(e => 'atl:' + e.rival));
   const today = dailyDate(), yday = dailyDate(new Date(Date.now() - 864e5));
   list.push('daily:' + today); if (yday !== today) list.push('daily:' + yday);
   return list;
@@ -11156,6 +11979,7 @@ async function goBoard(route) {
       ${routes.some(r => r.startsWith('special:')) ? `<optgroup label="Friends and invitations">${routes.filter(r => r.startsWith('special:')).map(opt).join('')}</optgroup>` : ''}
       ${routes.some(r => r.startsWith('essex:')) ? `<optgroup label="Essex">${routes.filter(r => r.startsWith('essex:')).map(opt).join('')}</optgroup>` : ''}
       ${routes.some(r => r.startsWith('mu:')) ? `<optgroup label="Mauritius">${routes.filter(r => r.startsWith('mu:')).map(opt).join('')}</optgroup>` : ''}
+      ${routes.some(r => r.startsWith('atl:')) ? `<optgroup label="Atlanta">${routes.filter(r => r.startsWith('atl:')).map(opt).join('')}</optgroup>` : ''}
       <optgroup label="Daily challenge">${routes.filter(r => r.startsWith('daily:')).map(opt).join('')}</optgroup>
     </select></label>
     <p class="tip">Everyone gets the same traffic on a route, so the times are fair. Only finished races count${boardRoute.startsWith('daily:') ? ', and everyone drives the same car' : ', in any car'}. ${routeSpec(boardRoute) ? 'Tap Race on anyone with a ghost to race their run.' : ''}</p>
@@ -11190,7 +12014,7 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'music': Music.setOn(!Music.on); break;
     case 'continue': if (S) goHub('race'); break;
     case 'new': if (S) { $('confirm-new').hidden = false; } else goSelect(); break;
-    case 'newyes': if (TEST_MODE) { S = TEST_ISLAND ? testIsland() : testCareer(); hubTab = null; save(false); goHub(); break; }
+    case 'newyes': if (TEST_MODE) { S = TEST_ATL ? testAtlanta() : TEST_ISLAND ? testIsland() : testCareer(); hubTab = null; save(false); goHub(); break; }
       Online.flushSave(); S = null; try { localStorage.removeItem(SAVE_KEY); localStorage.removeItem(OLD_SAVE_KEY); } catch (err) {} goSelect(); break;
     case 'newno': $('confirm-new').hidden = true; break;
     case 'help': showScreen('scr-help'); break;
@@ -11211,16 +12035,21 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'essexex': startRace({ kind: 'essex', index: +arg, exhibition: true }); break;
     case 'mu': startRace({ kind: 'mu', index: nextMuIndex(S) }); break;
     case 'muex': startRace({ kind: 'mu', index: +arg, exhibition: true }); break;
+    case 'atl': startRace({ kind: 'atl', index: nextAtlIndex(S) }); break;
+    case 'atlex': startRace({ kind: 'atl', index: +arg, exhibition: true }); break;
     case 'hubtab': {
-      // going somewhere else: island cars stay on the island, so flying swaps the car you race. You stay on the same page.
-      const fly = arg === 'mu' && muOpen(S) && !islandCar(S.current), home = arg !== 'mu' && islandCar(S.current);
+      // going somewhere else: island and Atlanta cars stay where they are, so flying swaps the car you race. You stay on the same page.
+      const here = regionOf(S.current), to = AWAY(arg) ? arg : null;
+      const fly = !!to && regionOpen(S, to) && here !== to, home = !to && !!here;
       if (arg === placeNow() && !fly && !home) break;
-      hubTab = arg; pendingSlip = null; pendingSell = null; draft = null; plateMsg = ''; goIsland(S, arg === 'mu');
+      if (to && !regionOpen(S, to)) break;
+      hubTab = arg; pendingSlip = null; pendingSell = null; draft = null; plateMsg = ''; goRegion(S, to);
       if (fly || home) S.street = streetOffers(S);
       save();
       if (!$('scr-garage').hidden) goGarage(null); else if (!$('scr-ladder').hidden) goLadder(); else goHub();
       Music.play(Music.area());
-      if (fly) { Cine.play('fly', null, { short: !!(S.announced && S.announced.flown) }); S.announced = Object.assign(S.announced || {}, { flown: true }); save(); }
+      const flownKey = to === 'atl' ? 'flownAtl' : 'flown';
+      if (fly) { Cine.play('fly', null, { short: !!(S.announced && S.announced[flownKey]), to, from: here === 'mu' ? 'MRU' : here === 'atl' ? 'ATL' : 'LHR' }); S.announced = Object.assign(S.announced || {}, { [flownKey]: true }); save(); }
       else if (home) toast(`Back home. Your ${carById(S.current).name} is ready.`);
       break;
     }
@@ -11230,7 +12059,7 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'slipyes': pendingSlip = null; startRace({ kind: 'slip', id: arg }); break;
     case 'retry': if (R && R.ev.kind === 'drag') startRace({ kind: 'drag', id: R.ev.id, stake: R.ev.stake || undefined });
       else if (R && R.ev.kind === 'daily') startRace({ kind: 'daily' });
-      else if (R && R.ev.kind === 'mu') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.mu && S.mu.completed[i]) goHub(); else startRace({ kind: 'mu', index: i, exhibition: ex }); }
+      else if (R && (R.ev.kind === 'mu' || R.ev.kind === 'atl')) { const k = R.ev.kind, i = R.ev.index, ex = R.ev.exhibition; if (!ex && S[k] && S[k].completed[i]) goHub(); else startRace({ kind: k, index: i, exhibition: ex }); }
       else if (R && R.ev.kind === 'essex') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.essex && S.essex.completed[i]) goHub(); else startRace({ kind: 'essex', index: i, exhibition: ex }); }
       else if (R && R.ev.kind === 'special') startRace({ kind: 'special', id: R.ev.id }); else if (R && R.ev.kind === 'career') { const i = R.ev.index, ex = R.ev.exhibition; if (!ex && S.careerDone) goHub(); else startRace({ kind: 'career', index: i, exhibition: ex }); } else goHub(); break;
     case 'hub': if (arg && arg === hubPage && !$('scr-hub').hidden && $('scr-hub').scrollTop > 0) { $('scr-hub').scrollTo({ top: 0, behavior: 'smooth' }); break; } goHub(arg); break;
@@ -11329,7 +12158,7 @@ addEventListener('resize', () => {
 });
 resize();
 S = load();
-if (TEST_MODE && !S) { S = TEST_ISLAND ? testIsland() : testCareer(); save(false); }
+if (TEST_MODE && !S) { S = TEST_ATL ? testAtlanta() : TEST_ISLAND ? testIsland() : testCareer(); save(false); }
 if (TEST_MODE) $('test-note').hidden = false;
 try { Sound.on = localStorage.getItem(SOUND_KEY) !== '0'; Music.on = localStorage.getItem(MUSIC_KEY) !== '0'; } catch (e) {}
 $('b-music').textContent = Music.on ? 'Music on' : 'Music off';
@@ -11338,7 +12167,9 @@ goTitle();
 requestAnimationFrame(frame);
 // fit every car's lamps and grilles in the background: traffic first, then the rest
 warmHold = () => mode === 'race';
-setTimeout(() => warmMeshes(['hatch', 'saloon', 'suv', 'van', 'cab', 'pickup'].concat(Object.keys(SPECS)).map(m => [m, 0])), 1200);
+// the American cars only once Atlanta is open: until then nothing shows them, and a race warms what it needs anyway
+setTimeout(() => { const us = new Set(['mustang', 'gt500', 'camaro', 'challenger', 'demon', 'charger', 'trackhawk', 'corvette']), atl = !!(S && atlOpen(S));
+  warmMeshes(['hatch', 'saloon', 'suv', 'van', 'cab', 'pickup'].concat(Object.keys(SPECS).filter(m => atl || !us.has(m))).map(m => [m, 0])); }, 1200);
 Online.init();
 document.addEventListener('visibilitychange', () => { if (document.hidden) Online.flushSave(); });
 
@@ -11348,8 +12179,8 @@ window.StreetKings = {
   steer, startRace, goHub, goGarage, goLadder, setDemo, save, preview: renderCarPreview, portrait: drawPortrait, Sound, engineProfile, ENGINE_OF, GEARS, Cine, goBack,
   get intro() { return intro; }, skipIntro: endIntro,
   step(sec, bot) { const h = 1 / 120; let n = Math.round(sec / h); while (n-- > 0 && R && mode !== 'menu') { if (bot) bot(R, input); updateRace(R, h, input); processEvents(); dragBtn(); } },
-  testCareer, testIsland, Online, core: { DRAG, DRAG_DIST, dragPress, dragUnlocked, dragBeaten, dragStakes, dragEstimate, dragBetBlock, rematchPrize, specialUnlocked, makeWave, heatOf, HEAT_POLICE, updateCop, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
-    migrateSave, buyLook, lookCost, lookOf, checkPlate, dailyFor, dailyDate, dailyPrize, ghostEncode, ghostDecode, ghostAt, carRel, EVENTS, ESSEX, MU, muOpen, muWins, nextMuIndex, islandCar, goIsland, openIsland, areaList, essexOpen, nextEssexIndex, slipReady, slipCarFor, carClass, totalStars, starCount, CARS, UPGRADES, CHARACTERS, BODY, Z_PLAYER, P_LEN, SPAWN_D, NITRO_MULT },
+  testCareer, testIsland, testAtlanta, Online, core: { DRAG, DRAG_DIST, dragPress, dragUnlocked, dragBeaten, dragStakes, dragEstimate, dragBetBlock, rematchPrize, specialUnlocked, makeWave, heatOf, HEAT_POLICE, updateCop, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
+    migrateSave, buyLook, lookCost, lookOf, checkPlate, dailyFor, dailyDate, dailyPrize, ghostEncode, ghostDecode, ghostAt, carRel, EVENTS, ESSEX, MU, ATL, REGIONS, regionOf, regionOpen, regionWins, nextRegionIndex, openRegion, goRegion, atlOpen, atlWins, nextAtlIndex, muOpen, muWins, nextMuIndex, islandCar, goIsland, openIsland, areaList, essexOpen, nextEssexIndex, slipReady, slipCarFor, carClass, totalStars, starCount, CARS, UPGRADES, CHARACTERS, BODY, Z_PLAYER, P_LEN, SPAWN_D, NITRO_MULT },
 };
 
 })();
