@@ -666,6 +666,40 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
 /* rain: the wet nights in London */
 .tip.rain { border-left: 3px solid #7fb0d8; padding-left: 10px; color: #cfe2f2; }
 .rung .where .wet { color: #8fc0e8; font-weight: 600; }
+
+/* ---------- multiplayer: rooms and live races ---------- */
+.mp .mp-cards { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.mp-card { gap: 12px; min-width: 0; }
+.mp-set, .mp-field, .seg { min-width: 0; }
+.seg { display: flex; flex-wrap: wrap; border: 1px solid var(--line-2); }
+.seg button { flex: 1 1 auto; background: var(--panel-2); border: 0; border-left: 1px solid var(--line-2); color: var(--muted); padding: 9px 10px; font-family: var(--fd); font-size: 16px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; }
+.seg button:first-child { border-left: 0; }
+.seg button.on { background: rgba(242, 163, 58, 0.16); color: var(--ink); box-shadow: inset 0 -3px 0 var(--sodium); }
+.seg button:focus-visible { outline: 2px solid var(--plate); outline-offset: -2px; }
+.mp-field { display: flex; flex-direction: column; gap: 6px; font-family: var(--fm); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.mp-field select { font-size: 16px; padding: 9px 10px; background: var(--panel-2); color: var(--ink); border: 1px solid var(--line-2); width: 100%; max-width: 100%; text-transform: none; letter-spacing: 0; font-family: inherit; }
+.mp-field .name-input { max-width: 100%; text-transform: none; }
+.mp-name { max-width: 420px; }
+.mp-codein { text-transform: uppercase !important; letter-spacing: 0.3em; font-size: 26px; max-width: 200px; }
+.street-head .mp-code, .mp-code { font-size: 54px; letter-spacing: 0.18em; color: var(--sodium); line-height: 1; font-style: normal; }
+.mp-players { display: flex; flex-direction: column; gap: 6px; }
+.mp-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; background: var(--panel); border: 1px solid var(--line); padding: 10px 14px; }
+.mp-row b { font-family: var(--fd); font-weight: 400; font-size: 20px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mp-row b small { font-family: var(--fm); font-size: 10px; letter-spacing: 0.08em; color: var(--muted); margin-left: 6px; }
+.mp-row b small.host { color: var(--sodium); }
+.mp-row span { font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mp-row i { font-style: normal; font-family: var(--fm); font-size: 13px; color: var(--ink); text-align: right; }
+.mp-row.me { border-color: var(--sodium); }
+.mp-row.first b { color: var(--sodium); }
+.mp-set { display: flex; flex-direction: column; gap: 10px; background: var(--panel-2); border: 1px solid var(--line); padding: 14px; }
+.gn.inroom svg { color: #5fd38a; }
+@media (max-width: 560px) {
+  .mp-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .mp-row span { grid-column: 1 / -1; grid-row: 2; }
+  .street-head .mp-code, .mp-code { font-size: 44px; }
+  .seg button { font-size: 14px; padding: 8px 6px; letter-spacing: 0.02em; }
+}
+@media (max-width: 560px) { .mp .mp-cards { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
 <body>
@@ -749,6 +783,8 @@ canvas.map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; 
         <section>
           <h3>Drag night</h3>
           <p>On the island, the Street page has drag night on the old airport road: a straight quarter mile, side by side. The big button says WAIT while the ambers count down. When the light goes green it turns into GO: tap it (or press Up) straight away. After that it says SHIFT: tap it each time the needle reaches the green. Too early off the line is a red light and you lose. One shot of nitro. Any island car can race except your GT-R, which is built for Boss. Beat each racer for their prize, then race them again for money.</p>
+          <h3>Multiplayer</h3>
+          <p>Race your mates live from the Multiplayer tab. Start a room and send them the four letter code or the invite link, or join theirs. Up to four of you on any road in the game, or one on one on the drag strip or a roll race. Everyone gets the same traffic and you see each other out there. The host picks the road and whether you race your own cars or everyone gets the same car. The quickest time wins, measured from each phone's own start, so a slow connection never costs you. No prize money and no damage.</p>
           <h3>Roll racing</h3>
           <p>In Atlanta the Street page has roll racing on I-285: you and the other car side by side at 40 mph, with a pickup rolling next to you. It honks three times. Tap GO on the third honk, not before, then SHIFT with the needle in the green and one shot of nitro. First to the half mile wins. Go early and you lose.</p>
           <h3>Wangan battles</h3>
@@ -1288,8 +1324,8 @@ const CHARACTERS = {
     pre: 'Pink does not mean slow. Keep up.',
     youWin: 'Fair. The Duke is waiting at the bridge. Good luck, you will need it.',
     youLose: 'Told you. Pink does not mean slow.',
-    // drawn from the picture she sent: plain black scarf, warm tan skin, big brown eyes, dark red lips, a sunlit brick wall
-    face: { skin: '#d59d70', hair: 'hijab', scarf: 'thin', hairCol: '#171618', eyes: 'big', iris: '#5b3a22', browCol: '#1a110c', browW: 1.9, lashes: true, blush: true,
+    // drawn from the picture she sent: long dark hair, warm tan skin, big brown eyes, dark red lips, a sunlit brick wall
+    face: { skin: '#d59d70', hair: 'long', hairCol: '#1a1412', highlight: '#3d2618', eyes: 'big', iris: '#5b3a22', browCol: '#1a110c', browW: 1.9, lashes: true, blush: true,
       lips: '#8a3a2e', lipsFull: true, top: '#2b2a2f', bg: '#e2b27c', bgBrick: true } },
   duke: { name: 'The Duke', from: 'Brentwood', car: 'Lamborghini Huracán', real: 'Vince Harlow',
     bio: 'Ran Essex before anyone else had a car worth racing. Lime green Huracán, sunglasses at midnight, and nobody has beaten him over the bridge.',
@@ -2008,6 +2044,8 @@ const areaList = ch => ch === 'essex' ? ESSEX : ch === 'mu' ? MU : ch === 'atl' 
 const openIsland = S => openRegion(S, 'mu');
 function goIsland(S, on) { if (muOpen(S)) goRegion(S, on ? 'mu' : null); }
 
+/* fully built: what everyone gets in a multiplayer race when the host picks one car for all */
+const MP_UP_CORE = { ecu: 3, exhaust: 3, turbo: 3, nitrous: 3, tyres: 3 };
 /* ---------- Mauritius drag nights ----------
    The old airport road at Plaine Magnien: a straight quarter mile, side by side, no traffic. Launch on the green light,
    shift with the needle in the green, one shot of nitro. Beat each racer once for their prize, then race them again for a bet. */
@@ -2124,15 +2162,18 @@ function rollStart(c, sp) {
 }
 function rollCruise(c, sp, dt) { c.v = ROLL_V; c.dist += c.v * dt; c.rpm = c.v / sp.vg[c.gear]; }
 function createDrag(S, spec) {
-  const roll = spec.kind === 'roll', d = dragById(spec.id), ch = CHARACTERS[d.id], st = curStats(S), own = S.owned[S.current];
-  const beaten = dragBeaten(S, d.id), stake = beaten ? Math.min(Math.max(0, S.money), spec.stake || dragStakes(d)[0]) : 0;
-  const nick = /"(.*)"/.test(ch.name) ? ch.name.match(/"(.*)"/)[1] : ch.name.split(' ')[0];
-  const rr = Math.random;
+  // multiplayer: the other lane is one of your mates, driven over the network. Same lights for both, from the room's seed
+  const mp = spec.mp || null, roll = spec.kind === 'roll', d = mp ? mp.opp : dragById(spec.id), ch = mp ? { name: mp.opp.name, car: mp.opp.carName, pre: '', bet: '' } : CHARACTERS[d.id];
+  let st = curStats(S), own = S.owned[S.current];
+  if (mp) { if (mp.car) st = statsFor(mp.car, MP_UP_CORE, stockLook(mp.car)); own = { up: mp.car ? MP_UP_CORE : own.up, damage: 0 }; }
+  const beaten = !mp && dragBeaten(S, d.id), stake = beaten ? Math.min(Math.max(0, S.money), spec.stake || dragStakes(d)[0]) : 0;
+  const nick = mp ? ch.name : /"(.*)"/.test(ch.name) ? ch.name.match(/"(.*)"/)[1] : ch.name.split(' ')[0];
+  const rr = mp ? seededRng(hashStr('mp:' + mp.seed)) : Math.random;
   // roll racing: the honks. A short random wait, then three honks the same distance apart; the third one is go
   const gap = 0.7 + rr() * 0.3, h1 = 1.9 + rr() * 1.1, honks = [h1, h1 + gap, h1 + gap * 2], d0 = roll ? ROLL_V * honks[2] : 0;
-  const ev = Object.assign({}, roll ? ROLL_ROAD : DRAG_STRIP, { kind: spec.kind, drag: true, roll, id: d.id, title: roll ? 'ROLL RACE' : 'DRAG NIGHT', chapter: roll ? 'Atlanta' : 'Mauritius', rival: d.id, oppName: ch.name, oppTag: nick, oppCar: ch.car, oppBhp: d.bhp,
-    oppLook: d.look, dist: roll ? d0 + P_LEN + ROLL_DIST : DRAG_DIST, lanes: roll ? 3 : 2, curvy: 0, reward: beaten ? 0 : d.prize, stake, rematch: beaten, preLine: beaten ? ch.bet : ch.pre, rep: 0, skill: 1, inc: [99, 99], d: 0, route: null });
-  const psp = dragSpec(st.bhp, st.handling, st.vmax, st.nitroCap), osp = dragSpec(d.bhp, d.handling, vmaxFor(d.bhp), 100 + d.skill * 60);
+  const ev = Object.assign({}, roll ? ROLL_ROAD : DRAG_STRIP, { kind: spec.kind, drag: true, roll, mp: !!mp, id: mp ? 'mp' : d.id, title: roll ? 'ROLL RACE' : 'DRAG NIGHT', chapter: roll ? 'Atlanta' : 'Mauritius', rival: mp ? null : d.id, oppName: ch.name, oppTag: nick, oppCar: ch.car, oppBhp: d.bhp,
+    oppLook: d.look, dist: roll ? d0 + P_LEN + ROLL_DIST : DRAG_DIST, lanes: roll ? 3 : 2, curvy: 0, reward: beaten || mp ? 0 : d.prize, stake, rematch: beaten, preLine: mp ? '' : beaten ? ch.bet : ch.pre, rep: 0, skill: 1, inc: [99, 99], d: 0, route: null });
+  const psp = dragSpec(st.bhp, st.handling, st.vmax, st.nitroCap), osp = dragSpec(d.bhp, d.handling, d.vmax || vmaxFor(d.bhp), 100 + d.skill * 60);
   psp.P *= hurtK(own.damage).accel;   // a badly damaged car has less to give here too
   const pl = roll ? 1 : 0;
   const p = Object.assign(dragCar(psp), { lane: pl, x: pl, vx: 0, latV: 0, nitro: st.nitroCap, boosting: false, damage: own.damage, startDamage: own.damage, collisions: 0, topV: 0 });
@@ -2144,7 +2185,7 @@ function createDrag(S, spec) {
   o.nextShift = o.shiftAt();
   // the honk car: a pickup in the left lane a few metres ahead, rolling at 40 with the two of you
   const waves = roll ? [{ id: 1, z: 9, speed: ROLL_V, cars: [{ lane: 0, off: 0, type: 'pickup', w: 1.86, len: 5.3, color: '#d9dadb', hit: false, hitT: 0, push: 0, spin: 0, route: null, brake: 0 }], span: 5.3, open: [1, 2], gapAfter: 0, gate: null }] : [];
-  return { ev, carId: S.current, st, psp, osp, traffic: { tClear: 1, vLo: 0 }, look: lookOf(S, S.current), up: Object.assign({}, own.up), styleBonus: styleBonus(st.style),
+  return { ev, carId: mp && mp.car ? mp.car : S.current, st, psp, osp, traffic: { tClear: 1, vLo: 0 }, look: mp && mp.car ? stockLook(mp.car) : lookOf(S, S.current), up: Object.assign({}, own.up), styleBonus: mp ? 0 : styleBonus(st.style),
     rec: null, ghosts: [], twoWay: false, nl: roll ? 3 : 2, state: 'countdown', countdown: 9, t: 0, doneT: 0, wrecked: false, p, o, rw: rr, rr, waves, lastOpen: 0, waveCount: 0, noMoreSpawns: true, gapMin: 1, d0,
     // the lights: pre-stage, stage, then three ambers half a second apart and green. A short random wait before the ambers so they cannot be learnt
     tree: { t: 0, stage: 0.9, amber: 1.7 + rr() * 0.9, lit: 0, green: 0, red: false, honks, honked: 0 }, press: 0, lastShift: null,
@@ -2197,11 +2238,19 @@ function updateDrag(R, dt, input) {
   }
   R.press = 0;
   if (R.lastShift) R.lastShift.t += dt;
-  // the rival: goes on their reaction, shifts where they like, nitro from third gear
-  if (!o.launched && R.t >= o.reactAt) { o.launched = true; o.react = R.t; }
-  if (o.launched && o.shiftT <= 0 && o.gear < R.osp.n - 1 && (o.rpm >= o.nextShift || (o.nextShift >= 1 && o.lim > 0.1 + Math.random() * 0.15))) { dragShift(o, R.osp); o.nextShift = o.shiftAt(); }
-  if (o.launched && !o.nitroUsed && o.gear >= 2 && o.shiftT <= 0) { o.nitroUsed = true; o.nitroOn = true; }
-  for (const [c, sp] of [[p, R.psp], [o, R.osp]]) { if (roll && racing && !c.launched) rollCruise(c, sp, dt); else dragStep(c, sp, dt); }
+  if (R.remoteAt) {
+    // multiplayer: the other lane is wherever your mate's phone says it is at this point in the race
+    const s = R.remoteAt(racing ? R.t : R.t + R.doneT);   // after you cross the line, keep watching them come in
+    if (s) { o.dist = s.d; o.v = s.v; o.rpm = s.r; o.gear = s.g; o.nitroOn = !!s.no; o.launched = !!s.l; if (s.l && o.react === null) o.react = R.t; }
+    else if (roll && racing && !o.launched) rollCruise(o, R.osp, dt);
+    if (roll && racing && !p.launched) rollCruise(p, R.psp, dt); else dragStep(p, R.psp, dt);
+  } else {
+    // the rival: goes on their reaction, shifts where they like, nitro from third gear
+    if (!o.launched && R.t >= o.reactAt) { o.launched = true; o.react = R.t; }
+    if (o.launched && o.shiftT <= 0 && o.gear < R.osp.n - 1 && (o.rpm >= o.nextShift || (o.nextShift >= 1 && o.lim > 0.1 + Math.random() * 0.15))) { dragShift(o, R.osp); o.nextShift = o.shiftAt(); }
+    if (o.launched && !o.nitroUsed && o.gear >= 2 && o.shiftT <= 0) { o.nitroUsed = true; o.nitroOn = true; }
+    for (const [c, sp] of [[p, R.psp], [o, R.osp]]) { if (roll && racing && !c.launched) rollCruise(c, sp, dt); else dragStep(c, sp, dt); }
+  }
   p.boosting = p.nitroOn; o.boosting = o.nitroOn;
   if (p.v > p.topV) p.topV = p.v;
   // past the line: the time when the front of the car crossed it
@@ -2218,7 +2267,7 @@ function updateDrag(R, dt, input) {
   } else if (racing && R.t > 40) {
     R.state = 'finishing'; R.result = { how: 'quit', won: false, time: R.t, gap: 0 }; R.events.push({ type: 'finish', how: 'quit', won: false });
   }
-  if (!racing) { for (const c of [p, o]) { c.nitroOn = false; c.launched = false; c.v = Math.max(0, c.v - 9 * dt); } }
+  if (!racing) { for (const c of R.remoteAt ? [p] : [p, o]) { c.nitroOn = false; c.launched = false; c.v = Math.max(0, c.v - 9 * dt); } }
   if (R.state === 'finishing' && R.doneT > 2.2 && !R.resultsShown) { R.resultsShown = true; R.events.push({ type: 'results' }); }
 }
 /* the drag result: the prize the first time you beat someone, the bet after that */
@@ -2279,6 +2328,7 @@ function ghostDecode(g, name) {
 }
 /* where a ghost is at race time t */
 function ghostAt(g, t) {
+  if (g.live) return g.at(t);
   const f = Math.max(0, t * g.hz), i = Math.floor(f), n = g.dist.length;
   if (i >= n - 1) return { dist: g.dist[n - 1], x: g.x[n - 1], done: true };
   const k = f - i;
@@ -2583,6 +2633,14 @@ function createRace(S, spec) {
     ev = Object.assign({}, e, { kind: spec.kind, index: idx, exhibition: spec.kind === 'essex' && !!spec.exhibition, oppName: ch.name, oppCar: ch.car,
       skill: e.diff.skill, inc: e.diff.inc, d: 1, open: true, slipCar: spec.kind === 'slip' ? slipCarFor(e.rival).id : null, betCar: spec.kind === 'slip' ? S.current : null,
       reward: spec.kind === 'slip' ? 0 : e.reward });
+  } else if (spec.kind === 'mp') {
+    // a live race with friends: a real route and the same traffic for everyone, no rival but each other. Nothing to win or lose
+    const [ch, ix] = String(spec.route || 'london:0').split(':'), list = areaList(ch), i = Math.max(0, Math.min(list.length - 1, +ix || 0)), e = list[i];
+    ev = Object.assign({}, e, { kind: 'mp', mp: true, index: i, title: 'LIVE RACE', solo: true, rival: null, oppName: 'your mates', oppCar: '', oppLook: null,
+      reward: 0, rep: 0, skill: 1, inc: [99, 99], d: e.d !== undefined ? e.d : i / Math.max(1, list.length - 1), exhibition: true, police: false, cp: false,
+      mpSeed: spec.seed, loaner: spec.car || null, loanUp: spec.car ? MP_UP_CORE : null });
+    if (spec.car) st = statsFor(spec.car, MP_UP_CORE, stockLook(spec.car));
+    own = { up: spec.car ? MP_UP_CORE : own.up, damage: 0 };
   } else if (spec.kind === 'battle') {
     // a Wangan battle: no finish line, so the road just keeps going
     const d = dragById(spec.id), ch = CHARACTERS[d.id], beaten = dragBeaten(S, d.id);
@@ -2601,8 +2659,8 @@ function createRace(S, spec) {
       skill: e.diff.skill, inc: e.diff.inc, d: spec.index / (EVENTS.length - 1) });
   }
   // the route a time counts for on the leaderboard (career events and friend races), and its traffic seed
-  ev.route = spec.kind === 'street' || spec.kind === 'battle' ? null : spec.kind === 'daily' ? 'daily:' + ev.date : spec.kind === 'special' ? 'special:' + spec.id : spec.kind === 'essex' || spec.kind === 'slip' ? 'essex:' + ev.rival : spec.kind === 'mu' ? 'mu:' + ev.rival : spec.kind === 'atl' ? 'atl:' + ev.rival : spec.kind === 'tyo' ? 'tyo:' + ev.rival : 'career:' + ev.rival;
-  const seed = hashStr((ev.route || 'street:' + (ev.battle ? Math.random() : ev.offerId)) + '|v1');
+  ev.route = spec.kind === 'street' || spec.kind === 'battle' || spec.kind === 'mp' ? null : spec.kind === 'daily' ? 'daily:' + ev.date : spec.kind === 'special' ? 'special:' + spec.id : spec.kind === 'essex' || spec.kind === 'slip' ? 'essex:' + ev.rival : spec.kind === 'mu' ? 'mu:' + ev.rival : spec.kind === 'atl' ? 'atl:' + ev.rival : spec.kind === 'tyo' ? 'tyo:' + ev.rival : 'career:' + ev.rival;
+  const seed = ev.mpSeed ? hashStr('mp:' + ev.mpSeed) : hashStr((ev.route || 'street:' + (ev.battle ? Math.random() : ev.offerId)) + '|v1');
   const rw = seededRng(seed), rr = seededRng(seed ^ 0x9E3779B9);
   const oppV = vmaxFor(ev.oppBhp) * ev.skill;
   const traffic = trafficFor(ev.d);
@@ -2987,6 +3045,8 @@ function payout(R, base, out) {
 function settleRace(S, R) {
   if (R.settled || !R.result) return R.summary || null;
   R.settled = true;
+  // multiplayer races are for fun: no prize, no damage, nothing on the leaderboards
+  if (R.ev.mp) { S.stats.mp = (S.stats.mp || 0) + 1; R.summary = { kind: 'mp', won: R.result.won, how: R.result.how, reward: 0, newCars: [] }; return R.summary; }
   const essexBefore = essexOpen(S), muBefore = muOpen(S), atlBefore = atlOpen(S), tyoBefore = tyoOpen(S), friendsBefore = FRIENDS.filter(id => specialUnlocked(S, id));
   const ev = R.ev, own = ev.loaner ? null : S.owned[R.carId];
   if (own) own.damage = Math.round(Math.min(100, R.p.damage));
@@ -5553,14 +5613,14 @@ function drawGhost(R, g, at, z, env) {
   drawCar(gctx, mesh, { x: xm, z, yaw: 0, fog: fogK(z), env, look: lk, plateText: lk.plate, brake: at.done });
   // fade right down when it sits on top of you, so it never hides the road
   const near = Math.abs(at.x - R.p.x) < 0.8 && Math.abs(z - Z_PLAYER) < 7;
-  ctx.globalAlpha = (near ? 0.16 : 0.34) * clamp((Z_FAR - z) / 45, 0, 1);
+  ctx.globalAlpha = (near ? 0.16 : g.live ? 0.62 : 0.34) * clamp((Z_FAR - z) / 45, 0, 1);
   ctx.drawImage(ghostCvs, bx * DPR, by * DPR, bw * DPR, bh * DPR, bx, by, bw, bh);
   ctx.globalAlpha = 1;
   if (bw > 26 && !near) {
     const tag = g.name.length > 14 ? g.name.slice(0, 13) + '…' : g.name, fs = clamp(bw * 0.11, 9, 14);
     ctx.font = `${fs}px ${FONT_D}`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
     const tw = ctx.measureText(tag).width + 10, cx = (x0 + x1) / 2, ty = y0 + fs + 4;
-    ctx.fillStyle = 'rgba(90,200,255,0.55)'; ctx.fillRect(cx - tw / 2, ty - fs - 4, tw, fs + 4);
+    ctx.fillStyle = g.live ? 'rgba(242,163,58,0.85)' : 'rgba(90,200,255,0.55)'; ctx.fillRect(cx - tw / 2, ty - fs - 4, tw, fs + 4);
     ctx.fillStyle = '#fff'; ctx.fillText(tag, cx, ty - 1);
   }
 }
@@ -5864,9 +5924,9 @@ function drawHUD(R, ctrlH) {
     ctx.fillText(txt, pad, py);
     const pw = ctx.measureText(txt).width;
     ctx.font = `${F(16, 11)}px ${FONT_D}`; ctx.fillStyle = 'rgba(233,228,216,0.7)';
-    ctx.fillText(gh.length ? '/ ' + (gh.length + 1) : 'DAILY', pad + pw + 6, py);
+    ctx.fillText(gh.length ? '/ ' + (gh.length + 1) : R.ev.mp ? 'LIVE' : 'DAILY', pad + pw + 6, py);
     ctx.font = `700 ${lineF}px ${FONT_M}`; ctx.fillStyle = '#e9e4d8';
-    ly = py + lineH + 2; ctx.fillText(gh.length ? 'AGAINST THE GHOSTS' : 'SAME CAR AND TRAFFIC FOR EVERYONE', pad, ly);
+    ly = py + lineH + 2; ctx.fillText(R.ev.mp ? 'LIVE RACE · SAME TRAFFIC FOR EVERYONE' : gh.length ? 'AGAINST THE GHOSTS' : 'SAME CAR AND TRAFFIC FOR EVERYONE', pad, ly);
   } else if (R.ev.cp) {
     ctx.font = `${posF}px ${FONT_D}`; ctx.fillStyle = cp.missed ? '#ff5a4a' : '#5ac8ff';
     ctx.fillText(String(cp.hit), pad, py);
@@ -5914,9 +5974,9 @@ function drawHUD(R, ctrlH) {
     }
   }
   // one line per ghost: how far ahead or behind their run is
-  if (!short || R.ev.solo) for (const q of gh.slice(0, 2)) {
+  if (!short || R.ev.solo) for (const q of gh.slice(0, R.ev.mp ? 3 : 2)) {
     const m = Math.round(q.at.dist - p.dist);
-    ly += lineH; ctx.fillStyle = 'rgba(90,200,255,0.9)'; ctx.font = `700 ${lineF}px ${FONT_M}`; ctx.textAlign = 'left';
+    ly += lineH; ctx.fillStyle = q.g.live ? 'rgba(242,163,58,0.95)' : 'rgba(90,200,255,0.9)'; ctx.font = `700 ${lineF}px ${FONT_M}`; ctx.textAlign = 'left';
     ctx.fillText(`${q.g.name} ${q.at.done ? 'FINISHED ' + fmtTime(q.g.t / 1000) : m >= 0 ? m + ' M AHEAD' : -m + ' M BEHIND'}`, pad, ly);
   }
   const blockBottom = ly + 4;
@@ -8837,7 +8897,9 @@ function drawPortrait(canvas, face, hidden) {
     g.fillStyle = hair; back(); g.fill();
     scarfPrint(back, 20, 16, 80, 100, 81);
   }
-  const lhl = face.hair === 'longhl';
+  // long hair: behind the head and down over the shoulders, with the neck showing. Plain long hair gets a slightly lighter shine instead of coloured pieces
+  const lhl = face.hair === 'longhl' || face.hair === 'long';
+  const HL = face.highlight || (face.hairCol ? css(shade(hex2rgb(face.hairCol), 1.18)) : hair), HL2 = face.highlight2 || HL;
   if (lhl) { g.fillStyle = hair; g.beginPath(); g.ellipse(50, 46, 24.5, 29, 0, 0, 7); g.fill(); }
   // shoulders and neck (a bigger build gets broader shoulders, a thicker neck and a fuller face)
   const big = face.build === 'big';
@@ -8884,7 +8946,6 @@ function drawPortrait(canvas, face, hidden) {
     if (face.pendant) { g.fillStyle = face.chain; g.beginPath(); g.moveTo(50, 82); g.lineTo(46, 86); g.lineTo(50, 92); g.lineTo(54, 86); g.closePath(); g.fill(); } }
   // hair behind the head
   if (face.hair === 'braids') { g.fillStyle = hair; for (const x of [30, 34, 66, 70]) { g.beginPath(); g.roundRect ? g.roundRect(x - 3, 38, 6, 44, 3) : g.rect(x - 3, 38, 6, 44); g.fill(); } g.fillStyle = face.earrings || '#e2b650'; for (const x of [30, 34, 66, 70]) g.fillRect(x - 3, 70, 6, 2.5); }
-  if (face.hair === 'long') { g.fillStyle = hair; g.beginPath(); g.ellipse(50, 50, 22, 30, 0, 0, 7); g.fill(); }
   if (lhl) {
     // long hair falling over both shoulders, with lighter face framing pieces
     for (const sd of [-1, 1]) {
@@ -8893,7 +8954,7 @@ function drawPortrait(canvas, face, hidden) {
       g.bezierCurveTo(X(38.5), 86, X(40.5), 72, X(39.5), 58); g.lineTo(X(36), 40); g.closePath(); g.fill();
       // the lighter piece tapers to a point, the right hand one fades to pink at the ends
       const end = sd > 0 ? 94 : 84;
-      const hg = g.createLinearGradient(0, 44, 0, end); hg.addColorStop(0, face.highlight); hg.addColorStop(0.45, face.highlight); hg.addColorStop(0.85, sd > 0 ? (face.highlight2 || face.highlight) : face.highlight); hg.addColorStop(1, sd > 0 ? (face.highlight2 || face.highlight) : face.highlight);
+      const hg = g.createLinearGradient(0, 44, 0, end); hg.addColorStop(0, HL); hg.addColorStop(0.45, HL); hg.addColorStop(0.85, sd > 0 ? HL2 : HL); hg.addColorStop(1, sd > 0 ? HL2 : HL);
       g.fillStyle = hg; g.beginPath(); g.moveTo(X(36), 44); g.bezierCurveTo(X(34), 58, X(36.5), 72, X(35.5), end - 6); g.quadraticCurveTo(X(36), end - 2, X(37), end);
       g.bezierCurveTo(X(38.4), end - 12, X(39.6), 68, X(39), 57); g.lineTo(X(37.2), 44); g.closePath(); g.fill();
       g.strokeStyle = 'rgba(0,0,0,0.18)'; g.lineWidth = 0.5; g.beginPath(); g.moveTo(X(37), 50); g.bezierCurveTo(X(36), 62, X(38), 74, X(37), end - 4); g.stroke();
@@ -8916,14 +8977,13 @@ function drawPortrait(canvas, face, hidden) {
   else if (face.hair === 'curly') { for (const [x, y, rr] of [[36, 32, 7], [44, 26, 7.5], [53, 25, 7.5], [61, 29, 7], [66, 36, 5.5], [34, 39, 5], [49, 30, 6]]) { g.beginPath(); g.arc(x, y, rr, 0, 7); g.fill(); } }
   else if (face.hair === 'braids') { cap(24); g.strokeStyle = 'rgba(255,255,255,0.12)'; g.lineWidth = 0.8; for (let x = 38; x <= 62; x += 5) { g.beginPath(); g.moveTo(x, 26); g.lineTo(x + (x - 50) * 0.3, 36); g.stroke(); } }
   else if (face.hair === 'bun') { cap(25); g.beginPath(); g.arc(50, 18, 7, 0, 7); g.fill(); }
-  else if (face.hair === 'long') { cap(23); }
   else if (lhl) {
     cap(22);
     for (const sd of [-1, 1]) {
       const X = x => 50 + sd * (x - 50);
       g.fillStyle = hair; g.beginPath(); g.moveTo(X(50), 23.5); g.bezierCurveTo(X(40), 24, X(32), 30, X(31.5), 44); g.lineTo(X(32), 62); g.lineTo(X(35.5), 60);
       g.bezierCurveTo(X(34.5), 48, X(37), 36, X(50), 29.5); g.closePath(); g.fill();
-      const tg = g.createLinearGradient(X(50), 26, X(36), 40); tg.addColorStop(0, hair); tg.addColorStop(0.35, face.highlight); tg.addColorStop(1, face.highlight);
+      const tg = g.createLinearGradient(X(50), 26, X(36), 40); tg.addColorStop(0, hair); tg.addColorStop(0.35, HL); tg.addColorStop(1, HL);
       g.fillStyle = tg; g.beginPath(); g.moveTo(X(49.5), 24.5); g.bezierCurveTo(X(42), 25.5, X(36.5), 31, X(35.2), 42); g.lineTo(X(36), 56); g.lineTo(X(37.3), 54);
       g.bezierCurveTo(X(36.6), 46, X(38.6), 35, X(50), 29.8); g.closePath(); g.fill();
     }
@@ -10061,6 +10121,219 @@ const Online = {
     await this.fetch('/rest/v1/rpc/delete_my_account', { method: 'POST', body: {} });
     this.session = null; this.name = null; this.storeSession();
     try { localStorage.removeItem(PENDING_KEY); } catch (e) {}
+  },
+};
+
+/* =====================================================================
+   STREET KINGS : MULTIPLAYER
+   Live races with your mates. A room has a four letter code, and Supabase Realtime carries it:
+   presence says who is in the room (the host's race settings ride along with the host), and
+   broadcast carries the start and everyone's position a few times a second.
+   Every phone runs its own race and times itself from its own start, so a slow connection
+   never costs anyone the win. Nothing is written to the database and nothing is paid out.
+   ===================================================================== */
+const MP_WS = () => window.__mpUrl || SB_URL.replace(/^https/, 'wss') + '/realtime/v1/websocket?apikey=' + SB_KEY + '&vsn=1.0.0';
+const MP_NAME_KEY = 'streetkings.mpname';
+const MP_LETTERS = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+// position updates a second: fewer with more of you, so a full room stays inside the free plan's
+// 100 messages a second (each update counts once sent plus once for every phone that gets it)
+const mpHz = n => n <= 2 ? 8 : n === 3 ? 6 : 4;
+const MP_MAX = { street: 4, drag: 2, roll: 2 };    // drag and roll races are one against one
+const MP_ROOM = 4;                                 // up to four in a room, whatever the race
+const MP_TYPES = { street: 'Street race', drag: 'Drag race', roll: 'Roll race' };
+const MP_UP = { ecu: 3, exhaust: 3, turbo: 3, nitrous: 3, tyres: 3 };
+/* every route in the game, for street races: London, Essex, the island, Atlanta, Tokyo */
+const MP_PLACES = [['london', 'London'], ['essex', 'Essex'], ['mu', 'Mauritius'], ['atl', 'Atlanta'], ['tyo', 'Tokyo']];
+const mpRoute = key => { const [ch, i] = String(key || 'london:0').split(':'), list = areaList(ch); return list[+i] || EVENTS[0]; };
+const mpPlaceName = key => (MP_PLACES.find(p => p[0] === String(key || '').split(':')[0]) || MP_PLACES[0])[1];
+const mpCode = () => Array.from({ length: 4 }, () => MP_LETTERS[Math.floor(Math.random() * MP_LETTERS.length)]).join('');
+const mpClean = s => String(s || '').replace(/[^\w .'-]/g, '').trim().slice(0, 16);
+
+const MP = {
+  ws: null, code: null, me: null, topic: '', ref: 0, jref: null, hbT: null, status: 'off', err: '', joinedAt: 0,
+  players: {},      // presence key -> the latest meta that player sent
+  cfg: null,        // the race settings, from the host
+  race: null,       // the race in progress or just finished
+  n: 0, lastSend: 0, checkT: null, onChange: null,
+  get inRoom() { return this.status === 'lobby' || this.status === 'connecting'; },
+  newId() { return Math.random().toString(36).slice(2, 10); },
+  name() { const on = typeof Online !== 'undefined' && Online.signedIn && Online.name; if (on) return Online.name; try { return mpClean(localStorage.getItem(MP_NAME_KEY)); } catch (e) { return ''; } },
+  setName(v) { try { localStorage.setItem(MP_NAME_KEY, mpClean(v)); } catch (e) {} },
+  list() { return Object.values(this.players).sort((a, b) => (a.joined - b.joined) || (a.id < b.id ? -1 : 1)); },
+  hostId() { const l = this.list(); return l.length ? l[0].id : null; },
+  isHost() { return !!this.me && this.hostId() === this.me; },
+  host() { return this.players[this.hostId()] || null; },
+  changed() { if (this.onChange) try { this.onChange(); } catch (e) {} },
+
+  /* ---- the connection ---- */
+  raw(m) { if (this.ws && this.ws.readyState === 1) this.ws.send(JSON.stringify(m)); },
+  push(event, payload, ref) { this.raw({ topic: this.topic, event, payload, ref: ref || String(++this.ref), join_ref: this.jref }); },
+  send(event, payload) { this.push('broadcast', { type: 'broadcast', event, payload }); },
+  connect(code, cfg, again) {
+    if (!again) {
+      this.leave(true);
+      this.code = code; this.topic = 'realtime:sk-room-' + code; this.me = this.me || this.newId();
+      this.players = {}; this.cfg = cfg || null; this.race = null; this.joinedAt = Date.now(); this.creating = !!cfg; this.retries = 0;
+    }
+    this.status = 'connecting'; this.lastMeta = ''; this.err = ''; this.players = {};
+    let ws;
+    try { ws = new WebSocket(MP_WS()); } catch (e) { this.fail('Could not reach the race server. Check your connection.'); return; }
+    this.ws = ws;
+    ws.onopen = () => {
+      this.jref = String(++this.ref);
+      this.push('phx_join', { config: { broadcast: { ack: false, self: false }, presence: { key: this.me, enabled: true }, postgres_changes: [], private: false }, access_token: SB_KEY }, this.jref);
+      clearInterval(this.hbT);
+      this.hbT = setInterval(() => this.raw({ topic: 'phoenix', event: 'heartbeat', payload: {}, ref: String(++this.ref) }), 25000);
+    };
+    ws.onmessage = e => { let m; try { m = JSON.parse(e.data); } catch (er) { return; } if (this.ws === ws) this.onMsg(m); };
+    ws.onclose = () => {
+      if (this.ws !== ws) return;
+      clearInterval(this.hbT); this.ws = null;
+      if (this.status === 'off') return;
+      // a phone that dropped its connection (a tunnel, the screen locking): try to get back into the same room, as the same racer
+      if ((this.status === 'lobby' || (this.status === 'connecting' && this.retries > 0)) && (this.retries || 0) < 3) { this.retries = (this.retries || 0) + 1; this.status = 'connecting'; this.changed(); setTimeout(() => { if (this.status === 'connecting' && this.code) this.connect(this.code, null, true); }, 1500); return; }
+      this.fail('Lost the connection to the room.');
+    };
+    ws.onerror = () => {};
+    this.changed();
+  },
+  fail(msg) { this.leave(true); this.err = msg; this.changed(); },
+  leave(quiet) {
+    clearInterval(this.hbT); clearTimeout(this.checkT);
+    const ws = this.ws; this.ws = null;
+    if (ws) { try { if (ws.readyState === 1) ws.send(JSON.stringify({ topic: this.topic, event: 'phx_leave', payload: {}, ref: String(++this.ref), join_ref: this.jref })); ws.close(); } catch (e) {} }
+    this.status = 'off'; this.players = {}; this.code = null; this.cfg = null; this.race = null; this.err = '';
+    if (!quiet) this.changed();
+  },
+  /* what everyone else sees about you: your name, the car you would race, and the host's settings */
+  meta(state) {
+    const S0 = typeof S !== 'undefined' ? S : null, id = S0 ? S0.current : 'civic', car = carById(id) || CARS[0], st = S0 ? curStats(S0) : statsFor(id, {});
+    const look = S0 ? lookOf(S0, id) : stockLook(id);
+    return { id: this.me, name: this.name() || 'Racer', joined: this.joinedAt, state: state || this.myState || 'lobby', n: this.n,
+      car: car.id, carName: car.name, look, up: S0 && S0.owned[id] ? S0.owned[id].up : {}, bhp: st.bhp, hand: st.handling, vmax: st.vmax, cfg: this.cfg };
+  },
+  track(state) {
+    if (state) this.myState = state;
+    if (this.status !== 'lobby') return;
+    const m = this.meta(), key = JSON.stringify([m.name, m.car, m.bhp, m.state, m.cfg, m.look]);
+    if (key === this.lastMeta) return;          // nothing new to tell the room
+    this.lastMeta = key;
+    this.push('presence', { type: 'presence', event: 'track', payload: m });
+  },
+  setCfg(cfg) { this.cfg = Object.assign({}, this.cfg || {}, cfg); this.track(); this.changed(); },
+
+  onMsg(m) {
+    if (m.topic !== this.topic) return;
+    const p = m.payload || {};
+    if (m.event === 'phx_reply' && m.ref === this.jref) {
+      if (p.status !== 'ok') { this.fail('Could not join the room.'); return; }
+      const back = this.myState === 'racing' && this.race && !this.race.fin[this.me];
+      this.status = 'lobby'; this.myState = back ? 'racing' : 'lobby'; this.retries = 0; this.track();
+      // joining someone else's room: if nobody is there, the code was wrong
+      if (!this.creating && !this.race) this.checkT = setTimeout(() => {
+        const others = this.list().filter(q => q.id !== this.me);
+        if (!others.length) this.fail(`Nobody is in room ${this.code}. Check the code.`);
+        else if (others.length >= MP_ROOM) this.fail(`Room ${this.code} is full. Four is the most.`);
+      }, 2500);
+      this.changed(); return;
+    }
+    if (m.event === 'presence_state') { for (const k in p) this.addMetas(k, p[k].metas); this.sync(); return; }
+    if (m.event === 'presence_diff') {
+      for (const k in (p.leaves || {})) this.dropMetas(k, p.leaves[k].metas);
+      for (const k in (p.joins || {})) this.addMetas(k, p.joins[k].metas);
+      this.sync(); return;
+    }
+    if (m.event === 'broadcast') this.onCast(p.event, p.payload || {});
+  },
+  addMetas(k, metas) { const last = (metas || [])[metas.length - 1]; if (last) this.players[k] = Object.assign({}, last, { id: k }); },
+  dropMetas(k, metas) {
+    const cur = this.players[k]; if (!cur) return;
+    if ((metas || []).some(q => q.phx_ref === cur.phx_ref)) delete this.players[k];
+  },
+  // the host's settings are the room's settings; if the host leaves, the next one in takes over with the same settings
+  sync() {
+    const h = this.host();
+    if (h && h.cfg && h.id !== this.me) this.cfg = h.cfg;
+    if (this.race) for (const id of this.race.ids) if (!this.players[id] && !this.race.fin[id]) this.race.left[id] = true;
+    this.changed();
+  },
+
+  /* ---- racing ---- */
+  canStart() {
+    const c = this.cfg || {}, ready = this.list().filter(q => q.state !== 'racing');
+    if (!this.isHost()) return 'Waiting for the host to start the race.';
+    if (ready.length < 2) return 'You need at least one more racer in the room.';
+    if (ready.length > MP_MAX[c.type || 'street']) return `${MP_TYPES[c.type]}s are one against one. Two racers only.`;
+    return '';
+  },
+  start() {
+    if (this.canStart()) return;
+    const ids = this.list().filter(q => q.state !== 'racing').map(q => q.id);
+    const msg = { n: (this.n || 0) + 1, seed: this.code + '-' + Date.now().toString(36), ids, cfg: this.cfg,
+      cars: ids.map(id => { const q = this.players[id]; return { id, name: q.name, car: q.car, carName: q.carName, look: q.look, up: q.up, bhp: q.bhp, hand: q.hand, vmax: q.vmax }; }) };
+    this.send('start', msg);
+    this.begin(msg);
+  },
+  begin(msg) {
+    if (!msg || !Array.isArray(msg.ids) || !msg.ids.includes(this.me)) return;
+    if (typeof mode !== 'undefined' && mode === 'race') return;           // already racing on their own
+    this.n = msg.n; this.cfg = msg.cfg || this.cfg;
+    this.race = { n: msg.n, ids: msg.ids, cfg: msg.cfg, seed: msg.seed, cars: msg.cars || [], tracks: {}, fin: {}, left: {}, started: Date.now() };
+    this.track('racing');
+    this.lastSend = -1;
+    if (typeof mpStartRace === 'function') mpStartRace(this.race);
+    this.changed();
+  },
+  onCast(ev, p) {
+    if (ev === 'start') { this.begin(p); return; }
+    const r = this.race;
+    if (!r || p.n !== r.n || !r.ids.includes(p.id)) return;
+    if (ev === 'pos') {
+      const tr = r.tracks[p.id] || (r.tracks[p.id] = []);
+      if (tr.length && p.t < tr[tr.length - 1].t) return;               // out of order
+      tr.push(p); if (tr.length > 60) tr.splice(0, tr.length - 60);
+    } else if (ev === 'fin') { r.fin[p.id] = p; this.changed(); }
+  },
+  /* sent a few times a second while you race */
+  tick(R) {
+    if (!R || !R.ev.mp || !this.race || this.status !== 'lobby') return;
+    // by race time, so the others get the same eight a second whatever the phone's frame rate
+    const now = R.t + (R.doneT || 0);
+    if (R.state === 'countdown' || now - this.lastSend < 1 / mpHz(this.race.ids.length)) return;
+    this.lastSend = now;
+    const p = R.p;
+    this.send('pos', { id: this.me, n: this.race.n, t: +R.t.toFixed(3), d: +p.dist.toFixed(2), x: +p.x.toFixed(3), v: +p.v.toFixed(2),
+      r: p.rpm !== undefined ? +p.rpm.toFixed(3) : 0, g: p.gear || 0, no: p.nitroOn || p.boosting ? 1 : 0, l: p.launched ? 1 : 0 });
+  },
+  /* your race is over: tell the others how it went */
+  finish(R) {
+    if (!this.race || this.race.fin[this.me]) return;
+    const res = R.result || { how: 'quit', time: 0 };
+    const f = { id: this.me, n: this.race.n, how: res.how, time: res.how === 'finish' ? +res.time.toFixed(3) : 0, react: res.react !== undefined ? +res.react.toFixed(3) : null, trap: res.trap ? Math.round(res.trap) : null };
+    this.race.fin[this.me] = f;
+    this.send('fin', f);
+    this.track('lobby');
+    this.changed();
+  },
+  /* where another racer is at race time t: between the updates it has, or carried on at its last speed for a moment */
+  sample(id, t) {
+    const tr = this.race && this.race.tracks[id];
+    if (!tr || !tr.length) return null;
+    const last = tr[tr.length - 1];
+    if (t >= last.t) { const k = Math.min(t - last.t, 0.6); return Object.assign({}, last, { d: last.d + last.v * k, t }); }
+    let i = tr.length - 1; while (i > 0 && tr[i - 1].t > t) i--;
+    const a = tr[Math.max(0, i - 1)], b = tr[i];
+    if (t <= a.t) return a;
+    const k = (t - a.t) / Math.max(1e-6, b.t - a.t);
+    return { t, d: a.d + (b.d - a.d) * k, x: a.x + (b.x - a.x) * k, v: a.v + (b.v - a.v) * k, r: a.r + (b.r - a.r) * k, g: b.g, no: b.no, l: b.l };
+  },
+  /* the table at the end: finishers by time, then everyone else */
+  standings() {
+    const r = this.race; if (!r) return [];
+    return r.ids.map(id => {
+      const c = r.cars.find(q => q.id === id) || { name: 'Racer' }, f = r.fin[id];
+      return { id, name: c.name, carName: c.carName, f, left: !f && !!r.left[id], me: id === this.me };
+    }).sort((a, b) => (a.f && a.f.how === 'finish' ? a.f.time : 1e9) - (b.f && b.f.how === 'finish' ? b.f.time : 1e9));
   },
 };
 
@@ -11255,6 +11528,7 @@ const NAV_ICONS = {
   garage: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/>',
   cars: '<path d="M3 17v-4l2.5-5h9l4 5H21v4"/><path d="M3 13h18"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/>',
   map: '<path d="M2 6v15l7-3 6 3 7-3V3l-7 3-6-3z"/><path d="M9 3v15M15 6v15"/>',
+  mp: '<circle cx="8" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M2.5 20c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6"/><path d="M14 14.5c.8-.4 1.6-.6 2.5-.6 2.7 0 5 2.2 5 5.6"/>',
 };
 /* the people who want a race with you: friends from the street, and the Ride3 invitation once you have the crown */
 const challengers = () => regionOf(S.current) ? [] : FRIENDS.filter(id => specialUnlocked(S, id)).concat(S.careerDone ? ['ride3'] : []);
@@ -11264,11 +11538,11 @@ const freshChallenger = () => challengers().some(id => !(S.found && S.found[id])
 const freshDrag = () => { const r = regionOf(S.current), k = Object.keys(MINI).find(k => MINI[k].place === r); return !!k && MINI[k].list.some((d, i) => miniUnlocked(S, k, i) && !(S.announced && S.announced['drag:' + d.id])); };
 function navBar(active) {
   const dmg = (S.owned[S.current] || {}).damage >= 50;
-  const items = [['race', 'Race', 'hub', 'race'], ['street', 'Street', 'hub', 'street'], ['garage', 'Garage', 'garage', ''], ['cars', 'Dealership', 'tab', 'cars'], ['map', 'Map', 'ladder', '']];
+  const items = [['race', 'Race', 'hub', 'race'], ['street', 'Street', 'hub', 'street'], ['mp', 'Multiplayer', 'hub', 'mp'], ['garage', 'Garage', 'garage', ''], ['cars', 'Dealership', 'tab', 'cars'], ['map', 'Map', 'ladder', '']];
   return `<nav class="gnav" aria-label="Menu">${items.map(([id, label, act, arg]) => {
-    const dot = (id === 'street' && (freshChallenger() || freshDrag())) || (id === 'garage' && dmg);
+    const dot = (id === 'street' && (freshChallenger() || freshDrag())) || (id === 'garage' && dmg) || (id === 'mp' && MP.status === 'lobby' && active !== 'mp');
     return `<button class="gn${id === active ? ' on' : ''}" type="button" data-act="${act}"${arg ? ` data-arg="${arg}"` : ''}${id === active ? ' aria-current="page"' : ''}>
-      <svg viewBox="0 0 24 24" aria-hidden="true">${NAV_ICONS[id]}</svg><span>${label}</span>${dot ? `<i class="dot" aria-label="${id === 'garage' ? 'Your car is damaged' : 'Someone new wants a race'}"></i>` : ''}</button>`;
+      <svg viewBox="0 0 24 24" aria-hidden="true">${NAV_ICONS[id]}</svg><span>${label}</span>${dot ? `<i class="dot" aria-label="${id === 'garage' ? 'Your car is damaged' : id === 'mp' ? 'You are in a room' : 'Someone new wants a race'}"></i>` : ''}</button>`;
   }).join('')}</nav>`;
 }
 /* London, Essex, Mauritius and Atlanta: tap one to go there. Island and Atlanta cars stay where they are, so flying swaps the car you race. */
@@ -11680,7 +11954,12 @@ function essexTeaser() {
 function goHub(page, sub) {
   if (page) { hubPage = page; pendingSlip = null; }
   if (sub) streetTab = sub;
+  // walked away from a live race before the end: the room hears you gave up
+  if (R && R.ev.mp && MP.race && !MP.race.fin[MP.me]) { if (!R.result) R.result = { how: 'quit', won: false, time: 0 }; MP.finish(R); }
   mode = 'menu'; R = null; paused = false; intro = null; setDemo();
+  // opened an invite link: straight to the room
+  if (mpPendingJoin) { const code = mpPendingJoin; mpPendingJoin = null; hubPage = 'mp'; mpForm.code = code; if (MP.name() && MP.status === 'off') setTimeout(() => MP.connect(code), 50); }
+  if (hubPage === 'mp' && MP.status === 'lobby') MP.track();   // the car you would race, if you changed it
   $('controls').hidden = true; $('b-pause').hidden = true; document.body.classList.remove('racing');
   // the first time the island opens, say so and take you there
   if (muOpen(S) && !(S.announced || {}).mu) {
@@ -11780,7 +12059,7 @@ function goHub(page, sub) {
   const scr = $('scr-hub'), same = !scr.hidden && hubShown === hubPage + streetTab, top = scr.scrollTop;
   $('hub-body').innerHTML = `${topBar('Menu')}
     ${menuHead(hubPage)}
-    ${hubPage === 'street' ? streetPage() : racePage}`;
+    ${hubPage === 'street' ? streetPage() : hubPage === 'mp' ? mpPage() : racePage}`;
   hubShown = hubPage + streetTab;
   showScreen('scr-hub');
   scr.scrollTop = same ? top : 0;
@@ -12101,6 +12380,131 @@ function goLadder() {
   paintCanvases();
 }
 
+/* ---------- multiplayer: rooms with your mates, and live races ---------- */
+let mpForm = { type: 'street', route: 'london:0', cars: 'own', car: 'gtr', code: '' };
+let mpPendingJoin = (location.search.match(/[?&]join=([A-Za-z]{4})\b/) || [])[1] || null;
+if (mpPendingJoin) { mpPendingJoin = mpPendingJoin.toUpperCase(); try { history.replaceState(null, '', location.pathname + location.search.replace(/[?&]join=[A-Za-z]{4}\b/, '').replace(/^&/, '?') + location.hash); } catch (e) {} }
+const mpCfgText = c => { c = c || {}; const car = carById(c.car); return `${MP_TYPES[c.type || 'street']}${c.type === 'street' || !c.type ? ' · ' + esc(mpRoute(c.route).title) + ', ' + mpPlaceName(c.route) : ''} · ${c.cars === 'same' && car ? 'everyone in a ' + esc(car.name) : 'your own cars'}`; };
+function mpPage() { return `<section class="street mp" id="mp-body">${mpInner()}</section>`; }
+function mpInner() {
+  if (MP.status === 'connecting') return `<div class="street-head"><div><p class="kicker">Multiplayer</p><h3 class="h3">Joining room ${esc(MP.code)}</h3></div></div><p class="tip">Connecting to the room...</p>`;
+  if (MP.status === 'lobby') return mpLobbyHtml();
+  return mpStartHtml();
+}
+/* the race settings: the same controls to start a room and, for the host, to change it */
+function mpSettingsHtml(c) {
+  const seg = (act, cur, opts) => `<div class="seg" role="group">${opts.map(([v, lab]) => `<button type="button" class="${v === cur ? 'on' : ''}" data-act="${act}" data-arg="${v}" aria-pressed="${v === cur}">${lab}</button>`).join('')}</div>`;
+  const routes = MP_PLACES.map(([ch, name]) => `<optgroup label="${name}">${areaList(ch).map((e, i) => `<option value="${ch}:${i}" ${c.route === ch + ':' + i ? 'selected' : ''}>${esc(e.title)} · ${esc(e.area)}</option>`).join('')}</optgroup>`).join('');
+  const cars = CARS.filter(k => !k.slip).map(k => `<option value="${k.id}" ${c.car === k.id ? 'selected' : ''}>${esc(k.name)}</option>`).join('');
+  return `${seg('mptype', c.type, Object.entries(MP_TYPES))}
+    ${c.type === 'street' ? `<label class="mp-field"><span>Road</span><select id="mp-route">${routes}</select></label>` : `<p class="offer-opp">${c.type === 'drag' ? 'The quarter mile on the old airport road in Mauritius. Two of you, one on one.' : 'Side by side at 40 on I-285 in Atlanta, go on the third honk. Two of you, one on one.'}</p>`}
+    ${seg('mpcars', c.cars, [['own', 'Your own cars'], ['same', 'Same car for all']])}
+    ${c.cars === 'same' ? `<label class="mp-field"><span>Car, fully built</span><select id="mp-car">${cars}</select></label>` : ''}`;
+}
+function mpStartHtml() {
+  const on = typeof Online !== 'undefined' && Online.signedIn && Online.name;
+  return `<div class="street-head"><div><p class="kicker">Multiplayer</p><h3 class="h3">Race your mates, live</h3></div></div>
+    ${MP.err ? `<p class="tip bad">${esc(MP.err)}</p>` : ''}
+    <p class="tip">Start a room and send your mates the code, or join theirs. Up to four of you on a street race, or one on one on the drag strip or a roll race. Everyone gets the same road and the same traffic, and you see each other out there as you go. Just for fun: no prize money and no damage to your car.</p>
+    ${on ? `<p class="tip rec">Racing as <b>${esc(Online.name)}</b></p>` : `<label class="mp-field mp-name"><span>Your name</span><input id="mp-name" class="name-input" maxlength="16" value="${esc(MP.name())}" placeholder="Your racer name" autocomplete="off" spellcheck="false"></label>`}
+    <div class="offers mp-cards">
+      <div class="offer mp-card"><p class="kicker">Start a room</p>
+        ${mpSettingsHtml(mpForm)}
+        <div class="offer-foot"><span></span><button class="btn primary" data-act="mpmake"><span>Start a room</span></button></div></div>
+      <div class="offer mp-card"><p class="kicker">Join a room</p>
+        <label class="mp-field"><span>Room code</span><input id="mp-code" class="name-input mp-codein" maxlength="4" value="${esc(mpForm.code)}" placeholder="ABCD" autocomplete="off" spellcheck="false" autocapitalize="characters"></label>
+        <p class="offer-opp">Your mate sees the code at the top of their room. Or open the invite link they send you.</p>
+        <div class="offer-foot"><span></span><button class="btn primary" data-act="mpjoin"><span>Join</span></button></div></div>
+    </div>`;
+}
+function mpLobbyHtml() {
+  const host = MP.isHost(), c = MP.cfg || {}, h = MP.host(), why = MP.canStart(), max = MP_MAX[c.type || 'street'];
+  const same = c.cars === 'same' && carById(c.car);
+  const rows = MP.list().map(q => `<div class="mp-row${q.id === MP.me ? ' me' : ''}"><b>${esc(q.name)}${q.id === MP.me ? ' <small>you</small>' : ''}${h && q.id === h.id ? ' <small class="host">host</small>' : ''}</b>
+      <span>${esc(same ? same.name : q.carName || '')}${same ? '' : ' · ' + q.bhp + ' bhp'}</span><i>${q.state === 'racing' ? 'Still racing' : 'Ready'}</i></div>`).join('');
+  return `<div class="street-head"><div><p class="kicker">Multiplayer · Room code</p><h3 class="h3 mp-code">${esc(MP.code)}</h3></div>
+      <div class="actions"><button class="btn small" data-act="mpshare"><span>Send invite</span></button></div></div>
+    <p class="tip">Send your mates the code <b>${esc(MP.code)}</b> or the invite link. ${MP.list().length} in the room${max < MP_ROOM ? `, and a ${MP_TYPES[c.type].toLowerCase()} is two of you` : `, up to ${MP_ROOM}`}.</p>
+    <div class="mp-players">${rows}</div>
+    <div class="mp-set"><p class="kicker">The race</p>${host ? mpSettingsHtml(c) : `<p class="offer-opp"><b>${mpCfgText(c)}</b></p>`}</div>
+    ${!same ? `<p class="tip">${c.cars === 'same' ? '' : `You race the car you have picked in the garage: your ${esc(carById(S.current).name)}. Change it in the garage before the start.`}</p>` : ''}
+    <div class="actions">${host ? `<button class="btn primary big" data-act="mpstart" ${why ? 'disabled' : ''}><span>Start the race</span></button>` : ''}
+      <button class="btn ghost" data-act="mpleave"><span>Leave the room</span></button></div>
+    ${why ? `<p class="tip center">${esc(why)}</p>` : ''}`;
+}
+MP.onChange = () => {
+  if (mode === 'results' && R && R.ev.mp) { showMpResults(true); return; }
+  if (mode !== 'menu') return;
+  const b = $('mp-body');
+  if (b && hubPage === 'mp' && !$('scr-hub').hidden) {
+    const a = document.activeElement, keep = a && (a.id === 'mp-name' || a.id === 'mp-code') ? [a.id, a.value, a.selectionStart] : null;
+    b.innerHTML = mpInner();
+    if (keep) { const el = $(keep[0]); if (el) { el.value = keep[1]; el.focus(); try { el.setSelectionRange(keep[2], keep[2]); } catch (e) {} } }
+  }
+  for (const d of document.querySelectorAll('.gn[data-arg=mp]')) d.classList.toggle('inroom', MP.status === 'lobby');
+};
+/* the host pressed start: everybody in the room lines up */
+function mpStartRace(race) {
+  const c = race.cfg || {}, others = race.cars.filter(q => q.id !== MP.me), same = c.cars === 'same' && carById(c.car) ? c.car : null;
+  if (Cine.on) Cine.skip();
+  let spec;
+  if (c.type === 'drag' || c.type === 'roll') {
+    const q = others[0] || { name: 'Racer', car: 'civic', look: {}, bhp: 300, hand: 8, vmax: 70 }, oc = carById(same || q.car) ? same || q.car : 'civic';
+    const ost = same ? statsFor(same, MP_UP, stockLook(same)) : null;
+    const look = Object.assign({ finish: 'metallic', tint: 2, rims: 'five', rimColor: '#c3c8cc' }, same ? stockLook(same) : q.look || {}, { model: carById(oc).model });
+    spec = { kind: c.type, mp: { seed: race.seed, car: same, opp: { name: q.name, carName: carById(oc).name, bhp: ost ? ost.bhp : q.bhp, handling: ost ? ost.handling : q.hand, vmax: ost ? ost.vmax : q.vmax, look, skill: 1 } } };
+  } else spec = { kind: 'mp', route: c.route || 'london:0', seed: race.seed, car: same, warm: others.map(q => (carById(same || q.car) || CARS[0]).model) };
+  startRace(spec);
+  if (!R || !R.ev.mp) { MP.finish({ result: { how: 'quit', time: 0 } }); return; }
+  if (R.ev.drag) { const oid = (others[0] || {}).id; R.remoteAt = t => MP.sample(oid, t); }
+  else R.ghosts = others.map(q => {
+    const g = { live: true, id: q.id, name: q.name, car: carById(same || q.car) ? same || q.car : 'civic', look: same ? stockLook(same) : q.look || {}, t: 0 };
+    g.at = t => {
+      const f = MP.race && MP.race.fin[q.id], s = MP.sample(q.id, t);
+      if (f && f.how === 'finish') g.t = Math.round(f.time * 1000);
+      if (!s) return { dist: 0, x: R.p.lane, done: false };
+      return { dist: s.d, x: s.x, done: !!(f && f.how === 'finish' && t >= f.time) };
+    };
+    return g;
+  });
+}
+/* the table at the end, filling in as everyone crosses the line */
+function showMpResults(update) {
+  const rows = MP.standings(), drag = R && R.ev.drag, roll = R && R.ev.roll;
+  const out = f => !f ? '' : f.how === 'finish' ? (drag ? f.time.toFixed(3) + ' s' : fmtTime(f.time)) : f.how === 'foul' ? (roll ? 'Went early' : 'Red light') : f.how === 'wrecked' ? 'Wrecked' : 'Gave up';
+  let pos = 0, mine = 0;
+  const table = rows.map(q => {
+    const done = q.f && q.f.how === 'finish'; if (done) pos++; if (q.me) mine = done ? pos : 0;
+    return `<div class="mp-row${q.me ? ' me' : ''}${done && pos === 1 ? ' first' : ''}"><b>${done ? ordinalTxt(pos) : ''} ${esc(q.name)}${q.me ? ' <small>you</small>' : ''}</b>
+      <span>${esc(q.carName || '')}${q.f && q.f.react !== null && q.f.react !== undefined && drag ? ' · R/T ' + q.f.react.toFixed(3) : ''}</span><i>${q.f ? out(q.f) : q.left ? 'Left the room' : 'Still racing'}</i></div>`;
+  }).join('');
+  const waiting = rows.some(q => !q.f && !q.left), total = rows.length;
+  const head = !mine ? (MP.race && MP.race.fin[MP.me] ? 'Out' : 'Racing') : mine === 1 ? (waiting ? 'In front' : 'You win') : ordinalTxt(mine).toLowerCase().replace(/^(\d+)/, '$1') + ' of ' + total;
+  const why = MP.status === 'lobby' ? MP.canStart() : 'You are no longer in the room.';
+  $('results-body').innerHTML = `<div class="topback">${backBtn('Hub')}${sndBtns()}</div>
+    <p class="kicker">Multiplayer · Room ${esc(MP.code || '')} · ${mpCfgText(MP.race ? MP.race.cfg : MP.cfg)}</p>
+    <h2 class="result-head ${mine === 1 && !waiting ? 'win' : mine ? '' : 'lose'}">${head}</h2>
+    ${waiting ? '<p class="story">Waiting for the others to finish. Their times fill in as they cross the line.</p>' : ''}
+    <div class="mp-players mp-results">${table}</div>
+    <div class="actions">${MP.isHost() ? `<button class="btn primary big" data-act="mpstart" ${why ? 'disabled' : ''}><span>Race again</span></button>` : ''}
+      <button class="btn ${MP.isHost() ? '' : 'primary big'}" data-act="mpback"><span>Back to the room</span></button></div>
+    ${MP.isHost() && why ? `<p class="tip center">${esc(why)}</p>` : !MP.isHost() && MP.status === 'lobby' ? '<p class="tip center">The host can start the next race from here, and you will be pulled straight in.</p>' : ''}`;
+  if (!update) { showScreen('scr-results'); paintCanvases(); }
+}
+/* the invite: the game's own address with the room code on the end */
+function mpInvite() {
+  const url = location.origin + location.pathname + (location.search ? location.search + '&' : '?') + 'join=' + MP.code;
+  const text = `Street Kings: race me live. Room ${MP.code}`;
+  if (navigator.share) { navigator.share({ title: 'Street Kings', text, url }).catch(() => {}); return; }
+  const done = () => toast('Invite link copied. Send it to your mates.');
+  try { navigator.clipboard.writeText(url).then(done, () => toast('Room code: ' + MP.code)); } catch (e) { toast('Room code: ' + MP.code); }
+}
+function mpNameOk() {
+  const el = $('mp-name'); if (el) MP.setName(el.value);
+  if (MP.name()) return true;
+  toast('Put your name in first, so your mates know who you are.', true); if (el) el.focus(); return false;
+}
+
 /* ---------- results ---------- */
 /* drag night results: the time slip */
 function showDragResults() {
@@ -12184,6 +12588,7 @@ function showBattleResults() {
 function showResults() {
   mode = 'results';
   $('controls').hidden = true; $('b-pause').hidden = true; document.body.classList.remove('racing');
+  if (R && R.ev.mp) { showMpResults(); return; }
   if (R && R.ev.drag) { showDragResults(); return; }
   if (R && R.ev.battle) { showBattleResults(); return; }
   // a car lost in a pink slip is no longer in the garage, so fall back to what the race knows about it
@@ -12292,8 +12697,8 @@ function showResults() {
 
 /* ---------- racing ---------- */
 function startRace(spec) {
-  const own = S.owned[S.current];
-  if (own.damage >= 100 && spec.kind !== 'daily') { toast('Your car is wrecked. Repair it in the garage first.', true); return; }
+  const own = S.owned[S.current], mpRace = !!(spec.mp || spec.kind === 'mp');
+  if (own.damage >= 100 && spec.kind !== 'daily' && !mpRace) { toast('Your car is wrecked. Repair it in the garage first.', true); return; }
   if (spec.kind === 'career' && !spec.exhibition && (S.completed[spec.index] || spec.index !== nextEventIndex(S))) return;
   if (spec.kind === 'career' && spec.exhibition && !S.careerDone) return;
   if (spec.kind === 'special' && (!SPECIALS[spec.id] || !specialUnlocked(S, spec.id))) return;
@@ -12322,7 +12727,7 @@ function startRace(spec) {
     if (regionOf(S.current) !== 'tyo') { toast('Tokyo races need a Japanese car from the Tokyo showroom. Tap Tokyo at the top.', true); return; }
   }
   if (spec.kind === 'mu' && regionOf(S.current) === 'atl') { toast('Your American car stays in Atlanta. Tap Mauritius at the top.', true); return; }
-  if (MINI[spec.kind]) {
+  if (MINI[spec.kind] && !mpRace) {
     const k = spec.kind, L = MINI[k].list, i = L.findIndex(d => d.id === spec.id);
     if (i < 0 || !miniUnlocked(S, k, i)) return;
     if (k === 'drag' && !islandCar(S.current)) { toast('Drag night is on the island. Tap Mauritius at the top.', true); return; }
@@ -12333,18 +12738,18 @@ function startRace(spec) {
   }
   if ((spec.kind === 'essex' || spec.kind === 'career' || spec.kind === 'special' || spec.kind === 'slip') && regionOf(S.current)) { const r = regionOf(S.current); toast(r === 'tyo' ? 'Your Tokyo car stays in Tokyo. Tap London or Essex at the top.' : r === 'atl' ? 'Your American car stays in Atlanta. Tap London or Essex at the top.' : 'Your island car stays on the island. Tap London or Essex at the top.', true); return; }
   if (spec.kind === 'slip' && (!slipReady(S, spec.id) || Object.keys(S.owned).length < 2 || S.current === slipCarFor(spec.id).id)) return;
-  hubPage = spec.kind === 'career' || spec.kind === 'essex' || spec.kind === 'mu' || spec.kind === 'atl' || spec.kind === 'tyo' ? 'race' : 'street';
-  if (MINI[spec.kind]) streetTab = spec.kind;
+  hubPage = mpRace ? 'mp' : spec.kind === 'career' || spec.kind === 'essex' || spec.kind === 'mu' || spec.kind === 'atl' || spec.kind === 'tyo' ? 'race' : 'street';
+  if (MINI[spec.kind] && !mpRace) streetTab = spec.kind;
   R = createRace(S, spec);
-  { const lk = R.ev.oppLook || {}, me = lookOf(S, S.current) || {}; warmMeshes([[carById(S.current).model, me.stance], [lk.model, lk.stance]].concat(['hatch', 'saloon', 'suv', 'van', 'cab', 'pickup'].map(m => [m, 0])), true); }
-  loadGhosts(R);
+  { const lk = R.ev.oppLook || {}, me = R.look || {}; warmMeshes([[carById(R.carId).model, me.stance], [lk.model, lk.stance]].concat((spec.warm || []).map(m => [m, 0]), ['hatch', 'saloon', 'suv', 'van', 'cab', 'pickup'].map(m => [m, 0])), true); }
+  if (!mpRace) loadGhosts(R);
   Music.preloadStings();
   mode = 'race'; paused = false; input.nitro = false;
   { const b = $('b-ghosts'); if (b) b.innerHTML = `<span>${ghostsOn ? 'Ghosts on' : 'Ghosts off'}</span>`; }
   parts.length = 0; popups.length = 0; banner = null; flashT = 0; V.shake = 0; V.boost = 0; V.camX = 0;
   showScreen(null);
   // show off the rival's motor first (not in a Checkpoint Run, where there is no rival)
-  intro = R.ev.cp || R.ev.solo || window.__noIntro ? null : { t: 0, len: R.ev.kind === 'street' ? 3.4 : R.ev.drag ? 4 : 4.8 };
+  intro = R.ev.cp || R.ev.solo || R.ev.mp || window.__noIntro ? null : { t: 0, len: R.ev.kind === 'street' ? 3.4 : R.ev.drag ? 4 : 4.8 };
   // drag night: two buttons, NITRO and SHIFT
   $('controls').classList.toggle('drag', !!R.ev.drag);
   dragBtnState = ''; $('c-right').classList.remove('wait', 'go', 'shift');
@@ -12386,6 +12791,7 @@ function setPause(v) {
 }
 function quitRace() {
   if (!R) return;
+  if (R.ev.mp) { if (!R.result) R.result = { how: 'quit', won: false, time: 0 }; R.state = 'finishing'; MP.finish(R); goHub('mp'); return; }
   if (R.state === 'racing') { endRace(R, 'quit'); settleRace(S, R); save(); toast('Race abandoned. No prize.'); }
   goHub();
 }
@@ -12440,6 +12846,16 @@ function processEvents() {
       case 'finish': {
         settleRace(S, R); save();
         input.nitro = false; $('c-nitro').classList.remove('down');
+        if (R.ev.mp) {
+          // tell the room how it went, then wait for everyone else
+          MP.finish(R);
+          const r = R.result;
+          if (e.how === 'foul') { showBanner(R.ev.roll ? 'TOO EARLY' : 'RED LIGHT', 'You jumped the start', 2.4, '#ff3b3b'); Sound.tone(220, 0.6, 0.14); }
+          else if (e.how === 'finish') { showBanner('FINISHED', (R.ev.drag ? r.time.toFixed(3) + ' s' : fmtTime(r.time)) + '  ·  waiting for the others', 2.4, '#f2a33a'); Sound.tone(880, 0.3, 0.12); }
+          else if (e.how === 'wrecked') { showBanner('WRECKED', 'Out of the race', 2.4, '#ff3b3b'); Sound.crash(); }
+          $('b-pause').hidden = true;
+          break;
+        }
         const cash = R.summary ? (R.summary.reward || 0) + (R.summary.cpCash || 0) : 0;
         if (e.how === 'foul') { if (R.ev.roll) showBanner('TOO EARLY', 'You went before the third honk', 2.4, '#ff3b3b'); else showBanner('RED LIGHT', 'Too early. You jumped the start', 2.4, '#ff3b3b'); Sound.tone(220, 0.6, 0.14); }
         else if (R.ev.drag && e.how === 'finish') {
@@ -13151,7 +13567,18 @@ async function goBoard(route) {
     ${rows.map(r => `<tr class="${r.user_id === Online.uid ? 'me' : ''}"><td>${r.place}</td><td><span class="lb-name">${esc(r.racer_name)}${r.user_id === Online.uid ? ' <small>you</small>' : ''}</span><span class="lb-car">${esc(r.car || 'Unknown car')}</span></td><td>${fmtMs(r.time_ms)}</td>${canRace ? `<td class="lb-go">${ghostBtn(r)}</td>` : ''}</tr>`).join('')}
     </tbody></table>`;
 }
-document.getElementById('ui').addEventListener('change', e => { if (e.target.id === 'board-route') goBoard(e.target.value); });
+document.getElementById('ui').addEventListener('change', e => {
+  if (e.target.id === 'board-route') goBoard(e.target.value);
+  // multiplayer: the road and the car. The host changes the room; before a room, the form
+  if (e.target.id === 'mp-route' || e.target.id === 'mp-car') {
+    const patch = { [e.target.id === 'mp-route' ? 'route' : 'car']: e.target.value };
+    if (MP.status === 'lobby' && MP.isHost()) MP.setCfg(patch); else Object.assign(mpForm, patch);
+  }
+});
+document.getElementById('ui').addEventListener('input', e => {
+  if (e.target.id === 'mp-name') MP.setName(e.target.value);
+  if (e.target.id === 'mp-code') { const v = e.target.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4); if (v !== e.target.value) e.target.value = v; mpForm.code = v; }
+});
 document.getElementById('ui').addEventListener('keydown', e => { if (e.target.id === 'name-input' && e.key === 'Enter') { e.preventDefault(); saveName(); } });
 
 /* all menu buttons */
@@ -13182,6 +13609,26 @@ document.getElementById('ui').addEventListener('click', e => {
     case 'essex': startRace({ kind: 'essex', index: nextEssexIndex(S) }); break;
     case 'daily': startRace({ kind: 'daily' }); break;
     case 'drag': startRace({ kind: miniOf(arg), id: arg }); break;
+    // multiplayer
+    case 'mptype': case 'mpcars': {
+      const k = act === 'mptype' ? 'type' : 'cars', patch = { [k]: arg };
+      if (k === 'cars' && arg === 'same' && !carById(mpForm.car)) patch.car = S.current;
+      if (MP.status === 'lobby' && MP.isHost()) { MP.setCfg(Object.assign({ car: (MP.cfg && MP.cfg.car) || S.current }, patch)); }
+      else { Object.assign(mpForm, patch); const b = $('mp-body'); if (b) b.innerHTML = mpInner(); }
+      break;
+    }
+    case 'mpmake': { if (!mpNameOk()) break; const f = mpForm; MP.connect(mpCode(), { type: f.type, route: f.route, cars: f.cars, car: carById(f.car) ? f.car : S.current }); break; }
+    case 'mpjoin': {
+      if (!mpNameOk()) break;
+      const el = $('mp-code'), code = ((el ? el.value : mpForm.code) || '').toUpperCase().replace(/[^A-Z]/g, '');
+      mpForm.code = code;
+      if (code.length !== 4) { toast('Room codes are four letters.', true); break; }
+      MP.connect(code); break;
+    }
+    case 'mpleave': MP.leave(); break;
+    case 'mpstart': MP.start(); break;
+    case 'mpshare': mpInvite(); break;
+    case 'mpback': goHub('mp'); break;
     case 'dragbet': { const [id, k] = (arg || '').split('|'); startRace({ kind: miniOf(id), id, stake: +k }); break; }
     case 'ghosts': setGhosts(!ghostsOn); break;
     case 'ghostrace': { const [route, uid, name] = (arg || '').split('|'), spec = routeSpec(route); if (spec) { pickedGhost = { route, uid, name }; startRace(spec); } break; }
@@ -13279,7 +13726,7 @@ function frame(ts) {
     if (R && (mode === 'race' || mode === 'results') && !paused) {
       let t = dt;
       while (t > 1e-6) { const h = Math.min(t, 1 / 120); updateRace(R, h, input); t -= h; }
-      processEvents(); dragBtn();
+      processEvents(); dragBtn(); if (R && R.ev.mp) MP.tick(R);
     } else if (!R && demo) demo.p.dist += demo.p.v * dt;
     // a cut scene covers the whole screen: nothing behind it needs drawing
     if (Cine.on && mode === 'menu') { requestAnimationFrame(frame); return; }
@@ -13332,11 +13779,11 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) Onlin
 
 /* test hooks: lets automated checks drive the game */
 window.StreetKings = {
-  get S() { return S; }, Music, engineProfile, loadGhosts, localGhost, routeSpec, setGhosts, goBoard, get R() { return R; }, get mode() { return mode; }, get paused() { return paused; }, input,
+  get S() { return S; }, Music, MP, engineProfile, loadGhosts, localGhost, routeSpec, setGhosts, goBoard, get R() { return R; }, get mode() { return mode; }, get paused() { return paused; }, input,
   steer, startRace, goHub, goGarage, goLadder, setDemo, save, preview: renderCarPreview, portrait: drawPortrait, Sound, engineProfile, ENGINE_OF, GEARS, Cine, goBack,
   get intro() { return intro; }, skipIntro: endIntro,
-  step(sec, bot) { const h = 1 / 120; let n = Math.round(sec / h); while (n-- > 0 && R && mode !== 'menu') { if (bot) bot(R, input); updateRace(R, h, input); processEvents(); dragBtn(); } },
-  testCareer, testIsland, testAtlanta, testTokyo, Online, core: { DRAG, DRAG_DIST, ROLL, ROLL_DIST, ROLL_V, BATTLE, BATTLE_MAX, MINI, miniOf, miniUnlocked, battleDrain, vmaxFor, dragPress, dragUnlocked, dragBeaten, dragStakes, dragEstimate, dragBetBlock, rematchPrize, specialUnlocked, makeWave, heatOf, HEAT_POLICE, updateCop, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
+  step(sec, bot) { const h = 1 / 120; let n = Math.round(sec / h); while (n-- > 0 && R && mode !== 'menu') { if (bot) bot(R, input); updateRace(R, h, input); processEvents(); dragBtn(); if (R && R.ev.mp) MP.tick(R); } },
+  testCareer, testIsland, testAtlanta, testTokyo, Online, core: { endRace, DRAG, DRAG_DIST, ROLL, ROLL_DIST, ROLL_V, BATTLE, BATTLE_MAX, MINI, miniOf, miniUnlocked, battleDrain, vmaxFor, dragPress, dragUnlocked, dragBeaten, dragStakes, dragEstimate, dragBetBlock, rematchPrize, specialUnlocked, makeWave, heatOf, HEAT_POLICE, updateCop, createRace, updateRace, settleRace, newCareer, buyUpgrade, buyCar, sellCar, selectCar, repairCar, statsFor, maxStats, curStats, streetOffers, nextEventIndex,
     migrateSave, buyLook, lookCost, lookOf, checkPlate, dailyFor, dailyDate, dailyPrize, ghostEncode, ghostDecode, ghostAt, carRel, EVENTS, ESSEX, MU, ATL, TYO, tyoOpen, tyoWins, nextTyoIndex, REGIONS, regionOf, regionOpen, regionWins, nextRegionIndex, openRegion, goRegion, atlOpen, atlWins, nextAtlIndex, muOpen, muWins, nextMuIndex, islandCar, goIsland, openIsland, areaList, essexOpen, nextEssexIndex, slipReady, slipCarFor, carClass, totalStars, starCount, CARS, UPGRADES, CHARACTERS, BODY, Z_PLAYER, P_LEN, SPAWN_D, NITRO_MULT },
 };
 
