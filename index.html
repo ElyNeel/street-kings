@@ -980,7 +980,7 @@ const CARS = [
   // Kenji's 240Z, the one he has been building for ten years: a 1971 Datsun with a GT-R engine in it. It comes finished, every part fitted
   { id: 'z240', name: 'Datsun 240Z (Godzilla swap)', price: 100000, bhp: 1200, handling: 9.3, rep: 0, pot: 1.3, model: 'z240', chapter: 'tyo', tyoUnlock: 7, built: 3,
     blurb: 'Kenji\'s 1971 240Z with the twin turbo six out of a GT-R, the engine they call Godzilla, bored out and boosted until it made his eyes water. It weighs next to nothing and makes over fourteen hundred horsepower.',
-    look: { paint: '#e8761e', finish: 'gloss', rims: 'dish', rimColor: '#c9a23a', tint: 2, spoiler: 'duck', kit: 1, stance: 2, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: 'GODZLA' } },
+    look: { paint: '#e8761e', finish: 'gloss', rims: 'eight', rimColor: '#1c1e21', tint: 2, spoiler: 'none', kit: 0, stance: 2, stripes: 'none', stripeColor: '#f2f2ee', glow: 'none', smoked: false, plate: 'GODZLA' } },
   // cars you can only win in a pink slip race. They come the way their owner raced them.
   { id: 'golfr', name: 'VW Golf R', price: 9000, bhp: 320, handling: 8.2, rep: 999, pot: 0.6, model: 'golf', slip: 'tommy', slipUp: 3,
     look: { paint: '#1e4fa8', finish: 'metallic', rims: 'five', rimColor: '#1c1e21', tint: 2, spoiler: 'lip', kit: 0, stance: 1, stripes: 'none', stripeColor: '#f2f2ee', glow: '#4aa8ff', smoked: false, plate: 'TH19 GTR' } },
@@ -1071,7 +1071,7 @@ const BODY = {
     { id: 'matte', name: 'Matte', price: 600, rep: 3 }, { id: 'pearl', name: 'Colour-shift pearl', price: 900, rep: 6 },
   ],
   rims: [{ id: 'five', name: 'Five-spoke' }, { id: 'mesh', name: 'Mesh' }, { id: 'dish', name: 'Deep dish' },
-         { id: 'split', name: 'Split-spoke' }, { id: 'fan', name: 'Turbofan' }, { id: 'steel', name: 'Steelies' }],
+         { id: 'split', name: 'Split-spoke' }, { id: 'fan', name: 'Turbofan' }, { id: 'steel', name: 'Steelies' }, { id: 'eight', name: 'Eight-spoke' }],
   rimPrice: 400,
   rimColors: [{ name: 'Silver', hex: '#c3c8cc' }, { name: 'Black', hex: '#1c1e21' }, { name: 'Gold', hex: '#c9a23a' },
               { name: 'Bronze', hex: '#8c5f32' }, { name: 'Chrome', hex: '#eef1f3' }, { name: 'Gunmetal', hex: '#4a4f55' }, { name: 'Dark grey', hex: '#2a2d31' }, { name: 'White', hex: '#eeeeea' }],
@@ -2456,6 +2456,9 @@ function migrateSave(old) {
     for (const k in (o.up || {})) if (k !== 'tune') up[k] = o.up[k] === true ? 1 : Math.min(3, Number(o.up[k]) || 0);
     if (carById(id).slip) { const sb = slipBuild(carById(id)); for (const u of UPGRADES) up[u.id] = Math.max(up[u.id] || 0, sb[u.id]); up.tune = sb.tune; }
     S.owned[id] = { up, damage: o.damage || 0, spent: o.spent || 0, look: Object.assign(stockLook(id), o.look || {}) };
+    // the 240Z used to come with a big ducktail, a body kit and gold dish wheels: a car still on that old kit gets the new one
+    const lk = S.owned[id].look;
+    if (id === 'z240' && lk.spoiler === 'duck' && lk.kit === 1 && lk.rims === 'dish' && lk.rimColor === '#c9a23a') Object.assign(lk, { spoiler: 'none', kit: 0, rims: 'eight', rimColor: '#1c1e21' });
   }
   if (!Object.keys(S.owned).length) return null;
   S.current = S.owned[old.current] ? old.current : Object.keys(S.owned)[0];
@@ -6265,12 +6268,14 @@ const SPECS = {
     plateR: 0.52, plateF: 0.3, exX: [-0.075, 0, 0.075], exY: 0.34, exR: 0.04, swF: 0.16, curvR: 0.14,
     keys: [[0, 0.91, 0.12, 'paint', 0.02], [0.44, 0.98, 0.18, 'glass', 0.03], [1.26, 1.2, 0.36, 'paint', 0.03], [2.0, 1.22, 0.37, 'glass', 0.02], [2.82, 0.83, 0.12, 'paint', 0.03], [4.37, 0.66, 0.2], [4.505, 0.56, 0.3]],
     glass: [[1.32, 2.82]], doors: [[1.46, 3.0]] },
-  // Datsun 240Z (S30), 1971: a long bonnet, round lamps sunk into scoops at the corners, a small mouth, the fastback hatch
-  // and a flat tail with wide lamps. This one has the bolt on arches, a chin spoiler and the ducktail
-  z240: { L: 4.115, W: 1.74, ro: 0.95, wb: 2.305, r: 0.31, sill: 0.18, beltR: 0.86, beltF: 0.8, rear: 'bar', front: 'plain', mount: 'deck', winFx: true, jpPlate: true, flares: true,
-    plateR: 0.46, plateF: 0.21, exTwin: true, exY: 0.26, exR: 0.045, endRound: 0.45, curvR: 0.06, curvF: 0.22, swF: 0.08, swR: 0.04,
-    keys: [[0, 0.86, 0.1, 'paint', 0.01], [0.24, 0.92, 0.16, 'glass', 0.03], [1.34, 1.25, 0.3, 'paint', 0.03], [1.95, 1.28, 0.31, 'glass', 0.02], [2.56, 0.9, 0.12, 'paint', 0.02], [3.98, 0.72, 0.16], [4.115, 0.63, 0.24]],
-    glass: [[1.38, 2.56]], doors: [[1.46, 2.66]] },
+  // Datsun 240Z (S30), 1971: a long bonnet with the raised centre, round lamps sunk into buckets at the front of the wings,
+  // the wide black mouth over a thin chrome bumper, the fastback hatch, the quarter window running back to a point and the
+  // black tail panel with the lamps either side. This one has bolt on arches over wide wheels
+  z240: { L: 4.115, W: 1.74, ro: 0.95, wb: 2.305, r: 0.31, sill: 0.18, beltR: 0.88, beltF: 0.8, rear: 'bar', front: 'plain', mount: 'deck', winFx: true, jpPlate: true, flares: true, mirrors: 'chrome',
+    plateR: 0.55, plateF: 0.2, exTwin: true, exY: 0.3, exR: 0.045, endRound: 0.45, curvR: 0.06, curvF: 0.22, swF: 0.08, swR: 0.04,
+    bulge: { z0: 2.48, z1: 3.96, w0: 0.27, w1: 0.2, h0: 0.034, h1: 0.004 },
+    keys: [[0, 0.87, 0.1, 'paint', 0.01], [0.2, 0.9, 0.16, 'glass', 0.03], [1.36, 1.255, 0.3, 'paint', 0.03], [1.96, 1.285, 0.31, 'glass', 0.02], [2.42, 0.88, 0.12, 'paint', 0.03], [3.98, 0.72, 0.16], [4.115, 0.63, 0.24]],
+    glass: [[0.7, 2.42]], doors: [[1.32, 2.48]] },
   // Tokyo traffic: the kei car, a tall little box (the N-Box and Wagon R kind), yellow plates
   kei: { L: 3.395, W: 1.475, ro: 0.43, wb: 2.46, r: 0.28, sill: 0.25, beltR: 1.0, beltF: 0.98, rear: 'rect', front: 'plain', mount: 'roof',
     keys: [[0, 1.0, 0.1], [0.08, 1.05, 0.13, 'glass', 0.02], [0.3, 1.66, 0.18, 'paint', 0.03], [2.34, 1.7, 0.19, 'glass', 0.02], [2.86, 1.0, 0.12, 'paint', 0.02], [3.3, 0.88, 0.14], [3.395, 0.8, 0.2]],
@@ -7240,32 +7245,64 @@ const FX = {
     fxWin(P, D, [[1.3, 0], [1.56, 1]], 2.82, { glass: false });
     fxWin(P, D, [[1.34, 0], [1.58, 1]], 2.82, { frame: false });
   },
-  // Datsun 240Z: round lamps deep in their scoops, the small slatted mouth, indicators under the lamps, no bumpers on this
-  // one; wide lamps across the tail either side of the badge, vents in the bonnet for the GT-R engine
+  // Datsun 240Z: round lamps deep in their buckets with chrome rings, the wide black mouth with the badge over it, a thin
+  // chrome bumper with two overriders and the indicators under it. At the back a black panel across the tail with the
+  // lamps either side, the plate between them and the split bumpers under. Chrome round the windows, the quarter window
+  // running back to a point and the round badge on the pillar behind it
   z240: (D, P) => {
-    for (const [cx, cy, rr] of [[0.6, 0.64, 0.088]]) {
-      P.front(ell(cx, cy, rr + 0.02, rr + 0.012, 24), 'dark', { layer: 0, far: true });
-      P.front(ell(cx, cy, rr, rr, 24), 'chrome', { layer: 1 });
-      P.front(ell(cx, cy, rr - 0.012, rr - 0.012, 22), 'lens', { layer: 2 });
-      P.front(ell(cx, cy, 0.03, 0.03, 14), 'head', { layer: 3, far: true });
-    }
-    P.front(fil([[0.56, 0.49], [0.7, 0.49], [0.7, 0.53], [0.56, 0.53]], 0.008), 'amber', { layer: 1 });
-    const mouth = fil([[0, 0.42], [0.3, 0.42], [0.34, 0.47], [0.3, 0.56], [0, 0.565]], [0, 0.03, 0.02, 0.03, 0]);
-    P.front(grow(mouth, 0.01), 'chrome', { layer: 0, far: true }); P.front(mouth, 'hole', { layer: 1, far: true });
-    for (let y = 0.44; y < 0.55; y += 0.022) P.front(rct(0, y, 0.31, y + 0.005), 'trim', { layer: 2 });
-    P.front(fil([[0, 0.19], [0.74, 0.19], [0.84, 0.24], [0.8, 0.3], [0, 0.3]], 0.02), 'dark', { layer: 0 });
-    for (const x of [0.2, 0.4]) P.top(fil([[3.3, x - 0.05], [3.7, x - 0.05], [3.7, x + 0.05], [3.3, x + 0.05]], 0.02), 'hole', { layer: 0 });
-    const tl = fil([[0.26, 0.66], [0.8, 0.66], [0.84, 0.7], [0.84, 0.77], [0.26, 0.77]], [0.01, 0.01, 0.02, 0.01, 0.01]);
-    P.rear(grow(tl, 0.008), 'chrome', { layer: 0, far: true });
-    P.rear(tl, 'lightlens', { layer: 1, far: true });
-    P.rear(fil([[0.44, 0.672], [0.82, 0.672], [0.83, 0.76], [0.44, 0.76]], 0.006), 'light', { layer: 2, far: true });
-    P.rear(fil([[0.28, 0.672], [0.36, 0.672], [0.36, 0.76], [0.28, 0.76]], 0.006), 'amber', { layer: 2 });
-    P.rear(fil([[0.365, 0.672], [0.435, 0.672], [0.435, 0.76], [0.365, 0.76]], 0.006), 'lens', { layer: 2 });
-    P.rear(fil([[0, 0.67], [0.25, 0.67], [0.25, 0.77], [0, 0.77]], 0.006), 'dark', { layer: 0 });
-    P.rear(fil([[-0.07, 0.705], [0.07, 0.705], [0.07, 0.735], [-0.07, 0.735]], 0.004), 'chrome', { layer: 1, one: true });
-    P.rear(fil([[0, 0.18], [0.66, 0.18], [0.78, 0.24], [0.74, 0.3], [0, 0.3]], 0.02), 'dark', { layer: 0 });
-    fxWin(P, D, [[1.36, 0], [1.66, 1]], 2.56, { glass: false });
-    fxWin(P, D, [[1.4, 0], [1.68, 1]], 2.56, { frame: false });
+    // lamps: the bucket, the chrome ring, the glass and the bulb
+    const lx = 0.57, ly = 0.655, lr = 0.084;
+    P.front(ell(lx, ly + 0.004, lr + 0.03, lr + 0.026, 26), 'bezel', { layer: 0, far: true });
+    P.front(ell(lx, ly, lr, lr, 24), 'chrome', { layer: 1 });
+    P.front(ell(lx, ly, lr - 0.012, lr - 0.012, 22), 'bezel', { layer: 2 });
+    P.front(ell(lx, ly, lr - 0.02, lr - 0.02, 22), 'lens', { layer: 3 });
+    P.front(ell(lx, ly, 0.02, 0.02, 12), 'head', { layer: 4, far: true });
+    // the mouth: wide and black, rounded ends, three bars across
+    const mw = 0.47, mouth = fil([[0, 0.462], [mw, 0.462], [mw + 0.04, 0.505], [mw + 0.01, 0.585], [0, 0.592]], [0, 0.03, 0.035, 0.03, 0]);
+    P.front(grow(mouth, 0.012), 'dark', { layer: 0, far: true });
+    P.front(mouth, 'hole', { layer: 1, far: true });
+    for (const y of [0.49, 0.52, 0.55]) P.front(rct(0, y, mw, y + 0.006), 'trim', { layer: 2 });
+    P.front(ell(0, 0.612, 0.045, 0.014, 14), 'chrome', { layer: 1, one: true });
+    // bumper: a thin chrome blade across the front, round the corners, with the overriders
+    const bw = D.endW(true, 0.46) - 0.015;
+    P.front(fil([[0, 0.442], [bw - 0.06, 0.445], [bw, 0.462], [bw - 0.01, 0.482], [bw - 0.07, 0.476], [0, 0.474]], 0.008), 'chrome', { layer: 3, far: true });
+    P.front(rct(0.3, 0.405, 0.335, 0.53, 0.01), 'chrome', { layer: 4 });
+    P.front(rct(0.303, 0.495, 0.332, 0.528, 0.006), 'dark', { layer: 5 });
+    // the shut lines of the long bonnet, along the tops of the wings
+    P.top(fil([[2.47, 0.625], [3.9, 0.53], [3.9, 0.537], [2.47, 0.632]], 0.002), 'seam', { layer: 0 });
+    // indicators under the bumper and a small chin
+    P.front(rct(0.46, 0.37, 0.64, 0.405, 0.008), 'amber', { layer: 1 });
+    P.front(fil([[0, 0.19], [bw - 0.12, 0.19], [bw - 0.06, 0.23], [bw - 0.1, 0.26], [0, 0.26]], 0.02), 'dark', { layer: 0 });
+    // side markers
+    P.side(rct(3.86, 0.5, 3.97, 0.53, 0.006), 'amber', { layer: 1 });
+    P.side(rct(0.14, 0.52, 0.25, 0.55, 0.006), 'lightlens', { layer: 1 });
+    // the tail: a black panel across, the lamps either side, the split bumpers
+    const ew = D.endW(false, 0.64) - 0.03;
+    P.rear(fil([[0, 0.515], [ew - 0.03, 0.515], [ew, 0.56], [ew, 0.73], [ew - 0.04, 0.765], [0, 0.765]], 0.02), 'dark', { layer: 0 });
+    const t0 = 0.42, t1 = ew - 0.05, tl = rct(t0, 0.575, t1, 0.735, 0.012);
+    P.rear(grow(tl, 0.01), 'chrome', { layer: 1, far: true });
+    P.rear(rct(t0, 0.645, t1, 0.735, 0.01), 'lightlens', { layer: 2, far: true });
+    P.rear(rct(t0 + 0.012, 0.655, t1 - 0.012, 0.724, 0.006), 'light', { layer: 3, far: true });
+    P.rear(rct(t0, 0.575, (t0 + t1) / 2, 0.635, 0.008), 'lens', { layer: 2 });
+    P.rear(rct((t0 + t1) / 2, 0.575, t1, 0.635, 0.008), 'amber', { layer: 2 });
+    P.rear(rct(t0, 0.635, t1, 0.645), 'chrome', { layer: 3 });
+    const rb = D.endW(false, 0.47) - 0.01;
+    P.rear(fil([[0.22, 0.458], [rb - 0.06, 0.458], [rb, 0.475], [rb - 0.01, 0.498], [0.22, 0.494]], 0.008), 'chrome', { layer: 2, far: true });
+    P.rear(rct(0.28, 0.42, 0.312, 0.55, 0.01), 'chrome', { layer: 3 });
+    P.rear(rct(0.283, 0.515, 0.309, 0.548, 0.006), 'dark', { layer: 4 });
+    P.rear(fil([[0, 0.18], [0.62, 0.18], [0.72, 0.23], [0.68, 0.28], [0, 0.28]], 0.02), 'dark', { layer: 0 });
+    // the script on the hatch, one side
+    P.rear(fil([[0.18, 0.795], [0.4, 0.812], [0.4, 0.822], [0.18, 0.805]], 0.003), 'chrome', { layer: 1, one: true });
+    // windows: chrome all round, the door glass, a thin post, then the quarter glass running back to a point
+    const qEdge = (dz) => [[1.2 + dz, 0], [0.95 + dz, 0.42], [0.74 + dz, 0.9], [0.7 + dz, 1]];
+    fxWin(P, D, qEdge(0), 2.42, { glass: false, frameMat: 'chrome' });
+    fxWin(P, D, qEdge(0.035), 1.27, { frame: false });
+    fxWin(P, D, 1.305, 2.42, { frame: false });
+    // the round badge on the pillar, and the script on the front wing
+    const bz = 0.8, by = D.belt(bz) + (D.rail(bz) - D.belt(bz)) * 0.22;
+    P.side(ell(bz, by, 0.034, 0.034, 16), 'chrome', { layer: 2 });
+    P.side(ell(bz, by, 0.024, 0.024, 14), 'bezel', { layer: 3 });
+    P.side(fil([[2.78, 0.6], [2.96, 0.612], [2.96, 0.622], [2.78, 0.61]], 0.003), 'chrome', { layer: 1 });
   },
 };
 for (const k in FX) SPECS[k].fx = FX[k];
@@ -8177,6 +8214,22 @@ function buildCar(model, look, detail) {
   }
   if (sp.dome) { const d0 = yTopAt(cowl + 0.15), d1 = yTopAt(cowl + 0.95);
     faces.push(mkFace([[-0.3, d0.yT + 0.045, cowl + 0.15], [0.3, d0.yT + 0.045, cowl + 0.15], [0.26, d1.yT + 0.01, cowl + 0.95], [-0.26, d1.yT + 0.01, cowl + 0.95]], 'paint', [0, 0, cowl + 0.5])); }
+  // a raised centre down the bonnet (the 240Z): a flat top with gentle sides, fading out towards the nose. The normals
+  // run smoothly from the bonnet up over the edge so it shades as a soft rise, not a stripe
+  if (sp.bulge) {
+    const b = sp.bulge, n = lo ? 2 : 9, secs = [], nrm = [];
+    for (let i = 0; i <= n; i++) {
+      const t = i / n, z = b.z0 + (b.z1 - b.z0) * t, y = yTopAt(z).yT - 0.002, w = b.w0 + (b.w1 - b.w0) * t, h = b.h0 + (b.h1 - b.h0) * t * t, e = w + 0.14;
+      const sl = -(yTopAt(z + 0.05).yT - yTopAt(z - 0.05).yT) / 0.1, k = h / (b.h0 || 1);
+      secs.push([[-e, y, z], [-w, y + h, z], [w, y + h, z], [e, y, z]]);
+      nrm.push([vnorm([0, 1, sl]), vnorm([-0.22 * k, 1, sl]), vnorm([0.22 * k, 1, sl]), vnorm([0, 1, sl])]);
+    }
+    for (let i = 0; i < n; i++) {
+      const A = secs[i], B = secs[i + 1], ref = [0, A[0][1] - 0.4, A[0][2]];
+      for (let j = 0; j < 3; j++) { const f = mkFace([A[j], A[j + 1], B[j + 1], B[j]], 'paint', ref); f.vns = [nrm[i][j], nrm[i][j + 1], nrm[i + 1][j + 1], nrm[i + 1][j]]; faces.push(f); }
+    }
+    faces.push(mkFace(secs[0].slice(), 'paint', [0, secs[0][0][1], b.z0 + 0.5]));
+  }
   if ((look.turbo || 0) >= 2) for (const sd of [-1, 1]) {
     const v0 = yTopAt(cowl + 0.6), v1 = yTopAt(cowl + 0.9);
     faces.push(mkFace([[sd * 0.2, v0.yT + 0.006, cowl + 0.6], [sd * 0.46, v0.yT - 0.004, cowl + 0.6], [sd * 0.46, v1.yT - 0.004, cowl + 0.9], [sd * 0.2, v1.yT + 0.006, cowl + 0.9]], 'dark', null, { two: true }));
@@ -8798,6 +8851,7 @@ function drawRim(g, f, tx, look, env, fg, simple) {
   else if (style === 'split') { for (let i = 0; i < 5; i++) { g.save(); g.rotate(i / 5 * Math.PI * 2); for (const o of [-0.09, 0.09]) { g.beginPath(); g.moveTo(0.12, o * 0.6 - 0.03); g.lineTo(R0 * 0.95, o * 1.8 - 0.03); g.lineTo(R0 * 0.95, o * 1.8 + 0.03); g.lineTo(0.12, o * 0.6 + 0.03); g.closePath(); g.fill(); } g.restore(); } }
   else if (style === 'mesh') { g.lineWidth = 0.035; for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2; g.beginPath(); g.moveTo(Math.cos(a) * 0.15, Math.sin(a) * 0.15); g.lineTo(Math.cos(a + 0.9) * R0 * 0.93, Math.sin(a + 0.9) * R0 * 0.93); g.moveTo(Math.cos(a) * 0.15, Math.sin(a) * 0.15); g.lineTo(Math.cos(a - 0.9) * R0 * 0.93, Math.sin(a - 0.9) * R0 * 0.93); g.stroke(); } }
   else if (style === 'dish') { g.lineWidth = 0.16; g.beginPath(); g.arc(0, 0, R0 * 0.86, 0, 7); g.stroke(); spokes(6, 0.05, 0.08); }
+  else if (style === 'eight') { g.lineWidth = 0.1; g.beginPath(); g.arc(0, 0, R0 * 0.88, 0, 7); g.stroke(); spokes(8, 0.035, 0.1); }
   else if (style === 'fan') { g.beginPath(); g.arc(0, 0, R0 * 0.93, 0, 7); g.fill(); g.strokeStyle = col([20, 20, 22], 1); g.lineWidth = 0.04; for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; g.beginPath(); g.moveTo(Math.cos(a) * 0.16, Math.sin(a) * 0.16); g.quadraticCurveTo(Math.cos(a + 0.5) * 0.5, Math.sin(a + 0.5) * 0.5, Math.cos(a + 0.35) * R0 * 0.9, Math.sin(a + 0.35) * R0 * 0.9); g.stroke(); } }
   else { g.beginPath(); g.arc(0, 0, R0 * 0.93, 0, 7); g.fill(); g.fillStyle = col([15, 15, 16], 1); for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2; g.beginPath(); g.arc(Math.cos(a) * 0.42, Math.sin(a) * 0.42, 0.09, 0, 7); g.fill(); } }
   g.fillStyle = col(rc, 0.75); g.beginPath(); g.arc(0, 0, 0.12, 0, 7); g.fill();
@@ -9820,6 +9874,7 @@ function rimData(mesh, style) {
     else if (S === 'mesh') { for (let i = 0; i < 10; i++) for (const o of [-0.45, 0.45]) spoke(i / 10 * Math.PI * 2 + o * 0.3, rr * 0.025, rr * 0.03, rr * 0.22, rr * 0.92, 0.004, 0.012); ring(rr * 0.6, rr * 0.55, 0.008, 0.008, RM, seg, 0); }
     else if (S === 'dish') { ring(rr * 0.93, rr * 0.6, 0.02, 0.012, RM, seg, 0.2); for (let i = 0; i < 6; i++) spoke(i / 6 * Math.PI * 2, rr * 0.05, rr * 0.07, rr * 0.18, rr * 0.62, -0.004, 0.012); }
     else if (S === 'fan') { ring(rr * 0.92, rr * 0.18, 0.004, 0.004, RM, seg, 0); for (let i = 0; i < 12; i++) spoke(i / 12 * Math.PI * 2, rr * 0.012, rr * 0.03, rr * 0.2, rr * 0.9, 0.006, 0.006); }
+    else if (S === 'eight') { ring(rr * 0.93, rr * 0.8, 0.02, 0.008, RM, seg, 0.25); for (let i = 0; i < 8; i++) spoke(i / 8 * Math.PI * 2, rr * 0.035, rr * 0.06, rr * 0.18, rr * 0.82, -0.008, 0.008); }
     else if (S === 'steel') { ring(rr * 0.92, rr * 0.18, 0.006, 0.0, RM, seg, 0.15); }
     else for (let i = 0; i < 5; i++) spoke(i / 5 * Math.PI * 2, rr * 0.1, rr * 0.16, rr * 0.18, rr * 0.92, 0.0, 0.014);
     // hub and centre cap
@@ -10175,7 +10230,7 @@ const MP = {
       this.code = code; this.topic = 'realtime:sk-room-' + code; this.me = this.me || this.newId();
       this.players = {}; this.cfg = cfg || null; this.race = null; this.joinedAt = Date.now(); this.creating = !!cfg; this.retries = 0;
     }
-    this.status = 'connecting'; this.lastMeta = ''; this.err = ''; this.players = {};
+    this.status = 'connecting'; this.lastMeta = ''; this.err = ''; this.players = {}; this.rejoin = !!again; clearTimeout(this.checkT);
     let ws;
     try { ws = new WebSocket(MP_WS()); } catch (e) { this.fail('Could not reach the race server. Check your connection.'); return; }
     this.ws = ws;
@@ -10188,7 +10243,7 @@ const MP = {
     ws.onmessage = e => { let m; try { m = JSON.parse(e.data); } catch (er) { return; } if (this.ws === ws) this.onMsg(m); };
     ws.onclose = () => {
       if (this.ws !== ws) return;
-      clearInterval(this.hbT); this.ws = null;
+      clearInterval(this.hbT); clearTimeout(this.checkT); this.ws = null;
       if (this.status === 'off') return;
       // a phone that dropped its connection (a tunnel, the screen locking): try to get back into the same room, as the same racer
       if ((this.status === 'lobby' || (this.status === 'connecting' && this.retries > 0)) && (this.retries || 0) < 3) { this.retries = (this.retries || 0) + 1; this.status = 'connecting'; this.changed(); setTimeout(() => { if (this.status === 'connecting' && this.code) this.connect(this.code, null, true); }, 1500); return; }
@@ -10229,8 +10284,8 @@ const MP = {
       if (p.status !== 'ok') { this.fail('Could not join the room.'); return; }
       const back = this.myState === 'racing' && this.race && !this.race.fin[this.me];
       this.status = 'lobby'; this.myState = back ? 'racing' : 'lobby'; this.retries = 0; this.track();
-      // joining someone else's room: if nobody is there, the code was wrong
-      if (!this.creating && !this.race) this.checkT = setTimeout(() => {
+      // joining someone else's room: if nobody is there, the code was wrong (not on the way back in after a dropped connection)
+      if (!this.creating && !this.race && !this.rejoin) this.checkT = setTimeout(() => {
         const others = this.list().filter(q => q.id !== this.me);
         if (!others.length) this.fail(`Nobody is in room ${this.code}. Check the code.`);
         else if (others.length >= MP_ROOM) this.fail(`Room ${this.code} is full. Four is the most.`);
@@ -13790,7 +13845,29 @@ window.StreetKings = {
 })();
 </script>
 <script>
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+// offline support, and updates: every time the game comes back to the front (and every few minutes while it is open) it
+// asks for the latest version. When a new one arrives the page reloads into it, straight away if you are in the menus,
+// otherwise as soon as you are back in them (never in a race, a cut scene or a multiplayer room)
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) addEventListener('load', () => {
+  let had = !!navigator.serviceWorker.controller;   // (the very first visit: the first take over is not an update)
+  let fresh = false;
+  const safe = () => { const K = window.StreetKings; if (!K) return true; const a = document.activeElement;
+    return K.mode === 'menu' && !K.intro && !(K.Cine && K.Cine.on) && !(K.MP && K.MP.status !== 'off') && !(a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)); };
+  // after the reload you land back where you were (the hub), not on the title screen
+  const go = () => { if (!fresh || !safe()) return; fresh = false;
+    const t = document.getElementById('scr-title'), sel = document.getElementById('scr-select');
+    try { if ((!t || t.hidden) && (!sel || sel.hidden)) sessionStorage.setItem('sk.resume', '1'); } catch (e) {}
+    location.reload(); };
+  try { if (sessionStorage.getItem('sk.resume') === '1') { sessionStorage.removeItem('sk.resume'); const c = document.getElementById('btn-continue'); if (c && c.offsetParent) c.click(); } } catch (e) {}
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (had) { fresh = true; window.__skFresh = true; go(); } had = true; });
+  setInterval(go, 2000);
+  navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(reg => {
+    const check = () => reg.update().catch(() => {});
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') check(); });
+    addEventListener('focus', check); addEventListener('pageshow', check);
+    setInterval(check, 5 * 60 * 1000);
+  }).catch(() => {});
+});
 </script>
 </body>
 </html>
